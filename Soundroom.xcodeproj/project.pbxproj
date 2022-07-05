@@ -21,6 +21,8 @@
 		0417B5A82874CEF8001D6B04 /* RecapCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5A72874CEF8001D6B04 /* RecapCell.m */; };
 		0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5AA2874D394001D6B04 /* SearchViewController.m */; };
 		0417B5AE2874D3A5001D6B04 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5AD2874D3A5001D6B04 /* SearchCell.m */; };
+		0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B02874E0B6001D6B04 /* RoomViewController.m */; };
+		0417B5B42874E0D6001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B32874E0D5001D6B04 /* RoomCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,10 @@
 		0417B5AA2874D394001D6B04 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		0417B5AC2874D3A5001D6B04 /* SearchCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchCell.h; sourceTree = "<group>"; };
 		0417B5AD2874D3A5001D6B04 /* SearchCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
+		0417B5AF2874E0B6001D6B04 /* RoomViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomViewController.h; sourceTree = "<group>"; };
+		0417B5B02874E0B6001D6B04 /* RoomViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomViewController.m; sourceTree = "<group>"; };
+		0417B5B22874E0D5001D6B04 /* RoomCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomCell.h; sourceTree = "<group>"; };
+		0417B5B32874E0D5001D6B04 /* RoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +177,8 @@
 				0417B5A72874CEF8001D6B04 /* RecapCell.m */,
 				0417B5AC2874D3A5001D6B04 /* SearchCell.h */,
 				0417B5AD2874D3A5001D6B04 /* SearchCell.m */,
+				0417B5B22874E0D5001D6B04 /* RoomCell.h */,
+				0417B5B32874E0D5001D6B04 /* RoomCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -182,6 +190,8 @@
 				0417B5A42874CED2001D6B04 /* ProfileViewController.m */,
 				0417B5A92874D394001D6B04 /* SearchViewController.h */,
 				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
+				0417B5AF2874E0B6001D6B04 /* RoomViewController.h */,
+				0417B5B02874E0B6001D6B04 /* RoomViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -320,6 +330,8 @@
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
 				0417B5A82874CEF8001D6B04 /* RecapCell.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
+				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
+				0417B5B42874E0D6001D6B04 /* RoomCell.m in Sources */,
 				0417B5AE2874D3A5001D6B04 /* SearchCell.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
