@@ -1,0 +1,602 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5692874B75F001D6B04 /* AppDelegate.m */; };
+		0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B56C2874B75F001D6B04 /* SceneDelegate.m */; };
+		0417B5702874B75F001D6B04 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B56F2874B75F001D6B04 /* ViewController.m */; };
+		0417B5732874B75F001D6B04 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0417B5712874B75F001D6B04 /* Main.storyboard */; };
+		0417B5752874B761001D6B04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0417B5742874B761001D6B04 /* Assets.xcassets */; };
+		0417B5782874B761001D6B04 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0417B5762874B761001D6B04 /* LaunchScreen.storyboard */; };
+		0417B57B2874B761001D6B04 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B57A2874B761001D6B04 /* main.m */; };
+		0417B5852874B762001D6B04 /* SoundroomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5842874B762001D6B04 /* SoundroomTests.m */; };
+		0417B58F2874B762001D6B04 /* SoundroomUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B58E2874B762001D6B04 /* SoundroomUITests.m */; };
+		0417B5912874B762001D6B04 /* SoundroomUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5902874B762001D6B04 /* SoundroomUITestsLaunchTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0417B5812874B762001D6B04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0417B55D2874B75F001D6B04 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0417B5642874B75F001D6B04;
+			remoteInfo = Soundroom;
+		};
+		0417B58B2874B762001D6B04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0417B55D2874B75F001D6B04 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0417B5642874B75F001D6B04;
+			remoteInfo = Soundroom;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0417B5652874B75F001D6B04 /* Soundroom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soundroom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0417B5682874B75F001D6B04 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		0417B5692874B75F001D6B04 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		0417B56B2874B75F001D6B04 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		0417B56C2874B75F001D6B04 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		0417B56E2874B75F001D6B04 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		0417B56F2874B75F001D6B04 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		0417B5722874B75F001D6B04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0417B5742874B761001D6B04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0417B5772874B761001D6B04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0417B5792874B761001D6B04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0417B57A2874B761001D6B04 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0417B5802874B762001D6B04 /* SoundroomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoundroomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0417B5842874B762001D6B04 /* SoundroomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundroomTests.m; sourceTree = "<group>"; };
+		0417B58A2874B762001D6B04 /* SoundroomUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoundroomUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0417B58E2874B762001D6B04 /* SoundroomUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundroomUITests.m; sourceTree = "<group>"; };
+		0417B5902874B762001D6B04 /* SoundroomUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundroomUITestsLaunchTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0417B5622874B75F001D6B04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0417B57D2874B762001D6B04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0417B5872874B762001D6B04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0417B55C2874B75F001D6B04 = {
+			isa = PBXGroup;
+			children = (
+				0417B5672874B75F001D6B04 /* Soundroom */,
+				0417B5832874B762001D6B04 /* SoundroomTests */,
+				0417B58D2874B762001D6B04 /* SoundroomUITests */,
+				0417B5662874B75F001D6B04 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0417B5662874B75F001D6B04 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0417B5652874B75F001D6B04 /* Soundroom.app */,
+				0417B5802874B762001D6B04 /* SoundroomTests.xctest */,
+				0417B58A2874B762001D6B04 /* SoundroomUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0417B5672874B75F001D6B04 /* Soundroom */ = {
+			isa = PBXGroup;
+			children = (
+				0417B5682874B75F001D6B04 /* AppDelegate.h */,
+				0417B5692874B75F001D6B04 /* AppDelegate.m */,
+				0417B56B2874B75F001D6B04 /* SceneDelegate.h */,
+				0417B56C2874B75F001D6B04 /* SceneDelegate.m */,
+				0417B56E2874B75F001D6B04 /* ViewController.h */,
+				0417B56F2874B75F001D6B04 /* ViewController.m */,
+				0417B5712874B75F001D6B04 /* Main.storyboard */,
+				0417B5742874B761001D6B04 /* Assets.xcassets */,
+				0417B5762874B761001D6B04 /* LaunchScreen.storyboard */,
+				0417B5792874B761001D6B04 /* Info.plist */,
+				0417B57A2874B761001D6B04 /* main.m */,
+			);
+			path = Soundroom;
+			sourceTree = "<group>";
+		};
+		0417B5832874B762001D6B04 /* SoundroomTests */ = {
+			isa = PBXGroup;
+			children = (
+				0417B5842874B762001D6B04 /* SoundroomTests.m */,
+			);
+			path = SoundroomTests;
+			sourceTree = "<group>";
+		};
+		0417B58D2874B762001D6B04 /* SoundroomUITests */ = {
+			isa = PBXGroup;
+			children = (
+				0417B58E2874B762001D6B04 /* SoundroomUITests.m */,
+				0417B5902874B762001D6B04 /* SoundroomUITestsLaunchTests.m */,
+			);
+			path = SoundroomUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0417B5642874B75F001D6B04 /* Soundroom */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0417B5942874B762001D6B04 /* Build configuration list for PBXNativeTarget "Soundroom" */;
+			buildPhases = (
+				0417B5612874B75F001D6B04 /* Sources */,
+				0417B5622874B75F001D6B04 /* Frameworks */,
+				0417B5632874B75F001D6B04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Soundroom;
+			productName = Soundroom;
+			productReference = 0417B5652874B75F001D6B04 /* Soundroom.app */;
+			productType = "com.apple.product-type.application";
+		};
+		0417B57F2874B762001D6B04 /* SoundroomTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0417B5972874B762001D6B04 /* Build configuration list for PBXNativeTarget "SoundroomTests" */;
+			buildPhases = (
+				0417B57C2874B762001D6B04 /* Sources */,
+				0417B57D2874B762001D6B04 /* Frameworks */,
+				0417B57E2874B762001D6B04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0417B5822874B762001D6B04 /* PBXTargetDependency */,
+			);
+			name = SoundroomTests;
+			productName = SoundroomTests;
+			productReference = 0417B5802874B762001D6B04 /* SoundroomTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		0417B5892874B762001D6B04 /* SoundroomUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0417B59A2874B762001D6B04 /* Build configuration list for PBXNativeTarget "SoundroomUITests" */;
+			buildPhases = (
+				0417B5862874B762001D6B04 /* Sources */,
+				0417B5872874B762001D6B04 /* Frameworks */,
+				0417B5882874B762001D6B04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0417B58C2874B762001D6B04 /* PBXTargetDependency */,
+			);
+			name = SoundroomUITests;
+			productName = SoundroomUITests;
+			productReference = 0417B58A2874B762001D6B04 /* SoundroomUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0417B55D2874B75F001D6B04 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					0417B5642874B75F001D6B04 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					0417B57F2874B762001D6B04 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 0417B5642874B75F001D6B04;
+					};
+					0417B5892874B762001D6B04 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 0417B5642874B75F001D6B04;
+					};
+				};
+			};
+			buildConfigurationList = 0417B5602874B75F001D6B04 /* Build configuration list for PBXProject "Soundroom" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0417B55C2874B75F001D6B04;
+			productRefGroup = 0417B5662874B75F001D6B04 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0417B5642874B75F001D6B04 /* Soundroom */,
+				0417B57F2874B762001D6B04 /* SoundroomTests */,
+				0417B5892874B762001D6B04 /* SoundroomUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0417B5632874B75F001D6B04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0417B5782874B761001D6B04 /* LaunchScreen.storyboard in Resources */,
+				0417B5752874B761001D6B04 /* Assets.xcassets in Resources */,
+				0417B5732874B75F001D6B04 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0417B57E2874B762001D6B04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0417B5882874B762001D6B04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0417B5612874B75F001D6B04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0417B5702874B75F001D6B04 /* ViewController.m in Sources */,
+				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
+				0417B57B2874B761001D6B04 /* main.m in Sources */,
+				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0417B57C2874B762001D6B04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0417B5852874B762001D6B04 /* SoundroomTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0417B5862874B762001D6B04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0417B58F2874B762001D6B04 /* SoundroomUITests.m in Sources */,
+				0417B5912874B762001D6B04 /* SoundroomUITestsLaunchTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0417B5822874B762001D6B04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0417B5642874B75F001D6B04 /* Soundroom */;
+			targetProxy = 0417B5812874B762001D6B04 /* PBXContainerItemProxy */;
+		};
+		0417B58C2874B762001D6B04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0417B5642874B75F001D6B04 /* Soundroom */;
+			targetProxy = 0417B58B2874B762001D6B04 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0417B5712874B75F001D6B04 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0417B5722874B75F001D6B04 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		0417B5762874B761001D6B04 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0417B5772874B761001D6B04 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0417B5922874B762001D6B04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		0417B5932874B762001D6B04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0417B5952874B762001D6B04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 85WMB29R8U;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Soundroom/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.metauniversity.Soundroom;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0417B5962874B762001D6B04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 85WMB29R8U;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Soundroom/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.metauniversity.Soundroom;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0417B5982874B762001D6B04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 85WMB29R8U;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.metauniversity.SoundroomTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Soundroom.app/Soundroom";
+			};
+			name = Debug;
+		};
+		0417B5992874B762001D6B04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 85WMB29R8U;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.metauniversity.SoundroomTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Soundroom.app/Soundroom";
+			};
+			name = Release;
+		};
+		0417B59B2874B762001D6B04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 85WMB29R8U;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.metauniversity.SoundroomUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Soundroom;
+			};
+			name = Debug;
+		};
+		0417B59C2874B762001D6B04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 85WMB29R8U;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.metauniversity.SoundroomUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Soundroom;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0417B5602874B75F001D6B04 /* Build configuration list for PBXProject "Soundroom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0417B5922874B762001D6B04 /* Debug */,
+				0417B5932874B762001D6B04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0417B5942874B762001D6B04 /* Build configuration list for PBXNativeTarget "Soundroom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0417B5952874B762001D6B04 /* Debug */,
+				0417B5962874B762001D6B04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0417B5972874B762001D6B04 /* Build configuration list for PBXNativeTarget "SoundroomTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0417B5982874B762001D6B04 /* Debug */,
+				0417B5992874B762001D6B04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0417B59A2874B762001D6B04 /* Build configuration list for PBXNativeTarget "SoundroomUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0417B59B2874B762001D6B04 /* Debug */,
+				0417B59C2874B762001D6B04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0417B55D2874B75F001D6B04 /* Project object */;
+}
