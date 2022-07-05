@@ -25,7 +25,6 @@
 		0417B5B42874E0D6001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B32874E0D5001D6B04 /* RoomCell.m */; };
 		0417B5B72874E377001D6B04 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B62874E377001D6B04 /* Song.m */; };
 		0417B5BD2874E4C1001D6B04 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5BC2874E4C1001D6B04 /* User.m */; };
-		0417B5C02874E4CB001D6B04 /* Queue.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5BF2874E4CB001D6B04 /* Queue.m */; };
 		0417B5C32874E4D7001D6B04 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C22874E4D7001D6B04 /* Room.m */; };
 /* End PBXBuildFile section */
 
@@ -79,8 +78,6 @@
 		0417B5B62874E377001D6B04 /* Song.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
 		0417B5BB2874E4C1001D6B04 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		0417B5BC2874E4C1001D6B04 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		0417B5BE2874E4CB001D6B04 /* Queue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Queue.h; sourceTree = "<group>"; };
-		0417B5BF2874E4CB001D6B04 /* Queue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Queue.m; sourceTree = "<group>"; };
 		0417B5C12874E4D7001D6B04 /* Room.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		0417B5C22874E4D7001D6B04 /* Room.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -182,8 +179,6 @@
 				0417B5B62874E377001D6B04 /* Song.m */,
 				0417B5BB2874E4C1001D6B04 /* User.h */,
 				0417B5BC2874E4C1001D6B04 /* User.m */,
-				0417B5BE2874E4CB001D6B04 /* Queue.h */,
-				0417B5BF2874E4CB001D6B04 /* Queue.m */,
 				0417B5C12874E4D7001D6B04 /* Room.h */,
 				0417B5C22874E4D7001D6B04 /* Room.m */,
 			);
@@ -351,7 +346,6 @@
 				0417B5B72874E377001D6B04 /* Song.m in Sources */,
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
 				0417B5A82874CEF8001D6B04 /* RecapCell.m in Sources */,
-				0417B5C02874E4CB001D6B04 /* Queue.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
 				0417B5B42874E0D6001D6B04 /* RoomCell.m in Sources */,
