@@ -1,5 +1,5 @@
 //
-//  RecapCell.h
+//  SongCell.h
 //  Soundroom
 //
 //  Created by Megan Miller on 7/5/22.
@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RecapCell : UITableViewCell
+@interface SongCell : UITableViewCell
 
 @end
 

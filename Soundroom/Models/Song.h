@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "User.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,10 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
 @property (nonatomic, strong) NSString *albumString;
-
-@property (nonatomic) NSInteger score;
-@property (nonatomic, strong) User *requester;
-
 // album image (unsure what type - possible Album model?)
 // song length
 

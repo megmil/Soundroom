@@ -1,13 +1,13 @@
 //
-//  RecapCell.m
+//  SongCell.m
 //  Soundroom
 //
 //  Created by Megan Miller on 7/5/22.
 //
 
-#import "RecapCell.h"
+#import "SongCell.h"
 
-@implementation RecapCell
+@implementation SongCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
