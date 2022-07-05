@@ -185,6 +185,11 @@
                                                     <color key="textColor" systemColor="systemGray2Color"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mMe-1u-hN1">
+                                                    <rect key="frame" x="350.5" y="11" width="43.5" height="50"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="plus" catalog="system"/>
+                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3h2-7S-swK">
                                                     <rect key="frame" x="78" y="17" width="31.5" height="19"/>
                                                     <constraints>
@@ -196,16 +201,19 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="mMe-1u-hN1" secondAttribute="bottom" id="6Jq-HQ-S5U"/>
                                                 <constraint firstItem="ec2-DU-Dak" firstAttribute="bottom" secondItem="0ab-bK-ZYQ" secondAttribute="bottomMargin" id="71s-gx-WIy"/>
+                                                <constraint firstItem="mMe-1u-hN1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3h2-7S-swK" secondAttribute="trailing" constant="8" id="83c-VF-32N"/>
                                                 <constraint firstItem="3h2-7S-swK" firstAttribute="leading" secondItem="ec2-DU-Dak" secondAttribute="trailing" constant="8" id="EZb-Lu-uVv"/>
                                                 <constraint firstItem="ec2-DU-Dak" firstAttribute="leading" secondItem="0ab-bK-ZYQ" secondAttribute="leadingMargin" id="Hh7-xa-0sr"/>
                                                 <constraint firstItem="YGk-Y2-Zg6" firstAttribute="leading" secondItem="ec2-DU-Dak" secondAttribute="trailing" constant="8" id="PTd-mT-eAS"/>
                                                 <constraint firstItem="ec2-DU-Dak" firstAttribute="top" secondItem="0ab-bK-ZYQ" secondAttribute="topMargin" id="TB6-lt-2Gi"/>
-                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="3h2-7S-swK" secondAttribute="trailing" id="byf-s4-K76"/>
+                                                <constraint firstItem="mMe-1u-hN1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="YGk-Y2-Zg6" secondAttribute="trailing" constant="8" id="XxW-n0-VSb"/>
+                                                <constraint firstItem="mMe-1u-hN1" firstAttribute="trailing" secondItem="0ab-bK-ZYQ" secondAttribute="trailingMargin" id="ddG-8a-39L"/>
                                                 <constraint firstItem="YGk-Y2-Zg6" firstAttribute="top" secondItem="3h2-7S-swK" secondAttribute="bottom" constant="3" id="mL8-tw-Tyo"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="YGk-Y2-Zg6" secondAttribute="bottom" constant="6" id="qhi-Dd-aoO"/>
                                                 <constraint firstItem="3h2-7S-swK" firstAttribute="top" secondItem="0ab-bK-ZYQ" secondAttribute="topMargin" constant="6" id="qht-68-xDC"/>
-                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="YGk-Y2-Zg6" secondAttribute="trailing" id="tyJ-uE-aWN"/>
+                                                <constraint firstItem="mMe-1u-hN1" firstAttribute="top" secondItem="0ab-bK-ZYQ" secondAttribute="topMargin" id="x1W-f3-kmT"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -239,6 +247,7 @@
         <image name="hifispeaker.fill" catalog="system" width="111" height="128"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
