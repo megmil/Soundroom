@@ -19,6 +19,8 @@
 		0417B59F2874B85C001D6B04 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0417B59E2874B85C001D6B04 /* Keys.plist */; };
 		0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5A42874CED2001D6B04 /* ProfileViewController.m */; };
 		0417B5A82874CEF8001D6B04 /* RecapCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5A72874CEF8001D6B04 /* RecapCell.m */; };
+		0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5AA2874D394001D6B04 /* SearchViewController.m */; };
+		0417B5AE2874D3A5001D6B04 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5AD2874D3A5001D6B04 /* SearchCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,10 @@
 		0417B5A42874CED2001D6B04 /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		0417B5A62874CEF8001D6B04 /* RecapCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecapCell.h; sourceTree = "<group>"; };
 		0417B5A72874CEF8001D6B04 /* RecapCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecapCell.m; sourceTree = "<group>"; };
+		0417B5A92874D394001D6B04 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		0417B5AA2874D394001D6B04 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		0417B5AC2874D3A5001D6B04 /* SearchCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchCell.h; sourceTree = "<group>"; };
+		0417B5AD2874D3A5001D6B04 /* SearchCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +169,8 @@
 			children = (
 				0417B5A62874CEF8001D6B04 /* RecapCell.h */,
 				0417B5A72874CEF8001D6B04 /* RecapCell.m */,
+				0417B5AC2874D3A5001D6B04 /* SearchCell.h */,
+				0417B5AD2874D3A5001D6B04 /* SearchCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -172,6 +180,8 @@
 			children = (
 				0417B5A32874CED2001D6B04 /* ProfileViewController.h */,
 				0417B5A42874CED2001D6B04 /* ProfileViewController.m */,
+				0417B5A92874D394001D6B04 /* SearchViewController.h */,
+				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -310,7 +320,9 @@
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
 				0417B5A82874CEF8001D6B04 /* RecapCell.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
+				0417B5AE2874D3A5001D6B04 /* SearchCell.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
+				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
