@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5692874B75F001D6B04 /* AppDelegate.m */; };
 		0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B56C2874B75F001D6B04 /* SceneDelegate.m */; };
-		0417B5702874B75F001D6B04 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B56F2874B75F001D6B04 /* ViewController.m */; };
 		0417B5732874B75F001D6B04 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0417B5712874B75F001D6B04 /* Main.storyboard */; };
 		0417B5752874B761001D6B04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0417B5742874B761001D6B04 /* Assets.xcassets */; };
 		0417B5782874B761001D6B04 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0417B5762874B761001D6B04 /* LaunchScreen.storyboard */; };
@@ -17,6 +16,7 @@
 		0417B5852874B762001D6B04 /* SoundroomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5842874B762001D6B04 /* SoundroomTests.m */; };
 		0417B58F2874B762001D6B04 /* SoundroomUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B58E2874B762001D6B04 /* SoundroomUITests.m */; };
 		0417B5912874B762001D6B04 /* SoundroomUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5902874B762001D6B04 /* SoundroomUITestsLaunchTests.m */; };
+		0417B59F2874B85C001D6B04 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0417B59E2874B85C001D6B04 /* Keys.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,8 +42,6 @@
 		0417B5692874B75F001D6B04 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0417B56B2874B75F001D6B04 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		0417B56C2874B75F001D6B04 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
-		0417B56E2874B75F001D6B04 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		0417B56F2874B75F001D6B04 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		0417B5722874B75F001D6B04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0417B5742874B761001D6B04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0417B5772874B761001D6B04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -54,6 +52,7 @@
 		0417B58A2874B762001D6B04 /* SoundroomUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoundroomUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0417B58E2874B762001D6B04 /* SoundroomUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundroomUITests.m; sourceTree = "<group>"; };
 		0417B5902874B762001D6B04 /* SoundroomUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundroomUITestsLaunchTests.m; sourceTree = "<group>"; };
+		0417B59E2874B85C001D6B04 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,12 +107,10 @@
 				0417B5692874B75F001D6B04 /* AppDelegate.m */,
 				0417B56B2874B75F001D6B04 /* SceneDelegate.h */,
 				0417B56C2874B75F001D6B04 /* SceneDelegate.m */,
-				0417B56E2874B75F001D6B04 /* ViewController.h */,
-				0417B56F2874B75F001D6B04 /* ViewController.m */,
-				0417B5712874B75F001D6B04 /* Main.storyboard */,
 				0417B5742874B761001D6B04 /* Assets.xcassets */,
-				0417B5762874B761001D6B04 /* LaunchScreen.storyboard */,
+				0417B59D2874B78F001D6B04 /* Storyboards */,
 				0417B5792874B761001D6B04 /* Info.plist */,
+				0417B59E2874B85C001D6B04 /* Keys.plist */,
 				0417B57A2874B761001D6B04 /* main.m */,
 			);
 			path = Soundroom;
@@ -134,6 +131,15 @@
 				0417B5902874B762001D6B04 /* SoundroomUITestsLaunchTests.m */,
 			);
 			path = SoundroomUITests;
+			sourceTree = "<group>";
+		};
+		0417B59D2874B78F001D6B04 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				0417B5712874B75F001D6B04 /* Main.storyboard */,
+				0417B5762874B761001D6B04 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,6 +245,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0417B59F2874B85C001D6B04 /* Keys.plist in Resources */,
 				0417B5782874B761001D6B04 /* LaunchScreen.storyboard in Resources */,
 				0417B5752874B761001D6B04 /* Assets.xcassets in Resources */,
 				0417B5732874B75F001D6B04 /* Main.storyboard in Resources */,
@@ -266,7 +273,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0417B5702874B75F001D6B04 /* ViewController.m in Sources */,
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
