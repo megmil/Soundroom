@@ -17,6 +17,8 @@
 		0417B58F2874B762001D6B04 /* SoundroomUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B58E2874B762001D6B04 /* SoundroomUITests.m */; };
 		0417B5912874B762001D6B04 /* SoundroomUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5902874B762001D6B04 /* SoundroomUITestsLaunchTests.m */; };
 		0417B59F2874B85C001D6B04 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0417B59E2874B85C001D6B04 /* Keys.plist */; };
+		0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5A42874CED2001D6B04 /* ProfileViewController.m */; };
+		0417B5A82874CEF8001D6B04 /* RecapCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5A72874CEF8001D6B04 /* RecapCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,10 @@
 		0417B58E2874B762001D6B04 /* SoundroomUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundroomUITests.m; sourceTree = "<group>"; };
 		0417B5902874B762001D6B04 /* SoundroomUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundroomUITestsLaunchTests.m; sourceTree = "<group>"; };
 		0417B59E2874B85C001D6B04 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
+		0417B5A32874CED2001D6B04 /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		0417B5A42874CED2001D6B04 /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		0417B5A62874CEF8001D6B04 /* RecapCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecapCell.h; sourceTree = "<group>"; };
+		0417B5A72874CEF8001D6B04 /* RecapCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecapCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,15 +109,18 @@
 		0417B5672874B75F001D6B04 /* Soundroom */ = {
 			isa = PBXGroup;
 			children = (
-				0417B5682874B75F001D6B04 /* AppDelegate.h */,
-				0417B5692874B75F001D6B04 /* AppDelegate.m */,
+				0417B5A22874B94B001D6B04 /* ViewControllers */,
+				0417B5A12874B942001D6B04 /* Views */,
+				0417B5A02874B937001D6B04 /* Models */,
+				0417B59D2874B78F001D6B04 /* Storyboards */,
 				0417B56B2874B75F001D6B04 /* SceneDelegate.h */,
 				0417B56C2874B75F001D6B04 /* SceneDelegate.m */,
+				0417B5682874B75F001D6B04 /* AppDelegate.h */,
+				0417B5692874B75F001D6B04 /* AppDelegate.m */,
+				0417B57A2874B761001D6B04 /* main.m */,
 				0417B5742874B761001D6B04 /* Assets.xcassets */,
-				0417B59D2874B78F001D6B04 /* Storyboards */,
 				0417B5792874B761001D6B04 /* Info.plist */,
 				0417B59E2874B85C001D6B04 /* Keys.plist */,
-				0417B57A2874B761001D6B04 /* main.m */,
 			);
 			path = Soundroom;
 			sourceTree = "<group>";
@@ -140,6 +149,31 @@
 				0417B5762874B761001D6B04 /* LaunchScreen.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		0417B5A02874B937001D6B04 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		0417B5A12874B942001D6B04 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0417B5A62874CEF8001D6B04 /* RecapCell.h */,
+				0417B5A72874CEF8001D6B04 /* RecapCell.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0417B5A22874B94B001D6B04 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				0417B5A32874CED2001D6B04 /* ProfileViewController.h */,
+				0417B5A42874CED2001D6B04 /* ProfileViewController.m */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,7 +308,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
+				0417B5A82874CEF8001D6B04 /* RecapCell.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
+				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
