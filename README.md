@@ -9,7 +9,7 @@
 ## 1. Overview
 
 ### Description
-A collaborative music queue that allows users to create/join virtual music rooms where other members can request and vote on queue songs.
+A collaborative music queue where users can create/join virtual music rooms to request and vote on songs.
 
 ### Requirements
 From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tRvQZDizWwBSQVCfRiS4sqMZY6Y/edit#heading=h.8l153mzbgh5r).
