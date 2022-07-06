@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 // album image (unsure what type - possible Album model?)
 // song length
 
++ (NSMutableArray *)songsWithArray:(NSArray *)dictionaries;
+
 @end
 
 NS_ASSUME_NONNULL_END

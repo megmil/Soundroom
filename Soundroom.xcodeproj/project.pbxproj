@@ -27,6 +27,7 @@
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* QueueSong.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
+		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,8 @@
 		0417B5CA2874F6E6001D6B04 /* QueueSong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueueSong.h; sourceTree = "<group>"; };
 		0417B5CB2874F6E6001D6B04 /* QueueSong.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueueSong.m; sourceTree = "<group>"; };
 		049304A428762A58006AA9A3 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
+		049304A928762B12006AA9A3 /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
+		049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
 		2C04CEF4D1B5E078613F406E /* Pods-Soundroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.debug.xcconfig"; sourceTree = "<group>"; };
 		3F7A823CE0AA3E0DA2379AC1 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		64C55F3CE8494318901C6ED5 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -141,17 +144,13 @@
 		0417B5672874B75F001D6B04 /* Soundroom */ = {
 			isa = PBXGroup;
 			children = (
-				0417B5CD2875F8D8001D6B04 /* Handler */,
+				049304A828762ADF006AA9A3 /* Handlers */,
 				0417B5A22874B94B001D6B04 /* ViewControllers */,
 				0417B5A12874B942001D6B04 /* Views */,
 				0417B5A02874B937001D6B04 /* Models */,
 				0417B59D2874B78F001D6B04 /* Storyboards */,
-				0417B56B2874B75F001D6B04 /* SceneDelegate.h */,
-				0417B56C2874B75F001D6B04 /* SceneDelegate.m */,
-				0417B5682874B75F001D6B04 /* AppDelegate.h */,
-				0417B5692874B75F001D6B04 /* AppDelegate.m */,
+				049304A628762AA9006AA9A3 /* Resources */,
 				0417B57A2874B761001D6B04 /* main.m */,
-				0417B5742874B761001D6B04 /* Assets.xcassets */,
 				0417B5792874B761001D6B04 /* Info.plist */,
 				0417B59E2874B85C001D6B04 /* Keys.plist */,
 			);
@@ -223,11 +222,25 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		0417B5CD2875F8D8001D6B04 /* Handler */ = {
+		049304A628762AA9006AA9A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0417B56B2874B75F001D6B04 /* SceneDelegate.h */,
+				0417B56C2874B75F001D6B04 /* SceneDelegate.m */,
+				0417B5682874B75F001D6B04 /* AppDelegate.h */,
+				0417B5692874B75F001D6B04 /* AppDelegate.m */,
+				0417B5742874B761001D6B04 /* Assets.xcassets */,
 			);
-			path = Handler;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		049304A828762ADF006AA9A3 /* Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				049304A928762B12006AA9A3 /* SpotifyAPIManager.h */,
+				049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */,
+			);
+			path = Handlers;
 			sourceTree = "<group>";
 		};
 		9FFFBC745A92601850297CB2 /* Frameworks */ = {
@@ -493,6 +506,7 @@
 				0417B5C32874E4D7001D6B04 /* Room.m in Sources */,
 				0417B5B72874E377001D6B04 /* Song.m in Sources */,
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
+				049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
 				0417B5BD2874E4C1001D6B04 /* User.m in Sources */,
