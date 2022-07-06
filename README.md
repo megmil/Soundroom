@@ -1,5 +1,11 @@
 # Soundroom
 
+# Table of Contents
+1. [Overview](#overview)
+2. [Product Spec](#product-spec)
+3. [Project Plan](#project-plan)
+4. [Schema](#schema)
+
 ## Overview
 
 ### Description
@@ -14,6 +20,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 * Uses at least one gesture
 * Incorporates at least one external library to add visual polish
 * Uses at least one animation
+
 
 ## Product Spec
 
@@ -55,8 +62,13 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
   * Add songs to the queue
 
 
-## Wireframes
-<img src="https://user-images.githubusercontent.com/101139170/177431593-f5094072-df7e-4d8d-904b-70a5da8a0066.png" alt="drawing" width="650"/>
+## Project Plan
+
+### Wireframes
+<img width="650" alt="wireframe" src="https://user-images.githubusercontent.com/101139170/177431593-f5094072-df7e-4d8d-904b-70a5da8a0066.png">
+
+### Gantt Chart
+<img width="760" alt="gantt" src="https://user-images.githubusercontent.com/101139170/177448765-d558fb32-1be6-43d9-a352-cfb01e51b752.png">
 
 
 ## Schema
@@ -85,14 +97,15 @@ Made with [Table Generator](https://www.tablesgenerator.com/markdown_tables).
 | requester    | User      | user who added the song to the queue |
 
 #### Room
-| **Property** | **Type**                    | **Description**                                   |
-|--------------|-----------------------------|---------------------------------------------------|
-| host         | User                        | user who created the room                         |
-| members      | NSMutableArray (Users)      | list of users who can collaborate in the room     |
-| queue        | NSMutableArray (QueueSongs) | list of songs to be played (or currently playing) |
-| playedSongs  | NSMutableArray (QueueSongs) | list of songs that have been played               |
-| title        | NSString                    | name of room                                      |
-| cover        | ?                           | image for room                                    |
+| **Property** | **Type**                    | **Description**                               |
+|--------------|-----------------------------|-----------------------------------------------|
+| host         | User                        | user who created the room                     |
+| members      | NSMutableArray (Users)      | list of users who can collaborate in the room |
+| currentSong  | QueueSong                   | currently playing song                        |
+| queue        | NSMutableArray (QueueSongs) | list of songs to be played                    |
+| playedSongs  | NSMutableArray (QueueSongs) | list of songs that have been played           |
+| title        | NSString                    | name of room                                  |
+| cover        | ?                           | image for room                                |
 
 #### User
 | **Property** | **Type**               | **Description**           |
@@ -101,19 +114,3 @@ Made with [Table Generator](https://www.tablesgenerator.com/markdown_tables).
 | password     | NSString               | login info                |
 | profileImage | ?                      | profile image for display |
 | recentRooms  | NSMutableArray (Rooms) | list of past sessions     |
-
-
-## Project Plan
-
-### Week 1
-* Search
-
-### Week 2
-
-### Week 3
-
-### Week 4
-
-### Week 5
-
-### Week 6
