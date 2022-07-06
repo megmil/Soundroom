@@ -26,9 +26,7 @@
 		0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SongCell.m */; };
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* QueueSong.m */; };
-		624BDB0B1F4A3DC1D2EF2678 /* Pods_SoundroomTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD769741374B7C6BCCAC5318 /* Pods_SoundroomTests.framework */; };
-		6D2AC072D6F5CD21525DD9FD /* Pods_Soundroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD3F74A83F650A6AB34B62A7 /* Pods_Soundroom.framework */; };
-		7EB72195087588882455C6E8 /* Pods_Soundroom_SoundroomUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F7FF0D8F7323BB772BBD5E9 /* Pods_Soundroom_SoundroomUITests.framework */; };
+		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,15 +81,13 @@
 		0417B5C82874F5F2001D6B04 /* RoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomCell.m; sourceTree = "<group>"; };
 		0417B5CA2874F6E6001D6B04 /* QueueSong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueueSong.h; sourceTree = "<group>"; };
 		0417B5CB2874F6E6001D6B04 /* QueueSong.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueueSong.m; sourceTree = "<group>"; };
+		049304A428762A58006AA9A3 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		2C04CEF4D1B5E078613F406E /* Pods-Soundroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.debug.xcconfig"; sourceTree = "<group>"; };
 		3F7A823CE0AA3E0DA2379AC1 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		64C55F3CE8494318901C6ED5 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6B12B6F96A1C67D8FC46A66B /* Pods-SoundroomTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.release.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.release.xcconfig"; sourceTree = "<group>"; };
-		6F7FF0D8F7323BB772BBD5E9 /* Pods_Soundroom_SoundroomUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundroom_SoundroomUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		804E14CE36C80558575DA967 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
 		A2FC9FFA6BB05BB3F07238C4 /* Pods-Soundroom-SoundroomUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.release.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.release.xcconfig"; sourceTree = "<group>"; };
-		DD769741374B7C6BCCAC5318 /* Pods_SoundroomTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundroomTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FD3F74A83F650A6AB34B62A7 /* Pods_Soundroom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundroom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D2AC072D6F5CD21525DD9FD /* Pods_Soundroom.framework in Frameworks */,
+				049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +103,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				624BDB0B1F4A3DC1D2EF2678 /* Pods_SoundroomTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +110,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EB72195087588882455C6E8 /* Pods_Soundroom_SoundroomUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,9 +233,7 @@
 		9FFFBC745A92601850297CB2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FD3F74A83F650A6AB34B62A7 /* Pods_Soundroom.framework */,
-				6F7FF0D8F7323BB772BBD5E9 /* Pods_Soundroom_SoundroomUITests.framework */,
-				DD769741374B7C6BCCAC5318 /* Pods_SoundroomTests.framework */,
+				049304A428762A58006AA9A3 /* SpotifyiOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -256,7 +248,6 @@
 				64C55F3CE8494318901C6ED5 /* Pods-SoundroomTests.debug.xcconfig */,
 				6B12B6F96A1C67D8FC46A66B /* Pods-SoundroomTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -685,6 +676,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 85WMB29R8U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Soundroom/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -713,6 +708,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 85WMB29R8U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Soundroom/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
