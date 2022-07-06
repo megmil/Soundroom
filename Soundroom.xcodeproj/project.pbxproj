@@ -26,6 +26,9 @@
 		0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SongCell.m */; };
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* QueueSong.m */; };
+		624BDB0B1F4A3DC1D2EF2678 /* Pods_SoundroomTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD769741374B7C6BCCAC5318 /* Pods_SoundroomTests.framework */; };
+		6D2AC072D6F5CD21525DD9FD /* Pods_Soundroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD3F74A83F650A6AB34B62A7 /* Pods_Soundroom.framework */; };
+		7EB72195087588882455C6E8 /* Pods_Soundroom_SoundroomUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F7FF0D8F7323BB772BBD5E9 /* Pods_Soundroom_SoundroomUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +83,15 @@
 		0417B5C82874F5F2001D6B04 /* RoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomCell.m; sourceTree = "<group>"; };
 		0417B5CA2874F6E6001D6B04 /* QueueSong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueueSong.h; sourceTree = "<group>"; };
 		0417B5CB2874F6E6001D6B04 /* QueueSong.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueueSong.m; sourceTree = "<group>"; };
+		2C04CEF4D1B5E078613F406E /* Pods-Soundroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.debug.xcconfig"; sourceTree = "<group>"; };
+		3F7A823CE0AA3E0DA2379AC1 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		64C55F3CE8494318901C6ED5 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6B12B6F96A1C67D8FC46A66B /* Pods-SoundroomTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.release.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.release.xcconfig"; sourceTree = "<group>"; };
+		6F7FF0D8F7323BB772BBD5E9 /* Pods_Soundroom_SoundroomUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundroom_SoundroomUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		804E14CE36C80558575DA967 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
+		A2FC9FFA6BB05BB3F07238C4 /* Pods-Soundroom-SoundroomUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.release.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.release.xcconfig"; sourceTree = "<group>"; };
+		DD769741374B7C6BCCAC5318 /* Pods_SoundroomTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundroomTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD3F74A83F650A6AB34B62A7 /* Pods_Soundroom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundroom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D2AC072D6F5CD21525DD9FD /* Pods_Soundroom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				624BDB0B1F4A3DC1D2EF2678 /* Pods_SoundroomTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EB72195087588882455C6E8 /* Pods_Soundroom_SoundroomUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +129,8 @@
 				0417B5832874B762001D6B04 /* SoundroomTests */,
 				0417B58D2874B762001D6B04 /* SoundroomUITests */,
 				0417B5662874B75F001D6B04 /* Products */,
+				A0CB11D43C3108DE9C7376C1 /* Pods */,
+				9FFFBC745A92601850297CB2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -219,6 +236,30 @@
 			path = Handler;
 			sourceTree = "<group>";
 		};
+		9FFFBC745A92601850297CB2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FD3F74A83F650A6AB34B62A7 /* Pods_Soundroom.framework */,
+				6F7FF0D8F7323BB772BBD5E9 /* Pods_Soundroom_SoundroomUITests.framework */,
+				DD769741374B7C6BCCAC5318 /* Pods_SoundroomTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A0CB11D43C3108DE9C7376C1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2C04CEF4D1B5E078613F406E /* Pods-Soundroom.debug.xcconfig */,
+				804E14CE36C80558575DA967 /* Pods-Soundroom.release.xcconfig */,
+				3F7A823CE0AA3E0DA2379AC1 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */,
+				A2FC9FFA6BB05BB3F07238C4 /* Pods-Soundroom-SoundroomUITests.release.xcconfig */,
+				64C55F3CE8494318901C6ED5 /* Pods-SoundroomTests.debug.xcconfig */,
+				6B12B6F96A1C67D8FC46A66B /* Pods-SoundroomTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -226,9 +267,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0417B5942874B762001D6B04 /* Build configuration list for PBXNativeTarget "Soundroom" */;
 			buildPhases = (
+				6F6D09F04510EB5BBF1B41CA /* [CP] Check Pods Manifest.lock */,
 				0417B5612874B75F001D6B04 /* Sources */,
 				0417B5622874B75F001D6B04 /* Frameworks */,
 				0417B5632874B75F001D6B04 /* Resources */,
+				AC3BF7AF6D4C790E92ACCDE0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -243,6 +286,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0417B5972874B762001D6B04 /* Build configuration list for PBXNativeTarget "SoundroomTests" */;
 			buildPhases = (
+				557FD16E77EC1358FC8C3822 /* [CP] Check Pods Manifest.lock */,
 				0417B57C2874B762001D6B04 /* Sources */,
 				0417B57D2874B762001D6B04 /* Frameworks */,
 				0417B57E2874B762001D6B04 /* Resources */,
@@ -261,9 +305,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0417B59A2874B762001D6B04 /* Build configuration list for PBXNativeTarget "SoundroomUITests" */;
 			buildPhases = (
+				4BA6C06397A64E5BCFB2967C /* [CP] Check Pods Manifest.lock */,
 				0417B5862874B762001D6B04 /* Sources */,
 				0417B5872874B762001D6B04 /* Frameworks */,
 				0417B5882874B762001D6B04 /* Resources */,
+				838857A664DECB1064531802 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -344,6 +390,109 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4BA6C06397A64E5BCFB2967C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Soundroom-SoundroomUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		557FD16E77EC1358FC8C3822 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SoundroomTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F6D09F04510EB5BBF1B41CA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Soundroom-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		838857A664DECB1064531802 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC3BF7AF6D4C790E92ACCDE0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Soundroom/Pods-Soundroom-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Soundroom/Pods-Soundroom-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Soundroom/Pods-Soundroom-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0417B5612874B75F001D6B04 /* Sources */ = {
@@ -529,6 +678,7 @@
 		};
 		0417B5952874B762001D6B04 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2C04CEF4D1B5E078613F406E /* Pods-Soundroom.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -556,6 +706,7 @@
 		};
 		0417B5962874B762001D6B04 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 804E14CE36C80558575DA967 /* Pods-Soundroom.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -583,6 +734,7 @@
 		};
 		0417B5982874B762001D6B04 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 64C55F3CE8494318901C6ED5 /* Pods-SoundroomTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -601,6 +753,7 @@
 		};
 		0417B5992874B762001D6B04 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B12B6F96A1C67D8FC46A66B /* Pods-SoundroomTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -619,6 +772,7 @@
 		};
 		0417B59B2874B762001D6B04 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F7A823CE0AA3E0DA2379AC1 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -635,6 +789,7 @@
 		};
 		0417B59C2874B762001D6B04 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2FC9FFA6BB05BB3F07238C4 /* Pods-Soundroom-SoundroomUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
