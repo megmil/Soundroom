@@ -1,12 +1,12 @@
 # Soundroom
 
-# Table of Contents
+## Table of Contents
 1. [Overview](#overview)
 2. [Product Spec](#product-spec)
 3. [Project Plan](#project-plan)
 4. [Schema](#schema)
 
-## Overview
+## 1. Overview
 
 ### Description
 A collaborative music queue that allows users to create/join virtual music rooms where other members can request and vote on queue songs.
@@ -22,7 +22,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 * Uses at least one animation
 
 
-## Product Spec
+## 2. Product Spec
 
 ### User Stories
 
@@ -62,7 +62,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
   * Add songs to the queue
 
 
-## Project Plan
+## 3. Project Plan
 
 ### Wireframes
 <img width="650" alt="wireframe" src="https://user-images.githubusercontent.com/101139170/177431593-f5094072-df7e-4d8d-904b-70a5da8a0066.png">
@@ -71,7 +71,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 <img width="760" alt="gantt" src="https://user-images.githubusercontent.com/101139170/177448765-d558fb32-1be6-43d9-a352-cfb01e51b752.png">
 
 
-## Schema
+## 4. Schema
 
 ### Models
 Made with [Table Generator](https://www.tablesgenerator.com/markdown_tables).
