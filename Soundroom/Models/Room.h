@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "User.h"
-#import "Song.h"
+#import "QueueSong.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,9 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) User *host;
 @property (nonatomic, strong) NSMutableArray <User *> *members;
-
-@property (nonatomic, strong) Song *currentSong;
-@property (nonatomic, strong) NSMutableArray <Song *> *queue;
+@property (nonatomic, strong) NSMutableArray <QueueSong *> *queue;
+@property (nonatomic, strong) NSMutableArray <QueueSong *> *playedSongs;
 
 @property (nonatomic, strong) NSString *title;
 // room image
