@@ -130,6 +130,7 @@
 		0417B5672874B75F001D6B04 /* Soundroom */ = {
 			isa = PBXGroup;
 			children = (
+				0417B5CD2875F8D8001D6B04 /* Handler */,
 				0417B5A22874B94B001D6B04 /* ViewControllers */,
 				0417B5A12874B942001D6B04 /* Views */,
 				0417B5A02874B937001D6B04 /* Models */,
@@ -209,6 +210,13 @@
 				0417B5B02874E0B6001D6B04 /* RoomViewController.m */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0417B5CD2875F8D8001D6B04 /* Handler */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Handler;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
