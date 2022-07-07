@@ -11,6 +11,6 @@
 
 + (instancetype)shared;
 
-- (void)getSongsWithText:(NSString *)text forFilter:(NSString *)filter completion:(void(^)(NSArray *songs, NSError *error))completion;
+- (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion;
 
 @end

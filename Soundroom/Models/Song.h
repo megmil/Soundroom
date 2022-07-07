@@ -11,13 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Song : NSObject
 
+@property (nonatomic, strong) NSString *idString;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
-@property (nonatomic, strong) NSString *albumString;
-// album image (unsure what type - possible Album model?)
-// song length
+@property (nonatomic, strong) NSString *albumTitle;
+@property (nonatomic, strong) NSData *albumImageData;
+@property (nonatomic, strong) NSString *durationString;
 
-+ (NSMutableArray *)songsWithArray:(NSArray *)dictionaries;
++ (NSMutableArray *)songsWithDictionary:(NSDictionary *)dictionary;
 
 @end
 

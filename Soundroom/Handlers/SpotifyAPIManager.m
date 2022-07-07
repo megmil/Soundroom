@@ -7,7 +7,6 @@
 
 #import "SpotifyAPIManager.h"
 #import "Song.h"
-#import <SpotifyiOS/SpotifyiOS.h>
 
 static NSString * const baseURLString = @"https://api.spotify.com";
 
@@ -44,22 +43,27 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     return self;
 }
 
-// REQUIRES: filter is "track" "artist" or "album"
-- (void)getSongsWithText:(NSString *)text forFilter:(NSString *)filter completion:(void(^)(NSArray *songs, NSError *error))completion {
+- (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
+    NSString *encodedQuery = [query stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
+    NSString *urlString = [NSString stringWithFormat:@"v1/search?q=%@&type=track", encodedQuery];
     
-    NSString *queryURLString = [NSString stringWithFormat:@"q=%@:%@", filter, text];
-    NSString *urlString = [NSString stringWithFormat:@"v1/search?%@&type=track", queryURLString];
-    
+    self.responseSerializer = [AFJSONResponseSerializer serializer];
+    self.requestSerializer = [AFJSONRequestSerializer serializer];
     [self.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [self.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Authorization"];
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
+    NSString *token = [dict objectForKey: @"spotify_token"];
+    NSString *authorizationValue = [NSString stringWithFormat:@"Bearer %@", token];
+    [self.requestSerializer setValue:authorizationValue forHTTPHeaderField:@"Authorization"];
     
     [self GET:urlString parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         // progress
-    } success:^(NSURLSessionDataTask * _Nonnull task, NSArray * _Nullable songDictionaries) {
-        NSMutableArray *songs = [Song songsWithArray:songDictionaries];
+    } success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable dictionary) {
+        NSMutableArray *songs = [Song songsWithDictionary:dictionary];
         completion(songs, nil);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"Failed to get songs: %@", error.localizedDescription);
+        completion(nil, error);
     }];
 }
 
