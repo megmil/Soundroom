@@ -13,5 +13,6 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         appDelegateClassName = NSStringFromClass([AppDelegate class]);
     }
+    
     return UIApplicationMain(argc, argv, nil, appDelegateClassName);
 }

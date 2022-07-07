@@ -431,6 +431,11 @@
                                                 <constraint firstItem="mMe-1u-hN1" firstAttribute="top" secondItem="0ab-bK-ZYQ" secondAttribute="topMargin" id="x1W-f3-kmT"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="albumImageView" destination="ec2-DU-Dak" id="8zF-nS-AHE"/>
+                                            <outlet property="artistLabel" destination="YGk-Y2-Zg6" id="Lwr-M5-Gtz"/>
+                                            <outlet property="titleLabel" destination="3h2-7S-swK" id="Kab-4q-iBp"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -451,6 +456,10 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Search" image="magnifyingglass" catalog="system" id="kb2-DM-I9s"/>
+                    <connections>
+                        <outlet property="searchBar" destination="WHf-9a-A3C" id="STA-sh-AvL"/>
+                        <outlet property="tableView" destination="LXa-29-WZw" id="mq7-Tp-LN3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SMw-zg-16G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
