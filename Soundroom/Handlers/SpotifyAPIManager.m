@@ -23,53 +23,48 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 }
 
 - (instancetype)init {
-    
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
-
-    NSString *path = [[NSBundle mainBundle] pathForResource: @"OAuth2Credentials" ofType: @"plist"];
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
-    NSString *clientID = [dict objectForKey: @"OAuth2ClientId"];
-    NSString *secret = [dict objectForKey: @"OAuth2Secret"];
-    
-    // check for launch arguments override
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2ClientId"]) {
-        clientID = [[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2Secret"];
-    }
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2ClientId"]) {
-        secret = [[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2Secret"];
-    }
-    
-    self.responseSerializer = [AFJSONResponseSerializer serializer];
-    self.requestSerializer = [AFJSONRequestSerializer serializer];
     self = [self initWithBaseURL:baseURL];
-    
     return self;
 }
 
-- (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
+# pragma mark - Server
 
+- (void)getSongsWithParameters:(NSDictionary *)parameters
+                    completion:(void(^)(NSArray *songs, NSError *error))completion {
+    NSString *urlString = [NSString stringWithFormat:@"v1/search?"];
+    
+    [self GET:urlString parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
+        // TODO: progress
+    } success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable dictionary) {
+        NSMutableArray *songs = [Song songsWithDictionary:dictionary];
+        completion(songs, nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        completion(nil, error);
+    }];
+}
+
+# pragma mark - Public
+
+- (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
     [[SpotifyAuthClient sharedInstance] accessToken:^(NSString *accessToken) {
         if (accessToken) {
-            NSString *authorizationValue = [NSString stringWithFormat:@"Bearer %@", accessToken];
-            
-            NSString *encodedQuery = [query stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
-            NSString *urlString = [NSString stringWithFormat:@"v1/search?q=%@&type=track", encodedQuery];
-            
-            [self.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-            [self.requestSerializer setValue:authorizationValue forHTTPHeaderField:@"Authorization"];
-            
-            [self GET:urlString parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-                // progress
-            } success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable dictionary) {
-                NSMutableArray *songs = [Song songsWithDictionary:dictionary];
-                completion(songs, nil);
-            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                completion(nil, error);
-            }];
+            NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
+            [self getSongsWithParameters:parameters completion:completion];
         } else {
             NSLog(@"API: Error: Access token is nil.");
+            completion(nil, nil);
         }
     }];
+}
+
+# pragma mark - Helpers
+
+- (NSDictionary *)searchRequestParametersWithToken:(NSString *)token query:(NSString *)query {
+    NSDictionary *parameters = @{@"access_token": token,
+                                 @"type": @"track",
+                                 @"q": query};
+    return parameters;
 }
 
 @end
