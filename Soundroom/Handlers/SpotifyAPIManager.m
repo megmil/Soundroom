@@ -26,17 +26,17 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
 
-    NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"OAuth2Credentials" ofType: @"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
-    NSString *clientID = [dict objectForKey: @"spotify_client_id"];
-    NSString *secret = [dict objectForKey: @"spotify_client_secret"];
+    NSString *clientID = [dict objectForKey: @"OAuth2ClientId"];
+    NSString *secret = [dict objectForKey: @"OAuth2Secret"];
     
     // check for launch arguments override
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"spotify_client_id"]) {
-        clientID = [[NSUserDefaults standardUserDefaults] stringForKey:@"spotify_client_id"];
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2ClientId"]) {
+        clientID = [[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2Secret"];
     }
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"spotify_client_secret"]) {
-        secret = [[NSUserDefaults standardUserDefaults] stringForKey:@"spotify_client_secret"];
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2ClientId"]) {
+        secret = [[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2Secret"];
     }
     
     self.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -47,7 +47,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 }
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
-    // get acccess token
+
     [[OAuth2Client sharedInstance] accessToken:^(NSString *accessToken) {
         if (accessToken) {
             NSString *authorizationValue = [NSString stringWithFormat:@"Bearer %@", accessToken];
@@ -67,7 +67,6 @@ static NSString * const baseURLString = @"https://api.spotify.com";
                 completion(nil, error);
             }];
         } else {
-            // stop
             NSLog(@"API: Error: Access token is nil.");
         }
     }];
