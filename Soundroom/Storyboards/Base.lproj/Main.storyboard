@@ -404,7 +404,7 @@
                                 </segments>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="LXa-29-WZw">
-                                <rect key="frame" x="0.0" y="139" width="414" height="757"/>
+                                <rect key="frame" x="0.0" y="139" width="414" height="674"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" rowHeight="72" id="pJh-ar-kta" customClass="SongCell">
@@ -462,6 +462,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="addButton" destination="mMe-1u-hN1" id="BBg-qM-T6Z"/>
                                             <outlet property="albumImageView" destination="ec2-DU-Dak" id="8zF-nS-AHE"/>
                                             <outlet property="artistLabel" destination="YGk-Y2-Zg6" id="Lwr-M5-Gtz"/>
                                             <outlet property="titleLabel" destination="3h2-7S-swK" id="Kab-4q-iBp"/>
@@ -477,7 +478,7 @@
                             <constraint firstItem="WHf-9a-A3C" firstAttribute="top" secondItem="OCt-xl-qSi" secondAttribute="top" id="7P9-Gq-196"/>
                             <constraint firstItem="LXa-29-WZw" firstAttribute="top" secondItem="6oU-Nr-VPD" secondAttribute="bottom" constant="8" id="CFG-aY-keC"/>
                             <constraint firstItem="WHf-9a-A3C" firstAttribute="leading" secondItem="OCt-xl-qSi" secondAttribute="leading" id="QfJ-M3-RYO"/>
-                            <constraint firstAttribute="bottom" secondItem="LXa-29-WZw" secondAttribute="bottom" id="RQx-hg-OUE"/>
+                            <constraint firstItem="LXa-29-WZw" firstAttribute="bottom" secondItem="OCt-xl-qSi" secondAttribute="bottom" id="RXK-cN-e4m"/>
                             <constraint firstItem="OCt-xl-qSi" firstAttribute="trailing" secondItem="6oU-Nr-VPD" secondAttribute="trailing" constant="75" id="YmS-tL-SFB"/>
                             <constraint firstItem="LXa-29-WZw" firstAttribute="leading" secondItem="OCt-xl-qSi" secondAttribute="leading" id="ZVR-TZ-iTg"/>
                             <constraint firstItem="WHf-9a-A3C" firstAttribute="trailing" secondItem="OCt-xl-qSi" secondAttribute="trailing" id="d3t-cR-Qca"/>
