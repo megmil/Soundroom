@@ -20,7 +20,6 @@
 
 - (IBAction)didTapLogin:(id)sender {
     [[OAuth2Client sharedInstance] authenticateInViewController:self];
-    NSLog(@"%@", [[OAuth2Client sharedInstance] signedIn]);
 }
 
 @end

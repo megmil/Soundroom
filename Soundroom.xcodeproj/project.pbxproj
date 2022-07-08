@@ -29,6 +29,7 @@
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 		049304B72877C8E4006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304B62877C8E4006AA9A3 /* LoginViewController.m */; };
+		049304B92877CB0B006AA9A3 /* OAuth2Credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* OAuth2Credentials.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
 		049304B52877C8E4006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		049304B62877C8E4006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		049304B82877CB0B006AA9A3 /* OAuth2Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = OAuth2Credentials.plist; sourceTree = "<group>"; };
 		05BA8035371BF12C93686B44 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5AC9246B9074C30C2C8BD3E1 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
 		6746B66977F4F2E15378B150 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				0417B57A2874B761001D6B04 /* main.m */,
 				0417B5792874B761001D6B04 /* Info.plist */,
 				0417B59E2874B85C001D6B04 /* Keys.plist */,
+				049304B82877CB0B006AA9A3 /* OAuth2Credentials.plist */,
 			);
 			path = Soundroom;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 			files = (
 				0417B59F2874B85C001D6B04 /* Keys.plist in Resources */,
 				0417B5782874B761001D6B04 /* LaunchScreen.storyboard in Resources */,
+				049304B92877CB0B006AA9A3 /* OAuth2Credentials.plist in Resources */,
 				0417B5752874B761001D6B04 /* Assets.xcassets in Resources */,
 				0417B5732874B75F001D6B04 /* Main.storyboard in Resources */,
 			);
