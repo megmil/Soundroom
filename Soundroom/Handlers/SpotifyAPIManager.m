@@ -28,22 +28,11 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     return self;
 }
 
-- (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
-    
-    NSString *urlString = [NSString stringWithFormat:@"v1/search?"];
-    
-    [[SpotifyAuthClient sharedInstance] accessToken:^(NSString *accessToken) {
-        if (accessToken) {
-            NSDictionary *parameters = [self searchRequestParametersForToken:accessToken query:query];
-            [self getSongsWithURLString:urlString parameters:parameters completion:completion];
-        } else {
-            NSLog(@"API: Error: Access token is nil.");
-        }
-    }];
-}
+# pragma mark - Server
 
-- (void)getSongsWithURLString:(NSString *)urlString parameters:(NSDictionary *)parameters
-                   completion:(void(^)(NSArray *songs, NSError *error))completion {
+- (void)getSongsWithParameters:(NSDictionary *)parameters
+                    completion:(void(^)(NSArray *songs, NSError *error))completion {
+    NSString *urlString = [NSString stringWithFormat:@"v1/search?"];
     
     [self GET:urlString parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
         // TODO: progress
@@ -55,9 +44,23 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     }];
 }
 
+# pragma mark - Public
+
+- (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
+    [[SpotifyAuthClient sharedInstance] accessToken:^(NSString *accessToken) {
+        if (accessToken) {
+            NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
+            [self getSongsWithParameters:parameters completion:completion];
+        } else {
+            NSLog(@"API: Error: Access token is nil.");
+            completion(nil, nil);
+        }
+    }];
+}
+
 # pragma mark - Helpers
 
-- (NSDictionary *)searchRequestParametersForToken:(NSString *)token query:(NSString *)query {
+- (NSDictionary *)searchRequestParametersWithToken:(NSString *)token query:(NSString *)query {
     NSDictionary *parameters = @{@"access_token": token,
                                  @"type": @"track",
                                  @"q": query};
