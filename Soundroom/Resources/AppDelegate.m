@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "OAuth2Client.h"
 
 @interface AppDelegate ()
 
@@ -18,12 +19,16 @@
     return YES;
 }
 
-
 #pragma mark - UISceneSession lifecycle
-
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
     return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+}
+
+#pragma mark - Authorization
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    [[OAuth2Client sharedInstance] retrieveCodeFromUrl:url];
+    return NO;
 }
 
 @end
