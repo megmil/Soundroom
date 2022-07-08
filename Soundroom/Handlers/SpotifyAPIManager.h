@@ -5,9 +5,9 @@
 //  Created by Megan Miller on 7/6/22.
 //
 
-#import "BDBOAuth1SessionManager.h"
+#import "AFNetworking/AFNetworking.h"
 
-@interface SpotifyAPIManager : BDBOAuth1SessionManager
+@interface SpotifyAPIManager : AFHTTPSessionManager
 
 + (instancetype)shared;
 
