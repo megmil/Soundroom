@@ -6,7 +6,7 @@
 //
 
 #import "LoginViewController.h"
-#import "OAuth2Client.h"
+#import "SpotifyAuthClient.h"
 
 @interface LoginViewController ()
 
@@ -19,7 +19,7 @@
 }
 
 - (IBAction)didTapLogin:(id)sender {
-    [[OAuth2Client sharedInstance] authenticateInViewController:self];
+    [[SpotifyAuthClient sharedInstance] authenticateInViewController:self];
 }
 
 @end

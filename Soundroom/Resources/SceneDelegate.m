@@ -6,7 +6,7 @@
 //
 
 #import "SceneDelegate.h"
-#import "OAuth2Client.h"
+#import "SpotifyAuthClient.h"
 
 @interface SceneDelegate ()
 
@@ -15,7 +15,7 @@
 @implementation SceneDelegate
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-    if ([[OAuth2Client sharedInstance] signedIn]) {
+    if ([[SpotifyAuthClient sharedInstance] signedIn]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
         self.window.rootViewController = tabBarController;
@@ -24,7 +24,7 @@
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
     NSURL *url = URLContexts.allObjects.firstObject.URL;
-    [[OAuth2Client sharedInstance] retrieveCodeFromUrl:url];
+    [[SpotifyAuthClient sharedInstance] retrieveCodeFromUrl:url];
 }
 
 @end

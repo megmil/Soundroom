@@ -30,6 +30,7 @@
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 		049304B72877C8E4006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304B62877C8E4006AA9A3 /* LoginViewController.m */; };
 		049304B92877CB0B006AA9A3 /* OAuth2Credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* OAuth2Credentials.plist */; };
+		049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +91,8 @@
 		049304B52877C8E4006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		049304B62877C8E4006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		049304B82877CB0B006AA9A3 /* OAuth2Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = OAuth2Credentials.plist; sourceTree = "<group>"; };
+		049304BD2877E759006AA9A3 /* SpotifyAuthClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAuthClient.h; sourceTree = "<group>"; };
+		049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAuthClient.m; sourceTree = "<group>"; };
 		05BA8035371BF12C93686B44 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5AC9246B9074C30C2C8BD3E1 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
 		6746B66977F4F2E15378B150 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -247,6 +250,8 @@
 			children = (
 				049304A928762B12006AA9A3 /* SpotifyAPIManager.h */,
 				049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */,
+				049304BD2877E759006AA9A3 /* SpotifyAuthClient.h */,
+				049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -521,6 +526,7 @@
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
 				0417B5BD2874E4C1001D6B04 /* User.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
+				049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,

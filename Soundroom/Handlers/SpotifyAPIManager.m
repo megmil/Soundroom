@@ -7,7 +7,7 @@
 
 #import "SpotifyAPIManager.h"
 #import "Song.h"
-#import "OAuth2Client.h"
+#import "SpotifyAuthClient.h"
 
 static NSString * const baseURLString = @"https://api.spotify.com";
 
@@ -48,7 +48,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
 
-    [[OAuth2Client sharedInstance] accessToken:^(NSString *accessToken) {
+    [[SpotifyAuthClient sharedInstance] accessToken:^(NSString *accessToken) {
         if (accessToken) {
             NSString *authorizationValue = [NSString stringWithFormat:@"Bearer %@", accessToken];
             
