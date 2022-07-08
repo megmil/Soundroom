@@ -28,6 +28,7 @@
 @property (nonatomic, strong) NSString *scope;
 @property (nonatomic, strong) NSURL *redirectUri;
 @property (nonatomic, strong) NSString *scheme;
+@property (nonatomic, strong) NSString *encodedKeys;
 
 + (instancetype)sharedInstance;
 

@@ -46,12 +46,20 @@
         self.scope = credentials[@"OAuth2Scope"];
         self.redirectUri = [NSURL URLWithString:credentials[@"OAuth2RedirectUri"]];
         self.scheme = [self.redirectUri scheme];
+        self.encodedKeys = [self encodeKeys];
         credentialsLoaded = YES;
         NSLog(@"OAuth2: Credentials loaded:");
         NSLog(@"%@", credentials);
     } else {
         NSLog(@"OAuth2 Error: You need to add and configure an OAuth2Credentials.plist to continue.");
     }
+}
+
+- (NSString *)encodeKeys {
+    NSString *clientKeysString = [NSString stringWithFormat:@"%@:%@", self.clientId, self.secret];
+    NSData *clientKeysData = [clientKeysString dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *encodedKeys = [clientKeysData base64EncodedStringWithOptions:0];
+    return [NSString stringWithFormat:@"Basic %@", encodedKeys];
 }
 
 - (void)authenticateInViewController:(UIViewController *)viewController {
@@ -128,6 +136,7 @@
 - (void)requestAccessTokenWithRefreshToken:(NSString *)refreshToken callback:(void (^)(void))callback {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSDictionary *parameters = [self tokenRequestParametersForRefreshToken:refreshToken];
+    [manager.requestSerializer setValue:self.encodedKeys forHTTPHeaderField:@"Authorization"];
     
     [manager POST:[self.tokenUrl absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [self persistTokensFromResponse:(id)responseObject callback:^{
