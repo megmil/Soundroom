@@ -9,4 +9,20 @@
 
 @implementation QueueSong
 
+- (instancetype)initWithSong:(Song *)song {
+    
+    self = [super init];
+    
+    if (self) {
+        self.song = song;
+        self.score = 0;
+    }
+    
+    return self;
+}
+
+- (void)addToQueue {
+    
+}
+
 @end

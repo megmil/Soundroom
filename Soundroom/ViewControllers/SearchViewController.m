@@ -7,6 +7,7 @@
 
 #import "SearchViewController.h"
 #import "Song.h"
+#import "QueueSong.h"
 #import "UIImageView+AFNetworking.h"
 #import "SpotifyAPIManager.h"
 #import "SongCell.h"
@@ -49,8 +50,9 @@
     return cell;
 }
 
-- (void)didTapAddButton:(UIButton *)addButton {
-    Song *song = self.songs[addButton.tag];
+- (void)didTapAddButton:(UIButton *)button {
+    Song *song = self.songs[button.tag];
+    QueueSong *queueSong = [[QueueSong alloc] initWithSong:song];
 }
 
 #pragma mark Search Bar

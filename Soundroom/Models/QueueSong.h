@@ -10,10 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : Song
+@interface QueueSong : NSObject
 
+@property (nonatomic, strong) Song *song;
 @property (nonatomic) NSInteger score;
 @property (nonatomic, strong) User *requester;
+
+- (instancetype)initWithSong:(Song *)song;
+- (void)addToQueue;
 
 @end
 
