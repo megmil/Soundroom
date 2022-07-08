@@ -43,7 +43,14 @@
     cell.artistLabel.text = song.artist;
     cell.albumImageView.image = [UIImage imageWithData:song.albumImageData];
     
+    cell.addButton.tag = indexPath.row;
+    [cell.addButton addTarget:nil action:@selector(didTapAddButton:) forControlEvents:UIControlEventTouchUpInside];
+    
     return cell;
+}
+
+- (void)didTapAddButton:(UIButton *)addButton {
+    Song *song = self.songs[addButton.tag];
 }
 
 #pragma mark Search Bar
