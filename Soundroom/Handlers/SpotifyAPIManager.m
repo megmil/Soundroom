@@ -28,31 +28,6 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     return self;
 }
 
-- (void)loadCredentials {
-    
-    NSDictionary *credentials = [self credentials];
-    self.clientId = [credentials objectForKey: @"OAuth2ClientId"];
-    self.secret = [credentials objectForKey: @"OAuth2Secret"];
-    
-    // check for launch arguments override
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2ClientId"]) {
-        self.clientId = [[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2ClientId"];
-    }
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2Secret"]) {
-        self.secret = [[NSUserDefaults standardUserDefaults] stringForKey:@"OAuth2Secret"];
-    }
-}
-
-- (NSDictionary *)credentials {
-    NSString *path = [[NSBundle mainBundle] pathForResource: @"OAuth2Credentials" ofType: @"plist"];
-    NSDictionary *credentials = [NSDictionary dictionaryWithContentsOfFile:path];
-    return credentials;
-}
-
-- (BOOL)credentialsLoaded {
-    return (self.clientId && self.secret);
-}
-
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
     
     NSString *urlString = [NSString stringWithFormat:@"v1/search?"];
@@ -83,14 +58,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 # pragma mark - Helpers
 
 - (NSDictionary *)searchRequestParametersForToken:(NSString *)token query:(NSString *)query {
-    
-    if ([self credentialsLoaded] == NO) {
-        [self loadCredentials];
-    }
-    
-    NSDictionary *parameters = @{@"client_id": self.clientId,
-                                 @"client_secret": self.secret,
-                                 @"access_token": token,
+    NSDictionary *parameters = @{@"access_token": token,
                                  @"type": @"track",
                                  @"q": query};
     return parameters;
