@@ -9,6 +9,9 @@
 
 @interface SpotifyAPIManager : AFHTTPSessionManager
 
+@property (nonatomic, strong) NSString *clientId;
+@property (nonatomic, strong) NSString *secret;
+
 + (instancetype)shared;
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion;
