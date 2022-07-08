@@ -1,5 +1,5 @@
 //
-//  SpotifyAuthClient.h
+//  OAuth2Client.h
 //  OAuth2-ObjC
 //
 //  Created by Tom Gallagher on 27/04/2016.
@@ -28,7 +28,6 @@
 @property (nonatomic, strong) NSString *scope;
 @property (nonatomic, strong) NSURL *redirectUri;
 @property (nonatomic, strong) NSString *scheme;
-@property (nonatomic, strong) NSString *encodedKeys;
 
 + (instancetype)sharedInstance;
 

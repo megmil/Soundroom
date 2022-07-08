@@ -1,5 +1,5 @@
 //
-//  SpotifyAuthClient.m
+//  OAuth2Client.m
 //  OAuth2-ObjC
 //
 //  Created by Tom Gallagher on 27/04/2016.
@@ -46,20 +46,12 @@
         self.scope = credentials[@"OAuth2Scope"];
         self.redirectUri = [NSURL URLWithString:credentials[@"OAuth2RedirectUri"]];
         self.scheme = [self.redirectUri scheme];
-        self.encodedKeys = [self encodeKeys];
         credentialsLoaded = YES;
         NSLog(@"OAuth2: Credentials loaded:");
         NSLog(@"%@", credentials);
     } else {
         NSLog(@"OAuth2 Error: You need to add and configure an OAuth2Credentials.plist to continue.");
     }
-}
-
-- (NSString *)encodeKeys {
-    NSString *clientKeysString = [NSString stringWithFormat:@"%@:%@", self.clientId, self.secret];
-    NSData *clientKeysData = [clientKeysString dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *encodedKeys = [clientKeysData base64EncodedStringWithOptions:0];
-    return [NSString stringWithFormat:@"Basic %@", encodedKeys];
 }
 
 - (void)authenticateInViewController:(UIViewController *)viewController {
@@ -107,7 +99,7 @@
     }
 
     // Access token expires at
-    if ([response objectForKey:@"created_at"] && [response objectForKey:@"expires_in"]) {
+    if ([response objectForKey:@"expires_in"]) {
         NSDate *tokenExpiresAt = [self calculateTokenExpiresAtWithResponse:response];
         [[NSUserDefaults standardUserDefaults] setObject:tokenExpiresAt forKey:@"OAuth2TokenExpiresAt"];
         NSLog(@"OAuth2: Token expires at: %@", tokenExpiresAt);
@@ -136,7 +128,6 @@
 - (void)requestAccessTokenWithRefreshToken:(NSString *)refreshToken callback:(void (^)(void))callback {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSDictionary *parameters = [self tokenRequestParametersForRefreshToken:refreshToken];
-    [manager.requestSerializer setValue:self.encodedKeys forHTTPHeaderField:@"Authorization"];
     
     [manager POST:[self.tokenUrl absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [self persistTokensFromResponse:(id)responseObject callback:^{
@@ -279,12 +270,9 @@
 }
 
 - (NSDate *)calculateTokenExpiresAtWithResponse:(id)response {
-    NSTimeInterval createdAtInterval = (NSTimeInterval)[[response valueForKey:@"created_at"] intValue];
-    NSDate *createdAt = [NSDate dateWithTimeIntervalSince1970:createdAtInterval];
-    
+    NSDate *now = [NSDate now]; // TODO: verify that this is only called when new tokens are created
     NSTimeInterval expiresInInterval = (NSTimeInterval)[[response valueForKey:@"expires_in"] intValue];
-    NSDate *tokenExpiresAt = [createdAt dateByAddingTimeInterval:expiresInInterval];
-    
+    NSDate *tokenExpiresAt = [now dateByAddingTimeInterval:expiresInInterval];
     return tokenExpiresAt;
 }
 
