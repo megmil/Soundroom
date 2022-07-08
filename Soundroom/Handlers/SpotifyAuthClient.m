@@ -270,7 +270,7 @@
 }
 
 - (NSDate *)calculateTokenExpiresAtWithResponse:(id)response {
-    NSDate *now = [NSDate now]; // TODO: verify that this is only called when new tokens are created
+    NSDate *now = [NSDate now];
     NSTimeInterval expiresInInterval = (NSTimeInterval)[[response valueForKey:@"expires_in"] intValue];
     NSDate *tokenExpiresAt = [now dateByAddingTimeInterval:expiresInInterval];
     return tokenExpiresAt;
