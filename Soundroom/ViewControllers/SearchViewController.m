@@ -52,7 +52,7 @@
 
 - (void)didTapAddButton:(UIButton *)button {
     Song *song = self.songs[button.tag];
-    QueueSong *queueSong = [[QueueSong alloc] initWithSong:song];
+    [song addToQueue];
 }
 
 #pragma mark Search Bar

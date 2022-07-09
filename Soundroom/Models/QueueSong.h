@@ -6,15 +6,15 @@
 //
 
 #import "Song.h"
-#import "User.h"
+#import "Realm/Realm.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : NSObject
+@interface QueueSong : RLMObject
 
-@property (nonatomic, strong) Song *song;
+@property (nonatomic, strong) NSString *idString;
 @property (nonatomic) NSInteger score;
-@property (nonatomic, strong) User *requester;
+@property (nonatomic, strong) NSString *requesterProfilePictureString;
 
 - (instancetype)initWithSong:(Song *)song;
 - (void)addToQueue;

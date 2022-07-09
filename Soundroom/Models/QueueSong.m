@@ -6,6 +6,7 @@
 //
 
 #import "QueueSong.h"
+#import "Realm/Realm.h"
 
 @implementation QueueSong
 
@@ -14,7 +15,7 @@
     self = [super init];
     
     if (self) {
-        self.song = song;
+        self.idString = song.idString;
         self.score = 0;
     }
     
@@ -22,7 +23,10 @@
 }
 
 - (void)addToQueue {
-    
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    [realm beginWriteTransaction];
+    [realm addObject:self];
+    [realm commitAsyncWriteTransaction]; // TODO: completion
 }
 
 @end
