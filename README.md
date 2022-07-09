@@ -13,13 +13,13 @@ A collaborative music queue where users can create/join virtual music rooms to r
 
 ### Requirements
 From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tRvQZDizWwBSQVCfRiS4sqMZY6Y/edit#heading=h.8l153mzbgh5r).
-* Interacts with a database
-* Integrates at least one SDK or API
-* Ability to log in / logout as a user
-* Ability to sign up with a new user profile
-* Uses at least one gesture
-* Incorporates at least one external library to add visual polish
-* Uses at least one animation
+- [x] Interacts with a database
+- [x] Integrates at least one SDK or API
+- [ ] Ability to log in / logout as a user
+- [ ] Ability to sign up with a new user profile
+- [ ] Uses at least one gesture
+- [ ] Incorporates at least one external library to add visual polish
+- [ ] Uses at least one animation
 
 
 ## 2. Product Spec
@@ -27,25 +27,25 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 ### User Stories
 
 #### Required Stories
-* Users can create rooms
-* Users can join private rooms
-* Users can play the room queue through the Spotify app
-* Users can vote on songs
-* Songs change position in the queue based on their "score"
-* Users can search songs
-* Users can add songs to the queue
-* Users can view details on past sessions
-* Alerts the user when the queue is empty
-* Users can leave a room
-* Hosts can swipe to remove a song from the queue
+- [ ] Users can create rooms
+- [ ] Users can join private rooms
+- [ ] Users can play the room queue through the Spotify app
+- [ ] Users can vote on songs
+- [ ] Songs change position in the queue based on their "score"
+- [X] Users can search songs
+- [ ] Users can add songs to the queue
+- [ ] Users can view details on past sessions
+- [ ] Alerts the user when the queue is empty
+- [ ] Users can leave a room
+- [ ] Hosts can swipe to remove a song from the queue
 
 #### Stretch goals
-* Users can save past session queues as a Spotify playlist
-* Users can lock songs together
-* Fill in songs when queue is empty
-* Users can vote on volume
-* Users can vote on queue order
-* Users can mix transitions between songs
+- [ ] Users can save past session queues as a Spotify playlist
+- [ ] Users can lock songs together
+- [ ] Fill in songs when queue is empty
+- [ ] Users can vote on volume
+- [ ] Users can vote on queue order
+- [ ] Users can mix transitions between songs
 
 ### Screen Archetypes
 * Login
@@ -77,22 +77,19 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 Made with [Table Generator](https://www.tablesgenerator.com/markdown_tables).
 
 #### Song
-| **Property** | **Type** | **Description**                  |
-|--------------|----------|----------------------------------|
-| title        | NSString | track name                       |
-| artist       | NSString | track artist name                |
-| albumString  | NSString | album name                       |
-| albumImage   | ?        | album image to show next to song |
-| length       | ?        | song length (formatted?)         |
+| **Property**   | **Type** | **Description**           |
+|----------------|----------|---------------------------|
+| idString       | NSString | Spotify song ID           |
+| title          | NSString | track name                |
+| artist         | NSString | track artist name         |
+| albumTitle     | NSString | album name                |
+| albumImageData | NSData   | album image data from URL |
+| durationString | NSString | song length as mm:ss.     |
 
 #### Queue Song
 | **Property** | **Type**  | **Description**                      |
 |--------------|-----------|--------------------------------------|
-| title        | NSString  | track name                           |
-| artist       | NSString  | track artist name                    |
-| albumString  | NSString  | album name                           |
-| albumImage   | ?         | album image to show next to song     |
-| length       | ?         | song length (formatted?)             |
+| idString     | NSString  | Spotify song ID                      |
 | score        | NSInteger | sum of upvotes and downvotes         |
 | requester    | User      | user who added the song to the queue |
 
