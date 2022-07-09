@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSMutableArray *)songsWithDictionary:(NSDictionary *)dictionary;
 
+- (void)addToQueue;
+
 @end
 
 NS_ASSUME_NONNULL_END

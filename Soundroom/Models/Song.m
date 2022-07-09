@@ -6,8 +6,19 @@
 //
 
 #import "Song.h"
+#import "QueueSong.h"
 
 @implementation Song
+
++ (NSMutableArray *)songsWithDictionary:(NSDictionary *)dictionary {
+    NSDictionary *dictionaries = dictionary[@"tracks"][@"items"];
+    NSMutableArray *songs = [NSMutableArray array];
+    for (NSDictionary *songDictionary in dictionaries) {
+        Song *song = [[Song alloc] initWithDictionary:songDictionary];
+        [songs addObject:song];
+    }
+    return songs;
+}
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
@@ -41,14 +52,9 @@
     return self;
 }
 
-+ (NSMutableArray *)songsWithDictionary:(NSDictionary *)dictionary {
-    NSDictionary *dictionaries = dictionary[@"tracks"][@"items"];
-    NSMutableArray *songs = [NSMutableArray array];
-    for (NSDictionary *songDictionary in dictionaries) {
-        Song *song = [[Song alloc] initWithDictionary:songDictionary];
-        [songs addObject:song];
-    }
-    return songs;
+- (void)addToQueue {
+    QueueSong *queueSong = [[QueueSong alloc] initWithSong:self];
+    [queueSong addToQueue];
 }
 
 @end
