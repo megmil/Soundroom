@@ -11,14 +11,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Song : NSObject
 
+// TODO: add prefix to class names
+
 @property (nonatomic, strong) NSString *idString;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
 @property (nonatomic, strong) NSString *albumTitle;
-@property (nonatomic, strong) NSData *albumImageData;
+@property (nonatomic, strong) NSData *albumImageData; // TODO: convert to UIImage?
 @property (nonatomic, strong) NSString *durationString;
 
-+ (NSMutableArray *)songsWithDictionary:(NSDictionary *)dictionary;
++ (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response;
 
 - (void)addToQueue;
 

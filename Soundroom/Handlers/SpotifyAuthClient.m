@@ -109,7 +109,7 @@
     callback();
 }
 
-#pragma mark Server
+#pragma mark - Server
 
 - (void)requestAccessTokenFor:(NSString *)code callback:(void (^)(void))callback {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

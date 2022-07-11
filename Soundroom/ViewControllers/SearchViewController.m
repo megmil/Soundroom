@@ -30,7 +30,7 @@
     self.searchBar.delegate = self;
 }
 
-#pragma mark Table View
+#pragma mark - Table View
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.songs.count;
 }
@@ -55,12 +55,14 @@
     [song addToQueue];
 }
 
-#pragma mark Search Bar
+#pragma mark - Search Bar
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    
     if (searchText.length == 0) {
         return;
     }
     
+    // TODO: search every X keypresses
     [[SpotifyAPIManager shared] getSongsWithQuery:searchText completion:^(NSArray *songs, NSError *error) {
         if (error) {
             NSLog(@"Error: %@", error);
