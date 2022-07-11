@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)registerUserWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(NSError *error))completion; // TODO: BOOL return vs completion
 - (void)logoutWithCompletion:(void(^)(NSError *error))completion;
+- (BOOL)signedIn;
 
 @end
 

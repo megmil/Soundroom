@@ -36,6 +36,11 @@
     [currentUser logOutWithCompletion:completion];
 }
 
+- (BOOL)signedIn {
+    RLMApp *app = [self realmApp];
+    return [app currentUser];
+}
+
 - (RLMApp *)realmApp {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
     NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
