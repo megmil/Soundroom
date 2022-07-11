@@ -15,8 +15,8 @@ A collaborative music queue where users can create/join virtual music rooms to r
 From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tRvQZDizWwBSQVCfRiS4sqMZY6Y/edit#heading=h.8l153mzbgh5r).
 - [x] Interacts with a database
 - [x] Integrates at least one SDK or API
-- [ ] Ability to log in / logout as a user
-- [ ] Ability to sign up with a new user profile
+- [x] Ability to log in / logout as a user
+- [x] Ability to sign up with a new user profile
 - [ ] Uses at least one gesture
 - [ ] Incorporates at least one external library to add visual polish
 - [ ] Uses at least one animation
@@ -32,7 +32,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 - [ ] Users can play the room queue through the Spotify app
 - [ ] Users can vote on songs
 - [ ] Songs change position in the queue based on their "score"
-- [X] Users can search songs
+- [x] Users can search songs
 - [ ] Users can add songs to the queue
 - [ ] Users can view details on past sessions
 - [ ] Alerts the user when the queue is empty
