@@ -29,7 +29,7 @@
 @property (nonatomic, strong) NSURL *redirectUri;
 @property (nonatomic, strong) NSString *scheme;
 
-+ (instancetype)sharedInstance;
++ (instancetype)shared;
 
 - (void)authenticateInViewController:(UIViewController *)viewController;
 - (void)retrieveCodeFromUrl:(NSURL *)url;

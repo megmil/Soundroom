@@ -6,15 +6,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "User.h"
+#import "SNDUser.h"
 #import "QueueSong.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Room : NSObject
 
-@property (nonatomic, strong) User *host;
-@property (nonatomic, strong) NSMutableArray <User *> *members;
+@property (nonatomic, strong) SNDUser *host;
+@property (nonatomic, strong) NSMutableArray <SNDUser *> *members;
 @property (nonatomic, strong) NSMutableArray <QueueSong *> *queue;
 @property (nonatomic, strong) NSMutableArray <QueueSong *> *playedSongs;
 

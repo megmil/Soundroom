@@ -10,39 +10,39 @@
 
 @implementation Song
 
-+ (NSMutableArray *)songsWithDictionary:(NSDictionary *)dictionary {
-    NSDictionary *dictionaries = dictionary[@"tracks"][@"items"];
-    NSMutableArray *songs = [NSMutableArray array];
-    for (NSDictionary *songDictionary in dictionaries) {
-        Song *song = [[Song alloc] initWithDictionary:songDictionary];
-        [songs addObject:song];
++ (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response {
+    NSDictionary *songsDictionary = response[@"tracks"][@"items"];
+    NSMutableArray *songsArray = [NSMutableArray array];
+    for (NSDictionary *songDictionary in songsDictionary) {
+        Song *song = [[Song alloc] initWithJSONResponse:songDictionary];
+        [songsArray addObject:song];
     }
-    return songs;
+    return songsArray;
 }
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+- (instancetype)initWithJSONResponse:(NSDictionary *)response {
     self = [super init];
     
     if (self) {
-        self.idString = dictionary[@"id"];
-        self.title = dictionary[@"name"];
+        self.idString = response[@"id"];
+        self.title = response[@"name"];
         
         // format artists into one string
         NSMutableArray <NSString *> *artists = [NSMutableArray array];
-        for (NSDictionary *artist in dictionary[@"artists"]) {
+        for (NSDictionary *artist in response[@"artists"]) {
             [artists addObject:artist[@"name"]];
         }
         self.artist = [artists componentsJoinedByString:@", "];
         
         // get album details
-        NSDictionary *album = dictionary[@"album"];
+        NSDictionary *album = response[@"album"];
         self.albumTitle = album[@"name"];
         NSString *albumImageURLString = [album[@"images"] firstObject][@"url"];
         NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
         self.albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
         
         // format duration (ms) for display (mm:ss)
-        NSNumber *millisecondsNumber = [dictionary valueForKey:@"duration_ms"];
+        NSNumber *millisecondsNumber = [response valueForKey:@"duration_ms"];
         int milliseconds = [millisecondsNumber intValue];
         int minutes = milliseconds / 60000;
         int seconds = (milliseconds % 60000) / 1000;

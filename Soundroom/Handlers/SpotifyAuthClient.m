@@ -11,19 +11,17 @@
 
 @implementation SpotifyAuthClient
 
-+ (instancetype)sharedInstance {
++ (instancetype)shared {
     static dispatch_once_t once;
-    static id sharedInstance;
-    
+    static id shared;
     dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init];
+        shared = [[self alloc] init];
     });
-    
-    return sharedInstance;
+    return shared;
 }
 
 - (NSString *)credentialsPath {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"OAuth2Credentials" ofType:@"plist"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
     return path;
 }
 
@@ -39,18 +37,14 @@
     if (credentialsExist) {
         NSString *path = [self credentialsPath];
         NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-        self.authUrl = [NSURL URLWithString:credentials[@"OAuth2AuthUrl"]];
-        self.tokenUrl = [NSURL URLWithString:credentials[@"OAuth2TokenUrl"]];
-        self.clientId = credentials[@"OAuth2ClientId"];
-        self.secret = credentials[@"OAuth2Secret"];
-        self.scope = credentials[@"OAuth2Scope"];
-        self.redirectUri = [NSURL URLWithString:credentials[@"OAuth2RedirectUri"]];
+        self.authUrl = [NSURL URLWithString:credentials[@"spotify-auth-url"]];
+        self.tokenUrl = [NSURL URLWithString:credentials[@"spotify-token-url"]];
+        self.clientId = credentials[@"spotify-client-id"];
+        self.secret = credentials[@"spotify-secret"];
+        self.scope = credentials[@"spotify-scope"];
+        self.redirectUri = [NSURL URLWithString:credentials[@"redirect-uri"]];
         self.scheme = [self.redirectUri scheme];
         credentialsLoaded = YES;
-        NSLog(@"OAuth2: Credentials loaded:");
-        NSLog(@"%@", credentials);
-    } else {
-        NSLog(@"OAuth2 Error: You need to add and configure an OAuth2Credentials.plist to continue.");
     }
 }
 
@@ -109,7 +103,7 @@
     callback();
 }
 
-#pragma mark Server
+#pragma mark - Server
 
 - (void)requestAccessTokenFor:(NSString *)code callback:(void (^)(void))callback {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

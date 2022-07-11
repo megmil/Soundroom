@@ -20,16 +20,19 @@
 		0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5AA2874D394001D6B04 /* SearchViewController.m */; };
 		0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B02874E0B6001D6B04 /* RoomViewController.m */; };
 		0417B5B72874E377001D6B04 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B62874E377001D6B04 /* Song.m */; };
-		0417B5BD2874E4C1001D6B04 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5BC2874E4C1001D6B04 /* User.m */; };
 		0417B5C32874E4D7001D6B04 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C22874E4D7001D6B04 /* Room.m */; };
 		0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SongCell.m */; };
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* QueueSong.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
-		049304B72877C8E4006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304B62877C8E4006AA9A3 /* LoginViewController.m */; };
-		049304B92877CB0B006AA9A3 /* OAuth2Credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* OAuth2Credentials.plist */; };
+		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
 		049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */; };
+		049304C8287C896D006AA9A3 /* SNDUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304C7287C896D006AA9A3 /* SNDUser.m */; };
+		049304CB287C8A04006AA9A3 /* UserLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* UserLoginViewController.m */; };
+		049304CE287C8A0F006AA9A3 /* SpotifyLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CD287C8A0F006AA9A3 /* SpotifyLoginViewController.m */; };
+		049304D1287C8F3B006AA9A3 /* RealmAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304D0287C8F3B006AA9A3 /* RealmAccountManager.m */; };
+		04A1B38C287CAB11006D2420 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1B38B287CAB11006D2420 /* SettingsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,8 +76,6 @@
 		0417B5B02874E0B6001D6B04 /* RoomViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomViewController.m; sourceTree = "<group>"; };
 		0417B5B52874E377001D6B04 /* Song.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Song.h; sourceTree = "<group>"; };
 		0417B5B62874E377001D6B04 /* Song.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
-		0417B5BB2874E4C1001D6B04 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		0417B5BC2874E4C1001D6B04 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		0417B5C12874E4D7001D6B04 /* Room.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		0417B5C22874E4D7001D6B04 /* Room.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		0417B5C42874F5D6001D6B04 /* SongCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SongCell.h; sourceTree = "<group>"; };
@@ -86,11 +87,19 @@
 		049304A428762A58006AA9A3 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		049304A928762B12006AA9A3 /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
 		049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
-		049304B52877C8E4006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		049304B62877C8E4006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		049304B82877CB0B006AA9A3 /* OAuth2Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = OAuth2Credentials.plist; sourceTree = "<group>"; };
+		049304B82877CB0B006AA9A3 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		049304BD2877E759006AA9A3 /* SpotifyAuthClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAuthClient.h; sourceTree = "<group>"; };
 		049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAuthClient.m; sourceTree = "<group>"; };
+		049304C6287C896D006AA9A3 /* SNDUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SNDUser.h; sourceTree = "<group>"; };
+		049304C7287C896D006AA9A3 /* SNDUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SNDUser.m; sourceTree = "<group>"; };
+		049304C9287C8A04006AA9A3 /* UserLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserLoginViewController.h; sourceTree = "<group>"; };
+		049304CA287C8A04006AA9A3 /* UserLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserLoginViewController.m; sourceTree = "<group>"; };
+		049304CC287C8A0F006AA9A3 /* SpotifyLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyLoginViewController.h; sourceTree = "<group>"; };
+		049304CD287C8A0F006AA9A3 /* SpotifyLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyLoginViewController.m; sourceTree = "<group>"; };
+		049304CF287C8F3B006AA9A3 /* RealmAccountManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RealmAccountManager.h; sourceTree = "<group>"; };
+		049304D0287C8F3B006AA9A3 /* RealmAccountManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RealmAccountManager.m; sourceTree = "<group>"; };
+		04A1B38A287CAB11006D2420 /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		04A1B38B287CAB11006D2420 /* SettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		05BA8035371BF12C93686B44 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5AC9246B9074C30C2C8BD3E1 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
 		6746B66977F4F2E15378B150 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -158,7 +167,7 @@
 				049304A628762AA9006AA9A3 /* Resources */,
 				0417B57A2874B761001D6B04 /* main.m */,
 				0417B5792874B761001D6B04 /* Info.plist */,
-				049304B82877CB0B006AA9A3 /* OAuth2Credentials.plist */,
+				049304B82877CB0B006AA9A3 /* Keys.plist */,
 			);
 			path = Soundroom;
 			sourceTree = "<group>";
@@ -196,8 +205,8 @@
 				0417B5B62874E377001D6B04 /* Song.m */,
 				0417B5CA2874F6E6001D6B04 /* QueueSong.h */,
 				0417B5CB2874F6E6001D6B04 /* QueueSong.m */,
-				0417B5BB2874E4C1001D6B04 /* User.h */,
-				0417B5BC2874E4C1001D6B04 /* User.m */,
+				049304C6287C896D006AA9A3 /* SNDUser.h */,
+				049304C7287C896D006AA9A3 /* SNDUser.m */,
 				0417B5C12874E4D7001D6B04 /* Room.h */,
 				0417B5C22874E4D7001D6B04 /* Room.m */,
 			);
@@ -224,8 +233,12 @@
 				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 				0417B5AF2874E0B6001D6B04 /* RoomViewController.h */,
 				0417B5B02874E0B6001D6B04 /* RoomViewController.m */,
-				049304B52877C8E4006AA9A3 /* LoginViewController.h */,
-				049304B62877C8E4006AA9A3 /* LoginViewController.m */,
+				049304C9287C8A04006AA9A3 /* UserLoginViewController.h */,
+				049304CA287C8A04006AA9A3 /* UserLoginViewController.m */,
+				049304CC287C8A0F006AA9A3 /* SpotifyLoginViewController.h */,
+				049304CD287C8A0F006AA9A3 /* SpotifyLoginViewController.m */,
+				04A1B38A287CAB11006D2420 /* SettingsViewController.h */,
+				04A1B38B287CAB11006D2420 /* SettingsViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -249,6 +262,8 @@
 				049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */,
 				049304BD2877E759006AA9A3 /* SpotifyAuthClient.h */,
 				049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */,
+				049304CF287C8F3B006AA9A3 /* RealmAccountManager.h */,
+				049304D0287C8F3B006AA9A3 /* RealmAccountManager.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -383,7 +398,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0417B5782874B761001D6B04 /* LaunchScreen.storyboard in Resources */,
-				049304B92877CB0B006AA9A3 /* OAuth2Credentials.plist in Resources */,
+				049304B92877CB0B006AA9A3 /* Keys.plist in Resources */,
 				0417B5752874B761001D6B04 /* Assets.xcassets in Resources */,
 				0417B5732874B75F001D6B04 /* Main.storyboard in Resources */,
 			);
@@ -516,17 +531,20 @@
 				0417B5C32874E4D7001D6B04 /* Room.m in Sources */,
 				0417B5B72874E377001D6B04 /* Song.m in Sources */,
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
+				04A1B38C287CAB11006D2420 /* SettingsViewController.m in Sources */,
 				049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */,
-				049304B72877C8E4006AA9A3 /* LoginViewController.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
-				0417B5BD2874E4C1001D6B04 /* User.m in Sources */,
+				049304CB287C8A04006AA9A3 /* UserLoginViewController.m in Sources */,
+				049304C8287C896D006AA9A3 /* SNDUser.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
+				049304CE287C8A0F006AA9A3 /* SpotifyLoginViewController.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */,
+				049304D1287C8F3B006AA9A3 /* RealmAccountManager.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
