@@ -21,7 +21,7 @@
 
 - (IBAction)didTapUserLogout:(id)sender {
     [[RealmAccountManager shared] logoutWithCompletion:^(NSError * _Nonnull error) {
-        // TODO: completion segue to login VC
+        // TODO: segue to login VC
     }];
 }
 
