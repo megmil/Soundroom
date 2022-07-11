@@ -1,15 +1,15 @@
 //
-//  User.h
+//  SNDUser.h
 //  Soundroom
 //
-//  Created by Megan Miller on 7/5/22.
+//  Created by Megan Miller on 7/11/22.
 //
 
-#import <Foundation/Foundation.h>
+#import <Realm/Realm.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface User : NSObject
+@interface SNDUser : RLMObject
 
 @property (nonatomic, strong) NSString *username;
 // recent rooms - only needed for current user
