@@ -9,4 +9,17 @@
 
 @implementation SNDUser
 
+- (instancetype)initWithUsername:(NSString *)username userID:(NSString *)userID {
+    
+    self = [super init];
+    
+    if (self) {
+        self.username = username;
+        self.userID = userID;
+        self.partition = [NSString stringWithFormat:@"user=%@", userID];
+    }
+    
+    return self;
+}
+
 @end

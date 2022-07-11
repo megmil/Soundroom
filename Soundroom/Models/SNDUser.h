@@ -11,9 +11,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SNDUser : RLMObject
 
+@property (nonatomic, strong) NSString *userID;
+@property (nonatomic, strong) NSString *partition;
 @property (nonatomic, strong) NSString *username;
-// recent rooms - only needed for current user
-// profile picture
+@property (nonatomic, strong) NSString *currentRoomID;
+@property (nonatomic, strong) NSString *avatarImageURLString; // TODO: separate RLMObject?
 
 @end
 

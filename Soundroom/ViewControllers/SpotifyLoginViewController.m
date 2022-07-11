@@ -6,6 +6,7 @@
 //
 
 #import "SpotifyLoginViewController.h"
+#import "SpotifyAuthClient.h"
 
 @interface SpotifyLoginViewController ()
 
@@ -15,6 +16,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+
+- (IBAction)didTapSpotifyLogin:(id)sender {
+    [[SpotifyAuthClient shared] authenticateInViewController:self];
 }
 
 @end

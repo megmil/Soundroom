@@ -47,7 +47,7 @@ static NSString * const baseURLString = @"https://api.spotify.com"; // TODO: sta
 # pragma mark - Public
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
-    [[SpotifyAuthClient sharedInstance] accessToken:^(NSString *accessToken) {
+    [[SpotifyAuthClient shared] accessToken:^(NSString *accessToken) {
         if (accessToken) {
             NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
             [self getSongsWithParameters:parameters completion:completion];
