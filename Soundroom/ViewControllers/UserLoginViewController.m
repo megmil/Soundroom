@@ -44,6 +44,8 @@
         [[RealmAccountManager shared] registerWithEmail:email password:password completion:^(NSError * _Nonnull error) {
             if (!error) {
                 [self loginWithEmail:email password:password];
+            } else {
+                NSLog(@"Error: %@", error.localizedDescription);
             }
         }];
     }

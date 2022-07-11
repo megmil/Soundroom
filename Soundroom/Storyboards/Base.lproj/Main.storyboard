@@ -284,6 +284,9 @@
                                 <rect key="frame" x="348" y="44" width="46" height="31"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="gearshape" catalog="system"/>
+                                <connections>
+                                    <segue destination="yc1-cW-urs" kind="presentation" id="DMD-jD-r8n"/>
+                                </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ydF-yK-vGF">
                                 <rect key="frame" x="0.0" y="155" width="414" height="741"/>
@@ -353,6 +356,58 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uYU-KT-dEu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="421.73913043478262" y="568.52678571428567"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="T8D-mc-wvw">
+            <objects>
+                <navigationController id="yc1-cW-urs" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="npP-11-baY">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="O6r-XZ-jsV" kind="relationship" relationship="rootViewController" id="8a0-aZ-Vc4"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="533-oX-gJS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1462" y="583"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="EcO-qa-H7u">
+            <objects>
+                <viewController id="O6r-XZ-jsV" customClass="SettingsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uII-tD-0rz">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="awx-bf-GWx">
+                                <rect key="frame" x="173" y="290" width="70" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Logout"/>
+                                <connections>
+                                    <action selector="didTapUserLogout:" destination="O6r-XZ-jsV" eventType="touchUpInside" id="u6O-oF-l23"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jk2-ay-IiD">
+                                <rect key="frame" x="152" y="352" width="115" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Spotify logout"/>
+                                <connections>
+                                    <action selector="didTapSpotifyLogout:" destination="O6r-XZ-jsV" eventType="touchUpInside" id="v4b-GV-sWt"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="fRx-8z-WMg"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="g9M-XZ-vAk"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ato-Ck-eii" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2337.68115942029" y="582.58928571428567"/>
         </scene>
         <!--User Login View Controller-->
         <scene sceneID="wwp-P3-q8Q">
