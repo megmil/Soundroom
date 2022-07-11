@@ -18,13 +18,13 @@
     return shared;
 }
 
-- (void)registerUserWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(NSError *error))completion {
+- (void)registerWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(NSError *error))completion {
     RLMApp *app = [self realmApp];
     RLMEmailPasswordAuth *client = [app emailPasswordAuth];
     [client registerUserWithEmail:email password:password completion:completion];
 }
 
-- (void)loginUserWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(RLMUser * _Nullable, NSError * _Nullable))completion {
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(RLMUser * _Nullable user, NSError * _Nullable error))completion {
     RLMApp *app = [self realmApp];
     RLMCredentials *realmCredentials = [RLMCredentials credentialsWithEmail:email password:password];
     [app loginWithCredential:realmCredentials completion:completion];

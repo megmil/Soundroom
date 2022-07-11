@@ -6,7 +6,7 @@
 //
 
 #import "UserLoginViewController.h"
-#import "Realm/Realm.h"
+#import "RealmAccountManager.h"
 
 @interface UserLoginViewController ()
 
@@ -31,8 +31,7 @@
     } else {
         NSString *email = self.emailField.text;
         NSString *password = self.passwordField.text;
-        
-        
+        [self loginWithEmail:email password:password];
     }
 }
 
@@ -40,8 +39,22 @@
     if ([self isFieldEmpty]) {
         [self showAlert];
     } else {
-        
+        NSString *email = self.emailField.text;
+        NSString *password = self.passwordField.text;
+        [[RealmAccountManager shared] registerWithEmail:email password:password completion:^(NSError * _Nonnull error) {
+            if (!error) {
+                [self loginWithEmail:email password:password];
+            }
+        }];
     }
+}
+
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password {
+    [[RealmAccountManager shared] loginWithEmail:email password:password completion:^(RLMUser * _Nullable user, NSError * _Nullable error) {
+        if (!error) {
+            [self performSegueWithIdentifier:@"tabSegue" sender:self];
+        }
+    }];
 }
 
 - (BOOL)isFieldEmpty {

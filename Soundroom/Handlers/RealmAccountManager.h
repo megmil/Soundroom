@@ -14,7 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
-- (void)registerUserWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(NSError *error))completion; // TODO: BOOL return vs completion
+- (void)registerWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(NSError * _Nullable))completion; // TODO: BOOL return vs completion
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(RLMUser * _Nullable, NSError * _Nullable))completion; // TODO: RLMUser in completion?
 - (void)logoutWithCompletion:(void(^)(NSError *error))completion;
 - (BOOL)signedIn;
 

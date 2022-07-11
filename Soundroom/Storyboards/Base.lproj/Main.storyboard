@@ -406,11 +406,12 @@
                         <outlet property="loginButton" destination="dRL-wb-noN" id="cxO-NV-3KR"/>
                         <outlet property="passwordField" destination="pzg-uC-KDP" id="hx8-yk-Ga3"/>
                         <outlet property="registerButton" destination="xC5-sJ-OfK" id="z2u-7h-MqW"/>
+                        <segue destination="7hC-7D-Km6" kind="presentation" identifier="tabSegue" modalPresentationStyle="fullScreen" id="UWk-D6-buS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1qf-jH-UPx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1203" y="-220"/>
+            <point key="canvasLocation" x="920" y="-220"/>
         </scene>
         <!--Spotify Login View Controller-->
         <scene sceneID="Obd-Jk-HVS">
