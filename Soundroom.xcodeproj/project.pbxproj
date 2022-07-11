@@ -20,7 +20,7 @@
 		0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5AA2874D394001D6B04 /* SearchViewController.m */; };
 		0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B02874E0B6001D6B04 /* RoomViewController.m */; };
 		0417B5B72874E377001D6B04 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B62874E377001D6B04 /* Song.m */; };
-		0417B5C32874E4D7001D6B04 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C22874E4D7001D6B04 /* Room.m */; };
+		0417B5C32874E4D7001D6B04 /* SNDRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C22874E4D7001D6B04 /* SNDRoom.m */; };
 		0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SongCell.m */; };
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* QueueSong.m */; };
@@ -78,8 +78,8 @@
 		0417B5B02874E0B6001D6B04 /* RoomViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomViewController.m; sourceTree = "<group>"; };
 		0417B5B52874E377001D6B04 /* Song.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Song.h; sourceTree = "<group>"; };
 		0417B5B62874E377001D6B04 /* Song.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
-		0417B5C12874E4D7001D6B04 /* Room.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
-		0417B5C22874E4D7001D6B04 /* Room.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
+		0417B5C12874E4D7001D6B04 /* SNDRoom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SNDRoom.h; sourceTree = "<group>"; };
+		0417B5C22874E4D7001D6B04 /* SNDRoom.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SNDRoom.m; sourceTree = "<group>"; };
 		0417B5C42874F5D6001D6B04 /* SongCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SongCell.h; sourceTree = "<group>"; };
 		0417B5C52874F5D6001D6B04 /* SongCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SongCell.m; sourceTree = "<group>"; };
 		0417B5C72874F5F2001D6B04 /* RoomCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomCell.h; sourceTree = "<group>"; };
@@ -213,8 +213,8 @@
 				0417B5CB2874F6E6001D6B04 /* QueueSong.m */,
 				049304C6287C896D006AA9A3 /* SNDUser.h */,
 				049304C7287C896D006AA9A3 /* SNDUser.m */,
-				0417B5C12874E4D7001D6B04 /* Room.h */,
-				0417B5C22874E4D7001D6B04 /* Room.m */,
+				0417B5C12874E4D7001D6B04 /* SNDRoom.h */,
+				0417B5C22874E4D7001D6B04 /* SNDRoom.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -538,7 +538,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0417B5C32874E4D7001D6B04 /* Room.m in Sources */,
+				0417B5C32874E4D7001D6B04 /* SNDRoom.m in Sources */,
 				0417B5B72874E377001D6B04 /* Song.m in Sources */,
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
 				04A1B38C287CAB11006D2420 /* SettingsViewController.m in Sources */,

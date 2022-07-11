@@ -11,15 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Room : NSObject
+@interface SNDRoom : RLMObject
 
-@property (nonatomic, strong) SNDUser *host;
+@property (nonatomic, strong) NSString *roomID;
+@property (nonatomic, strong) NSString *partition;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *coverImageURLString;
 @property (nonatomic, strong) NSMutableArray <SNDUser *> *members;
 @property (nonatomic, strong) NSMutableArray <QueueSong *> *queue;
-@property (nonatomic, strong) NSMutableArray <QueueSong *> *playedSongs;
-
-@property (nonatomic, strong) NSString *title;
-// room image
 
 @end
 
