@@ -25,8 +25,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"SearchCell"];
+    
     self.searchBar.delegate = self;
 }
 
@@ -46,6 +49,10 @@
     [cell setSpotifyId:song.spotifyId];
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 72.f;
 }
 
 #pragma mark - Search Bar

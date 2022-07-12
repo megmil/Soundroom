@@ -53,8 +53,4 @@
     return self;
 }
 
-+ (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(NSError *error))completion {
-    
-}
-
 @end

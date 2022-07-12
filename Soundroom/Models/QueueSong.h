@@ -5,19 +5,17 @@
 //  Created by Megan Miller on 7/5/22.
 //
 
-#import "Song.h"
-#import "Room.h"
-#import "Parse/Parse.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : PFObject<PFSubclassing> // TODO: embedded NSObject
+@interface QueueSong : NSObject
 
 @property (nonatomic, strong) NSString *queueSongId;
 @property (nonatomic, strong) NSString *spotifyId;
 @property (nonatomic) NSInteger score;
 
-+ (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion;
++ (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(BOOL succeeded, NSError *error))completion;
 
 @end
 

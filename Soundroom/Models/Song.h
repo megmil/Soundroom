@@ -23,8 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response;
 
-+ (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(NSError *error))completion;
-
 @end
 
 NS_ASSUME_NONNULL_END

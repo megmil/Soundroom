@@ -6,7 +6,7 @@
 //
 
 #import "SongCell.h"
-#import "Song.h"
+#import "QueueSong.h"
 
 @implementation SongCell {
     UILabel *_titleLabel;
@@ -23,12 +23,9 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    _albumImageView.frame = CGRectMake(0.f, 0.f, 50.f, 50.f);
-    
+    _albumImageView.frame = CGRectMake(20.f, 11.f, 50.f, 50.f);
     _addButton.frame = CGRectMake(self.contentView.frame.size.width - 50.f, self.contentView.frame.size.height - 50.f, 50.f, 50.f);
-    
     _titleLabel.frame = CGRectMake(_albumImageView.frame.size.width + 8.f, 6.f, (_addButton.frame.origin.x + 8.f) - (_albumImageView.frame.size.width + 8), 19.f);
-    
     _artistLabel.frame = CGRectMake(_titleLabel.frame.origin.x, _titleLabel.frame.origin.y + 3.f, (_addButton.frame.origin.x + 8.f) - (_albumImageView.frame.size.width + 8), 16.f);
 }
 
@@ -73,7 +70,9 @@
 }
 
 - (void)queueSong {
-    // TODO: queue song with id
+    [QueueSong queueSongWithSpotifyId:_spotifyId completion:^(BOOL succeeded, NSError * _Nonnull error) {
+        // TODO: completion
+    }];
 }
 
 @end
