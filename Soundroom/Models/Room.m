@@ -9,7 +9,7 @@
 
 @implementation Room
 
-@dynamic roomID;
+@dynamic roomId;
 @dynamic members;
 @dynamic queue;
 @dynamic title;
@@ -27,7 +27,7 @@
     
     [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
-            completion(newRoom.roomID, nil);
+            completion(newRoom.objectId, nil);
         } else {
             completion(nil, error);
         }

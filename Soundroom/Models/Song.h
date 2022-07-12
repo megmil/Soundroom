@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "Parse/Parse.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response;
 
-- (void)addToQueueWithCompletion:(PFBooleanResultBlock _Nullable)completion;
+- (void)addToQueueWithCompletion:(PFBooleanResultBlock _Nullable)completion; // TODO: change completion block
 
 @end
 

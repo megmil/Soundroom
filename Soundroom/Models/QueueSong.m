@@ -9,7 +9,7 @@
 
 @implementation QueueSong
 
-@dynamic queueSongID;
+@dynamic queueSongId;
 @dynamic score;
 @dynamic requesterAvatarImageFile;
 @dynamic song;
@@ -19,6 +19,7 @@
 }
 
 + (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion {
+    
     QueueSong *queueSong = [QueueSong new];
     queueSong.song = song;
     queueSong.score = 0;
@@ -26,8 +27,16 @@
     PFUser *currentUser = [PFUser currentUser];
     queueSong.requesterAvatarImageFile = [currentUser valueForKey:@"avatarImageFile"];
     
-    [room addObject:queueSong forKey:@"queue"];
-    [room saveInBackgroundWithBlock:completion];
+    NSString *roomId = [currentUser valueForKey:@"roomId"];
+    if (roomId) {
+        PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+        [query getObjectInBackgroundWithId:roomId block:^(PFObject * _Nullable room, NSError * _Nullable error) {
+            if (room) {
+                [room addObject:queueSong forKey:@"queue"];
+                [room saveInBackgroundWithBlock:completion];
+            }
+        }];
+    }
 }
 
 @end

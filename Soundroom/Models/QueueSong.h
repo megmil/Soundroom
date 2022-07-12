@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface QueueSong : PFObject<PFSubclassing> // TODO: embedded NSObject
 
-@property (nonatomic, strong) NSString *queueSongID;
+@property (nonatomic, strong) NSString *queueSongId;
 @property (nonatomic) NSInteger score;
 @property (nonatomic, strong) PFFileObject *requesterAvatarImageFile;
 @property (nonatomic, strong) Song *song;

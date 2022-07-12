@@ -6,8 +6,11 @@
 //
 
 #import "ConfigureViewController.h"
+#import "Room.h"
 
 @interface ConfigureViewController ()
+
+@property (weak, nonatomic) IBOutlet UITextField *titleField;
 
 @end
 
@@ -15,6 +18,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+
+- (IBAction)didTapCreateRoom:(id)sender {
+    [Room createRoomWithTitle:self.titleField.text completion:^(NSString * _Nonnull roomID, NSError * _Nonnull error) {
+        if (roomID) {
+            NSLog(@"id: %@", roomID);
+        }
+    }];
 }
 
 @end
