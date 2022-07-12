@@ -5,11 +5,11 @@
 //  Created by Megan Miller on 7/11/22.
 //
 
-#import <Realm/Realm.h>
+#import "Parse/Parse.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SNDUser : RLMObject
+@interface SNDUser : PFObject<PFSubclassing>
 
 @property (nonatomic, strong) NSString *userID;
 @property (nonatomic, strong) NSString *partition;
