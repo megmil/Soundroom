@@ -40,4 +40,10 @@
     [PFUser logOutInBackgroundWithBlock:completion];
 }
 
+- (void)addCurrentUserToRoomWithRoomId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
+    PFUser *currentUser = [PFUser currentUser];
+    [currentUser setValue:roomId forKey:@"roomId"];
+    [currentUser saveInBackgroundWithBlock:completion];
+}
+
 @end

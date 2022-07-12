@@ -6,6 +6,7 @@
 //
 
 #import "Room.h"
+#import "ParseUserManager.h"
 
 @implementation Room
 
@@ -27,8 +28,9 @@
     
     [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
-            PFUser *currentUser = [PFUser currentUser];
-            [currentUser addObject:newRoom.roomId forKey:@"roomId"];
+            [[ParseUserManager shared] addCurrentUserToRoomWithRoomId:newRoom.roomId completion:^(BOOL succeeded, NSError * _Nullable error) {
+                // TODO: completion
+            }];
         }
     }];
 }
