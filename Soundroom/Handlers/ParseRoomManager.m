@@ -21,16 +21,20 @@
 }
 
 - (void)createRoomWithTitle:(NSString *)title completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
+    
     Room *newRoom = [Room new];
     newRoom.queue = [NSMutableArray array];
     newRoom.members = [NSMutableArray array];
     [newRoom.members addObject:[PFUser currentUser]];
     newRoom.title = title;
     
+    // TODO: save roomId to current user
+    
     [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"OpenRoomNotification" object:self];
         }
+        completion(succeeded, error);
     }];
 }
 

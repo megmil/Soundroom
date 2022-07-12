@@ -19,8 +19,4 @@
     return @"Room";
 }
 
-+ (void)createRoomWithTitle:(NSString *)title completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
-    [[ParseRoomManager shared] createRoomWithTitle:title completion:completion];
-}
-
 @end

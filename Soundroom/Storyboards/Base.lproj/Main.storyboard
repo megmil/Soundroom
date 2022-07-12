@@ -19,14 +19,31 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="hGC-AJ-q2r" kind="relationship" relationship="viewControllers" id="T4R-9W-Irp"/>
-                        <segue destination="RPp-YR-1zU" kind="relationship" relationship="viewControllers" id="3GO-uX-YxG"/>
-                        <segue destination="mHq-Af-szW" kind="relationship" relationship="viewControllers" id="8mi-in-vM7"/>
+                        <segue destination="T6Q-vI-mNd" kind="relationship" relationship="viewControllers" id="hQN-Qd-YEV"/>
+                        <segue destination="RPp-YR-1zU" kind="relationship" relationship="viewControllers" id="yrR-8I-0Rd"/>
+                        <segue destination="mHq-Af-szW" kind="relationship" relationship="viewControllers" id="fv7-8l-tH0"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kde-LN-Atr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-549" y="-220"/>
+        </scene>
+        <!--Room-->
+        <scene sceneID="j8Q-2U-MrQ">
+            <objects>
+                <navigationController id="T6Q-vI-mNd" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Room" image="hifispeaker.fill" catalog="system" id="rHY-wr-Ztw"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uUL-wE-Kuv">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="hGC-AJ-q2r" kind="relationship" relationship="rootViewController" id="VdR-LH-pMo"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="87A-MQ-L5g" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2049" y="569"/>
         </scene>
         <!--Room-->
         <scene sceneID="fgk-8L-Hjb">
@@ -50,10 +67,11 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Room" image="hifispeaker.fill" catalog="system" id="Ypl-CB-On2"/>
+                    <navigationItem key="navigationItem" id="cti-59-RN8"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DCH-qz-Mss" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1539" y="569"/>
+            <point key="canvasLocation" x="-1180" y="1327"/>
         </scene>
         <!--Room View Controller-->
         <scene sceneID="5LE-f1-Fzn">
@@ -268,7 +286,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lok-fq-ngw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2049" y="1327"/>
+            <point key="canvasLocation" x="-2896" y="1327"/>
         </scene>
         <!--Configure View Controller-->
         <scene sceneID="Pyi-Fo-g5p">
@@ -285,7 +303,6 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Create room"/>
                                 <connections>
                                     <action selector="didTapCreateRoom:" destination="mjK-1i-rRQ" eventType="touchUpInside" id="ulQ-Cx-UR6"/>
-                                    <segue destination="8w9-aH-PUH" kind="presentation" modalPresentationStyle="fullScreen" id="hh5-ee-0A9"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iy5-aT-oFy">
@@ -304,7 +321,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rqg-aB-9Ef" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1155" y="1327"/>
+            <point key="canvasLocation" x="-2048" y="1327"/>
         </scene>
         <!--Profile-->
         <scene sceneID="HqX-1G-2ZR">

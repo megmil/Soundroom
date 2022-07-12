@@ -6,7 +6,7 @@
 //
 
 #import "ConfigureViewController.h"
-#import "Room.h"
+#import "ParseRoomManager.h"
 
 @interface ConfigureViewController ()
 
@@ -21,9 +21,11 @@
 }
 
 - (IBAction)didTapCreateRoom:(id)sender {
-    [Room createRoomWithTitle:self.titleField.text completion:^(BOOL succeeded, NSError * _Nullable error) {
+    [[ParseRoomManager shared] createRoomWithTitle:self.titleField.text completion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
-            // TODO: show RoomVC
+            [self dismissViewControllerAnimated:NO completion:nil];
+        } else {
+            NSLog(@"error: %@", error);
         }
     }];
 }
