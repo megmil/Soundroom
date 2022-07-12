@@ -54,7 +54,8 @@
         [self.contentView addSubview:_artistLabel];
         
         _addButton = [UIButton new];
-        [_addButton addTarget:nil action:@selector(queueSong) forControlEvents:UIControlEventTouchUpInside];
+        _addButton.userInteractionEnabled = YES;
+        [_addButton addTarget:self action:@selector(queueSong:) forControlEvents:UIControlEventTouchUpInside];
         [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
         [self.contentView addSubview:_addButton];
     }
@@ -74,9 +75,11 @@
     _albumImageView.image = albumImage;
 }
 
-- (void)queueSong {
+- (void)queueSong:(UIButton *)button {
     [QueueSong queueSongWithSpotifyId:_spotifyId completion:^(BOOL succeeded, NSError * _Nonnull error) {
-        // TODO: completion
+        if (succeeded) {
+            [button setImage:[UIImage systemImageNamed:@"checkmark"] forState:UIControlStateNormal];
+        }
     }];
 }
 
