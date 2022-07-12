@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PFFileObject *requesterAvatarImageFile;
 @property (nonatomic, strong) Song *song;
 
-+ (void)addSong:(Song *)song room:(Room *)room completion:(PFBooleanResultBlock _Nullable)completion;
++ (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion;
 
 @end
 

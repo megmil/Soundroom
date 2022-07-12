@@ -52,7 +52,7 @@
 
 - (void)didTapAddButton:(UIButton *)button {
     Song *song = self.songs[button.tag];
-    [song addToQueue]; // TODO: need roomID
+    [song addToQueueWithCompletion:nil]; // TODO: completion
 }
 
 #pragma mark - Search Bar

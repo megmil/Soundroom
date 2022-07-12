@@ -53,8 +53,8 @@
     return self;
 }
 
-- (void)addToQueue {
-    // TODO: body
+- (void)addToQueueWithCompletion:(PFBooleanResultBlock _Nullable)completion {
+    [QueueSong addSong:self completion:completion];
 }
 
 @end

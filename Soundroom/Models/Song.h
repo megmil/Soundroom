@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response;
 
-- (void)addToQueue;
+- (void)addToQueueWithCompletion:(PFBooleanResultBlock _Nullable)completion;
 
 @end
 

@@ -18,7 +18,7 @@
     return @"QueueSong";
 }
 
-+ (void)addSong:(Song *)song room:(Room *)room completion:(PFBooleanResultBlock _Nullable)completion {
++ (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion {
     QueueSong *queueSong = [QueueSong new];
     queueSong.song = song;
     queueSong.score = 0;

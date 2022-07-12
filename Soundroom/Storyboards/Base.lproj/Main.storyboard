@@ -31,7 +31,7 @@
         <!--Room-->
         <scene sceneID="fgk-8L-Hjb">
             <objects>
-                <viewController id="hGC-AJ-q2r" sceneMemberID="viewController">
+                <viewController id="hGC-AJ-q2r" customClass="LobbyViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g9W-vH-GdO">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -270,10 +270,10 @@
             </objects>
             <point key="canvasLocation" x="-2049" y="1327"/>
         </scene>
-        <!--View Controller-->
+        <!--Configure View Controller-->
         <scene sceneID="Pyi-Fo-g5p">
             <objects>
-                <viewController id="mjK-1i-rRQ" sceneMemberID="viewController">
+                <viewController id="mjK-1i-rRQ" customClass="ConfigureViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="X9F-b4-TaJ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
