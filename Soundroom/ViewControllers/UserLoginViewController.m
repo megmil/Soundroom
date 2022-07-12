@@ -6,7 +6,7 @@
 //
 
 #import "UserLoginViewController.h"
-#import "Parse/Parse.h"
+#import "ParseUserManager.h"
 
 @interface UserLoginViewController ()
 
@@ -48,21 +48,17 @@
 }
 
 - (void)registerWithUsername:(NSString *)username password:(NSString *)password {
-    PFUser *newUser = [PFUser user];
-    newUser.username = username;
-    newUser.password = password;
-    
-    [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+    [[ParseUserManager shared] registerWithUsername:username password:password completion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
-            [self loginWithUsername:username password:password];
+            // TODO: go to tab bar
         }
     }];
 }
 
 - (void)loginWithUsername:(NSString *)username password:(NSString *)password {
-    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser * _Nullable user, NSError * _Nullable error) {
-        if (!error) {
-            // TODO: perform segue
+    [[ParseUserManager shared] loginWithUsername:username password:password completion:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            // TODO: go to tab bar
         }
     }];
 }
