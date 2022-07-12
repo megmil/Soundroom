@@ -28,6 +28,7 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"SearchCell"];
     
     self.searchBar.delegate = self;
@@ -52,7 +53,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 72.f;
+    return 66.f;
 }
 
 #pragma mark - Search Bar
