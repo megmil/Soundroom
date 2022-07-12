@@ -7,6 +7,7 @@
 
 #import "ParseRoomManager.h"
 #import "ParseUserManager.h"
+#import "QueueSong.h"
 
 @implementation ParseRoomManager
 
@@ -31,6 +32,25 @@
             
         }
     }];
+}
+
+- (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
+    if ([self inRoom]) {
+        NSLog(@"Room found");
+        [QueueSong queueSongWithSpotifyId:spotifyId roomId:[self currentRoom] completion:completion];
+    } else {
+        NSLog(@"No room");
+    }
+}
+
+- (BOOL)inRoom {
+    PFUser *currentUser = [PFUser currentUser];
+    return [currentUser valueForKey:@"roomId"];
+}
+
+- (NSString *)currentRoom {
+    PFUser *currentUser = [PFUser currentUser];
+    return [currentUser valueForKey:@"roomId"];
 }
 
 @end

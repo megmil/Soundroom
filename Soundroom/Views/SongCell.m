@@ -7,6 +7,7 @@
 
 #import "SongCell.h"
 #import "QueueSong.h"
+#import "ParseRoomManager.h"
 
 @implementation SongCell {
     UILabel *_titleLabel;
@@ -76,7 +77,7 @@
 }
 
 - (void)queueSong:(UIButton *)button {
-    [QueueSong queueSongWithSpotifyId:_spotifyId completion:^(BOOL succeeded, NSError * _Nonnull error) {
+    [[ParseRoomManager shared] queueSongWithSpotifyId:_spotifyId completion:^(BOOL succeeded, NSError * _Nonnull error) {
         if (succeeded) {
             [button setImage:[UIImage systemImageNamed:@"checkmark"] forState:UIControlStateNormal];
         }

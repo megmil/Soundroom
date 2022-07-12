@@ -14,7 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
+// TODO: add nullable
 - (void)createRoomWithTitle:(NSString *)title completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion;
+- (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion;
+- (BOOL)inRoom;
 
 @end
 
