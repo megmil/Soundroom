@@ -27,7 +27,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 ### User Stories
 
 #### Required Stories
-- [ ] Users can create rooms
+- [x] Users can create rooms
 - [ ] Users can join private rooms
 - [ ] Users can play the room queue through the Spotify app
 - [ ] Users can vote on songs
