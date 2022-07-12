@@ -7,8 +7,8 @@
 
 #import "SceneDelegate.h"
 #import "SpotifyAuthClient.h"
-#import "RealmAccountManager.h"
 #import "UserLoginViewController.h"
+#import "Parse/Parse.h"
 
 @interface SceneDelegate ()
 
@@ -18,7 +18,7 @@
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
     
-    if (![[RealmAccountManager shared] signedIn]) {
+    if (![PFUser currentUser]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UserLoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"UserLoginViewController"];
         self.window.rootViewController = userLoginVC;

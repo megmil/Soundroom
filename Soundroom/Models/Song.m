@@ -39,7 +39,8 @@
         self.albumTitle = album[@"name"];
         NSString *albumImageURLString = [album[@"images"] firstObject][@"url"];
         NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
-        self.albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
+        NSData *albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
+        self.albumImage = [UIImage imageWithData:albumImageData];
         
         // format duration (ms) for display (mm:ss)
         NSNumber *millisecondsNumber = [response valueForKey:@"duration_ms"];
@@ -52,9 +53,8 @@
     return self;
 }
 
-- (void)addToQueue {
-    QueueSong *queueSong = [[QueueSong alloc] initWithSong:self];
-    [queueSong addToQueue];
+- (void)addToQueueWithCompletion:(PFBooleanResultBlock _Nullable)completion {
+    [QueueSong addSong:self completion:completion];
 }
 
 @end

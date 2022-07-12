@@ -6,7 +6,7 @@
 //
 
 #import "UserLoginViewController.h"
-#import "RealmAccountManager.h"
+#import "Parse/Parse.h"
 
 @interface UserLoginViewController ()
 
@@ -48,23 +48,21 @@
 }
 
 - (void)registerWithUsername:(NSString *)username password:(NSString *)password {
-    [[RealmAccountManager shared] registerWithUsername:username password:password
-                                            completion:^(NSError * _Nonnull error) {
-        if (error) {
-            [self showAlertWithError:error];
-        } else {
+    PFUser *newUser = [PFUser user];
+    newUser.username = username;
+    newUser.password = password;
+    
+    [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
             [self loginWithUsername:username password:password];
         }
     }];
 }
 
 - (void)loginWithUsername:(NSString *)username password:(NSString *)password {
-    [[RealmAccountManager shared] loginWithUsername:username password:password
-                                         completion:^(RLMUser * _Nullable user, NSError * _Nullable error) {
-        if (error) {
-            [self showAlertWithError:error];
-        } else {
-            // TODO: segue to tab bar
+    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser * _Nullable user, NSError * _Nullable error) {
+        if (!error) {
+            // TODO: perform segue
         }
     }];
 }

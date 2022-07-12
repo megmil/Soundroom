@@ -52,7 +52,6 @@ static NSString * const baseURLString = @"https://api.spotify.com"; // TODO: sta
             NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
             [self getSongsWithParameters:parameters completion:completion];
         } else {
-            NSLog(@"API: Error: Access token is nil.");
             completion(nil, nil);
         }
     }];
