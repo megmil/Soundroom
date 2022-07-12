@@ -24,12 +24,13 @@
     [super layoutSubviews];
     
     _albumImageView.frame = CGRectMake(20.f, 8.f, 50.f, 50.f);
-    _addButton.frame = CGRectMake(self.contentView.frame.size.width - 50.f, self.contentView.frame.size.height - 50.f, 50.f, 50.f); // TODO: not visible
+    _addButton.frame = CGRectMake(self.contentView.frame.size.width - 50.f - 20.f, 8.f, 50.f, 50.f);
     
-    CGFloat albumImageToLabels = _albumImageView.frame.origin.x + _albumImageView.frame.size.width + 8.f; // TODO: rename
-    CGFloat labelsToButtons = (_addButton.frame.origin.x + 8.f) - (_albumImageView.frame.size.width + 8); // TODO: rename
-    _titleLabel.frame = CGRectMake(albumImageToLabels, _albumImageView.frame.origin.y + 6.f, labelsToButtons, 19.f);
-    _artistLabel.frame = CGRectMake(albumImageToLabels, _titleLabel.frame.origin.y + _titleLabel.frame.size.height + 3.f, labelsToButtons, 16.f);
+    CGFloat imageToLabels = _albumImageView.frame.origin.x + _albumImageView.frame.size.width + 8.f; // TODO: rename
+    CGFloat labelsToButton = _addButton.frame.origin.x + 8.f; // TODO: rename
+    
+    _titleLabel.frame = CGRectMake(imageToLabels, _albumImageView.frame.origin.y + 6.f, labelsToButton - imageToLabels, 19.f);
+    _artistLabel.frame = CGRectMake(_titleLabel.frame.origin.x, _titleLabel.frame.origin.y + _titleLabel.frame.size.height + 3.f, _titleLabel.frame.size.width, 16.f);
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -54,7 +55,8 @@
         
         _addButton = [UIButton new];
         [_addButton addTarget:nil action:@selector(queueSong) forControlEvents:UIControlEventTouchUpInside];
-        _addButton.imageView.image = [UIImage systemImageNamed:@"plus"];
+        [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
+        [self.contentView addSubview:_addButton];
     }
     
     return self;
