@@ -35,6 +35,7 @@
 		04A1B38C287CAB11006D2420 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1B38B287CAB11006D2420 /* SettingsViewController.m */; };
 		04A1B38F287CD47A006D2420 /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1B38E287CD47A006D2420 /* LobbyViewController.m */; };
 		04A1B392287CD484006D2420 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1B391287CD484006D2420 /* ConfigureViewController.m */; };
+		04A1B398287D14F5006D2420 /* RealmRoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1B397287D14F5006D2420 /* RealmRoomManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,8 @@
 		04A1B38E287CD47A006D2420 /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
 		04A1B390287CD484006D2420 /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
 		04A1B391287CD484006D2420 /* ConfigureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
+		04A1B396287D14F5006D2420 /* RealmRoomManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RealmRoomManager.h; sourceTree = "<group>"; };
+		04A1B397287D14F5006D2420 /* RealmRoomManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RealmRoomManager.m; sourceTree = "<group>"; };
 		05BA8035371BF12C93686B44 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5AC9246B9074C30C2C8BD3E1 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
 		6746B66977F4F2E15378B150 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -274,6 +277,8 @@
 				049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */,
 				049304CF287C8F3B006AA9A3 /* RealmAccountManager.h */,
 				049304D0287C8F3B006AA9A3 /* RealmAccountManager.m */,
+				04A1B396287D14F5006D2420 /* RealmRoomManager.h */,
+				04A1B397287D14F5006D2420 /* RealmRoomManager.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -557,6 +562,7 @@
 				0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */,
 				04A1B392287CD484006D2420 /* ConfigureViewController.m in Sources */,
 				049304D1287C8F3B006AA9A3 /* RealmAccountManager.m in Sources */,
+				04A1B398287D14F5006D2420 /* RealmRoomManager.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

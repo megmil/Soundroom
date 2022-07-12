@@ -6,23 +6,22 @@
 //
 
 #import "SNDRoom.h"
-#import "RealmAccountManager.h"
+#import "RealmRoomManager.h"
 #import "Realm/Realm.h"
 
 @implementation SNDRoom
 
-- (instancetype)initWithTitle:(NSString *)title {
+@dynamic _id;
+
++ (void)createRoomWithTitle:(NSString *)title {
+    SNDRoom *room = [SNDRoom new];
+    room.title = title;
     
-    self = [super init];
-    
-    if (self) {
-        self.title = title;
-        
-        //self.roomID = roomID;
-        //self.partition = [NSString stringWithFormat:@"room=%@", roomID];
-    }
-    
-    return self;
+    [[RealmRoomManager shared] createRoom:room];
+}
+
+- (RLMObjectId *)roomID {
+    return self._id;
 }
 
 @end

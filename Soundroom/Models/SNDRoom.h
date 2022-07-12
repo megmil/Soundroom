@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "SNDUser.h"
 #import "QueueSong.h"
+#import "Realm/Realm.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,10 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *partition;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *coverImageURLString;
-@property (nonatomic, strong) NSMutableArray <SNDUser *> *members;
-@property (nonatomic, strong) NSMutableArray <QueueSong *> *queue;
+//@property (nonatomic, strong) RLMArray <QueueSong *> *queue;
 
-- (instancetype)initWithTitle:(NSString *)title;
++ (void)createRoomWithTitle:(NSString *)title;
+
+- (RLMObjectId *)roomID;
 
 @end
 

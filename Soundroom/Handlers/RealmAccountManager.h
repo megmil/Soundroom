@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
                completion:(void(^)(RLMUser * _Nullable, NSError * _Nullable))completion; // TODO: RLMUser in completion?
 - (void)logoutWithCompletion:(void(^)(NSError *error))completion;
 - (BOOL)signedIn;
+- (RLMUser *)currentUser;
 
 @end
 

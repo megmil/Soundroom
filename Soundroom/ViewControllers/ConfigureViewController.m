@@ -26,7 +26,7 @@
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    SNDRoom *room = [[SNDRoom alloc] initWithTitle:self.titleField.text];
+    [SNDRoom createRoomWithTitle:self.titleField.text];
 }
 
 @end

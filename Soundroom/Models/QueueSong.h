@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : RLMObject
+@interface QueueSong : RLMEmbeddedObject
 
 @property (nonatomic, strong) NSString *idString;
 @property (nonatomic) NSInteger score;
