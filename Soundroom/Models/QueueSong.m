@@ -6,27 +6,28 @@
 //
 
 #import "QueueSong.h"
-#import "Realm/Realm.h"
 
 @implementation QueueSong
 
-- (instancetype)initWithSong:(Song *)song {
-    
-    self = [super init];
-    
-    if (self) {
-        self.idString = song.idString;
-        self.score = 0;
-    }
-    
-    return self;
+@dynamic identifier;
+@dynamic score;
+@dynamic requesterAvatarImageFile;
+@dynamic song;
+
++ (nonnull NSString *)parseClassName {
+    return @"QueueSong";
 }
 
-- (void)addToQueue {
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    [realm beginWriteTransaction];
-    [realm addObject:self];
-    [realm commitAsyncWriteTransaction]; // TODO: completion
++ (void)addSong:(Song *)song room:(Room *)room completion:(PFBooleanResultBlock _Nullable)completion {
+    QueueSong *queueSong = [QueueSong new];
+    queueSong.song = song;
+    queueSong.score = 0;
+    
+    PFUser *currentUser = [PFUser currentUser];
+    queueSong.requesterAvatarImageFile = [currentUser valueForKey:@"avatarImageFile"];
+    
+    [room addObject:queueSong forKey:@"queue"];
+    [room saveInBackgroundWithBlock:completion];
 }
 
 @end

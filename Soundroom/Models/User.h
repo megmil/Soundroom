@@ -9,13 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SNDUser : PFObject<PFSubclassing>
+@interface User : PFObject<PFSubclassing>
 
 @property (nonatomic, strong) NSString *userID;
 @property (nonatomic, strong) NSString *partition;
 @property (nonatomic, strong) NSString *username;
 @property (nonatomic, strong) NSString *currentRoomID;
-@property (nonatomic, strong) NSString *avatarImageURLString; // TODO: separate RLMObject?
+@property (nonatomic, strong) NSString *avatarImageURLString;
 
 @end
 

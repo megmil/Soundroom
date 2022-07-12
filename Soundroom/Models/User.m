@@ -5,9 +5,9 @@
 //  Created by Megan Miller on 7/11/22.
 //
 
-#import "SNDUser.h"
+#import "User.h"
 
-@implementation SNDUser
+@implementation User
 
 - (instancetype)initWithUsername:(NSString *)username userID:(NSString *)userID {
     

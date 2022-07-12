@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
 @property (nonatomic, strong) NSString *albumTitle;
-@property (nonatomic, strong) NSData *albumImageData; // TODO: convert to UIImage?
+@property (nonatomic, strong) UIImage *albumImage;
 @property (nonatomic, strong) NSString *durationString;
 
 + (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response;

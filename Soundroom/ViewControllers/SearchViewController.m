@@ -42,7 +42,7 @@
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
     cell.titleLabel.text = song.title;
     cell.artistLabel.text = song.artist;
-    cell.albumImageView.image = [UIImage imageWithData:song.albumImageData];
+    cell.albumImageView.image = song.albumImage;
     
     cell.addButton.tag = indexPath.row;
     [cell.addButton addTarget:nil action:@selector(didTapAddButton:) forControlEvents:UIControlEventTouchUpInside];

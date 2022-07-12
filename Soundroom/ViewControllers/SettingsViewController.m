@@ -6,8 +6,8 @@
 //
 
 #import "SettingsViewController.h"
-#import "RealmAccountManager.h"
 #import "SpotifyAuthClient.h"
+#import "Parse/Parse.h"
 
 @interface SettingsViewController ()
 
@@ -20,8 +20,8 @@
 }
 
 - (IBAction)didTapUserLogout:(id)sender {
-    [[RealmAccountManager shared] logoutWithCompletion:^(NSError * _Nonnull error) {
-        // TODO: segue to login VC
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
+        // TODO: segue to loginVC
     }];
 }
 

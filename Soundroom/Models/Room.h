@@ -6,17 +6,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SNDUser.h"
-#import "QueueSong.h"
+#import "User.h"
+#import "Parse/Parse.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Room : NSObject
+@interface Room : PFObject<PFSubclassing>
 
-@property (nonatomic, strong) SNDUser *host;
-@property (nonatomic, strong) NSMutableArray <SNDUser *> *members;
-@property (nonatomic, strong) NSMutableArray <QueueSong *> *queue;
-@property (nonatomic, strong) NSMutableArray <QueueSong *> *playedSongs;
+@property (nonatomic, strong) User *host;
+@property (nonatomic, strong) NSMutableArray <User *> *members;
+@property (nonatomic, strong) NSMutableArray *queue;
+@property (nonatomic, strong) NSMutableArray *playedSongs;
 
 @property (nonatomic, strong) NSString *title;
 // room image
