@@ -28,7 +28,6 @@
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
 		049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */; };
-		049304C8287C896D006AA9A3 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304C7287C896D006AA9A3 /* User.m */; };
 		049304CB287C8A04006AA9A3 /* UserLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* UserLoginViewController.m */; };
 		049304CE287C8A0F006AA9A3 /* SpotifyLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CD287C8A0F006AA9A3 /* SpotifyLoginViewController.m */; };
 		04A1B38C287CAB11006D2420 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1B38B287CAB11006D2420 /* SettingsViewController.m */; };
@@ -92,8 +91,6 @@
 		049304B82877CB0B006AA9A3 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		049304BD2877E759006AA9A3 /* SpotifyAuthClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAuthClient.h; sourceTree = "<group>"; };
 		049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAuthClient.m; sourceTree = "<group>"; };
-		049304C6287C896D006AA9A3 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		049304C7287C896D006AA9A3 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		049304C9287C8A04006AA9A3 /* UserLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserLoginViewController.h; sourceTree = "<group>"; };
 		049304CA287C8A04006AA9A3 /* UserLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserLoginViewController.m; sourceTree = "<group>"; };
 		049304CC287C8A0F006AA9A3 /* SpotifyLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyLoginViewController.h; sourceTree = "<group>"; };
@@ -211,8 +208,6 @@
 				0417B5B62874E377001D6B04 /* Song.m */,
 				0417B5CA2874F6E6001D6B04 /* QueueSong.h */,
 				0417B5CB2874F6E6001D6B04 /* QueueSong.m */,
-				049304C6287C896D006AA9A3 /* User.h */,
-				049304C7287C896D006AA9A3 /* User.m */,
 				0417B5C12874E4D7001D6B04 /* Room.h */,
 				0417B5C22874E4D7001D6B04 /* Room.m */,
 			);
@@ -543,7 +538,6 @@
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
 				049304CB287C8A04006AA9A3 /* UserLoginViewController.m in Sources */,
-				049304C8287C896D006AA9A3 /* User.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,

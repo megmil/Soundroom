@@ -6,20 +6,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "User.h"
 #import "Parse/Parse.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Room : PFObject<PFSubclassing>
 
-@property (nonatomic, strong) User *host;
-@property (nonatomic, strong) NSMutableArray <User *> *members;
+@property (nonatomic, strong) NSString *roomID;
+@property (nonatomic, strong) NSMutableArray <PFUser *> *members;
 @property (nonatomic, strong) NSMutableArray *queue;
 @property (nonatomic, strong) NSMutableArray *playedSongs;
-
 @property (nonatomic, strong) NSString *title;
-// room image
+@property (nonatomic, strong) PFFileObject *coverImageData;
 
 @end
 

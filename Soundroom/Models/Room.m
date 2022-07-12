@@ -9,4 +9,15 @@
 
 @implementation Room
 
+@dynamic roomID;
+@dynamic members;
+@dynamic queue;
+@dynamic playedSongs;
+@dynamic title;
+@dynamic coverImageData;
+
++ (nonnull NSString *)parseClassName {
+    return @"Room";
+}
+
 @end
