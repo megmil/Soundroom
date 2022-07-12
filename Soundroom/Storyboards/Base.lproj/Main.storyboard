@@ -615,12 +615,6 @@
                                                 <constraint firstItem="YGk-Y2-Zg6" firstAttribute="leading" secondItem="ec2-DU-Dak" secondAttribute="trailing" constant="8" id="osj-Y9-F7d"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="addButton" destination="mMe-1u-hN1" id="BBg-qM-T6Z"/>
-                                            <outlet property="albumImageView" destination="ec2-DU-Dak" id="8zF-nS-AHE"/>
-                                            <outlet property="artistLabel" destination="YGk-Y2-Zg6" id="Lwr-M5-Gtz"/>
-                                            <outlet property="titleLabel" destination="3h2-7S-swK" id="Kab-4q-iBp"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

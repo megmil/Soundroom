@@ -6,6 +6,7 @@
 //
 
 #import "ParseRoomManager.h"
+#import "ParseUserManager.h"
 
 @implementation ParseRoomManager
 
@@ -25,9 +26,11 @@
     [newRoom.members addObject:[PFUser currentUser]];
     newRoom.title = title;
     
-    // TODO: notification that current user is in room
-    
-    [newRoom saveInBackgroundWithBlock:completion];
+    [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            
+        }
+    }];
 }
 
 @end

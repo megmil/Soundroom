@@ -40,19 +40,12 @@
     Song *song = self.songs[indexPath.row];
     
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
-    cell.titleLabel.text = song.title;
-    cell.artistLabel.text = song.artist;
-    cell.albumImageView.image = song.albumImage;
-    
-    cell.addButton.tag = indexPath.row;
-    [cell.addButton addTarget:nil action:@selector(didTapAddButton:) forControlEvents:UIControlEventTouchUpInside];
+    [cell setTitle:song.title];
+    [cell setArtist:song.artist];
+    [cell setAlbumImage:song.albumImage];
+    [cell setSpotifyId:song.spotifyId];
     
     return cell;
-}
-
-- (void)didTapAddButton:(UIButton *)button {
-    Song *song = self.songs[button.tag];
-    [song addToQueueWithCompletion:nil]; // TODO: completion
 }
 
 #pragma mark - Search Bar

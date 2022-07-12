@@ -242,8 +242,6 @@
 			children = (
 				0417B5A32874CED2001D6B04 /* ProfileViewController.h */,
 				0417B5A42874CED2001D6B04 /* ProfileViewController.m */,
-				0417B5A92874D394001D6B04 /* SearchViewController.h */,
-				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 				049304C9287C8A04006AA9A3 /* UserLoginViewController.h */,
 				049304CA287C8A04006AA9A3 /* UserLoginViewController.m */,
 				049304CC287C8A0F006AA9A3 /* SpotifyLoginViewController.h */,
@@ -256,6 +254,8 @@
 				0422998D287D2FA70086612E /* LobbyViewController.m */,
 				0422998F287D2FAF0086612E /* ConfigureViewController.h */,
 				04229990287D2FAF0086612E /* ConfigureViewController.m */,
+				0417B5A92874D394001D6B04 /* SearchViewController.h */,
+				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

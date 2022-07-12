@@ -40,4 +40,14 @@
     [PFUser logOutInBackgroundWithBlock:completion];
 }
 
+- (BOOL)currentUserIsInRoom {
+    PFUser *currentUser = [PFUser currentUser];
+    return [currentUser valueForKey:@"roomId"];
+}
+
+- (NSString *)currentUserRoomId {
+    PFUser *currentUser = [PFUser currentUser];
+    return [currentUser valueForKey:@"roomId"];
+}
+
 @end

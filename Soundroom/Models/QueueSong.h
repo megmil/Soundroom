@@ -14,9 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface QueueSong : PFObject<PFSubclassing> // TODO: embedded NSObject
 
 @property (nonatomic, strong) NSString *queueSongId;
+@property (nonatomic, strong) NSString *spotifyId;
 @property (nonatomic) NSInteger score;
-@property (nonatomic, strong) PFFileObject *requesterAvatarImageFile;
-@property (nonatomic, strong) Song *song;
 
 + (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion;
 

@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Song : NSObject
 
 // TODO: add prefix to class names
-@property (nonatomic, strong) NSString *idString;
+@property (nonatomic, strong) NSString *spotifyId;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
 @property (nonatomic, strong) NSString *albumTitle;
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response;
 
-- (void)addToQueueWithCompletion:(PFBooleanResultBlock _Nullable)completion; // TODO: change completion block
++ (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(NSError *error))completion;
 
 @end
 

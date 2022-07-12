@@ -6,16 +6,22 @@
 //
 
 #import "QueueSong.h"
+#import "ParseUserManager.h"
 
 @implementation QueueSong
 
 @dynamic queueSongId;
+@dynamic spotifyId;
 @dynamic score;
-@dynamic requesterAvatarImageFile;
-@dynamic song;
 
 + (nonnull NSString *)parseClassName {
     return @"QueueSong";
+}
+
++ (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(NSError *error))completion {
+    QueueSong *newQueueSong = [QueueSong new];
+    newQueueSong.spotifyId = spotifyId;
+    newQueueSong.score = 0;
 }
 
 + (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion {
