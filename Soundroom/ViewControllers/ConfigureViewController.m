@@ -21,9 +21,9 @@
 }
 
 - (IBAction)didTapCreateRoom:(id)sender {
-    [Room createRoomWithTitle:self.titleField.text completion:^(NSString * _Nonnull roomID, NSError * _Nonnull error) {
-        if (roomID) {
-            NSLog(@"id: %@", roomID);
+    [Room createRoomWithTitle:self.titleField.text completion:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            // TODO: show RoomVC
         }
     }];
 }

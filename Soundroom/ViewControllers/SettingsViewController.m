@@ -21,7 +21,7 @@
 
 - (IBAction)didTapUserLogout:(id)sender {
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
-        // TODO: segue to loginVC
+        // TODO: show loginVC
     }];
 }
 

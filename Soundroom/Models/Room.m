@@ -18,7 +18,7 @@
     return @"Room";
 }
 
-+ (void)createRoomWithTitle:(NSString *)title completion:(void(^)(NSString *roomID, NSError *error))completion {
++ (void)createRoomWithTitle:(NSString *)title completion:(PFBooleanResultBlock _Nullable)completion {
     Room *newRoom = [Room new];
     newRoom.queue = [NSMutableArray array];
     newRoom.members = [NSMutableArray array];
@@ -27,9 +27,8 @@
     
     [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
-            completion(newRoom.objectId, nil);
-        } else {
-            completion(nil, error);
+            PFUser *currentUser = [PFUser currentUser];
+            [currentUser addObject:newRoom.roomId forKey:@"roomId"];
         }
     }];
 }

@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *title;
 //@property (nonatomic, strong) PFFileObject *coverImageData;
 
-+ (void)createRoomWithTitle:(NSString *)title completion:(void(^)(NSString *roomID, NSError *error))completion;
++ (void)createRoomWithTitle:(NSString *)title completion:(PFBooleanResultBlock _Nullable)completion;
 
 @end
 
