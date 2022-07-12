@@ -12,7 +12,7 @@
 @dynamic queueSongID;
 @dynamic score;
 @dynamic requesterAvatarImageFile;
-//@dynamic song;
+@dynamic song;
 
 + (nonnull NSString *)parseClassName {
     return @"QueueSong";
@@ -20,7 +20,7 @@
 
 + (void)addSong:(Song *)song room:(Room *)room completion:(PFBooleanResultBlock _Nullable)completion {
     QueueSong *queueSong = [QueueSong new];
-    //queueSong.song = song;
+    queueSong.song = song;
     queueSong.score = 0;
     
     PFUser *currentUser = [PFUser currentUser];

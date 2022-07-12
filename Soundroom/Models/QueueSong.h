@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *queueSongID;
 @property (nonatomic) NSInteger score;
 @property (nonatomic, strong) PFFileObject *requesterAvatarImageFile;
-//@property (nonatomic, strong) Song *song;
+@property (nonatomic, strong) Song *song;
 
 + (void)addSong:(Song *)song room:(Room *)room completion:(PFBooleanResultBlock _Nullable)completion;
 
