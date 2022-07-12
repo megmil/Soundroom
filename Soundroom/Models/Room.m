@@ -12,12 +12,26 @@
 @dynamic roomID;
 @dynamic members;
 @dynamic queue;
-@dynamic playedSongs;
 @dynamic title;
-@dynamic coverImageData;
 
 + (nonnull NSString *)parseClassName {
     return @"Room";
+}
+
++ (void)createRoomWithTitle:(NSString *)title completion:(void(^)(NSString *roomID, NSError *error))completion {
+    Room *newRoom = [Room new];
+    newRoom.queue = [NSMutableArray array];
+    newRoom.members = [NSMutableArray array];
+    [newRoom.members addObject:[PFUser currentUser]];
+    newRoom.title = title;
+    
+    [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            completion(newRoom.roomID, nil);
+        } else {
+            completion(nil, error);
+        }
+    }];
 }
 
 @end

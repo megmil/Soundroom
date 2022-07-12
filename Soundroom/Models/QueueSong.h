@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : PFObject<PFSubclassing>
+@interface QueueSong : PFObject<PFSubclassing> // TODO: embedded NSObject
 
 @property (nonatomic, strong) NSString *queueSongID;
 @property (nonatomic) NSInteger score;

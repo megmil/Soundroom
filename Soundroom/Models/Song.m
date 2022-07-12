@@ -53,4 +53,8 @@
     return self;
 }
 
+- (void)addToQueue {
+    // TODO: body
+}
+
 @end

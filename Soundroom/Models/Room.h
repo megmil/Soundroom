@@ -15,9 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *roomID;
 @property (nonatomic, strong) NSMutableArray <PFUser *> *members;
 @property (nonatomic, strong) NSMutableArray *queue;
-@property (nonatomic, strong) NSMutableArray *playedSongs;
+//@property (nonatomic, strong) NSMutableArray *playedSongs;
 @property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) PFFileObject *coverImageData;
+//@property (nonatomic, strong) PFFileObject *coverImageData;
+
++ (void)createRoomWithTitle:(NSString *)title completion:(void(^)(NSString *roomID, NSError *error))completion;
 
 @end
 

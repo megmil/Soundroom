@@ -24,6 +24,8 @@
 		0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SongCell.m */; };
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* QueueSong.m */; };
+		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
+		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
@@ -85,6 +87,10 @@
 		0417B5C82874F5F2001D6B04 /* RoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomCell.m; sourceTree = "<group>"; };
 		0417B5CA2874F6E6001D6B04 /* QueueSong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueueSong.h; sourceTree = "<group>"; };
 		0417B5CB2874F6E6001D6B04 /* QueueSong.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueueSong.m; sourceTree = "<group>"; };
+		0422998C287D2FA70086612E /* LobbyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LobbyViewController.h; sourceTree = "<group>"; };
+		0422998D287D2FA70086612E /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
+		0422998F287D2FAF0086612E /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
+		04229990287D2FAF0086612E /* ConfigureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		049304A428762A58006AA9A3 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		049304A928762B12006AA9A3 /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
 		049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
@@ -232,14 +238,18 @@
 				0417B5A42874CED2001D6B04 /* ProfileViewController.m */,
 				0417B5A92874D394001D6B04 /* SearchViewController.h */,
 				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
-				0417B5AF2874E0B6001D6B04 /* RoomViewController.h */,
-				0417B5B02874E0B6001D6B04 /* RoomViewController.m */,
 				049304C9287C8A04006AA9A3 /* UserLoginViewController.h */,
 				049304CA287C8A04006AA9A3 /* UserLoginViewController.m */,
 				049304CC287C8A0F006AA9A3 /* SpotifyLoginViewController.h */,
 				049304CD287C8A0F006AA9A3 /* SpotifyLoginViewController.m */,
 				04A1B38A287CAB11006D2420 /* SettingsViewController.h */,
 				04A1B38B287CAB11006D2420 /* SettingsViewController.m */,
+				0417B5AF2874E0B6001D6B04 /* RoomViewController.h */,
+				0417B5B02874E0B6001D6B04 /* RoomViewController.m */,
+				0422998C287D2FA70086612E /* LobbyViewController.h */,
+				0422998D287D2FA70086612E /* LobbyViewController.m */,
+				0422998F287D2FAF0086612E /* ConfigureViewController.h */,
+				04229990287D2FAF0086612E /* ConfigureViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -538,6 +548,7 @@
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
 				049304CB287C8A04006AA9A3 /* UserLoginViewController.m in Sources */,
+				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
@@ -546,6 +557,7 @@
 				049304CE287C8A0F006AA9A3 /* SpotifyLoginViewController.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
+				04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
