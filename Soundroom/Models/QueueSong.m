@@ -17,6 +17,7 @@
     if (self) {
         self.idString = song.idString;
         self.score = 0;
+        self.song = song;
     }
     
     return self;

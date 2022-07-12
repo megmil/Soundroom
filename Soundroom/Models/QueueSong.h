@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *idString;
 @property (nonatomic) NSInteger score;
 @property (nonatomic, strong) NSString *requesterProfilePictureString;
+@property (nonatomic, strong) Song *song;
 
 - (instancetype)initWithSong:(Song *)song;
 - (void)addToQueue;

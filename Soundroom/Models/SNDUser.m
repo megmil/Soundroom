@@ -9,17 +9,25 @@
 
 @implementation SNDUser
 
-- (instancetype)initWithUsername:(NSString *)username userID:(NSString *)userID {
+@dynamic _id;
+
+- (instancetype)initWithUsername:(NSString *)username {
     
     self = [super init];
     
     if (self) {
         self.username = username;
-        self.userID = userID;
-        self.partition = [NSString stringWithFormat:@"user=%@", userID];
     }
     
     return self;
+}
+
++ (NSString *)primaryKey {
+    return @"_id";
+}
+
++ (NSArray<NSString *> *)requiredProperties {
+    return @[@"_id", @"username"];
 }
 
 @end

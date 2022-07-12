@@ -65,7 +65,7 @@
     // TODO: search every X keypresses
     [[SpotifyAPIManager shared] getSongsWithQuery:searchText completion:^(NSArray *songs, NSError *error) {
         if (error) {
-            NSLog(@"Error: %@", error);
+            NSLog(@"Error: %@", error); // TODO: remove
         } else {
             self.songs = (NSMutableArray<Song *> *)songs;
             [self.tableView reloadData];

@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RoomViewController : UIViewController
 
+@property (strong, nonatomic) NSString *roomID;
+
 @end
 
 NS_ASSUME_NONNULL_END

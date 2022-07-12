@@ -82,6 +82,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Create room"/>
                                 <connections>
+                                    <action selector="didTapCreate:" destination="xlF-r3-gCu" eventType="touchUpInside" id="9mB-Cv-pV8"/>
                                     <segue destination="8w9-aH-PUH" kind="presentation" modalPresentationStyle="fullScreen" id="Wke-mH-KbQ"/>
                                 </connections>
                             </button>
@@ -89,6 +90,9 @@
                         <viewLayoutGuide key="safeArea" id="vR9-fo-EDm"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="titleField" destination="k7H-Us-kvF" id="tro-v4-Vux"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EGz-EV-QU0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -159,7 +163,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RoomCell" rowHeight="72" id="rGn-nQ-SwX" customClass="SongCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="QueueSongCell" rowHeight="72" id="rGn-nQ-SwX" customClass="SongCell">
                                         <rect key="frame" x="0.0" y="116.5" width="414" height="72"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rGn-nQ-SwX" id="jwJ-cF-HBc">
@@ -305,6 +309,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Dyk-C7-rWz"/>
+                    <connections>
+                        <outlet property="tableView" destination="74f-57-bil" id="swX-Wu-p8b"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lok-fq-ngw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

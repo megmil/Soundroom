@@ -6,10 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Realm/Realm.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Song : NSObject
+@interface Song : RLMEmbeddedObject
 
 // TODO: add prefix to class names
 

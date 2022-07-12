@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SNDUser : RLMObject
 
-@property (nonatomic, strong) NSString *userID;
+@property (nonatomic, strong) RLMObjectId *_id;
 @property (nonatomic, strong) NSString *partition;
 @property (nonatomic, strong) NSString *username;
 @property (nonatomic, strong) NSString *currentRoomID;

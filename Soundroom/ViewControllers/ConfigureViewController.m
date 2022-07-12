@@ -6,8 +6,11 @@
 //
 
 #import "ConfigureViewController.h"
+#import "SNDRoom.h"
 
 @interface ConfigureViewController ()
+
+@property (weak, nonatomic) IBOutlet UITextField *titleField;
 
 @end
 
@@ -15,6 +18,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+
+- (IBAction)didTapCreate:(id)sender {
+    // TODO
+}
+
+#pragma mark - Navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    SNDRoom *room = [[SNDRoom alloc] initWithTitle:self.titleField.text];
 }
 
 @end
