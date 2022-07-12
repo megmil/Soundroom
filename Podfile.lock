@@ -17,29 +17,23 @@ PODS:
   - OAuth2-ObjC (0.1.0):
     - AFNetworking (~> 3.1)
     - STKWebKitViewController (~> 0.5)
-  - Realm (10.28.2):
-    - Realm/Headers (= 10.28.2)
-  - Realm/Headers (10.28.2)
   - STKWebKitViewController (0.5.0)
 
 DEPENDENCIES:
   - AFNetworking
   - OAuth2-ObjC
-  - Realm
 
 SPEC REPOS:
   trunk:
     - AFNetworking
     - OAuth2-ObjC
-    - Realm
     - STKWebKitViewController
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   OAuth2-ObjC: eb06fef2d282ea4b6f9b9b8ce779f165a1fe4783
-  Realm: e617c54ad0f566b3d0f6a2abae7010de05f252ac
   STKWebKitViewController: 1371f39e5f697de11aa091064eeed6eb515a2511
 
-PODFILE CHECKSUM: 32ad591fde8a16d7f39737e5b6d79e1b26db1539
+PODFILE CHECKSUM: f8f58dafdfa4b95a952e2420ddc41e29ca4277f2
 
 COCOAPODS: 1.11.3
