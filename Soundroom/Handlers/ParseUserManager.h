@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFBooleanResultBlock _Nullable)completion;
 
+- (void)logoutWithCompletion:(void(^)(NSError * _Nullable error))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

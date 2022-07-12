@@ -32,10 +32,12 @@
 
 - (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFBooleanResultBlock _Nullable)completion {
     [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser * _Nullable user, NSError * _Nullable error) {
-        if (!error) {
-            // TODO: perform segue
-        }
+        // TODO: completion
     }];
+}
+
+- (void)logoutWithCompletion:(void(^)(NSError * _Nullable error))completion {
+    [PFUser logOutInBackgroundWithBlock:completion];
 }
 
 @end

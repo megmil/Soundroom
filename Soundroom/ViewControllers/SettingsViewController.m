@@ -7,7 +7,7 @@
 
 #import "SettingsViewController.h"
 #import "SpotifyAuthClient.h"
-#import "Parse/Parse.h"
+#import "ParseUserManager.h"
 
 @interface SettingsViewController ()
 
@@ -20,7 +20,7 @@
 }
 
 - (IBAction)didTapUserLogout:(id)sender {
-    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
+    [[ParseUserManager shared] logoutWithCompletion:^(NSError * _Nullable error) {
         // TODO: show loginVC
     }];
 }
