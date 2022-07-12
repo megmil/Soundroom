@@ -6,18 +6,19 @@
 //
 
 #import "Song.h"
-#import "Realm/Realm.h"
+#import "Room.h"
+#import "Parse/Parse.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : RLMObject
+@interface QueueSong : PFObject<PFSubclassing> // TODO: embedded NSObject
 
-@property (nonatomic, strong) NSString *idString;
+@property (nonatomic, strong) NSString *queueSongId;
 @property (nonatomic) NSInteger score;
-@property (nonatomic, strong) NSString *requesterProfilePictureString;
+@property (nonatomic, strong) PFFileObject *requesterAvatarImageFile;
+@property (nonatomic, strong) Song *song;
 
-- (instancetype)initWithSong:(Song *)song;
-- (void)addToQueue;
++ (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion;
 
 @end
 

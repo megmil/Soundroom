@@ -83,20 +83,17 @@
     // Access token
     if ([response objectForKey:@"access_token"]) {
         [[NSUserDefaults standardUserDefaults] setObject:response[@"access_token"] forKey:@"OAuth2AccessToken"];
-        NSLog(@"OAuth2: Access token persisted: %@", response[@"access_token"]);
     }
 
     // Refresh token
     if ([response objectForKey:@"refresh_token"]) {
         [[NSUserDefaults standardUserDefaults] setObject:response[@"refresh_token"] forKey:@"OAuth2RefreshToken"];
-        NSLog(@"OAuth2: Refresh token persisted: %@", response[@"refresh_token"]);
     }
 
     // Access token expires at
     if ([response objectForKey:@"expires_in"]) {
         NSDate *tokenExpiresAt = [self calculateTokenExpiresAtWithResponse:response];
         [[NSUserDefaults standardUserDefaults] setObject:tokenExpiresAt forKey:@"OAuth2TokenExpiresAt"];
-        NSLog(@"OAuth2: Token expires at: %@", tokenExpiresAt);
     }
     
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -114,7 +111,6 @@
             callback();
         }];
     } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"OAuth2 Error: %@", error);
         callback();
     }];
 }
@@ -125,11 +121,9 @@
     
     [manager POST:[self.tokenUrl absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [self persistTokensFromResponse:(id)responseObject callback:^{
-            NSLog(@"OAuth2: Access token refresh automatically.");
             callback();
         }];
     } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"OAuth2 Error: %@", error);
         callback();
     }];
 }
@@ -177,7 +171,6 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"OAuth2TokenExpiresAt"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:kOAuth2SignedOutNotification object:self];
-    NSLog(@"OAuth2: Signed out.");
 }
 
 - (void)accessToken:(void (^)(NSString *accessToken))callback {
@@ -187,11 +180,9 @@
         BOOL accessTokenExpired = [self accessTokenExpired];
         
         if (accessTokenExpired) {
-            NSLog(@"OAuth2: Your access token has expired.");
             BOOL refreshTokenExists = [self refreshTokenExists];
             
             if (refreshTokenExists) {
-                NSLog(@"OAuth2: Refresh token found, attempting automatic access token refresh.");
                 NSString *refreshToken = [self persistedRefreshToken];
 
                 __weak __typeof__(self) weakSelf = self;
@@ -199,7 +190,6 @@
                     BOOL accessTokenExpired = [weakSelf accessTokenExpired];
                     
                     if (accessTokenExpired) {
-                        NSLog(@"OAuth2: Error: Could not refresh your access token.");
                         callback(nil);
                     } else {
                         NSString *accessToken = [weakSelf persistedAccessToken];
@@ -208,7 +198,6 @@
 
                 }];
             } else {
-                NSLog(@"OAuth2: Error: Your access token has expired and threre is no refresh token.");
                 callback(nil);
             }
         } else {
@@ -216,7 +205,6 @@
             callback(accessToken);
         }
     } else {
-        NSLog(@"OAuth2: Error: You are not signed in.");
         callback(nil);
     }
 }

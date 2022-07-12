@@ -8,7 +8,7 @@ target 'Soundroom' do
   # Pods for Soundroom
   pod 'AFNetworking'
   pod 'OAuth2-ObjC'
-  pod 'Realm'
+  pod 'Parse'
 
   target 'SoundroomTests' do
     inherit! :search_paths

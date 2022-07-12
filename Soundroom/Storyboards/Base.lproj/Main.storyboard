@@ -31,10 +31,21 @@
         <!--Room-->
         <scene sceneID="fgk-8L-Hjb">
             <objects>
-                <viewController id="hGC-AJ-q2r" sceneMemberID="viewController">
+                <viewController id="hGC-AJ-q2r" customClass="LobbyViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g9W-vH-GdO">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9zP-yN-yTC">
+                                <rect key="frame" x="156" y="569" width="104" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Create room"/>
+                                <connections>
+                                    <segue destination="mjK-1i-rRQ" kind="presentation" modalPresentationStyle="pageSheet" id="c1Z-Vt-sWw"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="O10-hZ-IFc"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
@@ -257,7 +268,43 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lok-fq-ngw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1539" y="1297"/>
+            <point key="canvasLocation" x="-2049" y="1327"/>
+        </scene>
+        <!--Configure View Controller-->
+        <scene sceneID="Pyi-Fo-g5p">
+            <objects>
+                <viewController id="mjK-1i-rRQ" customClass="ConfigureViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="X9F-b4-TaJ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lu5-9i-r3H">
+                                <rect key="frame" x="156" y="462" width="104" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Create room"/>
+                                <connections>
+                                    <action selector="didTapCreateRoom:" destination="mjK-1i-rRQ" eventType="touchUpInside" id="ulQ-Cx-UR6"/>
+                                    <segue destination="8w9-aH-PUH" kind="presentation" modalPresentationStyle="fullScreen" id="hh5-ee-0A9"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iy5-aT-oFy">
+                                <rect key="frame" x="160" y="372" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="7hB-w1-huU"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <connections>
+                        <outlet property="titleField" destination="iy5-aT-oFy" id="0s7-iq-s34"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rqg-aB-9Ef" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1155" y="1327"/>
         </scene>
         <!--Profile-->
         <scene sceneID="HqX-1G-2ZR">
