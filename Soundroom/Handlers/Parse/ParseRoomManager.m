@@ -8,6 +8,7 @@
 #import "ParseRoomManager.h"
 #import "ParseUserManager.h"
 #import "QueueSong.h"
+@import ParseLiveQuery;
 
 @implementation ParseRoomManager
 
@@ -56,18 +57,9 @@
     
     NSString *roomId = [self currentRoomId];
     Room *room = [self roomWithId:roomId]; // TODO: combine methods?
-    
-    // TODO: split into 2 methods
     [room addObject:userId forKey:@"memberIds"];
-    [room saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
-            PFUser *newMember = [[ParseUserManager shared] getUserWithId:userId];
-            [newMember setValue:roomId forKey:@"roomId"];
-            [newMember saveInBackgroundWithBlock:completion];
-        } else {
-            completion(succeeded, error);
-        }
-    }];
+    [room saveInBackgroundWithBlock:completion];
+    
 }
 
 - (BOOL)inRoom {
