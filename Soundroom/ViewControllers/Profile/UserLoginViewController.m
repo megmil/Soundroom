@@ -48,7 +48,8 @@
 }
 
 - (void)registerWithUsername:(NSString *)username password:(NSString *)password {
-    [[ParseUserManager shared] registerWithUsername:username password:password completion:^(BOOL succeeded, NSError * _Nullable error) {
+    [[ParseUserManager shared] registerWithUsername:username password:password
+                                         completion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             // TODO: go to tab bar
         }
@@ -56,7 +57,8 @@
 }
 
 - (void)loginWithUsername:(NSString *)username password:(NSString *)password {
-    [[ParseUserManager shared] loginWithUsername:username password:password completion:^(BOOL succeeded, NSError * _Nullable error) {
+    [[ParseUserManager shared] loginWithUsername:username password:password
+                                      completion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             // TODO: go to tab bar
         }
