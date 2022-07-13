@@ -9,6 +9,7 @@ target 'Soundroom' do
   pod 'AFNetworking'
   pod 'OAuth2-ObjC'
   pod 'Parse'
+  pod 'SkyFloatingLabelTextField'
 
   target 'SoundroomTests' do
     inherit! :search_paths

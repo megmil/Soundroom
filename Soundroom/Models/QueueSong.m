@@ -18,7 +18,8 @@
     return @"QueueSong";
 }
 
-+ (void)queueSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError *error))completion {
++ (void)queueSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId
+                    completion:(void(^)(BOOL succeeded, NSError *error))completion {
     
     QueueSong *newQueueSong = [QueueSong new];
     
