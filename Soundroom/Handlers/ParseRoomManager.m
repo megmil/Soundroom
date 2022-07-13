@@ -28,9 +28,13 @@
     [newRoom.members addObject:[PFUser currentUser]];
     newRoom.title = title;
     
-    // TODO: save roomId to current user
-    
-    [newRoom saveInBackgroundWithBlock:completion];
+    [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            [self addCurrentUserToRoomWithId:newRoom.objectId completion:completion];
+        } else {
+            completion(succeeded, error);
+        }
+    }];
 }
 
 - (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
@@ -40,6 +44,11 @@
     } else {
         NSLog(@"No room");
     }
+}
+
+- (void)addCurrentUserToRoomWithId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
+    PFUser *currentUser = [PFUser currentUser];
+    [currentUser addObject:roomId forKey:@"roomId"];
 }
 
 - (BOOL)inRoom {
