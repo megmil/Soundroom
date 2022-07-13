@@ -108,7 +108,7 @@
 }
 
 - (void)searchUsersWithQuery:(NSString *)query {
-    [[ParseUserManager shared] getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
+    [ParseUserManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
         if (users) {
             self.users = (NSMutableArray<PFUser *> *)users;
             [self.tableView reloadData];

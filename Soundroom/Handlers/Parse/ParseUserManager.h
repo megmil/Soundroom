@@ -12,15 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ParseUserManager : NSObject
 
-+ (instancetype)shared; // TODO: remove if possible
++ (void)registerWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock _Nullable)completion;
++ (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock _Nullable)completion;
++ (void)logoutWithCompletion:(PFUserLogoutResultBlock _Nullable)completion;
 
-- (void)registerWithUsername:(NSString *)username password:(NSString *)password
-                  completion:(PFBooleanResultBlock _Nullable)completion; // TODO: completion block
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password
-               completion:(PFBooleanResultBlock _Nullable)completion;
-- (void)logoutWithCompletion:(void(^)(NSError * _Nullable error))completion;
-- (void)getUsersWithUsername:(NSString *)username completion:(void(^)(NSArray *users, NSError *error))completion;
-- (PFUser *)getUserWithId:(NSString *)userId;
++ (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock _Nullable)completion;
++ (void)getUserWithId:(NSString *)userId completion:(PFObjectResultBlock _Nullable)completion;
 
 @end
 

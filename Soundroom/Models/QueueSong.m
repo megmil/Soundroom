@@ -6,7 +6,6 @@
 //
 
 #import "QueueSong.h"
-#import "ParseUserManager.h"
 
 @implementation QueueSong
 

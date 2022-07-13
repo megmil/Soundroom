@@ -6,7 +6,6 @@
 //
 
 #import "ParseRoomManager.h"
-#import "ParseUserManager.h"
 #import "QueueSong.h"
 @import ParseLiveQuery;
 

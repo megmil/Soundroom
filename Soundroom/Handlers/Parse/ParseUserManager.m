@@ -9,50 +9,43 @@
 
 @implementation ParseUserManager
 
-+ (instancetype)shared {
-    static dispatch_once_t once;
-    static id shared;
-    dispatch_once(&once, ^{
-        shared = [[self alloc] init];
-    });
-    return shared;
-}
+# pragma mark - Authentication
 
-- (void)registerWithUsername:(NSString *)username password:(NSString *)password
-                  completion:(PFBooleanResultBlock _Nullable)completion {
++ (void)registerWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock)completion {
+    
     PFUser *newUser = [PFUser user];
     newUser.username = username;
     newUser.password = password;
     
-    [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+    [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self loginWithUsername:username password:password completion:completion];
+        } else {
+            completion(nil, error);
         }
     }];
 }
 
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password
-               completion:(PFBooleanResultBlock _Nullable)completion {
-    [PFUser logInWithUsernameInBackground:username password:password
-                                    block:^(PFUser * _Nullable user, NSError * _Nullable error) {
-        // TODO: completion
-    }];
++ (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock)completion {
+    [PFUser logInWithUsernameInBackground:username password:password block:completion];
 }
 
-- (void)logoutWithCompletion:(void(^)(NSError * _Nullable error))completion {
++ (void)logoutWithCompletion:(PFUserLogoutResultBlock)completion {
     [PFUser logOutInBackgroundWithBlock:completion];
 }
 
-- (void)getUsersWithUsername:(NSString *)username completion:(void(^)(NSArray *users, NSError *error))completion {
+# pragma mark - Server
+
++ (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFUser query];
     [query whereKey:@"username" matchesRegex:username modifiers:@"i"]; // ignore case
     query.limit = 20;
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
-- (PFUser *)getUserWithId:(NSString *)userId {
++ (void)getUserWithId:(NSString *)userId completion:(PFObjectResultBlock)completion {
     PFQuery *query = [PFUser query];
-    return [query getObjectWithId:userId];
+    [query getObjectInBackgroundWithId:userId block:completion];
 }
 
 @end
