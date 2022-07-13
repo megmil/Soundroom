@@ -33,7 +33,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 - [ ] Users can vote on songs
 - [ ] Songs change position in the queue based on their "score"
 - [x] Users can search songs
-- [ ] Users can add songs to the queue
+- [x] Users can add songs to the queue
 - [ ] Users can view details on past sessions
 - [ ] Alerts the user when the queue is empty
 - [ ] Users can leave a room
