@@ -65,14 +65,16 @@
         cell.subtitle = song.artist;
         cell.image = song.albumImage;
         cell.objectId = song.spotifyId;
+        cell.isUser = NO;
         return cell;
     }
     
     PFUser *user = self.users[indexPath.row];
     cell.title = [user valueForKey:@"displayName"];
-    cell.subtitle = [user valueForKey:@"displayName"];
+    cell.subtitle = [user valueForKey:@"username"];
     cell.image = [UIImage imageNamed:@"check"]; // TODO: avatar images
     cell.objectId = user.objectId;
+    cell.isUser = YES;
     return cell;
 }
 

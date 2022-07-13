@@ -50,4 +50,9 @@
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
+- (PFUser *)getUserWithId:(NSString *)userId {
+    PFQuery *query = [PFUser query];
+    return [query getObjectWithId:userId];
+}
+
 @end

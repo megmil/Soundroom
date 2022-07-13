@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
                completion:(PFBooleanResultBlock _Nullable)completion;
 - (void)logoutWithCompletion:(void(^)(NSError * _Nullable error))completion;
 - (void)getUsersWithUsername:(NSString *)username completion:(void(^)(NSArray *users, NSError *error))completion;
+- (PFUser *)getUserWithId:(NSString *)userId;
 
 @end
 

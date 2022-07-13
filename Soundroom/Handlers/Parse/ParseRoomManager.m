@@ -41,7 +41,7 @@
 - (void)queueSongWithSpotifyId:(NSString *)spotifyId
                     completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
     if ([self inRoom]) {
-        [QueueSong queueSongWithSpotifyId:spotifyId roomId:[self currentRoom] completion:completion];
+        [QueueSong queueSongWithSpotifyId:spotifyId roomId:[self currentRoomId] completion:completion];
     }
 }
 
@@ -52,14 +52,37 @@
     [currentUser saveInBackgroundWithBlock:completion];
 }
 
+- (void)inviteUserWithId:(NSString *)userId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
+    
+    NSString *roomId = [self currentRoomId];
+    Room *room = [self roomWithId:roomId]; // TODO: combine methods?
+    
+    // TODO: split into 2 methods
+    [room addObject:userId forKey:@"memberIds"];
+    [room saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            PFUser *newMember = [[ParseUserManager shared] getUserWithId:userId];
+            [newMember setValue:roomId forKey:@"roomId"];
+            [newMember saveInBackgroundWithBlock:completion];
+        } else {
+            completion(succeeded, error);
+        }
+    }];
+}
+
 - (BOOL)inRoom {
     PFUser *currentUser = [PFUser currentUser];
     return [currentUser valueForKey:@"roomId"];
 }
 
-- (NSString *)currentRoom {
+- (NSString *)currentRoomId {
     PFUser *currentUser = [PFUser currentUser];
     return [currentUser valueForKey:@"roomId"];
+}
+
+- (Room *)roomWithId:(NSString *)roomId {
+    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+    return [query getObjectWithId:roomId];
 }
 
 @end

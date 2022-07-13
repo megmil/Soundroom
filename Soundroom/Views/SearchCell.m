@@ -60,7 +60,7 @@
         _addButton = [UIButton new];
         [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
         _addButton.userInteractionEnabled = YES;
-        [_addButton addTarget:self action:@selector(queueSong:) forControlEvents:UIControlEventTouchUpInside];
+        [_addButton addTarget:self action:@selector(addItem:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_addButton];
     }
     
@@ -79,13 +79,22 @@
     _imageView.image = image;
 }
 
-- (void)queueSong:(UIButton *)button {
-    [[ParseRoomManager shared] queueSongWithSpotifyId:_objectId
-                                           completion:^(BOOL succeeded, NSError * _Nonnull error) {
-        if (succeeded) {
-            [button setImage:[UIImage systemImageNamed:@"checkmark"] forState:UIControlStateNormal];
-        }
-    }];
+- (void)addItem:(UIButton *)button {
+    
+    if (self.isUser) {
+        [self addUser];
+        return;
+    }
+    
+    [self queueSong];
+}
+
+- (void)addUser {
+    [[ParseRoomManager shared] inviteUserWithId:_objectId completion:nil]; // TODO: change button when done
+}
+
+- (void)queueSong {
+    [[ParseRoomManager shared] queueSongWithSpotifyId:_objectId completion:nil]; // TODO: change button when done
 }
 
 @end

@@ -34,10 +34,12 @@
 }
 
 - (void)inviteMembers {
+    /*
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SearchViewController *searchVC = [storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
     searchVC.isUserSearch = YES;
     [self presentViewController:searchVC animated:YES completion:nil];
+     */
 }
 
 @end

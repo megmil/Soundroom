@@ -22,7 +22,7 @@
 }
 
 - (void)goToRoom {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil]; // TODO: animate?
 }
 
 @end
