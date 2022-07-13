@@ -24,7 +24,7 @@
     self = [super init];
     
     if (self) {
-        self.idString = response[@"id"];
+        self.spotifyId = response[@"id"];
         self.title = response[@"name"];
         
         // format artists into one string
@@ -51,10 +51,6 @@
     }
     
     return self;
-}
-
-- (void)addToQueueWithCompletion:(PFBooleanResultBlock _Nullable)completion {
-    [QueueSong addSong:self completion:completion];
 }
 
 @end

@@ -27,6 +27,7 @@
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
+		0422999A287DE1270086612E /* ParseRoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229999287DE1270086612E /* ParseRoomManager.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
@@ -94,6 +95,8 @@
 		04229990287D2FAF0086612E /* ConfigureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		04229995287DDB5C0086612E /* ParseUserManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseUserManager.h; sourceTree = "<group>"; };
 		04229996287DDB5C0086612E /* ParseUserManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseUserManager.m; sourceTree = "<group>"; };
+		04229998287DE1270086612E /* ParseRoomManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseRoomManager.h; sourceTree = "<group>"; };
+		04229999287DE1270086612E /* ParseRoomManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseRoomManager.m; sourceTree = "<group>"; };
 		049304A428762A58006AA9A3 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		049304A928762B12006AA9A3 /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
 		049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
@@ -239,12 +242,12 @@
 			children = (
 				0417B5A32874CED2001D6B04 /* ProfileViewController.h */,
 				0417B5A42874CED2001D6B04 /* ProfileViewController.m */,
-				0417B5A92874D394001D6B04 /* SearchViewController.h */,
-				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 				049304C9287C8A04006AA9A3 /* UserLoginViewController.h */,
 				049304CA287C8A04006AA9A3 /* UserLoginViewController.m */,
 				049304CC287C8A0F006AA9A3 /* SpotifyLoginViewController.h */,
 				049304CD287C8A0F006AA9A3 /* SpotifyLoginViewController.m */,
+				0417B5A92874D394001D6B04 /* SearchViewController.h */,
+				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 				04A1B38A287CAB11006D2420 /* SettingsViewController.h */,
 				04A1B38B287CAB11006D2420 /* SettingsViewController.m */,
 				0417B5AF2874E0B6001D6B04 /* RoomViewController.h */,
@@ -278,6 +281,8 @@
 				049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */,
 				04229995287DDB5C0086612E /* ParseUserManager.h */,
 				04229996287DDB5C0086612E /* ParseUserManager.m */,
+				04229998287DE1270086612E /* ParseRoomManager.h */,
+				04229999287DE1270086612E /* ParseRoomManager.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -557,6 +562,7 @@
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
+				0422999A287DE1270086612E /* ParseRoomManager.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,

@@ -6,7 +6,7 @@
 //
 
 #import "Room.h"
-#import "ParseUserManager.h"
+#import "ParseRoomManager.h"
 
 @implementation Room
 
@@ -17,22 +17,6 @@
 
 + (nonnull NSString *)parseClassName {
     return @"Room";
-}
-
-+ (void)createRoomWithTitle:(NSString *)title completion:(PFBooleanResultBlock _Nullable)completion {
-    Room *newRoom = [Room new];
-    newRoom.queue = [NSMutableArray array];
-    newRoom.members = [NSMutableArray array];
-    [newRoom.members addObject:[PFUser currentUser]];
-    newRoom.title = title;
-    
-    [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
-            [[ParseUserManager shared] addCurrentUserToRoomWithRoomId:newRoom.roomId completion:^(BOOL succeeded, NSError * _Nullable error) {
-                // TODO: completion
-            }];
-        }
-    }];
 }
 
 @end

@@ -6,37 +6,35 @@
 //
 
 #import "QueueSong.h"
+#import "ParseUserManager.h"
 
 @implementation QueueSong
 
 @dynamic queueSongId;
+@dynamic spotifyId;
 @dynamic score;
-@dynamic requesterAvatarImageFile;
-@dynamic song;
 
 + (nonnull NSString *)parseClassName {
     return @"QueueSong";
 }
 
-+ (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion {
++ (void)queueSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError *error))completion {
     
-    QueueSong *queueSong = [QueueSong new];
-    queueSong.song = song;
-    queueSong.score = 0;
+    QueueSong *newQueueSong = [QueueSong new];
     
-    PFUser *currentUser = [PFUser currentUser];
-    queueSong.requesterAvatarImageFile = [currentUser valueForKey:@"avatarImageFile"];
+    newQueueSong.spotifyId = spotifyId;
+    newQueueSong.score = @(0);
     
-    NSString *roomId = [currentUser valueForKey:@"roomId"];
-    if (roomId) {
-        PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-        [query getObjectInBackgroundWithId:roomId block:^(PFObject * _Nullable room, NSError * _Nullable error) {
-            if (room) {
-                [room addObject:queueSong forKey:@"queue"];
-                [room saveInBackgroundWithBlock:completion];
-            }
-        }];
-    }
+    // TODO: clean up
+    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+    [query getObjectInBackgroundWithId:roomId block:^(PFObject * _Nullable room, NSError * _Nullable error) {
+        if (room) {
+            [room addObject:newQueueSong forKey:@"queue"];
+            [room saveInBackgroundWithBlock:completion];
+        } else {
+            completion(nil, error);
+        }
+    }];
 }
 
 @end

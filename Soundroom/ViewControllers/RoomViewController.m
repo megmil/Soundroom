@@ -6,6 +6,8 @@
 //
 
 #import "RoomViewController.h"
+#import "LobbyViewController.h"
+#import "ParseRoomManager.h"
 
 @interface RoomViewController ()
 
@@ -15,6 +17,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (![[ParseRoomManager shared] inRoom]) {
+        [self goToLobby];
+    }
+}
+
+- (void)goToLobby {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    RoomViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:@"LobbyViewController"];
+    [lobbyVC setModalPresentationStyle:UIModalPresentationCurrentContext];
+    [self presentViewController:lobbyVC animated:NO completion:nil];
 }
 
 @end

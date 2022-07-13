@@ -5,20 +5,18 @@
 //  Created by Megan Miller on 7/5/22.
 //
 
-#import "Song.h"
-#import "Room.h"
-#import "Parse/Parse.h"
+#import <Foundation/Foundation.h>
+#import <Parse/Parse.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : PFObject<PFSubclassing> // TODO: embedded NSObject
+@interface QueueSong : PFObject<PFSubclassing>
 
 @property (nonatomic, strong) NSString *queueSongId;
-@property (nonatomic) NSInteger score;
-@property (nonatomic, strong) PFFileObject *requesterAvatarImageFile;
-@property (nonatomic, strong) Song *song;
+@property (nonatomic, strong) NSString *spotifyId;
+@property (nonatomic, strong) NSNumber *score;
 
-+ (void)addSong:(Song *)song completion:(PFBooleanResultBlock _Nullable)completion;
++ (void)queueSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError *error))completion;
 
 @end
 

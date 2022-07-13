@@ -11,10 +11,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SongCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *artistLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *albumImageView;
-@property (weak, nonatomic) IBOutlet UIButton *addButton;
+@property (strong, nonatomic) NSString *title;
+@property (strong, nonatomic) NSString *artist;
+@property (strong, nonatomic) UIImage *albumImage;
+@property (strong, nonatomic) NSString *spotifyId;
 
 @end
 
