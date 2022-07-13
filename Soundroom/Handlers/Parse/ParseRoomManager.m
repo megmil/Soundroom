@@ -25,8 +25,8 @@
     
     Room *newRoom = [Room new];
     newRoom.queue = [NSMutableArray array];
-    newRoom.members = [NSMutableArray array];
-    [newRoom.members addObject:[PFUser currentUser]];
+    newRoom.memberIds = [NSMutableArray array];
+    [newRoom.memberIds addObject:[PFUser currentUser].objectId];
     newRoom.title = title;
     
     [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
