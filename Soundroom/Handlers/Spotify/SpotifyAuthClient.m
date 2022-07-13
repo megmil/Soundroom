@@ -20,32 +20,17 @@
     return shared;
 }
 
-- (NSString *)credentialsPath {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
-    return path;
-}
-
-- (BOOL)checkCredentialsExist {
-    NSString *path = [self credentialsPath];
-    BOOL credentialsExist = [[NSFileManager defaultManager] fileExistsAtPath:path];
-    return credentialsExist;
-}
-
 - (void)loadCredentials {
-    BOOL credentialsExist = [self checkCredentialsExist];
-    
-    if (credentialsExist) {
-        NSString *path = [self credentialsPath];
-        NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-        self.authUrl = [NSURL URLWithString:credentials[@"spotify-auth-url"]];
-        self.tokenUrl = [NSURL URLWithString:credentials[@"spotify-token-url"]];
-        self.clientId = credentials[@"spotify-client-id"];
-        self.secret = credentials[@"spotify-secret"];
-        self.scope = credentials[@"spotify-scope"];
-        self.redirectUri = [NSURL URLWithString:credentials[@"redirect-uri"]];
-        self.scheme = [self.redirectUri scheme];
-        credentialsLoaded = YES;
-    }
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
+    NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
+    self.authUrl = [NSURL URLWithString:credentials[@"spotify-auth-url"]];
+    self.tokenUrl = [NSURL URLWithString:credentials[@"spotify-token-url"]];
+    self.clientId = credentials[@"spotify-client-id"];
+    self.secret = credentials[@"spotify-secret"];
+    self.scope = credentials[@"spotify-scope"];
+    self.redirectUri = [NSURL URLWithString:credentials[@"redirect-uri"]];
+    self.scheme = [self.redirectUri scheme];
+    credentialsLoaded = YES;
 }
 
 - (void)authenticateInViewController:(UIViewController *)viewController {
