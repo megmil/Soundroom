@@ -21,7 +21,7 @@
 		0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B02874E0B6001D6B04 /* RoomViewController.m */; };
 		0417B5B72874E377001D6B04 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B62874E377001D6B04 /* Song.m */; };
 		0417B5C32874E4D7001D6B04 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C22874E4D7001D6B04 /* Room.m */; };
-		0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SongCell.m */; };
+		0417B5C62874F5D6001D6B04 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SearchCell.m */; };
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* QueueSong.m */; };
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
@@ -84,8 +84,8 @@
 		0417B5B62874E377001D6B04 /* Song.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
 		0417B5C12874E4D7001D6B04 /* Room.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		0417B5C22874E4D7001D6B04 /* Room.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
-		0417B5C42874F5D6001D6B04 /* SongCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SongCell.h; sourceTree = "<group>"; };
-		0417B5C52874F5D6001D6B04 /* SongCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SongCell.m; sourceTree = "<group>"; };
+		0417B5C42874F5D6001D6B04 /* SearchCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchCell.h; sourceTree = "<group>"; };
+		0417B5C52874F5D6001D6B04 /* SearchCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
 		0417B5C72874F5F2001D6B04 /* RoomCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomCell.h; sourceTree = "<group>"; };
 		0417B5C82874F5F2001D6B04 /* RoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomCell.m; sourceTree = "<group>"; };
 		0417B5CA2874F6E6001D6B04 /* QueueSong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueueSong.h; sourceTree = "<group>"; };
@@ -232,8 +232,8 @@
 		0417B5A12874B942001D6B04 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0417B5C42874F5D6001D6B04 /* SongCell.h */,
-				0417B5C52874F5D6001D6B04 /* SongCell.m */,
+				0417B5C42874F5D6001D6B04 /* SearchCell.h */,
+				0417B5C52874F5D6001D6B04 /* SearchCell.m */,
 				0417B5C72874F5F2001D6B04 /* RoomCell.h */,
 				0417B5C82874F5F2001D6B04 /* RoomCell.m */,
 				042299A9287E86630086612E /* ConfigureView.h */,
@@ -606,7 +606,7 @@
 				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */,
-				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
+				0417B5C62874F5D6001D6B04 /* SearchCell.m in Sources */,
 				0422999A287DE1270086612E /* ParseRoomManager.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
 				042299AB287E86630086612E /* ConfigureView.m in Sources */,

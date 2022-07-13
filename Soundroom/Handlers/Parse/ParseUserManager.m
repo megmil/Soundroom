@@ -43,4 +43,11 @@
     [PFUser logOutInBackgroundWithBlock:completion];
 }
 
+- (void)getUsersWithUsername:(NSString *)username completion:(void(^)(NSArray *users, NSError *error))completion {
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"username" matchesRegex:username modifiers:@"i"]; // ignore case
+    query.limit = 20;
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
 @end

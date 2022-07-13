@@ -9,12 +9,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SongCell : UITableViewCell
+@interface SearchCell : UITableViewCell
 
 @property (strong, nonatomic) NSString *title;
-@property (strong, nonatomic) NSString *artist;
-@property (strong, nonatomic) UIImage *albumImage;
-@property (strong, nonatomic) NSString *spotifyId;
+@property (strong, nonatomic) NSString *subtitle;
+@property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSString *objectId;
 
 @end
 

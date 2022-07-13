@@ -8,6 +8,7 @@
 #import "ConfigureViewController.h"
 #import "ParseRoomManager.h"
 #import "ConfigureView.h"
+#import "SearchViewController.h"
 
 @interface ConfigureViewController () <ConfigureViewDelegate>
 
@@ -22,7 +23,7 @@
     self.configureView.delegate = self;
 }
 
-- (void)didCreateRoom {
+- (void)createRoom {
     [[ParseRoomManager shared] createRoomWithTitle:self.configureView.title
                                         completion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
@@ -30,6 +31,13 @@
             [self dismissViewControllerAnimated:NO completion:nil];
         }
     }];
+}
+
+- (void)inviteMembers {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SearchViewController *searchVC = [storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
+    searchVC.isUserSearch = YES;
+    [self presentViewController:searchVC animated:YES completion:nil];
 }
 
 @end

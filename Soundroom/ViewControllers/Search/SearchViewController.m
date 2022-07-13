@@ -10,14 +10,17 @@
 #import "QueueSong.h"
 #import "UIImageView+AFNetworking.h"
 #import "SpotifyAPIManager.h"
-#import "SongCell.h"
+#import "ParseUserManager.h"
+#import "SearchCell.h"
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *searchTypeControl;
 
 @property (nonatomic, strong) NSMutableArray<Song *> *songs;
+@property (nonatomic, strong) NSMutableArray<PFUser *> *users;
 
 @end
 
@@ -29,26 +32,47 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"SearchCell"];
+    
+    // TODO: simplify
+    if (self.isUserSearch) {
+        self.searchTypeControl.selectedSegmentIndex = 1;
+        self.searchTypeControl.userInteractionEnabled = NO;
+    } else {
+        self.searchTypeControl.selectedSegmentIndex = 0;
+        self.searchTypeControl.userInteractionEnabled = YES;
+    }
+    
+    [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:@"SearchCell"];
     
     self.searchBar.delegate = self;
 }
 
 #pragma mark - Table View
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.songs.count;
+    if ([self isSongSearch]) {
+        return self.songs.count;
+    }
+    return self.users.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    Song *song = self.songs[indexPath.row];
+    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
     
-    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
-    [cell setTitle:song.title];
-    [cell setArtist:song.artist];
-    [cell setAlbumImage:song.albumImage];
-    [cell setSpotifyId:song.spotifyId];
+    if ([self isSongSearch]) {
+        Song *song = self.songs[indexPath.row];
+        cell.title = song.title;
+        cell.subtitle = song.artist;
+        cell.image = song.albumImage;
+        cell.objectId = song.spotifyId;
+        return cell;
+    }
     
+    PFUser *user = self.users[indexPath.row];
+    cell.title = [user valueForKey:@"displayName"];
+    cell.subtitle = [user valueForKey:@"displayName"];
+    cell.image = [UIImage imageNamed:@"check"]; // TODO: avatar images
+    cell.objectId = user.objectId;
     return cell;
 }
 
@@ -64,14 +88,34 @@
     }
     
     // TODO: search every X keypresses
-    [[SpotifyAPIManager shared] getSongsWithQuery:searchText completion:^(NSArray *songs, NSError *error) {
-        if (error) {
-            NSLog(@"Error: %@", error);
-        } else {
+    if ([self isSongSearch]) {
+        [self searchSongsWithQuery:searchText];
+        return;
+    }
+    
+    [self searchUsersWithQuery:searchText];
+}
+
+- (void)searchSongsWithQuery:(NSString *)query {
+    [[SpotifyAPIManager shared] getSongsWithQuery:query completion:^(NSArray *songs, NSError *error) {
+        if (songs) {
             self.songs = (NSMutableArray<Song *> *)songs;
             [self.tableView reloadData];
         }
     }];
+}
+
+- (void)searchUsersWithQuery:(NSString *)query {
+    [[ParseUserManager shared] getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
+        if (users) {
+            self.users = (NSMutableArray<PFUser *> *)users;
+            [self.tableView reloadData];
+        }
+    }];
+}
+
+- (BOOL)isSongSearch {
+    return self.searchTypeControl.selectedSegmentIndex == 0;
 }
 
 @end

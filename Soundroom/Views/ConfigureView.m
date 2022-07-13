@@ -134,11 +134,11 @@
 }
 
 - (void)createRoom:(UIButton *)button {
-    [self.delegate didCreateRoom];
+    [self.delegate createRoom];
 }
 
 - (void)inviteMembers:(UIButton *)button {
-    
+    [self.delegate inviteMembers];
 }
 
 @end

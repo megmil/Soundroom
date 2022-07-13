@@ -11,7 +11,7 @@
 @implementation Room
 
 @dynamic roomId;
-@dynamic members;
+@dynamic memberIds;
 @dynamic queue;
 @dynamic title;
 
