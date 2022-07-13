@@ -18,7 +18,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 - [x] Ability to log in / logout as a user
 - [x] Ability to sign up with a new user profile
 - [ ] Uses at least one gesture
-- [ ] Incorporates at least one external library to add visual polish
+- [x] Incorporates at least one external library to add visual polish
 - [ ] Uses at least one animation
 
 
