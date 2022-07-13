@@ -6,10 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Parse/Parse.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : NSObject
+@interface QueueSong : PFObject<PFSubclassing>
 
 @property (nonatomic, strong) NSString *queueSongId;
 @property (nonatomic, strong) NSString *spotifyId;
