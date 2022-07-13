@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *queueSongId;
 @property (nonatomic, strong) NSString *spotifyId;
-@property (nonatomic) NSInteger score;
+@property (nonatomic, strong) NSNumber *score;
 
 + (void)queueSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError *error))completion;
 

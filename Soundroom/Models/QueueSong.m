@@ -15,18 +15,17 @@
     QueueSong *newQueueSong = [QueueSong new];
     
     newQueueSong.spotifyId = spotifyId;
-    newQueueSong.score = 0;
+    newQueueSong.score = @(0);
     
+    // TODO: clean up
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+    NSLog(@"roomId: %@", roomId);
     [query getObjectInBackgroundWithId:roomId block:^(PFObject * _Nullable room, NSError * _Nullable error) {
         if (room) {
-            NSLog(@"Room found in Parse");
             [room addObject:newQueueSong forKey:@"queue"];
             [room saveInBackgroundWithBlock:completion];
-        }
-        
-        if (error) {
-            NSLog(@"Room missing in Parse");
+        } else {
+            completion(nil, error);
         }
     }];
 }

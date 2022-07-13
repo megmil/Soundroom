@@ -39,16 +39,14 @@
 
 - (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
     if ([self inRoom]) {
-        NSLog(@"Room found");
         [QueueSong queueSongWithSpotifyId:spotifyId roomId:[self currentRoom] completion:completion];
-    } else {
-        NSLog(@"No room");
     }
 }
 
 - (void)addCurrentUserToRoomWithId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
     PFUser *currentUser = [PFUser currentUser];
-    [currentUser addObject:roomId forKey:@"roomId"];
+    [currentUser setValue:roomId forKey:@"roomId"];
+    [currentUser saveInBackgroundWithBlock:completion];
 }
 
 - (BOOL)inRoom {
