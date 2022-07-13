@@ -23,9 +23,8 @@
 - (IBAction)didTapCreateRoom:(id)sender {
     [[ParseRoomManager shared] createRoomWithTitle:self.titleField.text completion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"OpenedRoom" object:self];
             [self dismissViewControllerAnimated:NO completion:nil];
-        } else {
-            NSLog(@"error: %@", error);
         }
     }];
 }

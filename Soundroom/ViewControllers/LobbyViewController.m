@@ -8,6 +8,7 @@
 #import "LobbyViewController.h"
 #import "RoomViewController.h"
 #import "ParseRoomManager.h"
+#import "ConfigureViewController.h"
 
 @interface LobbyViewController ()
 
@@ -18,16 +19,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if ([[ParseRoomManager shared] inRoom]) {
-        [self enterRoom];
-    }
-        
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterRoom) name:@"OpenRoomNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:@"OpenedRoom" object:nil];
 }
 
-- (void)enterRoom {
-    RoomViewController *roomVC = [[RoomViewController alloc] init];
-    [self presentViewController:roomVC animated:YES completion:nil];
+- (void)goToRoom {
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 @end

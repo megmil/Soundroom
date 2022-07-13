@@ -30,12 +30,7 @@
     
     // TODO: save roomId to current user
     
-    [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"OpenRoomNotification" object:self];
-        }
-        completion(succeeded, error);
-    }];
+    [newRoom saveInBackgroundWithBlock:completion];
 }
 
 - (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {

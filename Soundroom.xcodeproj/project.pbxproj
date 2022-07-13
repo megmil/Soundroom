@@ -246,6 +246,8 @@
 				049304CA287C8A04006AA9A3 /* UserLoginViewController.m */,
 				049304CC287C8A0F006AA9A3 /* SpotifyLoginViewController.h */,
 				049304CD287C8A0F006AA9A3 /* SpotifyLoginViewController.m */,
+				0417B5A92874D394001D6B04 /* SearchViewController.h */,
+				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 				04A1B38A287CAB11006D2420 /* SettingsViewController.h */,
 				04A1B38B287CAB11006D2420 /* SettingsViewController.m */,
 				0417B5AF2874E0B6001D6B04 /* RoomViewController.h */,
@@ -254,8 +256,6 @@
 				0422998D287D2FA70086612E /* LobbyViewController.m */,
 				0422998F287D2FAF0086612E /* ConfigureViewController.h */,
 				04229990287D2FAF0086612E /* ConfigureViewController.m */,
-				0417B5A92874D394001D6B04 /* SearchViewController.h */,
-				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
