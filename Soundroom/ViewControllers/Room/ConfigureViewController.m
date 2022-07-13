@@ -23,7 +23,8 @@
 }
 
 - (void)didCreateRoom {
-    [[ParseRoomManager shared] createRoomWithTitle:self.configureView.title completion:^(BOOL succeeded, NSError * _Nullable error) {
+    [[ParseRoomManager shared] createRoomWithTitle:self.configureView.title
+                                        completion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"OpenedRoom" object:self];
             [self dismissViewControllerAnimated:NO completion:nil];

@@ -70,7 +70,8 @@
                 if ([urlQueryItem.name isEqualToString:@"code"]) {
                     __weak __typeof__(STKWebKitModalViewController *)weakAuthViewController = authViewController;
                     [self requestAccessTokenFor:urlQueryItem.value callback:^{
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kOAuth2SignedInNotification object:self];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kOAuth2SignedInNotification
+                                                                            object:self];
                         [weakAuthViewController dismissViewControllerAnimated:YES completion:nil];
                     }];
                 }
@@ -106,7 +107,8 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSDictionary *parameters = [self tokenRequestParametersForCode:code];
     
-    [manager POST:[self.tokenUrl absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    [manager POST:[self.tokenUrl absoluteString] parameters:parameters progress:nil
+          success:^(NSURLSessionTask *task, id responseObject) {
         [self persistTokensFromResponse:(id)responseObject callback:^{
             callback();
         }];
@@ -119,7 +121,8 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSDictionary *parameters = [self tokenRequestParametersForRefreshToken:refreshToken];
     
-    [manager POST:[self.tokenUrl absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    [manager POST:[self.tokenUrl absoluteString] parameters:parameters progress:nil
+          success:^(NSURLSessionTask *task, id responseObject) {
         [self persistTokensFromResponse:(id)responseObject callback:^{
             callback();
         }];
@@ -218,7 +221,8 @@
     NSURLQueryItem *display = [NSURLQueryItem queryItemWithName:@"display" value:@"touch"];
     NSURLQueryItem *clientId = [NSURLQueryItem queryItemWithName:@"client_id" value:self.clientId];
     NSURLQueryItem *scope = [NSURLQueryItem queryItemWithName:@"scope" value:self.scope];
-    NSURLQueryItem *redirectUri = [NSURLQueryItem queryItemWithName:@"redirect_uri" value:[self.redirectUri absoluteString]];
+    NSURLQueryItem *redirectUri = [NSURLQueryItem queryItemWithName:@"redirect_uri"
+                                                              value:[self.redirectUri absoluteString]];
     components.queryItems = @[type, responseType, display, clientId, scope, redirectUri];
     NSURL *url = components.URL;
     return url;

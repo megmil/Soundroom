@@ -30,8 +30,11 @@
     CGFloat imageToLabels = _albumImageView.frame.origin.x + _albumImageView.frame.size.width + 8.f; // TODO: rename
     CGFloat labelsToButton = _addButton.frame.origin.x + 8.f; // TODO: rename
     
-    _titleLabel.frame = CGRectMake(imageToLabels, _albumImageView.frame.origin.y + 6.f, labelsToButton - imageToLabels, 19.f);
-    _artistLabel.frame = CGRectMake(_titleLabel.frame.origin.x, _titleLabel.frame.origin.y + _titleLabel.frame.size.height + 3.f, _titleLabel.frame.size.width, 16.f);
+    _titleLabel.frame = CGRectMake(imageToLabels, _albumImageView.frame.origin.y + 6.f,
+                                   labelsToButton - imageToLabels, 19.f);
+    _artistLabel.frame = CGRectMake(_titleLabel.frame.origin.x,
+                                    _titleLabel.frame.origin.y + _titleLabel.frame.size.height + 3.f,
+                                    _titleLabel.frame.size.width, 16.f);
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -77,7 +80,8 @@
 }
 
 - (void)queueSong:(UIButton *)button {
-    [[ParseRoomManager shared] queueSongWithSpotifyId:_spotifyId completion:^(BOOL succeeded, NSError * _Nonnull error) {
+    [[ParseRoomManager shared] queueSongWithSpotifyId:_spotifyId
+                                           completion:^(BOOL succeeded, NSError * _Nonnull error) {
         if (succeeded) {
             [button setImage:[UIImage systemImageNamed:@"checkmark"] forState:UIControlStateNormal];
         }

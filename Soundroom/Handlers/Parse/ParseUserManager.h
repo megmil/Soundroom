@@ -14,8 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared; // TODO: remove if possible
 
-- (void)registerWithUsername:(NSString *)username password:(NSString *)password completion:(PFBooleanResultBlock _Nullable)completion; // TODO: completion block
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFBooleanResultBlock _Nullable)completion;
+- (void)registerWithUsername:(NSString *)username password:(NSString *)password
+                  completion:(PFBooleanResultBlock _Nullable)completion; // TODO: completion block
+- (void)loginWithUsername:(NSString *)username password:(NSString *)password
+               completion:(PFBooleanResultBlock _Nullable)completion;
 - (void)logoutWithCompletion:(void(^)(NSError * _Nullable error))completion;
 
 @end

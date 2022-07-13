@@ -18,7 +18,8 @@
     return shared;
 }
 
-- (void)registerWithUsername:(NSString *)username password:(NSString *)password completion:(PFBooleanResultBlock _Nullable)completion {
+- (void)registerWithUsername:(NSString *)username password:(NSString *)password
+                  completion:(PFBooleanResultBlock _Nullable)completion {
     PFUser *newUser = [PFUser user];
     newUser.username = username;
     newUser.password = password;
@@ -30,8 +31,10 @@
     }];
 }
 
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFBooleanResultBlock _Nullable)completion {
-    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser * _Nullable user, NSError * _Nullable error) {
+- (void)loginWithUsername:(NSString *)username password:(NSString *)password
+               completion:(PFBooleanResultBlock _Nullable)completion {
+    [PFUser logInWithUsernameInBackground:username password:password
+                                    block:^(PFUser * _Nullable user, NSError * _Nullable error) {
         // TODO: completion
     }];
 }

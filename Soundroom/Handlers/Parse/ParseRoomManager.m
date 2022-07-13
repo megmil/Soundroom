@@ -20,7 +20,8 @@
     return shared;
 }
 
-- (void)createRoomWithTitle:(NSString *)title completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
+- (void)createRoomWithTitle:(NSString *)title
+                 completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
     
     Room *newRoom = [Room new];
     newRoom.queue = [NSMutableArray array];
@@ -37,13 +38,15 @@
     }];
 }
 
-- (void)queueSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
+- (void)queueSongWithSpotifyId:(NSString *)spotifyId
+                    completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
     if ([self inRoom]) {
         [QueueSong queueSongWithSpotifyId:spotifyId roomId:[self currentRoom] completion:completion];
     }
 }
 
-- (void)addCurrentUserToRoomWithId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
+- (void)addCurrentUserToRoomWithId:(NSString *)roomId
+                        completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion {
     PFUser *currentUser = [PFUser currentUser];
     [currentUser setValue:roomId forKey:@"roomId"];
     [currentUser saveInBackgroundWithBlock:completion];
