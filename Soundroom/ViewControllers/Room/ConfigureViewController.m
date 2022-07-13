@@ -7,10 +7,11 @@
 
 #import "ConfigureViewController.h"
 #import "ParseRoomManager.h"
+#import "ConfigureView.h"
 
-@interface ConfigureViewController ()
+@interface ConfigureViewController () <ConfigureViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *titleField;
+@property (strong, nonatomic) IBOutlet ConfigureView *configureView;
 
 @end
 
@@ -18,10 +19,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.configureView.delegate = self;
 }
 
-- (IBAction)didTapCreateRoom:(id)sender {
-    [[ParseRoomManager shared] createRoomWithTitle:self.titleField.text completion:^(BOOL succeeded, NSError * _Nullable error) {
+- (void)didCreateRoom {
+    [[ParseRoomManager shared] createRoomWithTitle:self.configureView.title completion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"OpenedRoom" object:self];
             [self dismissViewControllerAnimated:NO completion:nil];

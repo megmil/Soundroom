@@ -55,9 +55,9 @@
         [self.contentView addSubview:_artistLabel];
         
         _addButton = [UIButton new];
+        [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
         _addButton.userInteractionEnabled = YES;
         [_addButton addTarget:self action:@selector(queueSong:) forControlEvents:UIControlEventTouchUpInside];
-        [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
         [self.contentView addSubview:_addButton];
     }
     
