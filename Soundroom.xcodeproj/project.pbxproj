@@ -241,9 +241,8 @@
 			isa = PBXGroup;
 			children = (
 				042299A5287E7DB50086612E /* Room */,
+				042299A8287E7E3B0086612E /* Search */,
 				042299A4287E7DA20086612E /* Profile */,
-				0417B5A92874D394001D6B04 /* SearchViewController.h */,
-				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -276,6 +275,37 @@
 			path = Room;
 			sourceTree = "<group>";
 		};
+		042299A6287E7E100086612E /* Spotify */ = {
+			isa = PBXGroup;
+			children = (
+				049304A928762B12006AA9A3 /* SpotifyAPIManager.h */,
+				049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */,
+				049304BD2877E759006AA9A3 /* SpotifyAuthClient.h */,
+				049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */,
+			);
+			path = Spotify;
+			sourceTree = "<group>";
+		};
+		042299A7287E7E170086612E /* Parse */ = {
+			isa = PBXGroup;
+			children = (
+				04229995287DDB5C0086612E /* ParseUserManager.h */,
+				04229996287DDB5C0086612E /* ParseUserManager.m */,
+				04229998287DE1270086612E /* ParseRoomManager.h */,
+				04229999287DE1270086612E /* ParseRoomManager.m */,
+			);
+			path = Parse;
+			sourceTree = "<group>";
+		};
+		042299A8287E7E3B0086612E /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				0417B5A92874D394001D6B04 /* SearchViewController.h */,
+				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		049304A628762AA9006AA9A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,14 +321,8 @@
 		049304A828762ADF006AA9A3 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
-				049304A928762B12006AA9A3 /* SpotifyAPIManager.h */,
-				049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */,
-				049304BD2877E759006AA9A3 /* SpotifyAuthClient.h */,
-				049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */,
-				04229995287DDB5C0086612E /* ParseUserManager.h */,
-				04229996287DDB5C0086612E /* ParseUserManager.m */,
-				04229998287DE1270086612E /* ParseRoomManager.h */,
-				04229999287DE1270086612E /* ParseRoomManager.m */,
+				042299A6287E7E100086612E /* Spotify */,
+				042299A7287E7E170086612E /* Parse */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
