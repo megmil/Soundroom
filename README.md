@@ -28,7 +28,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 
 #### Required Stories
 - [x] Users can create rooms
-- [ ] Users can join private rooms
+- [x] Users can join private rooms
 - [ ] Users can play the room queue through the Spotify app
 - [ ] Users can vote on songs
 - [ ] Songs change position in the queue based on their "score"
@@ -96,12 +96,13 @@ Made with [Table Generator](https://www.tablesgenerator.com/markdown_tables).
 #### Room
 | **Property** | **Type**                    | **Description**                               |
 |--------------|-----------------------------|-----------------------------------------------|
-| host         | User                        | user who created the room                     |
-| members      | NSMutableArray (Users)      | list of users who can collaborate in the room |
+| roomId       | NSString                    | objectId of room                              |
+| title        | NSString                    | name of room                                  |
+| hostId       | NSString                    | objectId of user that created the room        |
+| memberIds    | NSMutableArray (NSString)   | list of users invited to the room             |
 | currentSong  | QueueSong                   | currently playing song                        |
 | queue        | NSMutableArray (QueueSongs) | list of songs to be played                    |
 | playedSongs  | NSMutableArray (QueueSongs) | list of songs that have been played           |
-| title        | NSString                    | name of room                                  |
 | cover        | ?                           | image for room                                |
 
 #### User
