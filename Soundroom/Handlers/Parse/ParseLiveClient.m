@@ -21,10 +21,6 @@
 }
 
 - (void)newInvitationSubscriber {
-    if (!clientConfigured) {
-        [self configureClient];
-    }
-    
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
     [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
     
@@ -35,6 +31,15 @@
             [[ParseRoomManager shared] setCurrentRoomId:room.objectId]; // update room manager
         }
     }];
+}
+
+- (void)connect {
+    
+    if (!clientConfigured) {
+        [self configureClient];
+    }
+    
+    [self newInvitationSubscriber];
 }
 
 - (void)configureClient {

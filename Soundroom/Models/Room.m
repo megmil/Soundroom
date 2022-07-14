@@ -21,7 +21,7 @@
 + (void)createRoomWithTitle:(NSString *)title completion:(PFBooleanResultBlock)completion {
     Room *newRoom = [Room new];
     newRoom.title = title;
-    newRoom.memberIds = [NSSet setWithObject:[PFUser currentUser].objectId];
+    newRoom.memberIds = [NSMutableArray arrayWithObject:[PFUser currentUser].objectId];
     [newRoom saveInBackgroundWithBlock:completion];
 }
 

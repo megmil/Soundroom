@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSSet <NSString *> *memberIds;
+@property (nonatomic, strong) NSMutableArray <NSString *> *memberIds;
 @property (nonatomic, strong) NSMutableArray <QueueSong *> *queue;
 //@property (nonatomic, strong) NSMutableArray *playedSongs;
 //@property (nonatomic, strong) PFFileObject *coverImageFile;

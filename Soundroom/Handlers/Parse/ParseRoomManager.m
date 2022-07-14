@@ -30,9 +30,21 @@
 
 - (void)inviteUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
-        [_currentRoom addObject:userId forKey:@"memberIds"];
+        [_currentRoom addUniqueObject:userId forKey:@"memberIds"];
         [_currentRoom saveInBackgroundWithBlock:completion];
     }
+}
+
+- (void)lookForCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
+    [query findObjectsInBackgroundWithBlock:^(NSArray *rooms, NSError *error) {
+        // TODO: error if more than one room
+        if (rooms.count == 1) {
+            Room *room = rooms.firstObject;
+            self.currentRoomId = room.objectId;
+        }
+    }];
 }
 
 - (BOOL)currentRoomExists {

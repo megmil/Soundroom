@@ -296,12 +296,12 @@
 		042299A7287E7E170086612E /* Parse */ = {
 			isa = PBXGroup;
 			children = (
-				042299B8287F6D140086612E /* ParseLiveClient.h */,
-				042299B9287F6D140086612E /* ParseLiveClient.m */,
 				04229995287DDB5C0086612E /* ParseUserManager.h */,
 				04229996287DDB5C0086612E /* ParseUserManager.m */,
 				04229998287DE1270086612E /* ParseRoomManager.h */,
 				04229999287DE1270086612E /* ParseRoomManager.m */,
+				042299B8287F6D140086612E /* ParseLiveClient.h */,
+				042299B9287F6D140086612E /* ParseLiveClient.m */,
 			);
 			path = Parse;
 			sourceTree = "<group>";

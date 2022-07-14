@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
+- (void)connect;
+
 @end
 
 NS_ASSUME_NONNULL_END
