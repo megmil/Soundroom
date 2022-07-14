@@ -16,14 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL clientConfigured;
 }
 
-@property (strong, nonatomic) NSString *liveServer;
+@property (strong, nonatomic) NSString *server;
 @property (strong, nonatomic) NSString *appId;
 @property (strong, nonatomic) NSString *clientKey;
 @property (strong, nonatomic) PFLiveQueryClient *client;
 
 + (instancetype)shared;
-
-- (void)currentUserRoomStatus;
 
 @end
 

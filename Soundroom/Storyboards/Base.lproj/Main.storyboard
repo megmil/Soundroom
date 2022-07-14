@@ -400,6 +400,9 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="person.fill" catalog="system" id="jZh-Rc-0cf"/>
+                    <connections>
+                        <outlet property="usernameLabel" destination="c8B-zJ-xna" id="Cdd-Nx-LiM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uYU-KT-dEu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
