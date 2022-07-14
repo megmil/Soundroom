@@ -34,18 +34,13 @@
     [PFUser logOutInBackgroundWithBlock:completion];
 }
 
-# pragma mark - Server
+# pragma mark - Search
 
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFUser query];
     [query whereKey:@"username" matchesRegex:username modifiers:@"i"]; // ignore case
     query.limit = 20;
     [query findObjectsInBackgroundWithBlock:completion];
-}
-
-+ (void)getUserWithId:(NSString *)userId completion:(PFObjectResultBlock)completion {
-    PFQuery *query = [PFUser query];
-    [query getObjectInBackgroundWithId:userId block:completion];
 }
 
 @end

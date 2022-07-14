@@ -9,7 +9,7 @@
 #import "Song.h"
 #import "SpotifyAuthClient.h"
 
-static NSString * const baseURLString = @"https://api.spotify.com"; // TODO: static?
+static NSString * const baseURLString = @"https://api.spotify.com";
 
 @implementation SpotifyAPIManager
 
@@ -34,12 +34,10 @@ static NSString * const baseURLString = @"https://api.spotify.com"; // TODO: sta
                     completion:(void(^)(NSArray *songs, NSError *error))completion {
     NSString *urlString = [NSString stringWithFormat:@"v1/search?"];
     
-    [self GET:urlString parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
-        // TODO: progress
-    } success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable response) {
+    [self GET:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, NSDictionary *response) {
         NSMutableArray *songs = [Song songsWithJSONResponse:response];
         completion(songs, nil);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
     }];
 }

@@ -48,6 +48,7 @@
 }
 
 #pragma mark - Table View
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([self isSongSearch]) {
         return self.songs.count;
@@ -83,13 +84,13 @@
 }
 
 #pragma mark - Search Bar
+
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     
     if (searchText.length == 0) {
         return;
     }
     
-    // TODO: search every X keypresses
     if ([self isSongSearch]) {
         [self searchSongsWithQuery:searchText];
         return;

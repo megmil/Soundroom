@@ -22,7 +22,7 @@
 - (IBAction)didTapUserLogout:(id)sender {
     [ParseUserManager logoutWithCompletion:^(NSError *error) {
         if (!error) {
-            // TODO: show loginVC
+            
         }
     }];
 }

@@ -36,7 +36,7 @@
     
     [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            // TODO: go to tab bar
+            
         }
     }];
 }
@@ -53,7 +53,7 @@
     
     [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            // TODO: go to tab bar
+            
         }
     }];
 }

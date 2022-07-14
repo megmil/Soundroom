@@ -36,7 +36,6 @@
 - (void)newInvitationSubcription {
     PFQuery *query = [self currentRoomsQuery];
     PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addEnterHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
-        // TODO: if invited by another user or already in a room, send notification
         if (rooms.countObjects == 1) {
             [[ParseRoomManager shared] setCurrentRoomId:room.objectId]; // update room manager
         }

@@ -90,11 +90,11 @@
 }
 
 - (void)addUser {
-    [[ParseRoomManager shared] inviteUserWithId:_objectId completion:nil]; // TODO: change button when done
+    [[ParseRoomManager shared] inviteUserWithId:_objectId completion:nil];
 }
 
 - (void)queueSong {
-    [[ParseRoomManager shared] requestSongWithSpotifyId:_objectId completion:nil]; // TODO: change button when done
+    [[ParseRoomManager shared] requestSongWithSpotifyId:_objectId completion:nil];
 }
 
 @end

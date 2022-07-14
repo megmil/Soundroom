@@ -53,7 +53,6 @@
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
     [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that include currentUser as a member
     [query findObjectsInBackgroundWithBlock:^(NSArray *rooms, NSError *error) {
-        // TODO: error if more than one room
         if (rooms.count == 1) {
             Room *room = rooms.firstObject;
             self.currentRoomId = room.objectId;
