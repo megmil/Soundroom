@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *appId;
 @property (strong, nonatomic) NSString *clientKey;
 @property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
 
 + (instancetype)shared;
 

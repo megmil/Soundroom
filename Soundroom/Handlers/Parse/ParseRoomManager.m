@@ -22,17 +22,6 @@
     return shared;
 }
 
-- (void)setCurrentRoomId:(NSString *)currentRoomId {
-    if (currentRoomId) {
-        [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
-            if (room) {
-                self.currentRoomId = currentRoomId;
-                _currentRoom = (Room *)room;
-            }
-        }];
-    }
-}
-
 - (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
         [QueueSong requestSongWithSpotifyId:spotifyId roomId:self.currentRoomId completion:completion];
@@ -42,6 +31,20 @@
 - (void)inviteUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
         [_currentRoom addUniqueObject:userId forKey:@"memberIds"];
+        [_currentRoom saveInBackgroundWithBlock:completion];
+    }
+}
+
+- (void)removeCurrentUserWithCompletion:(PFBooleanResultBlock)completion {
+    // TODO: if user is host, end the room
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *currentUserId = currentUser.objectId;
+    [self removeUserWithId:currentUserId completion:completion];
+}
+
+- (void)removeUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
+    if (_currentRoom) {
+        [_currentRoom removeObject:userId forKey:@"memberIds"];
         [_currentRoom saveInBackgroundWithBlock:completion];
     }
 }
@@ -60,6 +63,20 @@
 
 - (BOOL)currentRoomExists {
     return _currentRoom;
+}
+
+- (void)setCurrentRoomId:(NSString *)currentRoomId {
+    [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
+        if (room) {
+            self.currentRoomId = currentRoomId;
+            _currentRoom = (Room *)room;
+        }
+    }];
+}
+
+- (void)resetCurrentRoomId {
+    self.currentRoomId = @"";
+    _currentRoom = nil;
 }
 
 @end

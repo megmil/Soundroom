@@ -26,21 +26,27 @@
     if (!clientConfigured) {
         [self configureClient];
     }
-    [self newInvitationSubscriber];
+    [self newInvitationSubcription];
+    [self leaveRoomSubscription];
 }
 
 
 # pragma mark - Subscriptions
 
-- (void)newInvitationSubscriber {
-    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
-    
-    self.subscription = [[self.client subscribeToQuery:query] addEnterHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
+- (void)newInvitationSubcription {
+    PFQuery *query = [self currentRoomsQuery];
+    PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addEnterHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
         // TODO: if invited by another user or already in a room, send notification
         if (rooms.countObjects == 1) {
             [[ParseRoomManager shared] setCurrentRoomId:room.objectId]; // update room manager
         }
+    }];
+}
+
+- (void)leaveRoomSubscription {
+    PFQuery *query = [self currentRoomsQuery];
+    PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addLeaveHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
+        [[ParseRoomManager shared] resetCurrentRoomId]; // update room manager
     }];
 }
 
@@ -54,6 +60,8 @@
     clientConfigured = YES;
 }
 
+# pragma mark - Helpers
+
 - (void)loadCredentials {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
     NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
@@ -61,6 +69,12 @@
     self.appId = [credentials objectForKey:@"parse-app-id"];
     self.clientKey = [credentials objectForKey:@"parse-client-key"];
     credentialsLoaded = YES;
+}
+
+- (PFQuery *)currentRoomsQuery {
+    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
+    return query;
 }
 
 @end

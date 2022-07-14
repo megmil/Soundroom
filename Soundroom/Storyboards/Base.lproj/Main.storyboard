@@ -227,6 +227,9 @@
                                 <color key="tintColor" systemColor="systemRedColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Leave"/>
+                                <connections>
+                                    <action selector="leaveRoom:" destination="8w9-aH-PUH" eventType="touchUpInside" id="xBX-kt-dWV"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eDn-vJ-DT5">
                                 <rect key="frame" x="100" y="109" width="103.5" height="22"/>

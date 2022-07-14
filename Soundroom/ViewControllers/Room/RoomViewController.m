@@ -23,4 +23,8 @@
     [self dismissViewControllerAnimated:NO completion:nil]; // TODO: animate?
 }
 
+- (IBAction)leaveRoom:(id)sender {
+    [[ParseRoomManager shared] removeCurrentUserWithCompletion:nil];
+}
+
 @end
