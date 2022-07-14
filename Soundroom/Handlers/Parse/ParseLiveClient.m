@@ -24,8 +24,7 @@
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
     [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
     
-    PFLiveQuerySubscription *subscription = [self.client subscribeToQuery:query];
-    [subscription addEnterHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
+    self.subscription = [[self.client subscribeToQuery:query] addEnterHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
         // TODO: if invited by another user or already in a room, send notification
         if (rooms.countObjects == 1) {
             [[ParseRoomManager shared] setCurrentRoomId:room.objectId]; // update room manager

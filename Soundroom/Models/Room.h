@@ -20,8 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 //@property (nonatomic, strong) NSMutableArray *playedSongs;
 //@property (nonatomic, strong) PFFileObject *coverImageFile;
 
-+ (void)createRoomWithTitle:(NSString *)title completion:(PFBooleanResultBlock)completion;
-+ (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
++ (void)createRoomWithTitle:(NSString *)title completion:(PFBooleanResultBlock _Nullable)completion;
++ (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock _Nullable)completion;
 
 @end
 

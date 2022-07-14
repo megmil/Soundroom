@@ -17,17 +17,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    if (![[ParseRoomManager shared] currentRoomExists]) {
-        [self goToLobby];
-    }
 }
 
 - (void)goToLobby {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    RoomViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:@"LobbyViewController"];
-    [lobbyVC setModalPresentationStyle:UIModalPresentationCurrentContext];
-    [self presentViewController:lobbyVC animated:NO completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil]; // TODO: animate?
 }
 
 @end

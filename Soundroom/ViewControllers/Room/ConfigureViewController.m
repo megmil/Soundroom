@@ -23,12 +23,7 @@
 }
 
 - (void)createRoom {
-    [Room createRoomWithTitle:self.configureView.title completion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"DismissLobbyViewController" object:self]; // TODO: replace with liveQuery observer
-            [self dismissViewControllerAnimated:NO completion:nil]; // TODO: required?
-        }
-    }];
+    [Room createRoomWithTitle:self.configureView.title completion:nil];
 }
 
 - (void)inviteMembers {
