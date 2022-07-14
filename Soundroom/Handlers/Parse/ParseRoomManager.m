@@ -49,7 +49,7 @@
     }
 }
 
-- (void)lookForCurrentRoom {
+- (void)lookForCurrentRoomWithCompletion:(PFBooleanResultBlock)completion {
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
     [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that include currentUser as a member
     [query findObjectsInBackgroundWithBlock:^(NSArray *rooms, NSError *error) {
@@ -57,6 +57,9 @@
         if (rooms.count == 1) {
             Room *room = rooms.firstObject;
             self.currentRoomId = room.objectId;
+            completion(room, error);
+        } else {
+            completion(nil, error);
         }
     }];
 }
@@ -65,11 +68,22 @@
     return _currentRoom;
 }
 
+- (NSString *)currentRoomTitle {
+    if (_currentRoom) {
+        return _currentRoom.title;
+    }
+    return @"Room name";
+}
+
 - (void)setCurrentRoomId:(NSString *)currentRoomId {
+    if (self.currentRoomId == currentRoomId) {
+        return;
+    }
+    
     [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
         if (room) {
-            self.currentRoomId = currentRoomId;
             _currentRoom = (Room *)room;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerJoinedRoomNotification object:self];
         }
     }];
 }
@@ -77,6 +91,7 @@
 - (void)resetCurrentRoomId {
     self.currentRoomId = @"";
     _currentRoom = nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerLeftRoomNotification object:self];
 }
 
 @end

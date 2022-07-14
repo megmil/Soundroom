@@ -11,16 +11,19 @@
 
 @interface RoomViewController ()
 
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+
 @end
 
 @implementation RoomViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerJoinedRoomNotification object:nil];
 }
 
-- (void)goToLobby {
-    [self dismissViewControllerAnimated:NO completion:nil]; // TODO: animate?
+- (void)refreshViews {
+    self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
 }
 
 - (IBAction)leaveRoom:(id)sender {
