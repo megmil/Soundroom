@@ -14,6 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
+  - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
   - OAuth2-ObjC (0.1.0):
     - AFNetworking (~> 3.1)
@@ -22,28 +23,44 @@ PODS:
     - Parse/Core (= 1.19.3)
   - Parse/Core (1.19.3):
     - Bolts/Tasks (= 1.9.1)
+  - ParseLiveQuery (2.8.1):
+    - Bolts-Swift (~> 1.5.0)
+    - Parse (~> 1.19.0)
+    - Starscream (~> 4.0.4)
+  - SkyFloatingLabelTextField (4.0.0)
+  - Starscream (4.0.4)
   - STKWebKitViewController (0.5.0)
 
 DEPENDENCIES:
   - AFNetworking
   - OAuth2-ObjC
   - Parse
+  - ParseLiveQuery
+  - SkyFloatingLabelTextField
 
 SPEC REPOS:
   trunk:
     - AFNetworking
     - Bolts
+    - Bolts-Swift
     - OAuth2-ObjC
     - Parse
+    - ParseLiveQuery
+    - SkyFloatingLabelTextField
+    - Starscream
     - STKWebKitViewController
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
+  Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   OAuth2-ObjC: eb06fef2d282ea4b6f9b9b8ce779f165a1fe4783
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
+  ParseLiveQuery: 7bc437c3b986880ffe5f241a9921e37f45df0677
+  SkyFloatingLabelTextField: 79ddc40e4ad59707fedbb48d605417aee48bb78a
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   STKWebKitViewController: 1371f39e5f697de11aa091064eeed6eb515a2511
 
-PODFILE CHECKSUM: 11b5705bccf7e2c97a1ba09ed4307d2b110f18db
+PODFILE CHECKSUM: d49c124079467f82ff008137fb633227bfe3196e
 
 COCOAPODS: 1.11.3

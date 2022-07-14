@@ -7,6 +7,7 @@
 
 #import "UserLoginViewController.h"
 #import "ParseUserManager.h"
+#import "ParseLiveClient.h"
 
 @interface UserLoginViewController ()
 
@@ -32,7 +33,12 @@
     
     NSString *username = self.usernameField.text;
     NSString *password = self.passwordField.text;
-    [self loginWithUsername:username password:password];
+    
+    [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
+        if (user) {
+            // TODO: go to tab bar
+        }
+    }];
 }
 
 - (IBAction)didTapUserRegister:(id)sender {
@@ -44,20 +50,9 @@
     
     NSString *username = self.usernameField.text;
     NSString *password = self.passwordField.text;
-    [self registerWithUsername:username password:password];
-}
-
-- (void)registerWithUsername:(NSString *)username password:(NSString *)password {
-    [[ParseUserManager shared] registerWithUsername:username password:password completion:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
-            // TODO: go to tab bar
-        }
-    }];
-}
-
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password {
-    [[ParseUserManager shared] loginWithUsername:username password:password completion:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
+    
+    [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
+        if (user) {
             // TODO: go to tab bar
         }
     }];

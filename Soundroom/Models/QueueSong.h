@@ -12,11 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface QueueSong : PFObject<PFSubclassing>
 
-@property (nonatomic, strong) NSString *queueSongId;
+@property (nonatomic, strong) NSString *objectId;
+@property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSString *spotifyId;
 @property (nonatomic, strong) NSNumber *score;
 
-+ (void)queueSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(void(^)(BOOL succeeded, NSError *error))completion;
++ (void)requestSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(PFBooleanResultBlock)completion;
 
 @end
 

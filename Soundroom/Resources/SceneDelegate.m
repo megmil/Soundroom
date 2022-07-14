@@ -9,6 +9,7 @@
 #import "SpotifyAuthClient.h"
 #import "UserLoginViewController.h"
 #import "Parse/Parse.h"
+#import "ParseLiveClient.h"
 
 @interface SceneDelegate ()
 

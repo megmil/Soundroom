@@ -1,29 +1,30 @@
 //
-//  RoomViewController.m
+//  LobbyViewController.m
 //  Soundroom
 //
-//  Created by Megan Miller on 7/5/22.
+//  Created by Megan Miller on 7/11/22.
 //
 
-#import "RoomViewController.h"
 #import "LobbyViewController.h"
+#import "RoomViewController.h"
+#import "ConfigureViewController.h"
+#import "ParseLiveClient.h"
 #import "ParseRoomManager.h"
 
-@interface RoomViewController ()
+@interface LobbyViewController ()
 
 @end
 
-@implementation RoomViewController
+@implementation LobbyViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    if (![[ParseRoomManager shared] inRoom]) {
-        [self goToLobby];
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:@"DismissLobbyViewController" object:nil];
+    [[ParseRoomManager shared] lookForCurrentRoom];
+    [[ParseLiveClient shared] connect];
 }
 
-- (void)goToLobby {
+- (void)goToRoom {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     RoomViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:@"LobbyViewController"];
     [lobbyVC setModalPresentationStyle:UIModalPresentationCurrentContext];

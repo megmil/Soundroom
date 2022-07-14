@@ -20,8 +20,10 @@
 }
 
 - (IBAction)didTapUserLogout:(id)sender {
-    [[ParseUserManager shared] logoutWithCompletion:^(NSError * _Nullable error) {
-        // TODO: show loginVC
+    [ParseUserManager logoutWithCompletion:^(NSError *error) {
+        if (!error) {
+            // TODO: show loginVC
+        }
     }];
 }
 
