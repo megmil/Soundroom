@@ -8,7 +8,7 @@
 #import "LobbyViewController.h"
 #import "RoomViewController.h"
 #import "ConfigureViewController.h"
-#import "ParseLiveClient.h"
+#import "ParseLiveQueryManager.h"
 #import "ParseRoomManager.h"
 
 @interface LobbyViewController ()
@@ -21,7 +21,7 @@
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:@"DismissLobbyViewController" object:nil];
     [[ParseRoomManager shared] lookForCurrentRoom];
-    [[ParseLiveClient shared] connect];
+    [[ParseLiveQueryManager shared] connect];
 }
 
 - (void)goToRoom {

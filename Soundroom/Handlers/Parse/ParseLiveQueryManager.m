@@ -5,11 +5,11 @@
 //  Created by Megan Miller on 7/13/22.
 //
 
-#import "ParseLiveClient.h"
+#import "ParseLiveQueryManager.h"
 #import "ParseRoomManager.h"
 #import "Room.h"
 
-@implementation ParseLiveClient
+@implementation ParseLiveQueryManager
 
 + (instancetype)shared {
     static dispatch_once_t once;
@@ -19,6 +19,18 @@
     });
     return shared;
 }
+
+# pragma mark - Public
+
+- (void)connect {
+    if (!clientConfigured) {
+        [self configureClient];
+    }
+    [self newInvitationSubscriber];
+}
+
+
+# pragma mark - Subscriptions
 
 - (void)newInvitationSubscriber {
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
@@ -32,14 +44,7 @@
     }];
 }
 
-- (void)connect {
-    
-    if (!clientConfigured) {
-        [self configureClient];
-    }
-    
-    [self newInvitationSubscriber];
-}
+# pragma mark - Client
 
 - (void)configureClient {
     if (!credentialsLoaded) {

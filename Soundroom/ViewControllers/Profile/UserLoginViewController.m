@@ -7,7 +7,7 @@
 
 #import "UserLoginViewController.h"
 #import "ParseUserManager.h"
-#import "ParseLiveClient.h"
+#import "ParseLiveQueryManager.h"
 
 @interface UserLoginViewController ()
 

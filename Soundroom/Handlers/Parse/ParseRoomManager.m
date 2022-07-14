@@ -22,7 +22,18 @@
     return shared;
 }
 
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion {
+- (void)setCurrentRoomId:(NSString *)currentRoomId {
+    if (currentRoomId) {
+        [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
+            if (room) {
+                self.currentRoomId = currentRoomId;
+                _currentRoom = (Room *)room;
+            }
+        }];
+    }
+}
+
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
         [QueueSong requestSongWithSpotifyId:spotifyId roomId:self.currentRoomId completion:completion];
     }
@@ -37,7 +48,7 @@
 
 - (void)lookForCurrentRoom {
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
+    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that include currentUser as a member
     [query findObjectsInBackgroundWithBlock:^(NSArray *rooms, NSError *error) {
         // TODO: error if more than one room
         if (rooms.count == 1) {
@@ -49,17 +60,6 @@
 
 - (BOOL)currentRoomExists {
     return _currentRoom;
-}
-
-- (void)setCurrentRoomId:(NSString *)currentRoomId {
-    if (currentRoomId) {
-        [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
-            if (room) {
-                self.currentRoomId = currentRoomId;
-                _currentRoom = (Room *)room;
-            }
-        }];
-    }
 }
 
 @end
