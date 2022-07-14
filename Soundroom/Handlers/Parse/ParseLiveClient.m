@@ -38,7 +38,7 @@
             // TODO: multiple rooms error handling
         } else if (rooms) {
             Room *room = [rooms firstObject];
-            [[ParseRoomManager shared] addCurrentUserToRoomWithId:room.objectId completion:nil];
+            [ParseRoomManager addCurrentUserToRoomWithId:room.objectId completion:nil];
         } else {
             NSLog(@"no rooms");
         }
@@ -49,7 +49,7 @@
         if (rooms.countObjects != 1) {
             return;
         }
-        [[ParseRoomManager shared] addCurrentUserToRoomWithId:room.objectId completion:^(BOOL succeeded, NSError * _Nullable error) {
+        [ParseRoomManager shared addCurrentUserToRoomWithId:room.objectId completion:^(BOOL succeeded, NSError * _Nullable error) {
             // TODO: completion
         }];
     }];

@@ -221,12 +221,12 @@
 		0417B5A02874B937001D6B04 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0417B5C12874E4D7001D6B04 /* Room.h */,
+				0417B5C22874E4D7001D6B04 /* Room.m */,
 				0417B5B52874E377001D6B04 /* Song.h */,
 				0417B5B62874E377001D6B04 /* Song.m */,
 				0417B5CA2874F6E6001D6B04 /* QueueSong.h */,
 				0417B5CB2874F6E6001D6B04 /* QueueSong.m */,
-				0417B5C12874E4D7001D6B04 /* Room.h */,
-				0417B5C22874E4D7001D6B04 /* Room.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";

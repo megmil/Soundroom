@@ -18,7 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (![[ParseRoomManager shared] inRoom]) {
+    if (![[ParseRoomManager shared] currentRoomExists]) {
         [self goToLobby];
     }
 }

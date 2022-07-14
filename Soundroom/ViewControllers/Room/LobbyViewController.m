@@ -7,7 +7,6 @@
 
 #import "LobbyViewController.h"
 #import "RoomViewController.h"
-#import "ParseRoomManager.h"
 #import "ConfigureViewController.h"
 
 @interface LobbyViewController ()
@@ -18,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:@"OpenedRoom" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:@"DismissLobbyViewController" object:nil];
 }
 
 - (void)goToRoom {

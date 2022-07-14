@@ -6,9 +6,8 @@
 //
 
 #import "ConfigureViewController.h"
-#import "ParseRoomManager.h"
 #import "ConfigureView.h"
-#import "SearchViewController.h"
+#import "Room.h"
 
 @interface ConfigureViewController () <ConfigureViewDelegate>
 
@@ -24,11 +23,10 @@
 }
 
 - (void)createRoom {
-    [[ParseRoomManager shared] createRoomWithTitle:self.configureView.title
-                                        completion:^(BOOL succeeded, NSError * _Nullable error) {
+    [Room createRoomWithTitle:self.configureView.title completion:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"OpenedRoom" object:self];
-            [self dismissViewControllerAnimated:NO completion:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"DismissLobbyViewController" object:self]; // TODO: replace with liveQuery observer
+            [self dismissViewControllerAnimated:NO completion:nil]; // TODO: required?
         }
     }];
 }

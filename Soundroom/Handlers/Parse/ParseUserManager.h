@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)logoutWithCompletion:(PFUserLogoutResultBlock _Nullable)completion;
 
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock _Nullable)completion;
-+ (void)getUserWithId:(NSString *)userId completion:(PFObjectResultBlock _Nullable)completion;
++ (void)getUserWithId:(NSString *)userId completion:(PFObjectResultBlock _Nullable)completion; // TODO: not called?
 
 @end
 

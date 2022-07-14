@@ -9,7 +9,8 @@
 
 @implementation QueueSong
 
-@dynamic queueSongId;
+@dynamic objectId;
+@dynamic roomId;
 @dynamic spotifyId;
 @dynamic score;
 
@@ -17,24 +18,12 @@
     return @"QueueSong";
 }
 
-+ (void)queueSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId
-                    completion:(void(^)(BOOL succeeded, NSError *error))completion {
-    
-    QueueSong *newQueueSong = [QueueSong new];
-    
-    newQueueSong.spotifyId = spotifyId;
-    newQueueSong.score = @(0);
-    
-    // TODO: clean up
-    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query getObjectInBackgroundWithId:roomId block:^(PFObject * _Nullable room, NSError * _Nullable error) {
-        if (room) {
-            [room addObject:newQueueSong forKey:@"queue"];
-            [room saveInBackgroundWithBlock:completion];
-        } else {
-            completion(nil, error);
-        }
-    }];
++ (void)requestSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(PFBooleanResultBlock)completion {
+    QueueSong *newSong = [QueueSong new];
+    newSong.spotifyId = spotifyId;
+    newSong.roomId = roomId;
+    newSong.score = @(0);
+    [newSong saveInBackgroundWithBlock:completion];
 }
 
 @end

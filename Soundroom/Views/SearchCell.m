@@ -94,7 +94,7 @@
 }
 
 - (void)queueSong {
-    [[ParseRoomManager shared] queueSongWithSpotifyId:_objectId completion:nil]; // TODO: change button when done
+    [[ParseRoomManager shared] requestSongWithSpotifyId:_objectId completion:nil]; // TODO: change button when done
 }
 
 @end

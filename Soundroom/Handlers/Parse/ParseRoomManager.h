@@ -12,17 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ParseRoomManager : NSObject
 
+@property (nonatomic, strong) NSString *currentRoomId;
+
 + (instancetype)shared;
 
-// TODO: add nullable
-- (void)createRoomWithTitle:(NSString *)title
-                 completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion;
-- (void)queueSongWithSpotifyId:(NSString *)spotifyId
-                    completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion;
-- (void)addCurrentUserToRoomWithId:(NSString *)roomId
-                        completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion;
-- (BOOL)inRoom;
-- (void)inviteUserWithId:(NSString *)userId completion:(void(^)(BOOL succeeded, NSError * _Nullable error))completion;
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion;
+- (void)inviteUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
+- (BOOL)currentRoomExists;
 
 @end
 
