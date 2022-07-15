@@ -5,11 +5,11 @@
 //  Created by Megan Miller on 7/13/22.
 //
 
-#import "ParseLiveClient.h"
+#import "ParseLiveQueryManager.h"
 #import "ParseRoomManager.h"
 #import "Room.h"
 
-@implementation ParseLiveClient
+@implementation ParseLiveQueryManager
 
 + (instancetype)shared {
     static dispatch_once_t once;
@@ -20,26 +20,36 @@
     return shared;
 }
 
-- (void)newInvitationSubscriber {
-    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
-    
-    self.subscription = [[self.client subscribeToQuery:query] addEnterHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
-        // TODO: if invited by another user or already in a room, send notification
+# pragma mark - Public
+
+- (void)connect {
+    if (!clientConfigured) {
+        [self configureClient];
+    }
+    [self newInvitationSubcription];
+    [self leaveRoomSubscription];
+}
+
+
+# pragma mark - Subscriptions
+
+- (void)newInvitationSubcription {
+    PFQuery *query = [self currentRoomsQuery];
+    PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addEnterHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
         if (rooms.countObjects == 1) {
             [[ParseRoomManager shared] setCurrentRoomId:room.objectId]; // update room manager
         }
     }];
 }
 
-- (void)connect {
-    
-    if (!clientConfigured) {
-        [self configureClient];
-    }
-    
-    [self newInvitationSubscriber];
+- (void)leaveRoomSubscription {
+    PFQuery *query = [self currentRoomsQuery];
+    PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addLeaveHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
+        [[ParseRoomManager shared] reset]; // update room manager
+    }];
 }
+
+# pragma mark - Client
 
 - (void)configureClient {
     if (!credentialsLoaded) {
@@ -49,6 +59,8 @@
     clientConfigured = YES;
 }
 
+# pragma mark - Helpers
+
 - (void)loadCredentials {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
     NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
@@ -56,6 +68,12 @@
     self.appId = [credentials objectForKey:@"parse-app-id"];
     self.clientKey = [credentials objectForKey:@"parse-client-key"];
     credentialsLoaded = YES;
+}
+
+- (PFQuery *)currentRoomsQuery {
+    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
+    return query;
 }
 
 @end

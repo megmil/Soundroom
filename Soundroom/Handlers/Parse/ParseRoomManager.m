@@ -7,10 +7,12 @@
 
 #import "ParseRoomManager.h"
 #import "QueueSong.h"
+#import "ParseUserManager.h"
 @import ParseLiveQuery;
 
 @implementation ParseRoomManager {
     Room *_currentRoom;
+    NSString *_hostId;
 }
 
 + (instancetype)shared {
@@ -22,44 +24,87 @@
     return shared;
 }
 
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion {
+#pragma mark - Invitees and Members
+
+- (void)inviteUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
-        [QueueSong requestSongWithSpotifyId:spotifyId roomId:self.currentRoomId completion:completion];
+        [_currentRoom addUniqueObject:userId forKey:@"invitedIds"];
+        [_currentRoom saveInBackgroundWithBlock:completion];
     }
 }
 
-- (void)inviteUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
+- (void)addUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
         [_currentRoom addUniqueObject:userId forKey:@"memberIds"];
         [_currentRoom saveInBackgroundWithBlock:completion];
     }
 }
 
-- (void)lookForCurrentRoom {
-    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
-    [query findObjectsInBackgroundWithBlock:^(NSArray *rooms, NSError *error) {
-        // TODO: error if more than one room
-        if (rooms.count == 1) {
-            Room *room = rooms.firstObject;
-            self.currentRoomId = room.objectId;
-        }
-    }];
+- (void)removeUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
+    if (_currentRoom) {
+        [_currentRoom removeObject:userId forKey:@"invitedIds"];
+        [_currentRoom removeObject:userId forKey:@"memberIds"];
+        [_currentRoom saveInBackgroundWithBlock:completion];
+    }
 }
 
-- (BOOL)currentRoomExists {
-    return _currentRoom;
+- (void)removeAllUsersWithCompletion:(PFBooleanResultBlock)completion {
+    if (_currentRoom) {
+        [_currentRoom removeObjectForKey:@"invitedIds"];
+        [_currentRoom removeObjectForKey:@"memberIds"];
+        [_currentRoom saveInBackgroundWithBlock:completion];
+    }
+}
+
+# pragma mark - Queue
+
+// TODO: match others
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock)completion {
+    if (_currentRoom) {
+        [QueueSong requestSongWithSpotifyId:spotifyId roomId:self.currentRoomId completion:completion];
+    }
+}
+
+# pragma mark - Room Data
+
+- (NSString *)currentRoomTitle {
+    if (_currentRoom) {
+        return _currentRoom.title;
+    }
+    return nil;
+}
+
+- (NSString *)currentHostId {
+    if (_currentRoom) {
+        return _currentRoom.hostId;
+    }
+    return nil;
+}
+
+- (void)reset {
+    self.currentRoomId = @""; // TODO: hmmmm
+    _currentRoom = nil;
+    _hostId = nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerLeftRoomNotification object:self];
 }
 
 - (void)setCurrentRoomId:(NSString *)currentRoomId {
-    if (currentRoomId) {
-        [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
-            if (room) {
-                self.currentRoomId = currentRoomId;
-                _currentRoom = (Room *)room;
-            }
-        }];
+    
+    if (currentRoomId == nil) { // TODO: hmmmmmmm
+        return;
     }
+    
+    if (currentRoomId == self.currentRoomId) {
+        return;
+    }
+    
+    [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
+        if (room) {
+            _currentRoom = (Room *)room;
+            _hostId = _currentRoom.hostId;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerJoinedRoomNotification object:self];
+        }
+    }];
 }
 
 @end

@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Song : NSObject
 
-// TODO: add prefix to class names
 @property (nonatomic, strong) NSString *spotifyId;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;

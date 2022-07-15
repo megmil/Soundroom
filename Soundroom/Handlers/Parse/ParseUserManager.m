@@ -34,7 +34,7 @@
     [PFUser logOutInBackgroundWithBlock:completion];
 }
 
-# pragma mark - Server
+# pragma mark - Search
 
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFUser query];
@@ -43,9 +43,11 @@
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
-+ (void)getUserWithId:(NSString *)userId completion:(PFObjectResultBlock)completion {
-    PFQuery *query = [PFUser query];
-    [query getObjectInBackgroundWithId:userId block:completion];
+# pragma mark - Current User Data
+
++ (NSString *)currentUserId {
+    PFUser *currentUser = [PFUser currentUser];
+    return currentUser.objectId;
 }
 
 @end

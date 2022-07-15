@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ParseLiveClient : NSObject {
+@interface ParseLiveQueryManager : NSObject {
     BOOL credentialsLoaded;
     BOOL clientConfigured;
 }
@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *appId;
 @property (strong, nonatomic) NSString *clientKey;
 @property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
 
 + (instancetype)shared;
 

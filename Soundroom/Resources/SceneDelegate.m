@@ -9,7 +9,7 @@
 #import "SpotifyAuthClient.h"
 #import "UserLoginViewController.h"
 #import "Parse/Parse.h"
-#import "ParseLiveClient.h"
+#import "ParseLiveQueryManager.h"
 
 @interface SceneDelegate ()
 
@@ -18,20 +18,11 @@
 @implementation SceneDelegate
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-    
     if (![PFUser currentUser]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UserLoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"UserLoginViewController"];
         self.window.rootViewController = userLoginVC;
     }
-    
-    /*
-    if ([[SpotifyAuthClient shared] signedIn]) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
-        self.window.rootViewController = tabBarController;
-    }
-     */
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {

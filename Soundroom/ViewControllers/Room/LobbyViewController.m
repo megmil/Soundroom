@@ -8,7 +8,7 @@
 #import "LobbyViewController.h"
 #import "RoomViewController.h"
 #import "ConfigureViewController.h"
-#import "ParseLiveClient.h"
+#import "ParseLiveQueryManager.h"
 #import "ParseRoomManager.h"
 
 @interface LobbyViewController ()
@@ -19,16 +19,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:@"DismissLobbyViewController" object:nil];
-    [[ParseRoomManager shared] lookForCurrentRoom];
-    [[ParseLiveClient shared] connect];
-}
-
-- (void)goToRoom {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    RoomViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:@"LobbyViewController"];
-    [lobbyVC setModalPresentationStyle:UIModalPresentationCurrentContext];
-    [self presentViewController:lobbyVC animated:NO completion:nil];
 }
 
 @end

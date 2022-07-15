@@ -7,7 +7,7 @@
 
 #import "UserLoginViewController.h"
 #import "ParseUserManager.h"
-#import "ParseLiveClient.h"
+#import "ParseLiveQueryManager.h"
 
 @interface UserLoginViewController ()
 
@@ -26,7 +26,7 @@
 
 - (IBAction)didTapUserLogin:(id)sender {
     
-    if ([self isFieldEmpty]) {
+    if ([self hasEmptyField]) {
         [self showEmptyFieldAlert];
         return;
     }
@@ -36,14 +36,14 @@
     
     [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            // TODO: go to tab bar
+            
         }
     }];
 }
 
 - (IBAction)didTapUserRegister:(id)sender {
     
-    if ([self isFieldEmpty]) {
+    if ([self hasEmptyField]) {
         [self showEmptyFieldAlert];
         return;
     }
@@ -53,13 +53,13 @@
     
     [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            // TODO: go to tab bar
+            
         }
     }];
 }
 
-- (BOOL)isFieldEmpty {
-    return [self.usernameField.text isEqual:@""] || [self.passwordField.text isEqual:@""];
+- (BOOL)hasEmptyField {
+    return self.usernameField.text.length == 0 || self.passwordField.text.length == 0;
 }
 
 - (void)showAlertWithError:(NSError *)error {
