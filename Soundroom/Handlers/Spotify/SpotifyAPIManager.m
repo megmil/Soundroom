@@ -39,8 +39,11 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     }];
 }
 
-- (void)getSongWithParameters:(NSDictionary *)parameters completion:(void(^)(Song *song, NSError *error))completion {
-    [self GET:@"v1/tracks" parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+- (void)getSongWithSpotifyId:(NSString *)spotifyId parameters:(NSDictionary *)parameters completion:(void(^)(Song *song, NSError *error))completion {
+    
+    NSString *urlString = [NSString stringWithFormat:@"v1/tracks/%@", spotifyId];
+    
+    [self GET:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         Song *song = [Song songWithJSONResponse:responseObject];
         completion(song, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -64,8 +67,8 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 - (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Song *song, NSError *error))completion {
     [[SpotifyAuthClient shared] accessToken:^(NSString *accessToken) {
         if (accessToken) {
-            NSDictionary *parameters = [self getRequestParametersWithToken:accessToken spotifyId:spotifyId];
-            [self getSongWithParameters:parameters completion:completion];
+            NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
+            [self getSongWithSpotifyId:spotifyId parameters:parameters completion:completion];
         } else {
             completion(nil, nil);
         }
@@ -81,9 +84,8 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     return parameters;
 }
 
-- (NSDictionary *)getRequestParametersWithToken:(NSString *)token spotifyId:(NSString *)spotifyId {
-    NSDictionary *parameters = @{@"access_token": token,
-                                 @"id": spotifyId};
+- (NSDictionary *)getRequestParametersWithToken:(NSString *)token {
+    NSDictionary *parameters = @{@"access_token": token};
     return parameters;
 }
 

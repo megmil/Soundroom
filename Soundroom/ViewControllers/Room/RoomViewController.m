@@ -29,15 +29,21 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:@"QueueSongCell"];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerUpdatedQueueNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
 }
 
-- (void)refreshViews {
-    [QueueSong getCurrentQueueSongs];
-    [self refreshQueueSongs];
+- (void)loadRoom {
     self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
+    [QueueSong getCurrentQueueSongs]; // get songs added to queue while live query was off
+    [self.tableView reloadData];
+}
+
+- (void)refreshRoom {
+    self.queue = [[ParseRoomManager shared] queue];
+    [self.tableView reloadData];
 }
 
 - (IBAction)leaveRoom:(id)sender {
@@ -57,13 +63,6 @@
     return NO;
 }
 
-# pragma mark - Queue
-
-- (void)refreshQueueSongs {
-    self.queue = [[ParseRoomManager shared] queue];
-    [self.tableView reloadData];
-}
-
 # pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -72,7 +71,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RoomCell"];
+    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
     QueueSong *queueSong = self.queue[indexPath.row];
     
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
@@ -81,7 +80,9 @@
             cell.subtitle = song.artist;
             cell.image = song.albumImage;
             cell.objectId = song.spotifyId;
-            cell.isUser = NO;
+            cell.isAddSongCell = NO;
+            cell.isUserCell = NO;
+            cell.isQueueSongCell = YES;
         }
     }];
     
