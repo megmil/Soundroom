@@ -31,14 +31,19 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:@"QueueSongCell"];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerUpdatedQueueNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
 }
 
-- (void)refreshViews {
-    [QueueSong getCurrentQueueSongs];
-    [self refreshQueueSongs];
+- (void)loadRoom {
     self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
+    [QueueSong getCurrentQueueSongs]; // get songs added to queue while live query was off
+    [self.tableView reloadData];
+}
+
+- (void)refreshRoom {
+    self.queue = [[ParseRoomManager shared] queue];
+    [self.tableView reloadData];
 }
 
 - (IBAction)leaveRoom:(id)sender {
@@ -56,13 +61,6 @@
         return [currentUserId isEqual:hostId];
     }
     return NO;
-}
-
-# pragma mark - Queue
-
-- (void)refreshQueueSongs {
-    self.queue = [[ParseRoomManager shared] queue];
-    [self.tableView reloadData];
 }
 
 # pragma mark - Table View
@@ -85,8 +83,6 @@
             cell.isAddSongCell = NO;
             cell.isUserCell = NO;
             cell.isQueueSongCell = YES;
-        } else {
-            NSLog(@"og: %@", error);
         }
     }];
     
