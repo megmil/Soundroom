@@ -65,13 +65,25 @@
     }
 }
 
-# pragma mark - Room Data
+- (void)updateQueueWithSongs:(NSArray<QueueSong *> *)songs {
+    if (songs) {
+        [_queue addObjectsFromArray:songs];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
+    }
+}
 
 - (void)updateQueueWithSong:(QueueSong *)song {
     if (song) {
         [_queue addObject:song];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
     }
 }
+
+- (NSMutableArray <QueueSong *> *)queue {
+    return _queue;
+}
+
+# pragma mark - Room Data
 
 - (NSString *)currentRoomTitle {
     if (_currentRoom) {

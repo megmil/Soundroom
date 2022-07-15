@@ -6,7 +6,6 @@
 //
 
 #import "SpotifyAPIManager.h"
-#import "Song.h"
 #import "SpotifyAuthClient.h"
 
 static NSString * const baseURLString = @"https://api.spotify.com";
@@ -32,7 +31,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 - (void)getSongsWithParameters:(NSDictionary *)parameters
                     completion:(void(^)(NSArray *songs, NSError *error))completion {
-    NSString *urlString = [NSString stringWithFormat:@"v1/search?"];
+    NSString *urlString = @"v1/search?";
     
     [self GET:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, NSDictionary *response) {
         NSMutableArray *songs = [Song songsWithJSONResponse:response];
@@ -52,6 +51,17 @@ static NSString * const baseURLString = @"https://api.spotify.com";
         } else {
             completion(nil, nil);
         }
+    }];
+}
+
+- (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Song *song, NSError *error))completion {
+    NSString *urlString = [NSString stringWithFormat:@"v1/tracks/%@", spotifyId];
+    
+    [self GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        Song *song = [Song songWithJSONResponse:responseObject];
+        completion(song, nil);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        completion(nil, error);
     }];
 }
 

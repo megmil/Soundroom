@@ -54,7 +54,7 @@
     PFQuery *query = [self songRequestsQuery];
     PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addCreateHandler:^(PFQuery<PFObject *> *queueSongs, PFObject *queueSong) {
         QueueSong *song = (QueueSong *)queueSong;
-        [[ParseRoomManager shared] addSongToQueue:song]; // update room manager
+        [[ParseRoomManager shared] updateQueueWithSong:song]; // update room manager
     }];
 }
 

@@ -6,6 +6,7 @@
 //
 
 #import "QueueSong.h"
+#import "ParseRoomManager.h"
 
 @implementation QueueSong
 
@@ -24,6 +25,17 @@
     newSong.spotifyId = spotifyId;
     newSong.score = @(0);
     [newSong saveInBackgroundWithBlock:completion];
+}
+
++ (void)getCurrentQueueSongsWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *queueSongs, NSError *error) {
+        if (queueSongs) {
+            [[ParseRoomManager shared] updateQueueWithSongs:queueSongs];
+        }
+        completion(queueSongs, error);
+    }];
 }
 
 @end

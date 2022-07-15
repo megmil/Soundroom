@@ -20,6 +20,11 @@
     return songs;
 }
 
++ (Song *)songWithJSONResponse:(NSDictionary *)response {
+    Song *song = [[Song alloc] initWithJSONResponse:response];
+    return song;
+}
+
 - (instancetype)initWithJSONResponse:(NSDictionary *)response {
     self = [super init];
     

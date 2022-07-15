@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *durationString;
 
 + (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response;
++ (Song *)songWithJSONResponse:(NSDictionary *)response;
 
 @end
 

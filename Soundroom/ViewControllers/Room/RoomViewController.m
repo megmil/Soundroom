@@ -7,13 +7,18 @@
 
 #import "RoomViewController.h"
 #import "LobbyViewController.h"
+#import "SpotifyAPIManager.h"
 #import "ParseRoomManager.h"
 #import "ParseUserManager.h"
+#import "QueueSong.h"
+#import "Song.h"
+#import "SearchCell.h"
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) NSMutableArray <QueueSong *> *queue;
 
 @end
 
@@ -24,12 +29,15 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerUpdatedQueueNotification object:nil];
 }
 
 - (void)refreshViews {
     self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
+    [self.tableView reloadData];
 }
 
 - (IBAction)leaveRoom:(id)sender {
@@ -49,9 +57,40 @@
     return NO;
 }
 
+# pragma mark - Queue
+
+- (void)refreshQueueSongs {
+    self.queue = [[ParseRoomManager shared] queue];
+    [self.tableView reloadData];
+}
+
 # pragma mark - Table View
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.queue.count;
+}
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
+    
+    QueueSong *queueSong = self.queue[indexPath.row];
+    [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
+        if (song) {
+            cell.title = song.title;
+            cell.subtitle = song.artist;
+            cell.image = song.albumImage;
+            cell.objectId = song.spotifyId;
+            cell.isUser = NO;
+        }
+    }];
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 66.f;
+}
 
 
 @end
