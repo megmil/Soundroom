@@ -8,6 +8,7 @@
 #import "RoomViewController.h"
 #import "LobbyViewController.h"
 #import "ParseRoomManager.h"
+#import "ParseUserManager.h"
 
 @interface RoomViewController ()
 
@@ -27,7 +28,20 @@
 }
 
 - (IBAction)leaveRoom:(id)sender {
-    [[ParseRoomManager shared] removeCurrentUserWithCompletion:nil];
+    if ([self isCurrentUserHost]) {
+        [[ParseRoomManager shared] removeAllUsersWithCompletion:nil];
+        return;
+    }
+    [[ParseRoomManager shared] removeUserWithId:[ParseUserManager currentUserId] completion:nil];
+}
+
+- (BOOL)isCurrentUserHost {
+    NSString *currentUserId = [ParseUserManager currentUserId];
+    NSString *hostId = [[ParseRoomManager shared] currentHostId];
+    if (currentUserId && hostId) {
+        return [currentUserId isEqual:hostId];
+    }
+    return NO;
 }
 
 @end
