@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Parse/Parse.h"
+#import "QueueSong.h"
 @import ParseLiveQuery;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -16,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL clientConfigured;
 }
 
+@property (strong, nonatomic) NSMutableArray<QueueSong*> *queue;
 @property (strong, nonatomic) NSString *server;
 @property (strong, nonatomic) NSString *appId;
 @property (strong, nonatomic) NSString *clientKey;

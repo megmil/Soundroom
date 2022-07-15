@@ -13,6 +13,7 @@
 @implementation ParseRoomManager {
     Room *_currentRoom;
     NSString *_hostId;
+    NSMutableArray <QueueSong *> *_queue;
 }
 
 + (instancetype)shared {
@@ -58,14 +59,19 @@
 
 # pragma mark - Queue
 
-// TODO: match others
 - (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
-        [QueueSong requestSongWithSpotifyId:spotifyId roomId:self.currentRoomId completion:completion];
+        [QueueSong requestSongWithSpotifyId:spotifyId roomId:_currentRoomId completion:completion];
     }
 }
 
 # pragma mark - Room Data
+
+- (void)updateQueueWithSong:(QueueSong *)song {
+    if (song) {
+        [_queue addObject:song];
+    }
+}
 
 - (NSString *)currentRoomTitle {
     if (_currentRoom) {
@@ -85,6 +91,7 @@
     _currentRoomId = nil;
     _currentRoom = nil;
     _hostId = nil;
+    [_queue removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerLeftRoomNotification object:self];
 }
 
@@ -96,8 +103,9 @@
     
     [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
         if (room) {
-            _currentRoom = (Room *)room;
-            _hostId = _currentRoom.hostId;
+            self->_currentRoom = (Room *)room;
+            self->_hostId = self->_currentRoom.hostId;
+            self->_queue = [NSMutableArray array];
             [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerJoinedRoomNotification object:self];
         }
     }];

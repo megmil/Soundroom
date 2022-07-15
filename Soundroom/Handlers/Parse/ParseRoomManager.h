@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Room.h"
+#import "QueueSong.h"
 
 #define ParseRoomManagerJoinedRoomNotification @"ParseRoomManagerJoinedRoomNotification"
 #define ParseRoomManagerLeftRoomNotification @"ParseRoomManagerLeftRoomNotification"
@@ -24,7 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
 - (void)removeAllUsersWithCompletion:(PFBooleanResultBlock _Nullable)completion;
 
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion; // TODO: match
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion;
+- (void)updateQueueWithSong:(QueueSong *)song;
 
 - (NSString *)currentRoomTitle; // TODO: properties?
 - (NSString *)currentHostId;

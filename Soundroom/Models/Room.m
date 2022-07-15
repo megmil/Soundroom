@@ -16,7 +16,6 @@
 @dynamic hostId;
 @dynamic invitedIds;
 @dynamic memberIds;
-@dynamic queue;
 
 + (nonnull NSString *)parseClassName {
     return @"Room";

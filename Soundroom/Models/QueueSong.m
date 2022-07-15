@@ -20,8 +20,8 @@
 
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(PFBooleanResultBlock)completion {
     QueueSong *newSong = [QueueSong new];
-    newSong.spotifyId = spotifyId;
     newSong.roomId = roomId;
+    newSong.spotifyId = spotifyId;
     newSong.score = @(0);
     [newSong saveInBackgroundWithBlock:completion];
 }

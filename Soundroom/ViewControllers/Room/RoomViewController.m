@@ -10,9 +10,10 @@
 #import "ParseRoomManager.h"
 #import "ParseUserManager.h"
 
-@interface RoomViewController ()
+@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -20,6 +21,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerJoinedRoomNotification object:nil];
 }
 
@@ -43,5 +48,10 @@
     }
     return NO;
 }
+
+# pragma mark - Table View
+
+
+
 
 @end

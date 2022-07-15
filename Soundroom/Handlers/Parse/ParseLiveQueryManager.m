@@ -7,6 +7,7 @@
 
 #import "ParseLiveQueryManager.h"
 #import "ParseRoomManager.h"
+#import "ParseUserManager.h"
 #import "Room.h"
 
 @implementation ParseLiveQueryManager
@@ -49,6 +50,14 @@
     }];
 }
 
+- (void)newSongRequestSubscription {
+    PFQuery *query = [self songRequestsQuery];
+    PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addCreateHandler:^(PFQuery<PFObject *> *queueSongs, PFObject *queueSong) {
+        QueueSong *song = (QueueSong *)queueSong;
+        [[ParseRoomManager shared] addSongToQueue:song]; // update room manager
+    }];
+}
+
 # pragma mark - Client
 
 - (void)configureClient {
@@ -72,7 +81,13 @@
 
 - (PFQuery *)currentRoomsQuery {
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query whereKey:@"memberIds" equalTo:[PFUser currentUser].objectId]; // get rooms that list currentUser as a member
+    [query whereKey:@"memberIds" equalTo:[ParseUserManager currentUserId]]; // get rooms that list currentUser as a member
+    return query;
+}
+
+- (PFQuery *)songRequestsQuery {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]]; // TODO: should update room id
     return query;
 }
 
