@@ -74,6 +74,9 @@
     SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
     QueueSong *queueSong = self.queue[indexPath.row];
     cell.objectId = queueSong.objectId;
+    cell.isUpvoted = [queueSong isUpvotedByCurrentUser];
+    cell.isDownvoted = [queueSong isDownvotedByCurrentUser];
+    cell.isUnvoted = [queueSong isUnvotedByCurrentUser];
     
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
         if (song) {

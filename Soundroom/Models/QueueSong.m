@@ -47,4 +47,30 @@
     }];
 }
 
+- (BOOL)isUpvotedByCurrentUser {
+    PFUser *currentUser = [PFUser currentUser];
+    NSMutableArray<NSString *> *upvotedSongIds = [currentUser valueForKey:@"upvotedSongIds"];
+    for (NSString *upvotedSongId in upvotedSongIds) {
+        if ([self.objectId isEqualToString:upvotedSongId]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)isDownvotedByCurrentUser {
+    PFUser *currentUser = [PFUser currentUser];
+    NSMutableArray<NSString *> *downvotedSongIds = [currentUser valueForKey:@"downvotedSongIds"];
+    for (NSString *downvotedSongId in downvotedSongIds) {
+        if ([self.objectId isEqualToString:downvotedSongId]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)isUnvotedByCurrentUser {
+    return ![self isUpvotedByCurrentUser] && ![self isDownvotedByCurrentUser];
+}
+
 @end

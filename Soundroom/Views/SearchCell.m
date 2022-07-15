@@ -83,7 +83,45 @@
     return self;
 }
 
+- (void)setTitle:(NSString *)title {
+    _titleLabel.text = title;
+}
+
+- (void)setSubtitle:(NSString *)subtitle {
+    _subtitleLabel.text = subtitle;
+}
+
+- (void)setImage:(UIImage *)image {
+    _imageView.image = image;
+}
+
+# pragma mark - Add Song/User Cell
+
+- (void)addItem {
+    if (_isAddSongCell) {
+        [self addSong];
+    } else if (_isUserCell) {
+        [self addUser];
+    }
+}
+
+- (void)addSong {
+    [[ParseRoomManager shared] requestSongWithSpotifyId:_objectId completion:nil];
+}
+
+- (void)addUser {
+    [[ParseRoomManager shared] inviteUserWithId:_objectId completion:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self->_addButton setImage:[UIImage systemImageNamed:@"circle.inset.filled"] forState:UIControlStateNormal];
+            self->_addButton.userInteractionEnabled = NO;
+        }
+    }];
+}
+
+# pragma mark - Queue Song Cell
+
 - (void)didTapUpvote {
+    
     // user upvotedSongIds and downvotedSongIds
     [ParseUserManager upvoteQueueSongWithId:_objectId];
     
@@ -104,9 +142,11 @@
         return;
     }
     self.isUnvoted = YES;
+    
 }
 
 - (void)didTapDownvote {
+    
     // user upvotedSongIds and downvotedSongIds
     [ParseUserManager downvoteQueueSongWithId:_objectId];
     
@@ -127,65 +167,7 @@
         return;
     }
     self.isUnvoted = YES;
-}
-
-- (void)addItem {
-    if (_isAddSongCell) {
-        [self addSong];
-    } else if (_isUserCell) {
-        [self addUser];
-    }
-}
-
-- (void)addUser {
-    [[ParseRoomManager shared] inviteUserWithId:_objectId completion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            [self->_addButton setImage:[UIImage systemImageNamed:@"circle.inset.filled"] forState:UIControlStateNormal];
-            self->_addButton.userInteractionEnabled = NO;
-        }
-    }];
-}
-
-- (void)addSong {
-    [[ParseRoomManager shared] requestSongWithSpotifyId:_objectId completion:nil];
-}
-
-- (void)setTitle:(NSString *)title {
-    _titleLabel.text = title;
-}
-
-- (void)setSubtitle:(NSString *)subtitle {
-    _subtitleLabel.text = subtitle;
-}
-
-- (void)setImage:(UIImage *)image {
-    _imageView.image = image;
-}
-
-- (void)setIsAddSongCell:(BOOL)isAddSongCell {
-    _isAddSongCell = isAddSongCell;
-    _addButton.hidden = !isAddSongCell;
-    _upvoteButton.hidden = isAddSongCell;
-    _downvoteButton.hidden = isAddSongCell;
-    _scoreLabel.hidden = isAddSongCell;
-    [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal]; // TODO: check if already added
-}
-
-- (void)setIsUserCell:(BOOL)isUserCell {
-    _isUserCell = isUserCell;
-    _addButton.hidden = !isUserCell;
-    _upvoteButton.hidden = isUserCell;
-    _downvoteButton.hidden = isUserCell;
-    _scoreLabel.hidden = isUserCell;
-    [_addButton setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal]; // TODO: check if already added
-}
-
-- (void)setIsQueueSongCell:(BOOL)isQueueSongCell {
-    _isQueueSongCell = isQueueSongCell;
-    _addButton.hidden = isQueueSongCell;
-    _upvoteButton.hidden = !isQueueSongCell;
-    _downvoteButton.hidden = !isQueueSongCell;
-    _scoreLabel.hidden = !isQueueSongCell;
+    
 }
 
 - (void)setIsUpvoted:(BOOL)isUpvoted {
@@ -218,6 +200,34 @@
         [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];
         [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down"] forState:UIControlStateNormal];
     }
+}
+
+# pragma mark - Set Cell Type
+
+- (void)setIsAddSongCell:(BOOL)isAddSongCell {
+    _isAddSongCell = isAddSongCell;
+    _addButton.hidden = !isAddSongCell;
+    _upvoteButton.hidden = isAddSongCell;
+    _downvoteButton.hidden = isAddSongCell;
+    _scoreLabel.hidden = isAddSongCell;
+    [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal]; // TODO: check if already added
+}
+
+- (void)setIsUserCell:(BOOL)isUserCell {
+    _isUserCell = isUserCell;
+    _addButton.hidden = !isUserCell;
+    _upvoteButton.hidden = isUserCell;
+    _downvoteButton.hidden = isUserCell;
+    _scoreLabel.hidden = isUserCell;
+    [_addButton setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal]; // TODO: check if already added
+}
+
+- (void)setIsQueueSongCell:(BOOL)isQueueSongCell {
+    _isQueueSongCell = isQueueSongCell;
+    _addButton.hidden = isQueueSongCell;
+    _upvoteButton.hidden = !isQueueSongCell;
+    _downvoteButton.hidden = !isQueueSongCell;
+    _scoreLabel.hidden = !isQueueSongCell;
 }
 
 @end
