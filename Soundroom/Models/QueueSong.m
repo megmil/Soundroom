@@ -37,4 +37,14 @@
     }];
 }
 
++ (void)incrementScoreForQueueSongWithId:(NSString *)queueSongId byAmount:(NSNumber *)amount completion:(PFBooleanResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query getObjectInBackgroundWithId:queueSongId block:^(PFObject *queueSong, NSError *error) {
+        if (queueSong) {
+            [queueSong incrementKey:@"score" byAmount:amount];
+        }
+        completion(queueSong, error);
+    }];
+}
+
 @end

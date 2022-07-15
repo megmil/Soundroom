@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(PFBooleanResultBlock _Nullable)completion;
 + (void)getCurrentQueueSongs;
++ (void)incrementScoreForQueueSongWithId:(NSString *)queueSongId byAmount:(NSNumber *)amount completion:(PFBooleanResultBlock _Nullable)completion;
 
 @end
 

@@ -73,13 +73,14 @@
     
     SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
     QueueSong *queueSong = self.queue[indexPath.row];
+    cell.objectId = queueSong.objectId;
     
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
         if (song) {
             cell.title = song.title;
             cell.subtitle = song.artist;
             cell.image = song.albumImage;
-            cell.objectId = song.spotifyId;
+            cell.spotifyId = song.spotifyId;
             cell.isAddSongCell = NO;
             cell.isUserCell = NO;
             cell.isQueueSongCell = YES;

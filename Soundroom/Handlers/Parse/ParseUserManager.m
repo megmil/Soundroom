@@ -50,4 +50,27 @@
     return currentUser.objectId;
 }
 
+# pragma mark - Votes
+
++ (void)upvoteQueueSongWithId:(NSString *)queueSongId {
+    PFUser *currentUser = [PFUser currentUser];
+    [currentUser addUniqueObject:queueSongId forKey:@"upvotedSongIds"];
+    [currentUser removeObject:queueSongId forKey:@"downvotedSongIds"];
+    [currentUser saveInBackground];
+}
+
++ (void)downvoteQueueSongWithId:(NSString *)queueSongId {
+    PFUser *currentUser = [PFUser currentUser];
+    [currentUser addUniqueObject:queueSongId forKey:@"downvotedSongIds"];
+    [currentUser removeObject:queueSongId forKey:@"upvotedSongIds"];
+    [currentUser saveInBackground];
+}
+
++ (void)unvoteQueueSongWithId:(NSString *)queueSongId {
+    PFUser *currentUser = [PFUser currentUser];
+    [currentUser removeObject:queueSongId forKey:@"downvotedSongIds"];
+    [currentUser removeObject:queueSongId forKey:@"upvotedSongIds"];
+    [currentUser saveInBackground];
+}
+
 @end
