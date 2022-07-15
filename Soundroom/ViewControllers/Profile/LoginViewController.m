@@ -8,6 +8,7 @@
 #import "LoginViewController.h"
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
+#import "SceneDelegate.h"
 
 @interface LoginViewController ()
 
@@ -36,7 +37,7 @@
     
     [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            // TODO: show tab bar
+            [self goToTabBar];
         }
     }];
 }
@@ -53,9 +54,16 @@
     
     [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            // TODO: show tab bar
+            [self goToTabBar];
         }
     }];
+}
+
+- (void)goToTabBar {
+    SceneDelegate *sceneDelegate = (SceneDelegate * ) UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
+    sceneDelegate.window.rootViewController = tabBarController;
 }
 
 - (BOOL)hasEmptyField {

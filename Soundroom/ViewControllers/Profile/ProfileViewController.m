@@ -10,6 +10,8 @@
 #import "AccountView.h"
 #import "SpotifyAuthClient.h"
 #import "ParseUserManager.h"
+#import "SceneDelegate.h"
+#import "LoginViewController.h"
 
 @interface ProfileViewController () <AccountViewDelegate>
 
@@ -49,9 +51,16 @@
 - (void)didTapUserLogout {
     [ParseUserManager logoutWithCompletion:^(NSError *error) {
         if (!error) {
-            // TODO: show login
+            [self goToLogin];
         }
     }];
+}
+
+- (void)goToLogin {
+    SceneDelegate *sceneDelegate = (SceneDelegate * ) UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoginViewController *loginVC = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    sceneDelegate.window.rootViewController = loginVC;
 }
 
 - (void)toggleSpotifyLoginStatus {
