@@ -7,7 +7,7 @@
 
 #import "SceneDelegate.h"
 #import "SpotifyAuthClient.h"
-#import "UserLoginViewController.h"
+#import "LoginViewController.h"
 #import "Parse/Parse.h"
 #import "ParseLiveQueryManager.h"
 
@@ -20,7 +20,7 @@
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
     if (![PFUser currentUser]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UserLoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"UserLoginViewController"];
+        LoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"UserLoginViewController"];
         self.window.rootViewController = userLoginVC;
     }
 }

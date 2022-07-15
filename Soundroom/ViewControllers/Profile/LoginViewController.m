@@ -5,11 +5,11 @@
 //  Created by Megan Miller on 7/11/22.
 //
 
-#import "UserLoginViewController.h"
+#import "LoginViewController.h"
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
 
-@interface UserLoginViewController ()
+@interface LoginViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation UserLoginViewController
+@implementation LoginViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -36,7 +36,7 @@
     
     [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            
+            // TODO: show tab bar
         }
     }];
 }
@@ -53,7 +53,7 @@
     
     [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            
+            // TODO: show tab bar
         }
     }];
 }

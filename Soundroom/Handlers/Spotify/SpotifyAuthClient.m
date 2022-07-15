@@ -148,7 +148,7 @@
     return accessTokenExpired;
 }
 
-- (BOOL)signedIn {
+- (BOOL)isSignedIn {
     BOOL signedIn = [self accessTokenExists];
     return signedIn;
 }
@@ -162,7 +162,7 @@
 }
 
 - (void)accessToken:(void (^)(NSString *accessToken))callback {
-    BOOL signedIn = [self signedIn];
+    BOOL signedIn = [self isSignedIn];
     
     if (signedIn) {
         BOOL accessTokenExpired = [self accessTokenExpired];
