@@ -5,12 +5,12 @@
 //  Created by Megan Miller on 7/5/22.
 //
 
-#import "SearchCell.h"
+#import "SongCell.h"
 #import "QueueSong.h"
 #import "ParseUserManager.h"
 #import "ParseRoomManager.h"
 
-@implementation SearchCell {
+@implementation SongCell {
     UILabel *_titleLabel;
     UILabel *_subtitleLabel;
     UIImageView *_imageView;
@@ -134,14 +134,14 @@
     } else {
         increment = @(1);
     }
-    [QueueSong incrementScoreForQueueSongWithId:_objectId byAmount:increment completion:nil];
+    [QueueSong incrementScoreForQueueSongWithId:_objectId byAmount:increment];
     
     // buttons
-    if (_isDownvoted) {
-        self.isUpvoted = YES;
+    if (_isUpvoted) {
+        self.isUnvoted = YES;
         return;
     }
-    self.isUnvoted = YES;
+    self.isUpvoted = YES;
     
 }
 
@@ -159,14 +159,14 @@
     } else {
         increment = @(-1);
     }
-    [QueueSong incrementScoreForQueueSongWithId:_objectId byAmount:increment completion:nil];
+    [QueueSong incrementScoreForQueueSongWithId:_objectId byAmount:increment];
     
     // buttons
-    if (_isUpvoted) {
-        self.isDownvoted = YES;
+    if (_isDownvoted) {
+        self.isUnvoted = YES;
         return;
     }
-    self.isUnvoted = YES;
+    self.isDownvoted = YES;
     
 }
 

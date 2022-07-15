@@ -12,7 +12,7 @@
 #import "ParseUserManager.h"
 #import "QueueSong.h"
 #import "Song.h"
-#import "SearchCell.h"
+#import "SongCell.h"
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -29,7 +29,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:@"QueueSongCell"];
+    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
@@ -71,9 +71,15 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
     QueueSong *queueSong = self.queue[indexPath.row];
+    
     cell.objectId = queueSong.objectId;
+    
+    cell.isQueueSongCell = YES;
+    cell.isAddSongCell = NO;
+    cell.isUserCell = NO;
+    
     cell.isUpvoted = [queueSong isUpvotedByCurrentUser];
     cell.isDownvoted = [queueSong isDownvotedByCurrentUser];
     cell.isUnvoted = [queueSong isUnvotedByCurrentUser];
@@ -84,9 +90,6 @@
             cell.subtitle = song.artist;
             cell.image = song.albumImage;
             cell.spotifyId = song.spotifyId;
-            cell.isAddSongCell = NO;
-            cell.isUserCell = NO;
-            cell.isQueueSongCell = YES;
         }
     }];
     

@@ -11,7 +11,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "SpotifyAPIManager.h"
 #import "ParseUserManager.h"
-#import "SearchCell.h"
+#import "SongCell.h"
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
@@ -42,7 +42,7 @@
         self.searchTypeControl.userInteractionEnabled = YES;
     }
     
-    [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:@"SearchCell"];
+    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"SearchCell"];
     
     self.searchBar.delegate = self;
 }
@@ -58,7 +58,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
     
     if ([self isSongSearch]) {
         Song *song = self.songs[indexPath.row];
