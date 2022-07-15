@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSNumber *score;
 
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(PFBooleanResultBlock _Nullable)completion;
-+ (void)getCurrentQueueSongsWithCompletion:(PFArrayResultBlock)completion;
++ (void)getCurrentQueueSongs;
 
 @end
 

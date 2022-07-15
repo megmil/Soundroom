@@ -27,14 +27,13 @@
     [newSong saveInBackgroundWithBlock:completion];
 }
 
-+ (void)getCurrentQueueSongsWithCompletion:(PFArrayResultBlock)completion {
++ (void)getCurrentQueueSongs {
     PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
     [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *queueSongs, NSError *error) {
         if (queueSongs) {
             [[ParseRoomManager shared] updateQueueWithSongs:queueSongs];
         }
-        completion(queueSongs, error);
     }];
 }
 

@@ -66,10 +66,12 @@
 }
 
 - (void)updateQueueWithSongs:(NSArray<QueueSong *> *)songs {
-    if (songs) {
-        [_queue addObjectsFromArray:songs];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
+    if (!songs || songs.count == 0) {
+        return;
     }
+    
+    [_queue addObjectsFromArray:songs];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
 }
 
 - (void)updateQueueWithSong:(QueueSong *)song {
@@ -117,6 +119,7 @@
         if (room) {
             self->_currentRoom = (Room *)room;
             self->_hostId = self->_currentRoom.hostId;
+            self->_currentRoomId = self->_currentRoom.objectId;
             self->_queue = [NSMutableArray array];
             [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerJoinedRoomNotification object:self];
         }

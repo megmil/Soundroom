@@ -29,15 +29,15 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerUpdatedQueueNotification object:nil];
 }
 
 - (void)refreshViews {
+    [QueueSong getCurrentQueueSongs];
+    [self refreshQueueSongs];
     self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
-    [self.tableView reloadData];
 }
 
 - (IBAction)leaveRoom:(id)sender {
@@ -72,9 +72,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
-    
+    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RoomCell"];
     QueueSong *queueSong = self.queue[indexPath.row];
+    
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
         if (song) {
             cell.title = song.title;
