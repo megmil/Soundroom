@@ -29,6 +29,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:@"QueueSongCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshViews) name:ParseRoomManagerUpdatedQueueNotification object:nil];
@@ -72,7 +73,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RoomCell"];
+    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
     QueueSong *queueSong = self.queue[indexPath.row];
     
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
@@ -81,7 +82,11 @@
             cell.subtitle = song.artist;
             cell.image = song.albumImage;
             cell.objectId = song.spotifyId;
-            cell.isUser = NO;
+            cell.isAddSongCell = NO;
+            cell.isUserCell = NO;
+            cell.isQueueSongCell = YES;
+        } else {
+            NSLog(@"og: %@", error);
         }
     }];
     

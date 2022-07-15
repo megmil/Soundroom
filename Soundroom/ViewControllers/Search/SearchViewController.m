@@ -66,7 +66,9 @@
         cell.subtitle = song.artist;
         cell.image = song.albumImage;
         cell.objectId = song.spotifyId;
-        cell.isUser = NO;
+        cell.isAddSongCell = YES;
+        cell.isUserCell = NO;
+        cell.isQueueSongCell = NO;
         return cell;
     }
     
@@ -75,7 +77,9 @@
     cell.subtitle = [user valueForKey:@"username"];
     cell.image = [UIImage imageNamed:@"check"]; // TODO: avatar images
     cell.objectId = user.objectId;
-    cell.isUser = YES;
+    cell.isAddSongCell = NO;
+    cell.isUserCell = YES;
+    cell.isQueueSongCell = NO;
     return cell;
 }
 

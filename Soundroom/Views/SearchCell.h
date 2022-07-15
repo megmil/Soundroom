@@ -15,7 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *subtitle;
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) NSString *objectId;
-@property (nonatomic) BOOL isUser;
+@property (nonatomic) BOOL isAddSongCell;
+@property (nonatomic) BOOL isUserCell;
+@property (nonatomic) BOOL isQueueSongCell;
 
 @end
 
