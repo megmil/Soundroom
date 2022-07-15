@@ -5,11 +5,12 @@
 //  Created by Megan Miller on 7/11/22.
 //
 
-#import "UserLoginViewController.h"
+#import "LoginViewController.h"
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
+#import "SceneDelegate.h"
 
-@interface UserLoginViewController ()
+@interface LoginViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -18,7 +19,7 @@
 
 @end
 
-@implementation UserLoginViewController
+@implementation LoginViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -36,7 +37,7 @@
     
     [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            
+            [self goToTabBar];
         }
     }];
 }
@@ -53,9 +54,16 @@
     
     [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
-            
+            [self goToTabBar];
         }
     }];
+}
+
+- (void)goToTabBar {
+    SceneDelegate *sceneDelegate = (SceneDelegate * ) UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
+    sceneDelegate.window.rootViewController = tabBarController;
 }
 
 - (BOOL)hasEmptyField {

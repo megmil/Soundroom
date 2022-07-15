@@ -82,17 +82,13 @@
 }
 
 - (void)reset {
-    self.currentRoomId = @""; // TODO: hmmmm
+    _currentRoomId = nil;
     _currentRoom = nil;
     _hostId = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerLeftRoomNotification object:self];
 }
 
 - (void)setCurrentRoomId:(NSString *)currentRoomId {
-    
-    if (currentRoomId == nil) { // TODO: hmmmmmmm
-        return;
-    }
     
     if (currentRoomId == self.currentRoomId) {
         return;

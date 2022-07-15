@@ -33,7 +33,7 @@
 
 - (void)authenticateInViewController:(UIViewController *)viewController;
 - (void)retrieveCodeFromUrl:(NSURL *)url;
-- (BOOL)signedIn;
+- (BOOL)isSignedIn;
 - (void)signOut;
 - (void)accessToken:(void (^)(NSString *accessToken))completion;
 

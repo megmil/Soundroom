@@ -7,6 +7,8 @@
 
 #import "AppDelegate.h"
 #import "Parse/Parse.h"
+#import "SpotifyAuthClient.h"
+#import "LoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,7 +20,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     ParseClientConfiguration *configuration = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
-
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
         NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:path];
         configuration.applicationId = [dictionary objectForKey:@"parse-app-id"];
