@@ -43,4 +43,11 @@
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
+# pragma mark - Current User Data
+
++ (NSString *)currentUserId {
+    PFUser *currentUser = [PFUser currentUser];
+    return currentUser.objectId;
+}
+
 @end

@@ -19,13 +19,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion;
 - (void)inviteUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
-- (void)removeCurrentUserWithCompletion:(PFBooleanResultBlock _Nullable)completion;
-- (void)lookForCurrentRoomWithCompletion:(PFBooleanResultBlock _Nullable)completion;
-- (BOOL)currentRoomExists;
-- (void)resetCurrentRoomId;
-- (NSString *)currentRoomTitle;
+- (void)addUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
+- (void)removeUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
+- (void)removeAllUsersWithCompletion:(PFBooleanResultBlock _Nullable)completion;
+
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion; // TODO: match
+
+- (NSString *)currentRoomTitle; // TODO: properties?
+- (NSString *)currentHostId;
+- (void)reset; // TODO: rename
 
 @end
 

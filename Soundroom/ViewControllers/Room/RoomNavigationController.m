@@ -10,6 +10,7 @@
 #import "RoomViewController.h"
 #import "ParseRoomManager.h"
 #import "ParseLiveQueryManager.h"
+#import "Room.h"
 
 @interface RoomNavigationController ()
 
@@ -26,7 +27,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToLobby) name:ParseRoomManagerLeftRoomNotification object:nil];
     
     // check to see if the current user is already in a room
-    [[ParseRoomManager shared] lookForCurrentRoomWithCompletion:^(BOOL succeeded, NSError *error) {
+    [Room getCurrentRoomWithCompletion:^(BOOL succeeded, NSError *error) {
         if (!succeeded) {
             [self goToLobby]; // if not, go to lobby
         }

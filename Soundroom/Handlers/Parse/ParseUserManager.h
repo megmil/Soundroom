@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock _Nullable)completion;
 
++ (NSString *)currentUserId;
+
 @end
 
 NS_ASSUME_NONNULL_END

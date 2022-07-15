@@ -45,7 +45,7 @@
 - (void)leaveRoomSubscription {
     PFQuery *query = [self currentRoomsQuery];
     PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addLeaveHandler:^(PFQuery<PFObject *> *rooms, PFObject *room) {
-        [[ParseRoomManager shared] resetCurrentRoomId]; // update room manager
+        [[ParseRoomManager shared] reset]; // update room manager
     }];
 }
 

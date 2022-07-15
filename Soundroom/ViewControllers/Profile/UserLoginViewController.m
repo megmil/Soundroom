@@ -26,7 +26,7 @@
 
 - (IBAction)didTapUserLogin:(id)sender {
     
-    if ([self isFieldEmpty]) {
+    if ([self hasEmptyField]) {
         [self showEmptyFieldAlert];
         return;
     }
@@ -43,7 +43,7 @@
 
 - (IBAction)didTapUserRegister:(id)sender {
     
-    if ([self isFieldEmpty]) {
+    if ([self hasEmptyField]) {
         [self showEmptyFieldAlert];
         return;
     }
@@ -58,8 +58,8 @@
     }];
 }
 
-- (BOOL)isFieldEmpty {
-    return [self.usernameField.text isEqual:@""] || [self.passwordField.text isEqual:@""];
+- (BOOL)hasEmptyField {
+    return self.usernameField.text.length == 0 || self.passwordField.text.length == 0;
 }
 
 - (void)showAlertWithError:(NSError *)error {

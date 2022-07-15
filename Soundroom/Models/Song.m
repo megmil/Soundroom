@@ -11,13 +11,13 @@
 @implementation Song
 
 + (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response {
-    NSDictionary *songsDictionary = response[@"tracks"][@"items"];
-    NSMutableArray *songsArray = [NSMutableArray array];
-    for (NSDictionary *songDictionary in songsDictionary) {
-        Song *song = [[Song alloc] initWithJSONResponse:songDictionary];
-        [songsArray addObject:song];
+    NSDictionary *songsJSONResponses = response[@"tracks"][@"items"];
+    NSMutableArray *songs = [NSMutableArray array];
+    for (NSDictionary *songJSONResponse in songsJSONResponses) {
+        Song *song = [[Song alloc] initWithJSONResponse:songJSONResponse];
+        [songs addObject:song];
     }
-    return songsArray;
+    return songs;
 }
 
 - (instancetype)initWithJSONResponse:(NSDictionary *)response {
