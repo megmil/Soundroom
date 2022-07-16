@@ -43,6 +43,7 @@
 
 - (void)loadRoom {
     self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
+    [self configureLiveSubscriptions];
     [QueueSong getCurrentQueueSongs]; // get songs added to queue while live query was off
     [self.tableView reloadData];
 }
@@ -65,7 +66,7 @@
     NSString *currentUserId = [ParseUserManager currentUserId];
     NSString *hostId = [[ParseRoomManager shared] currentHostId];
     if (currentUserId && hostId) {
-        return [currentUserId isEqual:hostId];
+        return [currentUserId isEqualToString:hostId];
     }
     return NO;
 }
