@@ -9,7 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RoomViewController : UIViewController
+@interface RoomViewController : UIViewController {
+    BOOL credentialsLoaded;
+}
+
+@property (strong, nonatomic) NSString *server;
+@property (strong, nonatomic) NSString *appId;
+@property (strong, nonatomic) NSString *clientKey;
 
 @end
 

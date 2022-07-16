@@ -7,7 +7,6 @@
 
 #import "LoginViewController.h"
 #import "ParseUserManager.h"
-#import "ParseLiveQueryManager.h"
 #import "SceneDelegate.h"
 
 @interface LoginViewController ()

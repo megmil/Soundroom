@@ -13,12 +13,16 @@
 #import "QueueSong.h"
 #import "Song.h"
 #import "SongCell.h"
+@import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) NSMutableArray <QueueSong *> *queue;
+
+@property (strong, nonatomic) PFLiveQueryClient *client;
+@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
 
 @end
 
@@ -31,6 +35,8 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
     
+    [self configureClient];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
 }
@@ -42,6 +48,7 @@
 }
 
 - (void)refreshRoom {
+    [self configureLiveSubscriptions];
     self.queue = [[ParseRoomManager shared] queue];
     [self.tableView reloadData];
 }
@@ -101,5 +108,56 @@
     return 66.f;
 }
 
+# pragma mark - Live Query
+
+- (void)configureLiveSubscriptions {
+    
+    // reset subscriptions
+    self.subscription = nil;
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    self.subscription = [self.client subscribeToQuery:query];
+    
+    // new song added to queue
+    [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        QueueSong *song = (QueueSong *)object;
+        [[ParseRoomManager shared] updateQueueWithSong:song];
+    }];
+    
+    // queue song is updated
+    [self.subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        QueueSong *song = (QueueSong *)object;
+        [[ParseRoomManager shared] updateScoreForSong:song];
+    }];
+    
+    // queue song is deleted
+    /*
+    [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        QueueSong *song = (QueueSong *)object;
+    }];
+     */
+}
+
+- (void)configureClient {
+    if (!credentialsLoaded) {
+        [self loadCredentials];
+    }
+    self.client = [[PFLiveQueryClient alloc] initWithServer:self.server applicationId:self.appId clientKey:self.clientKey];
+}
+
+- (void)loadCredentials {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
+    NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
+    self.server = [credentials objectForKey:@"parse-live-server"];
+    self.appId = [credentials objectForKey:@"parse-app-id"];
+    self.clientKey = [credentials objectForKey:@"parse-client-key"];
+    credentialsLoaded = YES;
+}
+
+- (PFQuery *)queueSongsQuery {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]]; // TODO: should update room id
+    return query;
+}
 
 @end

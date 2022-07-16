@@ -29,7 +29,6 @@
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
 		0422999A287DE1270086612E /* ParseRoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229999287DE1270086612E /* ParseRoomManager.m */; };
 		042299AB287E86630086612E /* ConfigureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299AA287E86630086612E /* ConfigureView.m */; };
-		042299BA287F6D140086612E /* ParseLiveQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299B9287F6D140086612E /* ParseLiveQueryManager.m */; };
 		042299BD288092C40086612E /* RoomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299BC288092C40086612E /* RoomNavigationController.m */; };
 		04785C8028813094001AF277 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C7F28813094001AF277 /* AccountView.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
@@ -98,8 +97,6 @@
 		04229999287DE1270086612E /* ParseRoomManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseRoomManager.m; sourceTree = "<group>"; };
 		042299A9287E86630086612E /* ConfigureView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureView.h; sourceTree = "<group>"; };
 		042299AA287E86630086612E /* ConfigureView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureView.m; sourceTree = "<group>"; };
-		042299B8287F6D140086612E /* ParseLiveQueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseLiveQueryManager.h; sourceTree = "<group>"; };
-		042299B9287F6D140086612E /* ParseLiveQueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseLiveQueryManager.m; sourceTree = "<group>"; };
 		042299BB288092C40086612E /* RoomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomNavigationController.h; sourceTree = "<group>"; };
 		042299BC288092C40086612E /* RoomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomNavigationController.m; sourceTree = "<group>"; };
 		04785C7E28813094001AF277 /* AccountView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
@@ -291,8 +288,6 @@
 				04229996287DDB5C0086612E /* ParseUserManager.m */,
 				04229998287DE1270086612E /* ParseRoomManager.h */,
 				04229999287DE1270086612E /* ParseRoomManager.m */,
-				042299B8287F6D140086612E /* ParseLiveQueryManager.h */,
-				042299B9287F6D140086612E /* ParseLiveQueryManager.m */,
 			);
 			path = Parse;
 			sourceTree = "<group>";
@@ -608,7 +603,6 @@
 				042299BD288092C40086612E /* RoomNavigationController.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
-				042299BA287F6D140086612E /* ParseLiveQueryManager.m in Sources */,
 				04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

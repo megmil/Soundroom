@@ -10,7 +10,6 @@
 #import "RoomViewController.h"
 #import "ParseUserManager.h"
 #import "ParseRoomManager.h"
-#import "ParseLiveQueryManager.h"
 #import "Room.h"
 @import ParseLiveQuery;
 
@@ -26,7 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // prepare to switch view controllers if the current user leaves or joins a room
+    // prepare to switch view controllers if the current user leaves a room
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToLobby) name:ParseRoomManagerLeftRoomNotification object:nil];
     
     // check to see if the current user is already in a room
@@ -38,7 +37,7 @@
     
     // setup Live Query client
     [self configureClient];
-    [self subscribeToLiveQuery];
+    [self configureLiveSubscriptions];
 }
 
 - (void)goToLobby {
@@ -47,12 +46,12 @@
         LobbyViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:@"LobbyViewController"];
         [lobbyVC setModalPresentationStyle:UIModalPresentationCurrentContext];
         
-        RoomViewController *rootVC = [self.viewControllers firstObject];
-        [rootVC presentViewController:lobbyVC animated:YES completion:nil];
+        RoomViewController *roomVC = [self.viewControllers firstObject];
+        [roomVC presentViewController:lobbyVC animated:YES completion:nil];
     });
 }
 
-- (void)subscribeToLiveQuery {
+- (void)configureLiveSubscriptions {
     PFQuery *query = [self currentRoomsQuery];
     self.subscription = [self.client subscribeToQuery:query];
     
