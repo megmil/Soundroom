@@ -16,7 +16,6 @@
     UIImageView *_imageView;
     
     UIButton *_addButton;
-    
     UIButton *_upvoteButton;
     UIButton *_downvoteButton;
     UILabel *_scoreLabel;
@@ -138,7 +137,7 @@
     
     // buttons
     if (_isUpvoted) {
-        self.isUnvoted = YES;
+        self.isNotVoted = YES;
         return;
     }
     self.isUpvoted = YES;
@@ -163,7 +162,7 @@
     
     // buttons
     if (_isDownvoted) {
-        self.isUnvoted = YES;
+        self.isNotVoted = YES;
         return;
     }
     self.isDownvoted = YES;
@@ -174,7 +173,7 @@
     _isUpvoted = isUpvoted;
     if (isUpvoted) {
         self.isDownvoted = NO;
-        self.isUnvoted = NO;
+        self.isNotVoted = NO;
         [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up.fill"] forState:UIControlStateNormal];
     } else {
         [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];
@@ -185,16 +184,16 @@
     _isDownvoted = isDownvoted;
     if (isDownvoted) {
         self.isUpvoted = NO;
-        self.isUnvoted = NO;
+        self.isNotVoted = NO;
         [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down.fill"] forState:UIControlStateNormal];
     } else {
         [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down"] forState:UIControlStateNormal];
     }
 }
 
-- (void)setIsUnvoted:(BOOL)isUnvoted {
-    _isUnvoted = isUnvoted;
-    if (isUnvoted) {
+- (void)setIsNotVoted:(BOOL)isNotVoted {
+    _isNotVoted = isNotVoted;
+    if (isNotVoted) {
         _isUpvoted = NO;
         _isDownvoted = NO;
         [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];

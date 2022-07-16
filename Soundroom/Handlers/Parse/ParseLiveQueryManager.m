@@ -51,10 +51,18 @@
 }
 
 - (void)newSongRequestSubscription {
-    PFQuery *query = [self songRequestsQuery];
-    PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addCreateHandler:^(PFQuery<PFObject *> *queueSongs, PFObject *queueSong) {
-        QueueSong *song = (QueueSong *)queueSong;
-        [[ParseRoomManager shared] updateQueueWithSong:song]; // update room manager
+    PFQuery *query = [self queueSongsQuery];
+    PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addCreateHandler:^(PFQuery<PFObject *> *objects, PFObject *object) {
+        QueueSong *queueSong = (QueueSong *)object;
+        [[ParseRoomManager shared] updateQueueWithSong:queueSong]; // update room manager
+    }];
+}
+
+- (void)queueSongScoreUpdateSubscription {
+    PFQuery *query = [self queueSongsQuery];
+    PFLiveQuerySubscription *subscription = [[self.client subscribeToQuery:query] addUpdateHandler:^(PFQuery<PFObject *> *objects, PFObject *object) {
+        QueueSong *queueSong = (QueueSong *)object;
+        [[ParseRoomManager shared] updateScoreForSong:queueSong];
     }];
 }
 
@@ -85,7 +93,7 @@
     return query;
 }
 
-- (PFQuery *)songRequestsQuery {
+- (PFQuery *)queueSongsQuery {
     PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
     [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]]; // TODO: should update room id
     return query;

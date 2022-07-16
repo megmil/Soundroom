@@ -82,7 +82,7 @@
     
     cell.isUpvoted = [queueSong isUpvotedByCurrentUser];
     cell.isDownvoted = [queueSong isDownvotedByCurrentUser];
-    cell.isUnvoted = [queueSong isUnvotedByCurrentUser];
+    cell.isNotVoted = [queueSong isNotVotedByCurrentUser];
     
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
         if (song) {

@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL isUpvoted;
 @property (nonatomic) BOOL isDownvoted;
-@property (nonatomic) BOOL isUnvoted;
+@property (nonatomic) BOOL isNotVoted;
 
 @end
 

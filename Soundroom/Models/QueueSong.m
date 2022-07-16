@@ -46,7 +46,7 @@
     }];
 }
 
-+ (void)deleteAllWithRoomId:(NSString *)roomId {
++ (void)deleteAllQueueSongsWithRoomId:(NSString *)roomId {
     PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
     [query whereKey:@"roomId" equalTo:roomId];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -78,7 +78,7 @@
     return NO;
 }
 
-- (BOOL)isUnvotedByCurrentUser {
+- (BOOL)isNotVotedByCurrentUser {
     return ![self isUpvotedByCurrentUser] && ![self isDownvotedByCurrentUser];
 }
 

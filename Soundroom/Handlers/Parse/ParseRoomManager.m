@@ -51,7 +51,7 @@
 
 - (void)removeAllUsersWithCompletion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
-        [QueueSong deleteAllWithRoomId:_currentRoomId];
+        [QueueSong deleteAllQueueSongsWithRoomId:_currentRoomId];
         [_currentRoom deleteEventually];
     }
 }
@@ -65,6 +65,7 @@
 }
 
 - (void)updateQueueWithSongs:(NSArray<QueueSong *> *)songs {
+    
     if (!songs || songs.count == 0) {
         return;
     }
@@ -77,6 +78,19 @@
     if (song) {
         [_queue addObject:song];
         [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
+    }
+}
+
+- (void)updateScoreForSong:(QueueSong *)song {
+    if (song) {
+        NSString *songId = song.objectId;
+        for (NSUInteger i = 0; i < _queue.count; i++) {
+            if ([songId isEqualToString:_queue[i].objectId]) {
+                [_queue replaceObjectAtIndex:i withObject:song];
+                [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
+                return;
+            }
+        }
     }
 }
 
