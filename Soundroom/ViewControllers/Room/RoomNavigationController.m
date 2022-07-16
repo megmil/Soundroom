@@ -8,11 +8,16 @@
 #import "RoomNavigationController.h"
 #import "LobbyViewController.h"
 #import "RoomViewController.h"
+#import "ParseUserManager.h"
 #import "ParseRoomManager.h"
 #import "ParseLiveQueryManager.h"
 #import "Room.h"
+@import ParseLiveQuery;
 
 @interface RoomNavigationController ()
+
+@property (strong, nonatomic) PFLiveQueryClient *client;
+@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
 
 @end
 
@@ -22,8 +27,6 @@
     [super viewDidLoad];
     
     // prepare to switch view controllers if the current user leaves or joins a room
-    [[ParseLiveQueryManager shared] connect];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToLobby) name:ParseRoomManagerLeftRoomNotification object:nil];
     
     // check to see if the current user is already in a room
@@ -32,19 +35,68 @@
             [self goToLobby]; // if not, go to lobby
         }
     }];
-}
-
-- (void)goToRoom {
-    [self popToRootViewControllerAnimated:YES];
+    
+    // setup Live Query client
+    [self configureClient];
+    [self subscribeToLiveQuery];
 }
 
 - (void)goToLobby {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LobbyViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:@"LobbyViewController"];
-    [lobbyVC setModalPresentationStyle:UIModalPresentationCurrentContext];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LobbyViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:@"LobbyViewController"];
+        [lobbyVC setModalPresentationStyle:UIModalPresentationCurrentContext];
+        
+        RoomViewController *rootVC = [self.viewControllers firstObject];
+        [rootVC presentViewController:lobbyVC animated:YES completion:nil];
+    });
+}
+
+- (void)subscribeToLiveQuery {
+    PFQuery *query = [self currentRoomsQuery];
+    self.subscription = [self.client subscribeToQuery:query];
     
-    RoomViewController *rootVC = [self.viewControllers firstObject];
-    [rootVC presentViewController:lobbyVC animated:YES completion:nil];
+    // room that matches query is created
+    [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        [[ParseRoomManager shared] setCurrentRoomId:object.objectId];
+    }];
+    
+    // room enters query
+    [self.subscription addEnterHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        [[ParseRoomManager shared] setCurrentRoomId:object.objectId];
+    }];
+    
+    // room leaves query
+    [self.subscription addLeaveHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        [[ParseRoomManager shared] reset];
+    }];
+    
+    // room is deleted
+    [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        [[ParseRoomManager shared] reset];
+    }];
+}
+
+- (void)configureClient {
+    if (!credentialsLoaded) {
+        [self loadCredentials];
+    }
+    self.client = [[PFLiveQueryClient alloc] initWithServer:self.server applicationId:self.appId clientKey:self.clientKey];
+}
+
+- (void)loadCredentials {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
+    NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
+    self.server = [credentials objectForKey:@"parse-live-server"];
+    self.appId = [credentials objectForKey:@"parse-app-id"];
+    self.clientKey = [credentials objectForKey:@"parse-client-key"];
+    credentialsLoaded = YES;
+}
+
+- (PFQuery *)currentRoomsQuery {
+    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+    [query whereKey:@"memberIds" equalTo:[ParseUserManager currentUserId]]; // get rooms that list currentUser as a member
+    return query;
 }
 
 @end

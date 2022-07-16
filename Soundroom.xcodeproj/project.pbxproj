@@ -37,9 +37,6 @@
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
 		049304BF2877E759006AA9A3 /* SpotifyAuthClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304BE2877E759006AA9A3 /* SpotifyAuthClient.m */; };
 		049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* LoginViewController.m */; };
-		300D3741757F3CCE46299C2B /* Pods_SoundroomTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F84C002CF78A304291B068A2 /* Pods_SoundroomTests.framework */; };
-		5B1987C1DA1A46BBDF3F6265 /* Pods_Soundroom_SoundroomUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A67AAF878034E71A1841981 /* Pods_Soundroom_SoundroomUITests.framework */; };
-		C084D0A1024DB4910A5D78EF /* Pods_Soundroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EED2F91B0659EE6BAA164E9B /* Pods_Soundroom.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,14 +113,11 @@
 		049304C9287C8A04006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		049304CA287C8A04006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		05BA8035371BF12C93686B44 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4A67AAF878034E71A1841981 /* Pods_Soundroom_SoundroomUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundroom_SoundroomUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC9246B9074C30C2C8BD3E1 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
 		6746B66977F4F2E15378B150 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7F7B2491B84C18FC2505113B /* Pods-Soundroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.debug.xcconfig"; sourceTree = "<group>"; };
 		CDAD3879A60A9B38F5CDC353 /* Pods-Soundroom-SoundroomUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.release.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.release.xcconfig"; sourceTree = "<group>"; };
 		EABA6F28FBB451AB560D8AF8 /* Pods-SoundroomTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.release.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.release.xcconfig"; sourceTree = "<group>"; };
-		EED2F91B0659EE6BAA164E9B /* Pods_Soundroom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundroom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F84C002CF78A304291B068A2 /* Pods_SoundroomTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundroomTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,7 +126,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */,
-				C084D0A1024DB4910A5D78EF /* Pods_Soundroom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +133,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				300D3741757F3CCE46299C2B /* Pods_SoundroomTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,7 +140,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B1987C1DA1A46BBDF3F6265 /* Pods_Soundroom_SoundroomUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,9 +332,6 @@
 			isa = PBXGroup;
 			children = (
 				049304A428762A58006AA9A3 /* SpotifyiOS.framework */,
-				EED2F91B0659EE6BAA164E9B /* Pods_Soundroom.framework */,
-				4A67AAF878034E71A1841981 /* Pods_Soundroom_SoundroomUITests.framework */,
-				F84C002CF78A304291B068A2 /* Pods_SoundroomTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

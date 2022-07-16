@@ -41,6 +41,9 @@
             [[ParseRoomManager shared] setCurrentRoomId:room.objectId]; // update room manager
         }
     }];
+    [subscription addSubscribeHandler:^(PFQuery<PFObject *> * _Nonnull) {
+        NSLog(@"AM I SUBSCRIBED?????");
+    }];
 }
 
 - (void)leaveRoomSubscription {
