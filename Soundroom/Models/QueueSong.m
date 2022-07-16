@@ -46,6 +46,16 @@
     }];
 }
 
++ (void)deleteAllWithRoomId:(NSString *)roomId {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query whereKey:@"roomId" equalTo:roomId];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        for (PFObject *object in objects) {
+            [object deleteEventually];
+        }
+    }];
+}
+
 - (BOOL)isUpvotedByCurrentUser {
     PFUser *currentUser = [PFUser currentUser];
     NSMutableArray<NSString *> *upvotedSongIds = [currentUser valueForKey:@"upvotedSongIds"];

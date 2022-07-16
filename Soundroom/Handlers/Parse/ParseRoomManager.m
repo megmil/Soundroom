@@ -51,9 +51,8 @@
 
 - (void)removeAllUsersWithCompletion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
-        [_currentRoom removeObjectForKey:@"invitedIds"];
-        [_currentRoom removeObjectForKey:@"memberIds"];
-        [_currentRoom saveInBackgroundWithBlock:completion];
+        [QueueSong deleteAllWithRoomId:_currentRoomId];
+        [_currentRoom deleteEventually];
     }
 }
 
