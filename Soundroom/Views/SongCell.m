@@ -35,8 +35,8 @@
     
     [_scoreLabel sizeToFit];
     _downvoteButton.frame = CGRectMake(self.contentView.frame.size.width - 25.f - 20.f, 20.5f, 25.f, 25.f);
-    _scoreLabel.frame = CGRectMake(_downvoteButton.frame.origin.x - _downvoteButton.frame.size.width - 5.f, (self.contentView.frame.size.height - _scoreLabel.frame.size.height) / 2.f, _scoreLabel.frame.size.width, _scoreLabel.frame.size.height);
-    _upvoteButton.frame = CGRectMake(_scoreLabel.frame.origin.x - _scoreLabel.frame.size.width - 5.f, 20.5f, 25.f, 25.f);
+    _scoreLabel.frame = CGRectMake(_downvoteButton.frame.origin.x - _scoreLabel.frame.size.width - 5.f, (self.contentView.frame.size.height - _scoreLabel.frame.size.height) / 2.f, _scoreLabel.frame.size.width, _scoreLabel.frame.size.height);
+    _upvoteButton.frame = CGRectMake(_scoreLabel.frame.origin.x - 25.f - 5.f, 20.5f, 25.f, 25.f);
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -167,6 +167,10 @@
     }
     self.isDownvoted = YES;
     
+}
+
+- (void)setScore:(NSNumber *)score {
+    _scoreLabel.text = [score stringValue];
 }
 
 - (void)setIsUpvoted:(BOOL)isUpvoted {

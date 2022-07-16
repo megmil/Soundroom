@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL isUserCell;
 @property (nonatomic) BOOL isQueueSongCell;
 
+@property (strong, nonatomic) NSNumber *score;
 @property (nonatomic) BOOL isUpvoted;
 @property (nonatomic) BOOL isDownvoted;
 @property (nonatomic) BOOL isNotVoted;

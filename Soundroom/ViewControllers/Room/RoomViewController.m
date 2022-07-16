@@ -75,6 +75,7 @@
     QueueSong *queueSong = self.queue[indexPath.row];
     
     cell.objectId = queueSong.objectId;
+    cell.score = queueSong.score;
     
     cell.isQueueSongCell = YES;
     cell.isAddSongCell = NO;
