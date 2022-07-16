@@ -33,7 +33,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
 }
 
 - (void)loadRoom {
@@ -45,10 +44,6 @@
 - (void)refreshRoom {
     self.queue = [[ParseRoomManager shared] queue];
     [self.tableView reloadData];
-}
-
-- (void)goToRoom {
-    [self dismissViewControllerAnimated:YES completion:nil]; // dismiss lobbyVC
 }
 
 - (IBAction)leaveRoom:(id)sender {
