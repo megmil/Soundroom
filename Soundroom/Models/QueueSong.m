@@ -42,6 +42,7 @@
     [query getObjectInBackgroundWithId:queueSongId block:^(PFObject *queueSong, NSError *error) {
         if (queueSong) {
             [queueSong incrementKey:@"score" byAmount:amount];
+            [queueSong saveInBackground];
         }
     }];
 }

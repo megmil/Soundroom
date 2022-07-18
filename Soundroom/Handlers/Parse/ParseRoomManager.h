@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion;
 - (void)updateQueueWithSong:(QueueSong *)song;
 - (void)updateQueueWithSongs:(NSArray <QueueSong *> *)songs;
-- (void)updateScoreForSong:(QueueSong *)song;
+- (void)updateScoreForQueueSong:(QueueSong *)song;
 - (NSMutableArray <QueueSong *> *)queue;
 
 - (NSString *)currentRoomTitle; // TODO: properties?
