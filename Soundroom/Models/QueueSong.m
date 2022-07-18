@@ -27,16 +27,6 @@
     [newSong saveInBackgroundWithBlock:completion];
 }
 
-+ (void)getCurrentQueueSongs {
-    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-    [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *queueSongs, NSError *error) {
-        if (queueSongs) {
-            [[ParseRoomManager shared] updateQueueWithSongs:queueSongs];
-        }
-    }];
-}
-
 + (void)incrementScoreForQueueSongWithId:(NSString *)queueSongId byAmount:(NSNumber *)amount {
     PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
     [query getObjectInBackgroundWithId:queueSongId block:^(PFObject *queueSong, NSError *error) {
