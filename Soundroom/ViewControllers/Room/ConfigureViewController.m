@@ -23,7 +23,11 @@
 }
 
 - (void)createRoom {
-    [Room createRoomWithTitle:self.configureView.title completion:nil];
+    [Room createRoomWithTitle:self.configureView.title completion:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // dismiss self
+        }
+    }];
 }
 
 - (void)inviteMembers {
