@@ -49,9 +49,11 @@
 }
 
 - (void)refreshRoom {
-    [self configureLiveSubscriptions];
-    self.queue = [[ParseRoomManager shared] queue];
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self configureLiveSubscriptions];
+        self.queue = [[ParseRoomManager shared] queue];
+        [self.tableView reloadData];
+    });
 }
 
 - (IBAction)leaveRoom:(id)sender {
@@ -111,6 +113,16 @@
 
 # pragma mark - Live Query
 
+- (void)configureClient {
+    
+    if (!credentialsLoaded) {
+        [self loadCredentials];
+    }
+    
+    self.client = [[PFLiveQueryClient alloc] initWithServer:self.server applicationId:self.appId clientKey:self.clientKey];
+    
+}
+
 - (void)configureLiveSubscriptions {
     
     // reset subscriptions
@@ -128,7 +140,7 @@
     // queue song is updated
     [self.subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
-        [[ParseRoomManager shared] updateScoreForSong:song];
+        [[ParseRoomManager shared] updateScoreForQueueSong:song];
     }];
     
     // queue song is deleted
@@ -137,13 +149,6 @@
         QueueSong *song = (QueueSong *)object;
     }];
      */
-}
-
-- (void)configureClient {
-    if (!credentialsLoaded) {
-        [self loadCredentials];
-    }
-    self.client = [[PFLiveQueryClient alloc] initWithServer:self.server applicationId:self.appId clientKey:self.clientKey];
 }
 
 - (void)loadCredentials {

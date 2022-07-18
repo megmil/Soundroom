@@ -81,12 +81,12 @@
     }
 }
 
-- (void)updateScoreForSong:(QueueSong *)song {
-    if (song) {
-        NSString *songId = song.objectId;
+- (void)updateScoreForQueueSong:(QueueSong *)queueSong {
+    if (queueSong) {
+        NSString *songId = queueSong.objectId;
         for (NSUInteger i = 0; i < _queue.count; i++) {
             if ([songId isEqualToString:_queue[i].objectId]) {
-                [_queue replaceObjectAtIndex:i withObject:song];
+                [_queue replaceObjectAtIndex:i withObject:queueSong];
                 [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
                 return;
             }

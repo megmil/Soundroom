@@ -121,11 +121,15 @@
 
 - (void)didTapUpvote {
     
-    // user upvotedSongIds and downvotedSongIds
-    [ParseUserManager upvoteQueueSongWithId:_objectId];
+    // update user's upvotedSongIds and downvotedSongIds
+    if (_isUpvoted) {
+        [ParseUserManager unvoteQueueSongWithId:_objectId];
+    } else {
+        [ParseUserManager upvoteQueueSongWithId:_objectId];
+    }
     
-    // queue song score
-    NSNumber *increment;
+    // update queue song score
+    NSNumber *increment = @(0);
     if (_isDownvoted) {
         increment = @(2);
     } else if (_isUpvoted) {
@@ -135,22 +139,19 @@
     }
     [QueueSong incrementScoreForQueueSongWithId:_objectId byAmount:increment];
     
-    // buttons
-    if (_isUpvoted) {
-        self.isNotVoted = YES;
-        return;
-    }
-    self.isUpvoted = YES;
-    
 }
 
 - (void)didTapDownvote {
     
-    // user upvotedSongIds and downvotedSongIds
-    [ParseUserManager downvoteQueueSongWithId:_objectId];
+    // update user's upvotedSongIds and downvotedSongIds
+    if (_isDownvoted) {
+        [ParseUserManager unvoteQueueSongWithId:_objectId];
+    } else {
+        [ParseUserManager downvoteQueueSongWithId:_objectId];
+    }
     
-    // queue song score
-    NSNumber *increment;
+    // update queue song score
+    NSNumber *increment = @(0);
     if (_isDownvoted) {
         increment = @(1);
     } else if (_isUpvoted) {
@@ -159,14 +160,7 @@
         increment = @(-1);
     }
     [QueueSong incrementScoreForQueueSongWithId:_objectId byAmount:increment];
-    
-    // buttons
-    if (_isDownvoted) {
-        self.isNotVoted = YES;
-        return;
-    }
-    self.isDownvoted = YES;
-    
+
 }
 
 - (void)setScore:(NSNumber *)score {
@@ -176,9 +170,10 @@
 - (void)setIsUpvoted:(BOOL)isUpvoted {
     _isUpvoted = isUpvoted;
     if (isUpvoted) {
-        self.isDownvoted = NO;
-        self.isNotVoted = NO;
+        _isDownvoted = NO;
+        _isNotVoted = NO;
         [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up.fill"] forState:UIControlStateNormal];
+        [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down"] forState:UIControlStateNormal];
     } else {
         [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];
     }
@@ -187,8 +182,9 @@
 - (void)setIsDownvoted:(BOOL)isDownvoted {
     _isDownvoted = isDownvoted;
     if (isDownvoted) {
-        self.isUpvoted = NO;
-        self.isNotVoted = NO;
+        _isUpvoted = NO;
+        _isNotVoted = NO;
+        [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];
         [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down.fill"] forState:UIControlStateNormal];
     } else {
         [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down"] forState:UIControlStateNormal];
