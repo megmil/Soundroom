@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "Parse/Parse.h"
-#import "QueueSong.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *hostId;
 @property (nonatomic, strong) NSMutableArray <NSString *> *invitedIds;
 @property (nonatomic, strong) NSMutableArray <NSString *> *memberIds;
-@property (nonatomic, strong) NSMutableArray <QueueSong *> *queue;
 
 + (void)createRoomWithTitle:(NSString *)title completion:(PFBooleanResultBlock _Nullable)completion;
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock _Nullable)completion;

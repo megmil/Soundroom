@@ -6,7 +6,6 @@
 //
 
 #import "SpotifyAPIManager.h"
-#import "Song.h"
 #import "SpotifyAuthClient.h"
 
 static NSString * const baseURLString = @"https://api.spotify.com";
@@ -32,11 +31,21 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 - (void)getSongsWithParameters:(NSDictionary *)parameters
                     completion:(void(^)(NSArray *songs, NSError *error))completion {
-    NSString *urlString = [NSString stringWithFormat:@"v1/search?"];
-    
-    [self GET:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, NSDictionary *response) {
+    [self GET:@"v1/search?" parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, NSDictionary *response) {
         NSMutableArray *songs = [Song songsWithJSONResponse:response];
         completion(songs, nil);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        completion(nil, error);
+    }];
+}
+
+- (void)getSongWithSpotifyId:(NSString *)spotifyId parameters:(NSDictionary *)parameters completion:(void(^)(Song *song, NSError *error))completion {
+    
+    NSString *urlString = [NSString stringWithFormat:@"v1/tracks/%@", spotifyId];
+    
+    [self GET:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        Song *song = [Song songWithJSONResponse:responseObject];
+        completion(song, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
     }];
@@ -55,12 +64,28 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     }];
 }
 
+- (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Song *song, NSError *error))completion {
+    [[SpotifyAuthClient shared] accessToken:^(NSString *accessToken) {
+        if (accessToken) {
+            NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
+            [self getSongWithSpotifyId:spotifyId parameters:parameters completion:completion];
+        } else {
+            completion(nil, nil);
+        }
+    }];
+}
+
 # pragma mark - Helpers
 
 - (NSDictionary *)searchRequestParametersWithToken:(NSString *)token query:(NSString *)query {
     NSDictionary *parameters = @{@"access_token": token,
                                  @"type": @"track",
                                  @"q": query};
+    return parameters;
+}
+
+- (NSDictionary *)getRequestParametersWithToken:(NSString *)token {
+    NSDictionary *parameters = @{@"access_token": token};
     return parameters;
 }
 

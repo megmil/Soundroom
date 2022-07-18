@@ -36,7 +36,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 - [x] Users can add songs to the queue
 - [ ] Users can view details on past sessions
 - [ ] Alerts the user when the queue is empty
-- [ ] Users can leave a room
+- [x] Users can leave a room
 - [ ] Hosts can swipe to remove a song from the queue
 
 #### Stretch goals

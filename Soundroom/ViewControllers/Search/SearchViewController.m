@@ -11,7 +11,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "SpotifyAPIManager.h"
 #import "ParseUserManager.h"
-#import "SearchCell.h"
+#import "SongCell.h"
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
@@ -42,7 +42,7 @@
         self.searchTypeControl.userInteractionEnabled = YES;
     }
     
-    [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:@"SearchCell"];
+    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"SearchCell"];
     
     self.searchBar.delegate = self;
 }
@@ -58,7 +58,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
     
     if ([self isSongSearch]) {
         Song *song = self.songs[indexPath.row];
@@ -66,7 +66,9 @@
         cell.subtitle = song.artist;
         cell.image = song.albumImage;
         cell.objectId = song.spotifyId;
-        cell.isUser = NO;
+        cell.isAddSongCell = YES;
+        cell.isUserCell = NO;
+        cell.isQueueSongCell = NO;
         return cell;
     }
     
@@ -75,7 +77,9 @@
     cell.subtitle = [user valueForKey:@"username"];
     cell.image = [UIImage imageNamed:@"check"]; // TODO: avatar images
     cell.objectId = user.objectId;
-    cell.isUser = YES;
+    cell.isAddSongCell = NO;
+    cell.isUserCell = YES;
+    cell.isQueueSongCell = NO;
     return cell;
 }
 

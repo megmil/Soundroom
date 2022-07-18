@@ -13,6 +13,7 @@
 @implementation ParseRoomManager {
     Room *_currentRoom;
     NSString *_hostId;
+    NSMutableArray <QueueSong *> *_queue;
 }
 
 + (instancetype)shared {
@@ -50,19 +51,38 @@
 
 - (void)removeAllUsersWithCompletion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
-        [_currentRoom removeObjectForKey:@"invitedIds"];
-        [_currentRoom removeObjectForKey:@"memberIds"];
-        [_currentRoom saveInBackgroundWithBlock:completion];
+        [QueueSong deleteAllQueueSongsWithRoomId:_currentRoomId];
+        [_currentRoom deleteEventually];
     }
 }
 
 # pragma mark - Queue
 
-// TODO: match others
 - (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
-        [QueueSong requestSongWithSpotifyId:spotifyId roomId:self.currentRoomId completion:completion];
+        [QueueSong requestSongWithSpotifyId:spotifyId roomId:_currentRoomId completion:completion];
     }
+}
+
+- (void)refreshQueue {
+    PFQuery *query = [self queueQuery];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            self->_queue = (NSMutableArray <QueueSong *> *)objects;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
+        }
+    }];
+}
+
+- (PFQuery *)queueQuery {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query whereKey:@"roomId" equalTo:_currentRoomId];
+    [query orderByDescending:@"score"];
+    return query;
+}
+
+- (NSMutableArray <QueueSong *> *)queue {
+    return _queue;
 }
 
 # pragma mark - Room Data
@@ -85,6 +105,7 @@
     _currentRoomId = nil;
     _currentRoom = nil;
     _hostId = nil;
+    [_queue removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerLeftRoomNotification object:self];
 }
 
@@ -96,8 +117,10 @@
     
     [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
         if (room) {
-            _currentRoom = (Room *)room;
-            _hostId = _currentRoom.hostId;
+            self->_currentRoom = (Room *)room;
+            self->_hostId = self->_currentRoom.hostId;
+            self->_currentRoomId = self->_currentRoom.objectId;
+            self->_queue = [NSMutableArray array];
             [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerJoinedRoomNotification object:self];
         }
     }];

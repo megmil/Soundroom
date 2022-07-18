@@ -9,6 +9,8 @@
 #import "Parse/Parse.h"
 #import "SpotifyAuthClient.h"
 #import "LoginViewController.h"
+#import "QueueSong.h"
+#import "Room.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +20,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    [QueueSong registerSubclass];
+    [Room registerSubclass];
     
     ParseClientConfiguration *configuration = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
