@@ -44,8 +44,7 @@
 - (void)loadRoom {
     self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
     [self configureLiveSubscriptions];
-    [QueueSong getCurrentQueueSongs]; // get songs added to queue while live query was off
-    [self.tableView reloadData];
+    [[ParseRoomManager shared] refreshQueue];
 }
 
 - (void)refreshRoom {
@@ -134,13 +133,13 @@
     // new song added to queue
     [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
-        [[ParseRoomManager shared] updateQueueWithSong:song];
+        [[ParseRoomManager shared] refreshQueue];
     }];
     
     // queue song is updated
     [self.subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
-        [[ParseRoomManager shared] updateScoreForQueueSong:song];
+        [[ParseRoomManager shared] refreshQueue];
     }];
     
     // queue song is deleted
@@ -163,6 +162,7 @@
 - (PFQuery *)queueSongsQuery {
     PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
     [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]]; // TODO: should update room id
+    [query orderByAscending:@"score"];
     return query;
 }
 

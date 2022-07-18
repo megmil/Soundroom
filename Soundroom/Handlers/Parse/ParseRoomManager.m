@@ -64,34 +64,21 @@
     }
 }
 
-- (void)updateQueueWithSongs:(NSArray<QueueSong *> *)songs {
-    
-    if (!songs || songs.count == 0) {
-        return;
-    }
-    
-    [_queue addObjectsFromArray:songs];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
-}
-
-- (void)updateQueueWithSong:(QueueSong *)song {
-    if (song) {
-        [_queue addObject:song];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
-    }
-}
-
-- (void)updateScoreForQueueSong:(QueueSong *)queueSong {
-    if (queueSong) {
-        NSString *songId = queueSong.objectId;
-        for (NSUInteger i = 0; i < _queue.count; i++) {
-            if ([songId isEqualToString:_queue[i].objectId]) {
-                [_queue replaceObjectAtIndex:i withObject:queueSong];
-                [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
-                return;
-            }
+- (void)refreshQueue {
+    PFQuery *query = [self queueQuery];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            self->_queue = (NSMutableArray <QueueSong *> *)objects;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
         }
-    }
+    }];
+}
+
+- (PFQuery *)queueQuery {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query whereKey:@"roomId" equalTo:_currentRoomId];
+    [query orderByDescending:@"score"];
+    return query;
 }
 
 - (NSMutableArray <QueueSong *> *)queue {
