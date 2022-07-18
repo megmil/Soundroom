@@ -142,12 +142,7 @@
         [[ParseRoomManager shared] refreshQueue];
     }];
     
-    // queue song is deleted
-    /*
-    [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-    }];
-     */
+    // TODO: queue song is deleted
 }
 
 - (void)loadCredentials {

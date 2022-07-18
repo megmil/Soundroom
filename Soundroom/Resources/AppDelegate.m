@@ -21,9 +21,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    // model configuration
     [QueueSong registerSubclass];
     [Room registerSubclass];
     
+    // parse configuration
     ParseClientConfiguration *configuration = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
         NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:path];
@@ -31,7 +33,6 @@
         configuration.clientKey = [dictionary objectForKey:@"parse-client-key"];
         configuration.server = @"https://parseapi.back4app.com";
     }];
-
     [Parse initializeWithConfiguration:configuration];
     
     return YES;
