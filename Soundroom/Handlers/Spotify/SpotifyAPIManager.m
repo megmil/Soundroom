@@ -54,7 +54,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 # pragma mark - Public
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
-    [[SpotifyRemoteManager shared] accessTokenWithCompletion:^(NSString *accessToken) {
+    [[SpotifyRemoteManager shared] accessToken:^(NSString *accessToken) {
         if (accessToken) {
             NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
             [self getSongsWithParameters:parameters completion:completion];
@@ -65,7 +65,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 }
 
 - (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Song *song, NSError *error))completion {
-    [[SpotifyRemoteManager shared] accessTokenWithCompletion:^(NSString *accessToken) {
+    [[SpotifyRemoteManager shared] accessToken:^(NSString *accessToken) {
         if (accessToken) {
             NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
             [self getSongWithSpotifyId:spotifyId parameters:parameters completion:completion];

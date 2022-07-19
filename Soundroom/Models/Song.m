@@ -26,10 +26,12 @@
 }
 
 - (instancetype)initWithJSONResponse:(NSDictionary *)response {
+    
     self = [super init];
     
     if (self) {
         self.spotifyId = response[@"id"];
+        self.spotifyURI = response[@"uri"];
         self.title = response[@"name"];
         
         // format artists into one string
@@ -56,6 +58,7 @@
     }
     
     return self;
+    
 }
 
 @end

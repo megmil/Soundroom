@@ -51,12 +51,11 @@
 
 # pragma mark - Public
 
-- (void)accessTokenWithCompletion:(void(^)(NSString *accessToken))completion {
-    if ([self isAppRemoteConnected]) {
-        completion(_appRemote.connectionParameters.accessToken);
-    } else {
-        completion(nil);
+- (NSString *)accessToken {
+    if (_sessionManager.session) {
+        return _sessionManager.session.accessToken;
     }
+    return nil;
 }
 
 - (void)authorizeSession {
@@ -70,7 +69,7 @@
 }
 
 - (BOOL)isAppRemoteConnected {
-    return [_appRemote isConnected];
+    return _appRemote.isConnected;
 }
 
 - (void)pausePlayback {
@@ -80,11 +79,12 @@
 }
 
 - (void)playSongWithSpotifyURI:(NSString *)spotifyURI {
-    if ([_appRemote isConnected]) {
+    if (_appRemote.isConnected) {
         [_appRemote.playerAPI play:spotifyURI callback:nil];
         return;
     }
     [_appRemote authorizeAndPlayURI:spotifyURI];
+    [_appRemote connect];
 }
 
 

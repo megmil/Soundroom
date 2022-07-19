@@ -93,6 +93,7 @@
             cell.subtitle = song.artist;
             cell.image = song.albumImage;
             cell.spotifyId = song.spotifyId;
+            cell.spotifyURI = song.spotifyURI;
         }
     }];
     
@@ -114,7 +115,7 @@
 
 - (IBAction)didTapPlay:(id)sender {
     self.currentSong = self.queue.firstObject;
-    [[SpotifyRemoteManager shared] playSongWithSpotifyURI:self.currentSong.spotifyId];
+    [[SpotifyRemoteManager shared] playSongWithSpotifyURI:self.currentSong.spotifyURI];
 }
 
 # pragma mark - Live Query

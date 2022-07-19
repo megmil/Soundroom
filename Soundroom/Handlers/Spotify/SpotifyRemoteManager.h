@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
 - (void)pausePlayback;
 - (void)signOut;
-- (void)accessTokenWithCompletion:(void(^)(NSString * _Nullable accessToken))completion;
+- (NSString *)accessToken;
 - (void)playSongWithSpotifyURI:(NSString *)spotifyURI;
 
 @end

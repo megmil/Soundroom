@@ -66,6 +66,8 @@
         cell.subtitle = song.artist;
         cell.image = song.albumImage;
         cell.objectId = song.spotifyId;
+        cell.spotifyId = song.spotifyId;
+        cell.spotifyURI = song.spotifyURI;
         cell.isAddSongCell = YES;
         cell.isUserCell = NO;
         cell.isQueueSongCell = NO;

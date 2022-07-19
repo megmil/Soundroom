@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
 - (void)removeAllUsersWithCompletion:(PFBooleanResultBlock _Nullable)completion;
 
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock _Nullable)completion;
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId spotifyURI:(NSString *)spotifyURI completion:(PFBooleanResultBlock _Nullable)completion;
 - (NSMutableArray <QueueSong *> *)queue;
 - (void)refreshQueue;
 

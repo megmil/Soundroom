@@ -105,7 +105,7 @@
 }
 
 - (void)addSong {
-    [[ParseRoomManager shared] requestSongWithSpotifyId:_objectId completion:nil];
+    [[ParseRoomManager shared] requestSongWithSpotifyId:_objectId spotifyURI:_spotifyURI completion:nil];
 }
 
 - (void)addUser {

@@ -58,9 +58,9 @@
 
 # pragma mark - Queue
 
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId completion:(PFBooleanResultBlock)completion {
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId spotifyURI:(NSString *)spotifyURI completion:(PFBooleanResultBlock)completion {
     if (_currentRoom) {
-        [QueueSong requestSongWithSpotifyId:spotifyId roomId:_currentRoomId completion:completion];
+        [QueueSong requestSongWithSpotifyId:spotifyId spotifyURI:spotifyURI roomId:_currentRoomId completion:completion];
     }
 }
 

@@ -13,16 +13,18 @@
 @dynamic objectId;
 @dynamic roomId;
 @dynamic spotifyId;
+@dynamic spotifyURI;
 @dynamic score;
 
 + (nonnull NSString *)parseClassName {
     return @"QueueSong";
 }
 
-+ (void)requestSongWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId completion:(PFBooleanResultBlock)completion {
++ (void)requestSongWithSpotifyId:(NSString *)spotifyId spotifyURI:(NSString *)spotifyURI roomId:(NSString *)roomId completion:(PFBooleanResultBlock)completion {
     QueueSong *newSong = [QueueSong new];
     newSong.roomId = roomId;
     newSong.spotifyId = spotifyId;
+    newSong.spotifyURI = spotifyURI;
     newSong.score = @(0);
     [newSong saveInBackgroundWithBlock:completion];
 }

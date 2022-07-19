@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Song : NSObject
 
 @property (nonatomic, strong) NSString *spotifyId;
+@property (nonatomic, strong) NSString *spotifyURI;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
 @property (nonatomic, strong) NSString *albumTitle;
