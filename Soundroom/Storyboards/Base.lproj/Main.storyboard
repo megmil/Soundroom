@@ -189,9 +189,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="wnx-Ap-gx2"/>
                     <connections>
+                        <outlet property="currentSongAlbumImageView" destination="z8N-s0-9jf" id="93Q-XB-Tre"/>
+                        <outlet property="currentSongArtistLabel" destination="sHX-HO-3zw" id="7bJ-Ot-O7P"/>
+                        <outlet property="currentSongTitleLabel" destination="eDn-vJ-DT5" id="UGy-Ig-ZKk"/>
                         <outlet property="playButton" destination="TdI-DB-BCd" id="GFF-xb-Fak"/>
+                        <outlet property="roomTitleLabel" destination="gE4-oq-sK0" id="Csb-UD-zBf"/>
                         <outlet property="tableView" destination="74f-57-bil" id="QRj-cf-ldM"/>
-                        <outlet property="titleLabel" destination="gE4-oq-sK0" id="Csb-UD-zBf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lok-fq-ngw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

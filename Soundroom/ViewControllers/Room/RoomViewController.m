@@ -17,7 +17,11 @@
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *roomTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currentSongArtistLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *currentSongAlbumImageView;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 
@@ -39,10 +43,44 @@
     [self configureNotificationObservers];
 }
 
+# pragma mark - Queue
+
+- (void)refreshQueue {
+    self.queue = [[ParseRoomManager shared] queue];
+}
+
+- (void)startPlayingQueue {
+    if (self.queue.count) {
+        
+        // lock first song (remove roomId)
+            // should still know what song is currently playing
+            // CurrentSong model?
+        // play song
+        // delete song
+        
+        // get first song in queue
+        self.currentSong = self.queue.firstObject;
+        
+        // TODO: delete QueueSong from database
+        
+    }
+}
+
+- (void)getQueue {
+    NSMutableArray <QueueSong *> *fullQueue = [[ParseRoomManager shared] queue];
+    if (fullQueue.count) {
+        self.currentSong = fullQueue.firstObject;
+        if (fullQueue.count > 1) {
+            [fullQueue removeObjectAtIndex:0];
+            self.queue = fullQueue;
+        }
+    }
+}
+
 # pragma mark - Room Status
 
 - (void)loadRoom {
-    self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
+    self.roomTitleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
     [self configureLiveSubscriptions];
     [[ParseRoomManager shared] refreshQueue];
 }
@@ -50,8 +88,7 @@
 - (void)refreshRoom {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self configureLiveSubscriptions];
-        self.queue = [[ParseRoomManager shared] queue];
-        [self.tableView reloadData];
+        [self refreshQueue];
     });
 }
 
@@ -148,6 +185,24 @@
     // TODO: queue song is deleted
 }
 
+# pragma mark - Setters
+
+- (void)setQueue:(NSMutableArray<QueueSong *> *)queue {
+    _queue = queue;
+    [self.tableView reloadData];
+}
+
+- (void)setCurrentSong:(QueueSong *)currentSong {
+    _currentSong = currentSong;
+    [[SpotifyAPIManager shared] getSongWithSpotifyId:currentSong.spotifyId completion:^(Song *song, NSError *error) {
+        if (song) {
+            self.currentSongTitleLabel.text = song.title;
+            self.currentSongArtistLabel.text = song.artist;
+            self.currentSongAlbumImageView.image = song.albumImage;
+        }
+    }];
+}
+
 # pragma mark - Helpers
 
 - (void)configureTableView {
@@ -160,7 +215,7 @@
     
     // Parse notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshQueue) name:ParseRoomManagerUpdatedQueueNotification object:nil];
     
     // Spotify notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
