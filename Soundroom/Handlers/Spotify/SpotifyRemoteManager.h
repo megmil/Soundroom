@@ -18,17 +18,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) SPTConfiguration *configuration;
 @property (strong, nonatomic) SPTSessionManager *sessionManager;
 @property (strong, nonatomic) SPTAppRemote *appRemote;
-@property (strong, nonatomic) NSString *accessToken;
 
 + (instancetype)shared;
 
 - (void)authorizeSession;
 - (void)applicationWillResignActive;
 - (void)applicationDidBecomeActive;
-- (BOOL)isConnected;
+- (BOOL)isAppRemoteConnected;
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
 - (void)pausePlayback;
 - (void)signOut;
+- (void)accessTokenWithCompletion:(void(^)(NSString * _Nullable accessToken))completion;
 
 @end
 

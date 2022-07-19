@@ -7,7 +7,6 @@
 
 #import "AppDelegate.h"
 #import "Parse/Parse.h"
-#import "SpotifyAuthClient.h"
 #import "LoginViewController.h"
 #import "QueueSong.h"
 #import "SpotifyRemoteManager.h"

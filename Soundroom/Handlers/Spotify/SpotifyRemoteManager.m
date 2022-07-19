@@ -51,6 +51,14 @@
 
 # pragma mark - Public
 
+- (void)accessTokenWithCompletion:(void(^)(NSString *accessToken))completion {
+    if ([self isAppRemoteConnected]) {
+        completion(_appRemote.connectionParameters.accessToken);
+    } else {
+        completion(nil);
+    }
+}
+
 - (void)authorizeSession {
     SPTScope requestedScope = SPTAppRemoteControlScope;
     [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
@@ -61,7 +69,7 @@
     [_appRemote disconnect];
 }
 
-- (BOOL)isConnected {
+- (BOOL)isAppRemoteConnected {
     return [_appRemote isConnected];
 }
 
@@ -76,7 +84,6 @@
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didInitiateSession:(nonnull SPTSession *)session {
     _appRemote.connectionParameters.accessToken = session.accessToken;
-    _accessToken = session.accessToken;
     [_appRemote connect];
 }
 

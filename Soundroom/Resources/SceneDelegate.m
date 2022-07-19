@@ -6,7 +6,6 @@
 //
 
 #import "SceneDelegate.h"
-#import "SpotifyAuthClient.h"
 #import "LoginViewController.h"
 #import "Parse/Parse.h"
 #import "SpotifyRemoteManager.h"
