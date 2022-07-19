@@ -12,16 +12,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SpotifyRemoteManager : NSObject <SPTSessionManagerDelegate, SPTAppRemoteDelegate>
+@interface SpotifyRemoteManager : NSObject <SPTSessionManagerDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate>
 
 @property (strong, nonatomic) SPTConfiguration *configuration;
 @property (strong, nonatomic) SPTSessionManager *sessionManager;
 @property (strong, nonatomic) SPTAppRemote *appRemote;
+@property (strong, nonatomic) NSString *accessToken;
 
 + (instancetype)shared;
 
 - (void)authorizeSession;
-- (void)retrieveCodeFromUrl:(NSURL *)url withOptions:(UISceneOpenURLOptions *)options;
+- (void)applicationWillResignActive;
+- (void)applicationDidBecomeActive;
+- (BOOL)isConnected;
 
 @end
 

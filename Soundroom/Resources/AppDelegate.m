@@ -44,4 +44,12 @@
     return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
 }
 
+- (void)applicationWillResignActive:(UIApplication *)application {
+    [[SpotifyRemoteManager shared] applicationWillResignActive];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [[SpotifyRemoteManager shared] applicationDidBecomeActive];
+}
+
 @end

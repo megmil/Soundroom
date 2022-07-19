@@ -34,7 +34,7 @@
     self.soundroomAccountView.delegate = self;
     
     self.spotifyAccountView.isUserAccountView = NO;
-    self.spotifyAccountView.isLoggedIn = [[SpotifyAuthClient shared] isSignedIn];
+    self.spotifyAccountView.isLoggedIn = [[SpotifyRemoteManager shared] isConnected];
     self.spotifyAccountView.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:kOAuth2SignedInNotification object:nil];

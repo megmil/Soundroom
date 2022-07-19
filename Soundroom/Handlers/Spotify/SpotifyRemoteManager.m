@@ -6,7 +6,6 @@
 //
 
 #import "SpotifyRemoteManager.h"
-@import STKWebKitViewController;
 
 @implementation SpotifyRemoteManager
 
@@ -31,19 +30,27 @@
         NSString *redirectURLString = credentials[@"spotify-redirect-url"];
         NSURL *redirectURL = [NSURL URLWithString:redirectURLString];
         
+        NSString *tokenSwapURLString = credentials[@"spotify-token-swap-url"];
+        NSString *tokenRefreshURLString = credentials[@"spotify-token-refresh-url"];
+        
         _configuration = [[SPTConfiguration alloc] initWithClientID:clientId redirectURL:redirectURL];
-        _configuration.tokenSwapURL = credentials[@"spotify-token-swap-url"];
-        _configuration.tokenRefreshURL = credentials[@"spotify-token-refresh-url"];
+        _configuration.tokenSwapURL = [NSURL URLWithString:tokenSwapURLString];
+        _configuration.tokenRefreshURL = [NSURL URLWithString:tokenRefreshURLString];
         _configuration.playURI = nil;
         
         _sessionManager = [[SPTSessionManager alloc] initWithConfiguration:_configuration delegate:self];
         
         _appRemote = [[SPTAppRemote alloc] initWithConfiguration:_configuration logLevel:SPTAppRemoteLogLevelDebug]; // TODO: change from debug
+        _appRemote.delegate = self;
         
     }
     
     return self;
     
+}
+
+- (BOOL)isConnected {
+    return [_appRemote isConnected];
 }
 
 - (void)authorizeSession {
@@ -56,12 +63,36 @@
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didInitiateSession:(nonnull SPTSession *)session {
     _appRemote.connectionParameters.accessToken = session.accessToken;
+    _accessToken = session.accessToken;
     [_appRemote connect];
 }
 
-- (void)retrieveCodeFromUrl:(NSURL *)url withOptions:(UISceneOpenURLOptions *)options {
-    if (url) {
-        [_sessionManager application:[UIApplication sharedApplication] openURL:url options:[NSMutableDictionary dictionary]];
+- (void)appRemote:(nonnull SPTAppRemote *)appRemote didDisconnectWithError:(nullable NSError *)error {
+    //
+}
+
+- (void)appRemote:(nonnull SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error {
+    //
+}
+
+- (void)appRemoteDidEstablishConnection:(nonnull SPTAppRemote *)appRemote {
+    _appRemote.playerAPI.delegate = self;
+    [_appRemote.playerAPI subscribeToPlayerState:^(id result, NSError *error) {
+        if (error) {
+            NSLog(@"error: %@", error.localizedDescription);
+        }
+    }];
+}
+
+- (void)applicationDidBecomeActive {
+    if (_appRemote.connectionParameters.accessToken) {
+        [_appRemote connect];
+    }
+}
+
+- (void)applicationWillResignActive {
+    if (_appRemote.isConnected) {
+        [_appRemote disconnect];
     }
 }
 
