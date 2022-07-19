@@ -6,7 +6,7 @@
 //
 
 #import "SpotifyAPIManager.h"
-#import "SpotifyAuthClient.h"
+#import "SpotifyRemoteManager.h"
 
 static NSString * const baseURLString = @"https://api.spotify.com";
 
@@ -31,8 +31,8 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 - (void)getSongsWithParameters:(NSDictionary *)parameters
                     completion:(void(^)(NSArray *songs, NSError *error))completion {
-    [self GET:@"v1/search?" parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, NSDictionary *response) {
-        NSMutableArray *songs = [Song songsWithJSONResponse:response];
+    [self GET:@"v1/search?" parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSMutableArray *songs = [Song songsWithJSONResponse:responseObject];
         completion(songs, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
@@ -43,7 +43,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     
     NSString *urlString = [NSString stringWithFormat:@"v1/tracks/%@", spotifyId];
     
-    [self GET:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:urlString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         Song *song = [Song songWithJSONResponse:responseObject];
         completion(song, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -54,7 +54,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 # pragma mark - Public
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
-    [[SpotifyAuthClient shared] accessToken:^(NSString *accessToken) {
+    [[SpotifyRemoteManager shared] accessTokenWithCompletion:^(NSString *accessToken) {
         if (accessToken) {
             NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
             [self getSongsWithParameters:parameters completion:completion];
@@ -65,7 +65,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 }
 
 - (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Song *song, NSError *error))completion {
-    [[SpotifyAuthClient shared] accessToken:^(NSString *accessToken) {
+    [[SpotifyRemoteManager shared] accessTokenWithCompletion:^(NSString *accessToken) {
         if (accessToken) {
             NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
             [self getSongWithSpotifyId:spotifyId parameters:parameters completion:completion];

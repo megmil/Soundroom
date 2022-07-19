@@ -6,9 +6,9 @@
 //
 
 #import "SceneDelegate.h"
-#import "SpotifyAuthClient.h"
 #import "LoginViewController.h"
 #import "Parse/Parse.h"
+#import "SpotifyRemoteManager.h"
 
 @interface SceneDelegate ()
 
@@ -17,16 +17,18 @@
 @implementation SceneDelegate
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+    
+    // if there is no current user, show the login view
     if (![PFUser currentUser]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         self.window.rootViewController = userLoginVC;
     }
+    
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
-    NSURL *url = URLContexts.allObjects.firstObject.URL;
-    [[SpotifyAuthClient shared] retrieveCodeFromUrl:url];
+    [[SpotifyRemoteManager shared] openURLContexts:URLContexts];
 }
 
 @end

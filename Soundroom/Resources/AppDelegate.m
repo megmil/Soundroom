@@ -7,9 +7,9 @@
 
 #import "AppDelegate.h"
 #import "Parse/Parse.h"
-#import "SpotifyAuthClient.h"
 #import "LoginViewController.h"
 #import "QueueSong.h"
+#import "SpotifyRemoteManager.h"
 #import "Room.h"
 
 @interface AppDelegate ()
@@ -42,6 +42,14 @@
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
     return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    [[SpotifyRemoteManager shared] applicationWillResignActive];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [[SpotifyRemoteManager shared] applicationDidBecomeActive];
 }
 
 @end

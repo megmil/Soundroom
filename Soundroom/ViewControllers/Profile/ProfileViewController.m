@@ -8,7 +8,7 @@
 #import "ProfileViewController.h"
 #import "Parse/Parse.h"
 #import "AccountView.h"
-#import "SpotifyAuthClient.h"
+#import "SpotifyRemoteManager.h"
 #import "ParseUserManager.h"
 #import "SceneDelegate.h"
 #import "LoginViewController.h"
@@ -33,19 +33,19 @@
     self.soundroomAccountView.delegate = self;
     
     self.spotifyAccountView.isUserAccountView = NO;
-    self.spotifyAccountView.isLoggedIn = [[SpotifyAuthClient shared] isSignedIn];
+    self.spotifyAccountView.isLoggedIn = [[SpotifyRemoteManager shared] isAppRemoteConnected];
     self.spotifyAccountView.delegate = self;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:kOAuth2SignedInNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:kOAuth2SignedOutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifyRemoteManagerConnectedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifyRemoteManagerDisconnectedNotification object:nil];
 }
 
 - (void)didTapSpotifyLogin {
-    [[SpotifyAuthClient shared] authenticateInViewController:self];
+    [[SpotifyRemoteManager shared] authorizeSession];
 }
 
 - (void)didTapSpotifyLogout {
-    [[SpotifyAuthClient shared] signOut];
+    [[SpotifyRemoteManager shared] signOut];
 }
 
 - (void)didTapUserLogout {
@@ -65,6 +65,7 @@
 
 - (void)toggleSpotifyLoginStatus {
     self.spotifyAccountView.isLoggedIn = !self.spotifyAccountView.isLoggedIn;
+    //[[SpotifyRemoteManager shared] pausePlayback];
 }
 
 @end
