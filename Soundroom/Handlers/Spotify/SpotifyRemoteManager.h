@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pausePlayback;
 - (void)signOut;
 - (void)accessTokenWithCompletion:(void(^)(NSString * _Nullable accessToken))completion;
+- (void)playSongWithSpotifyURI:(NSString *)spotifyURI;
 
 @end
 

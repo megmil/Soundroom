@@ -20,8 +20,10 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) NSMutableArray <QueueSong *> *queue;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
+
+@property (strong, nonatomic) NSMutableArray <QueueSong *> *queue;
+@property (strong, nonatomic) QueueSong *currentSong;
 
 @property (strong, nonatomic) PFLiveQueryClient *client;
 @property (strong, nonatomic) PFLiveQuerySubscription *subscription;
@@ -32,27 +34,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
-    
+    [self configureTableView];
     [self configureLiveQueryClient];
     [self authenticateSpotifySession];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifyRemoteManagerConnectedNotification object:nil];
+    [self configureNotificationObservers];
 }
 
-- (void)authenticateSpotifySession {
-    
-    if ([[SpotifyRemoteManager shared] isAppRemoteConnected]) {
-        return;
-    }
-    
-    [[SpotifyRemoteManager shared] authorizeSession];
-}
+# pragma mark - Room Status
 
 - (void)loadRoom {
     self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
@@ -76,14 +64,6 @@
     [[ParseRoomManager shared] removeUserWithId:[ParseUserManager currentUserId] completion:nil];
 }
 
-- (BOOL)isCurrentUserHost {
-    NSString *currentUserId = [ParseUserManager currentUserId];
-    NSString *hostId = [[ParseRoomManager shared] currentHostId];
-    if (currentUserId && hostId) {
-        return [currentUserId isEqualToString:hostId];
-    }
-    return NO;
-}
 
 # pragma mark - Table View
 
@@ -123,16 +103,27 @@
     return 66.f;
 }
 
+# pragma mark - Spotify
+
+- (void)authenticateSpotifySession {
+    if ([[SpotifyRemoteManager shared] isAppRemoteConnected]) {
+        return;
+    }
+    [[SpotifyRemoteManager shared] authorizeSession];
+}
+
+- (IBAction)didTapPlay:(id)sender {
+    self.currentSong = self.queue.firstObject;
+    [[SpotifyRemoteManager shared] playSongWithSpotifyURI:self.currentSong.spotifyId];
+}
+
 # pragma mark - Live Query
 
 - (void)configureLiveQueryClient {
-    
     if (!credentialsLoaded) {
-        [self loadCredentials];
+        [self loadParseCredentials];
     }
-    
     self.client = [[PFLiveQueryClient alloc] initWithServer:self.server applicationId:self.appId clientKey:self.clientKey];
-    
 }
 
 - (void)configureLiveSubscriptions {
@@ -158,7 +149,21 @@
     // TODO: queue song is deleted
 }
 
-- (void)loadCredentials {
+# pragma mark - Helpers
+
+- (void)configureTableView {
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
+}
+
+- (void)configureNotificationObservers {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifyRemoteManagerConnectedNotification object:nil];
+}
+
+- (void)loadParseCredentials {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
     NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
     self.server = [credentials objectForKey:@"parse-live-server"];
@@ -172,6 +177,15 @@
     [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]]; // TODO: should update room id
     [query orderByAscending:@"score"];
     return query;
+}
+
+- (BOOL)isCurrentUserHost {
+    NSString *currentUserId = [ParseUserManager currentUserId];
+    NSString *hostId = [[ParseRoomManager shared] currentHostId];
+    if (currentUserId && hostId) {
+        return [currentUserId isEqualToString:hostId];
+    }
+    return NO;
 }
 
 @end

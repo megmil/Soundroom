@@ -79,6 +79,14 @@
     }
 }
 
+- (void)playSongWithSpotifyURI:(NSString *)spotifyURI {
+    if ([_appRemote isConnected]) {
+        [_appRemote.playerAPI play:spotifyURI callback:nil];
+        return;
+    }
+    [_appRemote authorizeAndPlayURI:spotifyURI];
+}
+
 
 # pragma mark - SPTSessionManagerDelegate
 
