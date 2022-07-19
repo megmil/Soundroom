@@ -8,7 +8,8 @@
 #import <Foundation/Foundation.h>
 #import "SpotifyiOS/SpotifyiOS.h"
 
-#define kOAuth2SignedInNotification @"OAuth2SignedInNotification"
+#define SpotifyRemoteManagerConnectedNotification @"SpotifyRemoteManagerConnectedNotification"
+#define SpotifyRemoteManagerDisconnectedNotification @"SpotifyRemoteManagerDisconnectedNotification"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)applicationWillResignActive;
 - (void)applicationDidBecomeActive;
 - (BOOL)isConnected;
+- (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
+- (void)pausePlayback;
+- (void)signOut;
 
 @end
 
