@@ -6,7 +6,7 @@
 //
 
 #import "SpotifyAPIManager.h"
-#import "SpotifyRemoteManager.h"
+#import "SpotifySessionManager.h"
 
 static NSString * const baseURLString = @"https://api.spotify.com";
 
@@ -55,7 +55,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
     
-    NSString *accessToken = [[SpotifyRemoteManager shared] accessToken]; // nil if current session is nil
+    NSString *accessToken = [[SpotifySessionManager shared] accessToken]; // nil if current session is nil
     
     if (accessToken) {
         NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
@@ -69,7 +69,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 - (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Song *song, NSError *error))completion {
     
-    NSString *accessToken = [[SpotifyRemoteManager shared] accessToken]; // nil if current session is nil
+    NSString *accessToken = [[SpotifySessionManager shared] accessToken]; // nil if current session is nil
     
     if (accessToken) {
         NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];

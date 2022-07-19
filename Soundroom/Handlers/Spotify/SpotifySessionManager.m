@@ -5,9 +5,9 @@
 //  Created by Megan Miller on 7/18/22.
 //
 
-#import "SpotifyRemoteManager.h"
+#import "SpotifySessionManager.h"
 
-@implementation SpotifyRemoteManager
+@implementation SpotifySessionManager
 
 + (instancetype)shared {
     static dispatch_once_t once;
@@ -36,7 +36,7 @@
         _configuration = [[SPTConfiguration alloc] initWithClientID:clientId redirectURL:redirectURL];
         _configuration.tokenSwapURL = [NSURL URLWithString:tokenSwapURLString];
         _configuration.tokenRefreshURL = [NSURL URLWithString:tokenRefreshURLString];
-        _configuration.playURI = @""; // continues playing the most recent song (must be playing song to connect)
+        _configuration.playURI = nil; // continues playing the most recent song (must be playing song to connect)
         
         _sessionManager = [[SPTSessionManager alloc] initWithConfiguration:_configuration delegate:self];
         
@@ -49,30 +49,27 @@
     
 }
 
-# pragma mark - Public
+# pragma mark - Session Manager
 
 - (void)authorizeSession {
     SPTScope requestedScope = SPTAppRemoteControlScope;
     [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
 }
 
-- (NSString *)accessToken {
-    if ([self isAuthorized]) {
-        return _sessionManager.session.accessToken;
-    }
-    return nil;
+- (void)signOut {
+    _sessionManager.session = nil;
+    [_appRemote disconnect];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifySessionManagerDeauthorizedNotificaton object:self];
 }
 
-- (BOOL)isAuthorized {
+- (BOOL)isSessionAuthorized {
     return _sessionManager.session;
 }
 
-- (BOOL)isAppRemoteConnected {
-    return _appRemote.isConnected;
-}
+# pragma mark - App Remote
 
 - (void)playSongWithSpotifyURI:(NSString *)spotifyURI {
-    if ([self isAppRemoteConnected]) {
+    if (_appRemote.isConnected) {
         [_appRemote.playerAPI play:spotifyURI callback:nil];
         return;
     }
@@ -80,22 +77,16 @@
     [_appRemote connect];
 }
 
-
 # pragma mark - SPTSessionManagerDelegate
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didInitiateSession:(nonnull SPTSession *)session {
     _appRemote.connectionParameters.accessToken = session.accessToken;
-    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifyRemoteManagerAuthorizedNotification object:self];
+    _accessToken = session.accessToken;
+    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifySessionManagerAuthorizedNotificaton object:self];
 }
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didFailWithError:(nonnull NSError *)error {
     NSLog(@"fail: %@", error.localizedDescription);
-}
-
-- (void)signOut {
-    _sessionManager.session = nil;
-    [_appRemote disconnect];
-    // TODO: notification
 }
 
 # pragma mark - SPTAppRemoteDelegate
@@ -107,12 +98,11 @@
             NSLog(@"subscription error: %@", error.localizedDescription);
         }
     }];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifyRemoteManagerConnectedNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifySessionManagerRemoteConnectedNotificaton object:self];
 }
 
 - (void)appRemote:(nonnull SPTAppRemote *)appRemote didDisconnectWithError:(nullable NSError *)error {
     NSLog(@"disconnect: %@", error.localizedDescription);
-    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifyRemoteManagerDisconnectedNotification object:self];
 }
 
 - (void)appRemote:(nonnull SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error {
@@ -139,7 +129,7 @@
 }
 
 - (void)applicationWillResignActive {
-    if ([self isAppRemoteConnected]) {
+    if (_appRemote.isConnected) {
         [_appRemote disconnect];
     }
 }

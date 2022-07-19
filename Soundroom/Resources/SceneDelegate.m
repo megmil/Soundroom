@@ -28,7 +28,7 @@
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
-    [[SpotifyRemoteManager shared] openURLContexts:URLContexts];
+    [[SpotifySessionManager shared] openURLContexts:URLContexts];
 }
 
 @end

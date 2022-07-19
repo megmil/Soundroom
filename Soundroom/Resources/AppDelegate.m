@@ -45,11 +45,11 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [[SpotifyRemoteManager shared] applicationWillResignActive];
+    [[SpotifySessionManager shared] applicationWillResignActive];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [[SpotifyRemoteManager shared] applicationDidBecomeActive];
+    [[SpotifySessionManager shared] applicationDidBecomeActive];
 }
 
 @end

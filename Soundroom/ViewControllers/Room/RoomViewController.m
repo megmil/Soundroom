@@ -8,7 +8,7 @@
 #import "RoomViewController.h"
 #import "LobbyViewController.h"
 #import "SpotifyAPIManager.h"
-#import "SpotifyRemoteManager.h"
+#import "SpotifySessionManager.h"
 #import "ParseRoomManager.h"
 #import "ParseUserManager.h"
 #import "QueueSong.h"
@@ -107,14 +107,14 @@
 # pragma mark - Spotify
 
 - (void)authenticateSpotifySession {
-    if (![[SpotifyRemoteManager shared] isAuthorized]) {
-        [[SpotifyRemoteManager shared] authorizeSession];
+    if (![[SpotifySessionManager shared] isSessionAuthorized]) {
+        [[SpotifySessionManager shared] authorizeSession];
     }
 }
 
 - (IBAction)didTapPlay:(id)sender {
     self.currentSong = self.queue.firstObject;
-    [[SpotifyRemoteManager shared] playSongWithSpotifyURI:self.currentSong.spotifyURI];
+    [[SpotifySessionManager shared] playSongWithSpotifyURI:self.currentSong.spotifyURI];
 }
 
 # pragma mark - Live Query
@@ -158,9 +158,14 @@
 }
 
 - (void)configureNotificationObservers {
+    
+    // Parse notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifyRemoteManagerAuthorizedNotification object:nil];
+    
+    // Spotify notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
+    
 }
 
 - (void)loadParseCredentials {
