@@ -8,6 +8,7 @@
 #import "RoomViewController.h"
 #import "LobbyViewController.h"
 #import "SpotifyAPIManager.h"
+#import "SpotifyRemoteManager.h"
 #import "ParseRoomManager.h"
 #import "ParseUserManager.h"
 #import "QueueSong.h"
@@ -36,10 +37,21 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
     
-    [self configureClient];
+    [self configureLiveQueryClient];
+    [self authenticateSpotifySession];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifyRemoteManagerConnectedNotification object:nil];
+}
+
+- (void)authenticateSpotifySession {
+    
+    if ([[SpotifyRemoteManager shared] isAppRemoteConnected]) {
+        return;
+    }
+    
+    [[SpotifyRemoteManager shared] authorizeSession];
 }
 
 - (void)loadRoom {
@@ -113,7 +125,7 @@
 
 # pragma mark - Live Query
 
-- (void)configureClient {
+- (void)configureLiveQueryClient {
     
     if (!credentialsLoaded) {
         [self loadCredentials];
