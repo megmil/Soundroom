@@ -36,7 +36,7 @@
         _configuration = [[SPTConfiguration alloc] initWithClientID:clientId redirectURL:redirectURL];
         _configuration.tokenSwapURL = [NSURL URLWithString:tokenSwapURLString];
         _configuration.tokenRefreshURL = [NSURL URLWithString:tokenRefreshURLString];
-        _configuration.playURI = nil;
+        _configuration.playURI = @""; // continues playing the most recent song (must be playing song to connect)
         
         _sessionManager = [[SPTSessionManager alloc] initWithConfiguration:_configuration delegate:self];
         
@@ -49,17 +49,30 @@
     
 }
 
+# pragma mark - Public
+
+- (void)authorizeSession {
+    SPTScope requestedScope = SPTAppRemoteControlScope;
+    [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
+}
+
+- (void)signOut {
+    _sessionManager.session = nil;
+    [_appRemote disconnect];
+}
+
 - (BOOL)isConnected {
     return [_appRemote isConnected];
 }
 
-- (void)authorizeSession {
-    [_sessionManager initiateSessionWithScope:SPTAppRemoteControlScope options:SPTDefaultAuthorizationOption];
+- (void)pausePlayback {
+    if (_sessionManager.session) {
+        [_appRemote.playerAPI pause:nil];
+    }
 }
 
-- (void)sessionManager:(nonnull SPTSessionManager *)manager didFailWithError:(nonnull NSError *)error {
-    //
-}
+
+# pragma mark - SPTSessionManagerDelegate
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didInitiateSession:(nonnull SPTSession *)session {
     _appRemote.connectionParameters.accessToken = session.accessToken;
@@ -67,21 +80,42 @@
     [_appRemote connect];
 }
 
-- (void)appRemote:(nonnull SPTAppRemote *)appRemote didDisconnectWithError:(nullable NSError *)error {
-    //
+- (void)sessionManager:(nonnull SPTSessionManager *)manager didFailWithError:(nonnull NSError *)error {
+    NSLog(@"fail: %@", error.localizedDescription);
 }
 
-- (void)appRemote:(nonnull SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error {
-    //
-}
+# pragma mark - SPTAppRemoteDelegate
 
 - (void)appRemoteDidEstablishConnection:(nonnull SPTAppRemote *)appRemote {
     _appRemote.playerAPI.delegate = self;
     [_appRemote.playerAPI subscribeToPlayerState:^(id result, NSError *error) {
         if (error) {
-            NSLog(@"error: %@", error.localizedDescription);
+            NSLog(@"subscription error: %@", error.localizedDescription);
         }
     }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifyRemoteManagerConnectedNotification object:self];
+}
+
+- (void)appRemote:(nonnull SPTAppRemote *)appRemote didDisconnectWithError:(nullable NSError *)error {
+    NSLog(@"disconnect: %@", error.localizedDescription);
+    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifyRemoteManagerDisconnectedNotification object:self];
+}
+
+- (void)appRemote:(nonnull SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error {
+    NSLog(@"failed connection: %@", error.localizedDescription);
+}
+
+# pragma mark - SPTAppRemotePlayerStateDelegate
+
+- (void)playerStateDidChange:(nonnull id<SPTAppRemotePlayerState>)playerState {
+    //
+}
+
+# pragma mark - SceneDelegate
+
+- (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
+    NSURL *url = URLContexts.allObjects.firstObject.URL;
+    [_sessionManager application:[UIApplication sharedApplication] openURL:url options:[NSMutableDictionary dictionary]];
 }
 
 - (void)applicationDidBecomeActive {

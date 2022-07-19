@@ -37,17 +37,16 @@
     self.spotifyAccountView.isLoggedIn = [[SpotifyRemoteManager shared] isConnected];
     self.spotifyAccountView.delegate = self;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:kOAuth2SignedInNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:kOAuth2SignedOutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifyRemoteManagerConnectedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifyRemoteManagerDisconnectedNotification object:nil];
 }
 
 - (void)didTapSpotifyLogin {
     [[SpotifyRemoteManager shared] authorizeSession];
-    //[[SpotifyAuthClient shared] authenticateInViewController:self];
 }
 
 - (void)didTapSpotifyLogout {
-    [[SpotifyAuthClient shared] signOut];
+    [[SpotifyRemoteManager shared] signOut];
 }
 
 - (void)didTapUserLogout {
@@ -67,6 +66,7 @@
 
 - (void)toggleSpotifyLoginStatus {
     self.spotifyAccountView.isLoggedIn = !self.spotifyAccountView.isLoggedIn;
+    //[[SpotifyRemoteManager shared] pausePlayback];
 }
 
 @end

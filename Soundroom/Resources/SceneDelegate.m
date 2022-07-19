@@ -25,11 +25,11 @@
         LoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         self.window.rootViewController = userLoginVC;
     }
+    
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
-    NSURL *url = URLContexts.allObjects.firstObject.URL;
-    [[[SpotifyRemoteManager shared] sessionManager] application:[UIApplication sharedApplication] openURL:url options:[NSMutableDictionary dictionary]];
+    [[SpotifyRemoteManager shared] openURLContexts:URLContexts];
 }
 
 @end
