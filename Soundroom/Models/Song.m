@@ -6,7 +6,6 @@
 //
 
 #import "Song.h"
-#import "QueueSong.h"
 
 @implementation Song
 

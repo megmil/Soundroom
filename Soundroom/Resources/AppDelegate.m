@@ -6,11 +6,10 @@
 //
 
 #import "AppDelegate.h"
-#import "Parse/Parse.h"
-#import "LoginViewController.h"
+#import "SpotifySessionManager.h"
 #import "QueueSong.h"
-#import "SpotifyRemoteManager.h"
 #import "Room.h"
+#import <Parse/Parse.h>
 
 @interface AppDelegate ()
 

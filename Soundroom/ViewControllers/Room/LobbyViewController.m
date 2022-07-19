@@ -6,8 +6,6 @@
 //
 
 #import "LobbyViewController.h"
-#import "RoomViewController.h"
-#import "ConfigureViewController.h"
 #import "ParseRoomManager.h"
 
 @interface LobbyViewController ()

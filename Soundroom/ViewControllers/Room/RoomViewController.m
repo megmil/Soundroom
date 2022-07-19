@@ -6,7 +6,6 @@
 //
 
 #import "RoomViewController.h"
-#import "LobbyViewController.h"
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
 #import "ParseRoomManager.h"

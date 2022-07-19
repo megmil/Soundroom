@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Parse/Parse.h"
+#import <Parse/Parse.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock _Nullable)completion;
 
 + (NSString *)currentUserId;
++ (BOOL)isLoggedIn;
 
 + (void)upvoteQueueSongWithId:(NSString *)queueSongId;
 + (void)downvoteQueueSongWithId:(NSString *)queueSongId;

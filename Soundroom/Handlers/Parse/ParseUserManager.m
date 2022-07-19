@@ -50,6 +50,10 @@
     return currentUser.objectId;
 }
 
++ (BOOL)isLoggedIn {
+    return [PFUser currentUser];
+}
+
 # pragma mark - Votes
 
 + (void)upvoteQueueSongWithId:(NSString *)queueSongId {

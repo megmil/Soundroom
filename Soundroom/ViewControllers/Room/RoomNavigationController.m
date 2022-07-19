@@ -10,7 +10,6 @@
 #import "RoomViewController.h"
 #import "ParseUserManager.h"
 #import "ParseRoomManager.h"
-#import "Room.h"
 @import ParseLiveQuery;
 
 @interface RoomNavigationController ()
@@ -52,6 +51,7 @@
 }
 
 - (void)configureLiveSubscriptions {
+    
     PFQuery *query = [self currentRoomsQuery];
     self.subscription = [self.client subscribeToQuery:query];
     
@@ -74,6 +74,7 @@
     [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         [[ParseRoomManager shared] reset];
     }];
+    
 }
 
 - (void)configureClient {

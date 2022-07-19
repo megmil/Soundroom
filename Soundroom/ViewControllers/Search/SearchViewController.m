@@ -7,8 +7,6 @@
 
 #import "SearchViewController.h"
 #import "Song.h"
-#import "QueueSong.h"
-#import "UIImageView+AFNetworking.h"
 #import "SpotifyAPIManager.h"
 #import "ParseUserManager.h"
 #import "SongCell.h"

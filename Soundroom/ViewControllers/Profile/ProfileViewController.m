@@ -6,7 +6,6 @@
 //
 
 #import "ProfileViewController.h"
-#import "Parse/Parse.h"
 #import "AccountView.h"
 #import "SpotifySessionManager.h"
 #import "ParseUserManager.h"

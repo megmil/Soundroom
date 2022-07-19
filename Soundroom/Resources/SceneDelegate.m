@@ -6,9 +6,9 @@
 //
 
 #import "SceneDelegate.h"
+#import "SpotifySessionManager.h"
 #import "LoginViewController.h"
-#import "Parse/Parse.h"
-#import "SpotifyRemoteManager.h"
+#import "ParseUserManager.h"
 
 @interface SceneDelegate ()
 
@@ -19,7 +19,7 @@
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
     
     // if there is no current user, show the login view
-    if (![PFUser currentUser]) {
+    if (![ParseUserManager isLoggedIn]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         self.window.rootViewController = userLoginVC;
