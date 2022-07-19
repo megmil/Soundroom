@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) NSMutableArray <QueueSong *> *queue;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @property (strong, nonatomic) PFLiveQueryClient *client;
 @property (strong, nonatomic) PFLiveQuerySubscription *subscription;
@@ -142,12 +143,7 @@
         [[ParseRoomManager shared] refreshQueue];
     }];
     
-    // queue song is deleted
-    /*
-    [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-    }];
-     */
+    // TODO: queue song is deleted
 }
 
 - (void)loadCredentials {
