@@ -107,10 +107,9 @@
 # pragma mark - Spotify
 
 - (void)authenticateSpotifySession {
-    if ([[SpotifyRemoteManager shared] isAppRemoteConnected]) {
-        return;
+    if (![[SpotifyRemoteManager shared] isAuthorized]) {
+        [[SpotifyRemoteManager shared] authorizeSession];
     }
-    [[SpotifyRemoteManager shared] authorizeSession];
 }
 
 - (IBAction)didTapPlay:(id)sender {
@@ -161,7 +160,7 @@
 - (void)configureNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifyRemoteManagerConnectedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifyRemoteManagerAuthorizedNotification object:nil];
 }
 
 - (void)loadParseCredentials {

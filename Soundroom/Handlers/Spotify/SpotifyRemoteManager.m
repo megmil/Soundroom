@@ -51,35 +51,28 @@
 
 # pragma mark - Public
 
-- (NSString *)accessToken {
-    if (_sessionManager.session) {
-        return _sessionManager.session.accessToken;
-    }
-    return nil;
-}
-
 - (void)authorizeSession {
     SPTScope requestedScope = SPTAppRemoteControlScope;
     [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
 }
 
-- (void)signOut {
-    _sessionManager.session = nil;
-    [_appRemote disconnect];
+- (NSString *)accessToken {
+    if ([self isAuthorized]) {
+        return _sessionManager.session.accessToken;
+    }
+    return nil;
+}
+
+- (BOOL)isAuthorized {
+    return _sessionManager.session;
 }
 
 - (BOOL)isAppRemoteConnected {
     return _appRemote.isConnected;
 }
 
-- (void)pausePlayback {
-    if (_sessionManager.session) {
-        [_appRemote.playerAPI pause:nil];
-    }
-}
-
 - (void)playSongWithSpotifyURI:(NSString *)spotifyURI {
-    if (_appRemote.isConnected) {
+    if ([self isAppRemoteConnected]) {
         [_appRemote.playerAPI play:spotifyURI callback:nil];
         return;
     }
@@ -92,11 +85,17 @@
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didInitiateSession:(nonnull SPTSession *)session {
     _appRemote.connectionParameters.accessToken = session.accessToken;
-    [_appRemote connect];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifyRemoteManagerAuthorizedNotification object:self];
 }
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didFailWithError:(nonnull NSError *)error {
     NSLog(@"fail: %@", error.localizedDescription);
+}
+
+- (void)signOut {
+    _sessionManager.session = nil;
+    [_appRemote disconnect];
+    // TODO: notification
 }
 
 # pragma mark - SPTAppRemoteDelegate
@@ -140,7 +139,7 @@
 }
 
 - (void)applicationWillResignActive {
-    if (_appRemote.isConnected) {
+    if ([self isAppRemoteConnected]) {
         [_appRemote disconnect];
     }
 }

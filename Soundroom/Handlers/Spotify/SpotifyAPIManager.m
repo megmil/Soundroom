@@ -54,25 +54,30 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 # pragma mark - Public
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
-    [[SpotifyRemoteManager shared] accessToken:^(NSString *accessToken) {
-        if (accessToken) {
-            NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
-            [self getSongsWithParameters:parameters completion:completion];
-        } else {
-            completion(nil, nil);
-        }
-    }];
+    
+    NSString *accessToken = [[SpotifyRemoteManager shared] accessToken]; // nil if current session is nil
+    
+    if (accessToken) {
+        NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
+        [self getSongsWithParameters:parameters completion:completion];
+        return;
+    }
+    
+    completion(nil, nil);
+    
 }
 
 - (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Song *song, NSError *error))completion {
-    [[SpotifyRemoteManager shared] accessToken:^(NSString *accessToken) {
-        if (accessToken) {
-            NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
-            [self getSongWithSpotifyId:spotifyId parameters:parameters completion:completion];
-        } else {
-            completion(nil, nil);
-        }
-    }];
+    
+    NSString *accessToken = [[SpotifyRemoteManager shared] accessToken]; // nil if current session is nil
+    
+    if (accessToken) {
+        NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
+        [self getSongWithSpotifyId:spotifyId parameters:parameters completion:completion];
+        return;
+    }
+    
+    completion(nil, nil);
 }
 
 # pragma mark - Helpers

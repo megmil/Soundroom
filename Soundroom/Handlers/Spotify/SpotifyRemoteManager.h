@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "SpotifyiOS/SpotifyiOS.h"
 
+#define SpotifyRemoteManagerAuthorizedNotification @"SpotifyRemoteManagerAuthorizedNotification"
 #define SpotifyRemoteManagerConnectedNotification @"SpotifyRemoteManagerConnectedNotification"
 #define SpotifyRemoteManagerDisconnectedNotification @"SpotifyRemoteManagerDisconnectedNotification"
 
@@ -26,10 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)applicationDidBecomeActive;
 - (BOOL)isAppRemoteConnected;
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
-- (void)pausePlayback;
 - (void)signOut;
 - (NSString *)accessToken;
 - (void)playSongWithSpotifyURI:(NSString *)spotifyURI;
+- (BOOL)isAuthorized;
 
 @end
 
