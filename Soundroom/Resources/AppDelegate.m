@@ -10,6 +10,7 @@
 #import "SpotifyAuthClient.h"
 #import "LoginViewController.h"
 #import "QueueSong.h"
+#import "SpotifyRemoteManager.h"
 #import "Room.h"
 
 @interface AppDelegate ()

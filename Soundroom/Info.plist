@@ -4,6 +4,7 @@
 <dict>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>spotify</string>
 		<string>soundroom</string>
 	</array>
 	<key>CFBundleURLTypes</key>

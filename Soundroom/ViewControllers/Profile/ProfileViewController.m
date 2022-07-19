@@ -9,6 +9,7 @@
 #import "Parse/Parse.h"
 #import "AccountView.h"
 #import "SpotifyAuthClient.h"
+#import "SpotifyRemoteManager.h"
 #import "ParseUserManager.h"
 #import "SceneDelegate.h"
 #import "LoginViewController.h"
@@ -41,7 +42,8 @@
 }
 
 - (void)didTapSpotifyLogin {
-    [[SpotifyAuthClient shared] authenticateInViewController:self];
+    [[SpotifyRemoteManager shared] authorizeSession];
+    //[[SpotifyAuthClient shared] authenticateInViewController:self];
 }
 
 - (void)didTapSpotifyLogout {
