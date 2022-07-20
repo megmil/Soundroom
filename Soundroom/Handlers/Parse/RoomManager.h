@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
+- (void)updateRoomWithCurrentSongId:(NSString *)currentSongId;
+
 - (void)joinRoomWithId:(NSString * _Nonnull)currentRoomId;
 - (void)joinRoom:(Room * _Nonnull)room;
 - (void)leaveCurrentRoom;

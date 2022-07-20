@@ -23,6 +23,11 @@
     return shared;
 }
 
+- (void)updateRoomWithCurrentSongId:(NSString *)currentSongId {
+    [_currentRoom setValue:currentSongId forKey:@"currentSongId"];
+    [_currentRoom saveInBackground];
+}
+
 # pragma mark - Fetch
 
 - (void)fetchCurrentRoom {

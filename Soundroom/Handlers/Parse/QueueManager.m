@@ -23,6 +23,17 @@
     return shared;
 }
 
+- (void)playTopSong {
+    if (_queue.count) {
+        // get and remove first song from queue
+        QueueSong *topSong = _queue.firstObject;
+        [self _removeQueueSong:topSong];
+        
+        // save current song to room
+        [[RoomManager shared] updateRoomWithCurrentSongId:topSong.objectId];
+    }
+}
+
 # pragma mark - QueueSongs
 
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId {
@@ -120,6 +131,7 @@
         [_queue removeObjectAtIndex:index];
         [_scores removeObjectAtIndex:index];
     }
+    // TODO: delete queue song and votes?
 }
 
 - (void)_insertQueueSong:(QueueSong *)song {

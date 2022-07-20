@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId;
 + (NSString *)getSpotifyIdForSongWithId:(NSString *)songId;
 
+- (void)playTopSong;
+
 - (void)resetQueue;
 - (void)fetchQueue;
 - (void)updateQueueSong:(QueueSong *)song;

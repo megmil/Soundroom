@@ -25,7 +25,7 @@
     [super viewDidLoad];
     
     // prepare to switch view controllers if the current user leaves a room
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToLobby) name:ParseRoomManagerLeftRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToLobby) name:RoomManagerLeftRoomNotification object:nil];
     
     // check to see if the current user is already in a room
     [Room getCurrentRoomWithCompletion:^(BOOL succeeded, NSError *error) {
