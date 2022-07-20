@@ -83,10 +83,6 @@
     return query;
 }
 
-- (NSMutableArray <QueueSong *> *)queue {
-    return _queue;
-}
-
 # pragma mark - Room Data
 
 - (NSString *)currentRoomTitle {

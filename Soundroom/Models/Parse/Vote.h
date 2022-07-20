@@ -26,9 +26,7 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount;
 + (VoteState)voteStateForSongWithId:(NSString *)songId;
-+ (BOOL)didUpvoteSongWithId:(NSString *)songId;
-+ (BOOL)didDownvoteSongWithId:(NSString *)songId;
-+ (BOOL)didNotVoteSongWithId:(NSString *)songId;
++ (NSNumber *)scoreForSongWithId:(NSString *)songId;
 
 @end
 

@@ -27,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeAllUsers;
 
 - (void)requestSongWithSpotifyId:(NSString *)spotifyId;
-- (NSMutableArray <QueueSong *> *)queue;
 - (void)refreshQueue;
 
 - (NSString *)currentRoomTitle; // TODO: properties?

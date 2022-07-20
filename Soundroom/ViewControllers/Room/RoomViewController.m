@@ -47,17 +47,11 @@
 # pragma mark - Queue
 
 - (void)refreshQueue {
-    self.queue = [[ParseRoomManager shared] queue];
+    self.queue = [[ParseQueueManager shared] queue];
 }
 
 - (void)startPlayingQueue {
     if (self.queue.count) {
-        
-        // lock first song (remove roomId)
-            // should still know what song is currently playing
-            // CurrentSong model?
-        // play song
-        // delete song
         
         // get first song in queue
         self.currentSong = self.queue.firstObject;
@@ -114,7 +108,7 @@
     QueueSong *queueSong = self.queue[indexPath.row];
     
     cell.objectId = queueSong.objectId;
-    cell.score = [ParseQueueManager scoreForSongWithId:queueSong.objectId];
+    cell.score = [Vote scoreForSongWithId:queueSong.objectId];
     cell.cellType = QueueSongCell;
     cell.voteState = [Vote voteStateForSongWithId:queueSong.objectId];
     
