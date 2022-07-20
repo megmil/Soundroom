@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateRoomWithCurrentSongId:(NSString *)currentSongId;
 
+- (void)fetchCurrentRoom;
+
 - (void)joinRoomWithId:(NSString * _Nonnull)currentRoomId;
 - (void)joinRoom:(Room * _Nonnull)room;
 - (void)leaveCurrentRoom;

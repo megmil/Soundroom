@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)inviteUserWithId:(NSString *)userId;
 
++ (PFQuery *)queryForAcceptedInvitations;
+
 @end
 
 NS_ASSUME_NONNULL_END

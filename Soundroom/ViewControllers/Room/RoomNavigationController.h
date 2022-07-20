@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RoomNavigationController : UINavigationController {
-    BOOL credentialsLoaded;
+    BOOL didLoadCredentials;
 }
 
 @property (strong, nonatomic) NSString *server;

@@ -10,6 +10,8 @@
 #import "RoomViewController.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
+#import "InvitationManager.h"
+#import "Invitation.h"
 @import ParseLiveQuery;
 
 @interface RoomNavigationController ()
@@ -23,20 +25,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // prepare to switch view controllers if the current user leaves a room
+    [[RoomManager shared] fetchCurrentRoom];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToLobby) name:RoomManagerLeftRoomNotification object:nil];
-    
-    // check to see if the current user is already in a room
-    [Room getCurrentRoomWithCompletion:^(BOOL succeeded, NSError *error) {
-        if (!succeeded) {
-            [self goToLobby]; // if not, go to lobby
-        }
-    }];
-    
-    // setup Live Query client
-    [self configureClient];
-    [self configureLiveSubscriptions];
+    [self configureLiveClient];
+}
+
+- (void)configureLiveClient {
+    if (!didLoadCredentials) {
+        [self loadCredentials];
+    }
+    _client = [[PFLiveQueryClient alloc] initWithServer:_server applicationId:_appId clientKey:_clientKey];
+    [self configureInvitationSubscriptions];
 }
 
 - (void)goToLobby {
@@ -50,55 +49,41 @@
     });
 }
 
-- (void)configureLiveSubscriptions {
+- (void)configureInvitationSubscriptions {
     
-    PFQuery *query = [self currentRoomsQuery];
-    self.subscription = [self.client subscribeToQuery:query];
+    // reset subscriptions
+    _subscription = nil;
     
-    // room that matches query is created
-    [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Room *room = (Room *)object;
-        [[RoomManager shared] joinRoom:room];
+    // get query for invitations accepted by current user
+    PFQuery *queryForAcceptedInvitations = [InvitationManager queryForAcceptedInvitations];
+    _subscription = [_client subscribeToQuery:queryForAcceptedInvitations];
+    
+    // accepted invitation is created (current user created room)
+    _subscription = [_subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Invitation *invitation = (Invitation *)object;
+        [[RoomManager shared] joinRoomWithId:invitation.roomId];
     }];
     
-    // room enters query
-    [self.subscription addEnterHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Room *room = (Room *)object;
-        [[RoomManager shared] joinRoom:room];
+    // pending invitation is accepted (current user accepted invite)
+    _subscription = [_subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Invitation *invitation = (Invitation *)object;
+        [[RoomManager shared] joinRoomWithId:invitation.roomId];
     }];
     
-    // room leaves query
-    [self.subscription addLeaveHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[RoomManager shared] leaveCurrentRoom];
+    // accepted invitation is deleted
+    _subscription = [_subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        // TODO: ?
     }];
     
-    // room is deleted
-    [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[RoomManager shared] leaveCurrentRoom];
-    }];
-    
-}
-
-- (void)configureClient {
-    if (!credentialsLoaded) {
-        [self loadCredentials];
-    }
-    self.client = [[PFLiveQueryClient alloc] initWithServer:self.server applicationId:self.appId clientKey:self.clientKey];
 }
 
 - (void)loadCredentials {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
     NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-    self.server = [credentials objectForKey:@"parse-live-server"];
-    self.appId = [credentials objectForKey:@"parse-app-id"];
-    self.clientKey = [credentials objectForKey:@"parse-client-key"];
-    credentialsLoaded = YES;
-}
-
-- (PFQuery *)currentRoomsQuery {
-    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query whereKey:@"memberIds" equalTo:[ParseUserManager currentUserId]]; // get rooms that list currentUser as a member
-    return query;
+    _server = [credentials objectForKey:@"parse-live-server"];
+    _appId = [credentials objectForKey:@"parse-app-id"];
+    _clientKey = [credentials objectForKey:@"parse-client-key"];
+    didLoadCredentials = YES;
 }
 
 @end

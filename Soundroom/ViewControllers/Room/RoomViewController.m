@@ -88,7 +88,9 @@
 
 - (void)updateQueueData {
     [self updateCurrentSongData];
-    [_tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self->_tableView reloadData];
+    });
 }
 
 - (void)updateCurrentSongData {

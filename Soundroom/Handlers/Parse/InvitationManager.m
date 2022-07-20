@@ -6,6 +6,7 @@
 //
 
 #import "InvitationManager.h"
+#import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "Invitation.h"
 
@@ -83,5 +84,12 @@
     }];
 }
  */
+
++ (PFQuery *)queryForAcceptedInvitations {
+    PFQuery *query = [PFQuery queryWithClassName:@"Invitation"];
+    [query whereKey:@"userId" equalTo:[ParseUserManager currentUserId]];
+    [query whereKey:@"isPending" equalTo:@(NO)];
+    return query;
+}
 
 @end
