@@ -23,35 +23,24 @@
     return shared;
 }
 
-- (void)loadQueue {
-    
-    NSString *roomId = [[ParseRoomManager shared] currentRoomId];
-    if (roomId) {
-        PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-        [query whereKey:@"roomId" equalTo:roomId];
-        [query orderByAscending:@"createdAt"];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (objects) {
-                self->_queue = (NSMutableArray <QueueSong *> *)objects;
-                [self sortQueue];
-            }
-        }];
-    }
-    
-}
+// TODO: delete queue songs when room is deleted
 
-- (void)updateQueueSong:(QueueSong *)song {
+# pragma mark - Update Queue
+
+- (void)_updateQueueSong:(QueueSong *)song {
     [self removeQueueSong:song];
     [self insertQueueSong:song];
 }
 
-- (void)removeQueueSong:(QueueSong *)song {
+- (void)_removeQueueSong:(QueueSong *)song {
     NSUInteger index = [_queue indexOfObject:song];
-    [_queue removeObjectAtIndex:index];
-    [_scores removeObjectAtIndex:index];
+    if (index) {
+        [_queue removeObjectAtIndex:index];
+        [_scores removeObjectAtIndex:index];
+    }
 }
 
-- (void)insertQueueSong:(QueueSong *)song {
+- (void)_insertQueueSong:(QueueSong *)song {
     
     NSUInteger score = [[Vote scoreForSongWithId:song.objectId] intValue];
     
@@ -65,16 +54,32 @@
     // insert queue song at lowest position
     for (NSUInteger i = _scores.count - 1; i >= 0; i--) {
         NSUInteger current = [[_scores objectAtIndex:i] intValue];
-        if (score <= current) {
+        if (score <= current || i == 0) {
             [_queue insertObject:song atIndex:i];
             [_scores insertObject:@(score) atIndex:i];
             return;
         }
     }
+}
+
+# pragma mark - Fetch Queue
+
+- (void)fetchQueue {
     
-    // queue song has highest score in queue
-    [_queue insertObject:song atIndex:0];
-    [_scores insertObject:@(score) atIndex:0];
+    NSString *roomId = [[ParseRoomManager shared] currentRoomId];
+    if (roomId) {
+        PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+        [query whereKey:@"roomId" equalTo:roomId];
+        [query orderByAscending:@"createdAt"];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (objects) {
+                self->_queue = (NSMutableArray <QueueSong *> *)objects;
+                [self sortQueue];
+                [self postUpdatedQueueNotification];
+            }
+        }];
+    }
+    
 }
 
 - (void)sortQueue {
@@ -111,6 +116,34 @@
     _queue = sortedQueue;
     _scores = sortedScores;
     
+}
+
+# pragma mark - Public
+
+- (void)updateQueueSong:(QueueSong *)song {
+    [self _updateQueueSong:song];
+    [self postUpdatedQueueNotification];
+}
+
+- (void)removeQueueSong:(QueueSong *)song {
+    [self _removeQueueSong:song];
+    [self postUpdatedQueueNotification];
+}
+
+- (void)insertQueueSong:(QueueSong *)song {
+    [self _insertQueueSong:song];
+    [self postUpdatedQueueNotification];
+}
+
+- (NSMutableArray <QueueSong *> *)queue {
+    return _queue;
+}
+
+
+# pragma mark - Helpers
+
+- (void)postUpdatedQueueNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:QueueManagerUpdatedQueueNotification object:self];
 }
 
 @end

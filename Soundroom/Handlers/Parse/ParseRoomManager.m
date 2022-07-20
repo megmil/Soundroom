@@ -66,23 +66,6 @@
     }
 }
 
-- (void)refreshQueue {
-    PFQuery *query = [self queueQuery];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
-            self->_queue = (NSMutableArray <QueueSong *> *)objects;
-            [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerUpdatedQueueNotification object:self];
-        }
-    }];
-}
-
-- (PFQuery *)queueQuery {
-    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-    [query whereKey:@"roomId" equalTo:_currentRoomId];
-    [query orderByDescending:@"score"];
-    return query;
-}
-
 # pragma mark - Room Data
 
 - (NSString *)currentRoomTitle {
@@ -103,7 +86,6 @@
     _currentRoomId = nil;
     _currentRoom = nil;
     _hostId = nil;
-    [_queue removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerLeftRoomNotification object:self];
 }
 
@@ -116,9 +98,8 @@
     [Room getRoomWithId:currentRoomId completion:^(PFObject *room, NSError *error) {
         if (room) {
             self->_currentRoom = (Room *)room;
-            self->_hostId = self->_currentRoom.hostId;
             self->_currentRoomId = self->_currentRoom.objectId;
-            self->_queue = [NSMutableArray array];
+            self->_hostId = self->_currentRoom.hostId;
             [[NSNotificationCenter defaultCenter] postNotificationName:ParseRoomManagerJoinedRoomNotification object:self];
         }
     }];

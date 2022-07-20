@@ -11,7 +11,6 @@
 
 #define ParseRoomManagerJoinedRoomNotification @"ParseRoomManagerJoinedRoomNotification"
 #define ParseRoomManagerLeftRoomNotification @"ParseRoomManagerLeftRoomNotification"
-#define ParseRoomManagerUpdatedQueueNotification @"ParseRoomManagerUpdatedQueueNotification"
 
 NS_ASSUME_NONNULL_BEGIN
 
