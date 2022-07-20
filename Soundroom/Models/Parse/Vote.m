@@ -7,7 +7,7 @@
 
 #import "Vote.h"
 #import "ParseUserManager.h"
-#import "CurrentRoomManager.h"
+#import "RoomManager.h"
 
 @implementation Vote
 

@@ -27,7 +27,7 @@
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
-		0422999A287DE1270086612E /* CurrentRoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229999287DE1270086612E /* CurrentRoomManager.m */; };
+		0422999A287DE1270086612E /* RoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229999287DE1270086612E /* RoomManager.m */; };
 		042299AB287E86630086612E /* ConfigureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299AA287E86630086612E /* ConfigureView.m */; };
 		042299BD288092C40086612E /* RoomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299BC288092C40086612E /* RoomNavigationController.m */; };
 		042D626D28876A81005DE8E7 /* Vote.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D626C28876A81005DE8E7 /* Vote.m */; };
@@ -97,8 +97,8 @@
 		04229990287D2FAF0086612E /* ConfigureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		04229995287DDB5C0086612E /* ParseUserManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseUserManager.h; sourceTree = "<group>"; };
 		04229996287DDB5C0086612E /* ParseUserManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseUserManager.m; sourceTree = "<group>"; };
-		04229998287DE1270086612E /* CurrentRoomManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CurrentRoomManager.h; sourceTree = "<group>"; };
-		04229999287DE1270086612E /* CurrentRoomManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CurrentRoomManager.m; sourceTree = "<group>"; };
+		04229998287DE1270086612E /* RoomManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomManager.h; sourceTree = "<group>"; };
+		04229999287DE1270086612E /* RoomManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomManager.m; sourceTree = "<group>"; };
 		042299A9287E86630086612E /* ConfigureView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureView.h; sourceTree = "<group>"; };
 		042299AA287E86630086612E /* ConfigureView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureView.m; sourceTree = "<group>"; };
 		042299BB288092C40086612E /* RoomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomNavigationController.h; sourceTree = "<group>"; };
@@ -295,8 +295,8 @@
 			children = (
 				04229995287DDB5C0086612E /* ParseUserManager.h */,
 				04229996287DDB5C0086612E /* ParseUserManager.m */,
-				04229998287DE1270086612E /* CurrentRoomManager.h */,
-				04229999287DE1270086612E /* CurrentRoomManager.m */,
+				04229998287DE1270086612E /* RoomManager.h */,
+				04229999287DE1270086612E /* RoomManager.m */,
 				042D6277288797D3005DE8E7 /* ParseQueueManager.h */,
 				042D6278288797D3005DE8E7 /* ParseQueueManager.m */,
 			);
@@ -623,7 +623,7 @@
 				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
-				0422999A287DE1270086612E /* CurrentRoomManager.m in Sources */,
+				0422999A287DE1270086612E /* RoomManager.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
 				042299AB287E86630086612E /* ConfigureView.m in Sources */,
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,

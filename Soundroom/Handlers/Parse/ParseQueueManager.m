@@ -6,7 +6,7 @@
 //
 
 #import "ParseQueueManager.h"
-#import "CurrentRoomManager.h"
+#import "RoomManager.h"
 #import "Vote.h"
 
 @implementation ParseQueueManager {

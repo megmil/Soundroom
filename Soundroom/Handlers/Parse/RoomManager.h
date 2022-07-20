@@ -14,11 +14,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CurrentRoomManager : NSObject
+@interface RoomManager : NSObject
 
-@property (nonatomic, strong) NSString *roomId;
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSString *hostId;
+@property (nonatomic, strong) NSString *currentRoomId;
+@property (nonatomic, strong) NSString *currentRoomName;
+@property (nonatomic, strong) NSString *currentHostId;
 @property (nonatomic, strong) NSString *currentSongId;
 
 + (instancetype)shared;
@@ -26,8 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeAllUsers;
 
 - (void)requestSongWithSpotifyId:(NSString *)spotifyId;
-- (void)refreshQueue;
-- (void)reset; // TODO: rename
+
+- (void)joinRoomWithId:(NSString * _Nonnull)currentRoomId;
+- (void)leaveCurrentRoom;
 
 @end
 
