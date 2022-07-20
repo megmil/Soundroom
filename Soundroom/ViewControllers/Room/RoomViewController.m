@@ -9,7 +9,7 @@
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
 #import "ParseUserManager.h"
-#import "ParseRoomManager.h"
+#import "RoomManager.h"
 #import "QueueManager.h"
 #import "QueueSong.h"
 #import "Song.h"
@@ -18,16 +18,12 @@
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UILabel *roomTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentSongArtistLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *currentSongAlbumImageView;
-
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
-
-@property (strong, nonatomic) NSMutableArray <QueueSong *> *queue;
-@property (strong, nonatomic) QueueSong *currentSong;
 
 @property (strong, nonatomic) PFLiveQueryClient *client;
 @property (strong, nonatomic) PFLiveQuerySubscription *subscription;
@@ -37,55 +33,48 @@
 @implementation RoomViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
-    [self configureTableView];
+    
+    // configure table view
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
+    
+    // configure observers
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomData) name:RoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomData) name:RoomManagerLeftRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueData) name:QueueManagerUpdatedQueueNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueData) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
+    
     [self configureLiveQueryClient];
     [self authenticateSpotifySession];
-    [self configureNotificationObservers];
+    
 }
 
-# pragma mark - Queue
+# pragma mark - Notication Selectors
 
-- (void)refreshQueue {
-    self.queue = [[QueueManager shared] queue];
+- (void)loadRoomData {
+    _roomNameLabel.text = [[RoomManager shared] currentRoomName];
+    // TODO: update roomId related subcriptions
+    [[QueueManager shared] fetchQueue];
 }
 
-- (void)startPlayingQueue {
-    if (self.queue.count) {
-        
-        // get first song in queue
-        self.currentSong = self.queue.firstObject;
-        
-        // TODO: delete QueueSong from database
-        
-    }
+- (void)clearRoomData {
+    // TODO: fill in defaults
+    _roomNameLabel.text = @"";
+    [[QueueManager shared] resetQueue];
 }
 
-- (void)getQueue {
-    NSMutableArray <QueueSong *> *fullQueue = [[ParseRoomManager shared] queue];
-    if (fullQueue.count) {
-        self.currentSong = fullQueue.firstObject;
-        if (fullQueue.count > 1) {
-            [fullQueue removeObjectAtIndex:0];
-            self.queue = fullQueue;
-        }
-    }
+- (void)updateQueueData {
+    [self.tableView reloadData];
 }
 
-# pragma mark - Room Status
 
-- (void)loadRoom {
-    self.roomTitleLabel.text = [[CurrentRoomManager shared] currentRoomTitle];
-    [self configureLiveSubscriptions];
-    [[CurrentRoomManager shared] refreshQueue];
-}
 
-- (void)refreshRoom {
-    dispatch_async(dispatch_get_main_queue(), ^(void){
-        [self configureLiveSubscriptions];
-        [self refreshQueue];
-    });
-}
+
+
+
 
 - (IBAction)leaveRoom:(id)sender {
     if ([self isCurrentUserHost]) {
@@ -99,13 +88,13 @@
 # pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.queue.count;
+    return [[QueueManager shared] queue].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
-    QueueSong *queueSong = self.queue[indexPath.row];
+    QueueSong *queueSong = [[QueueManager shared] queue][indexPath.row];
     
     cell.objectId = queueSong.objectId;
     cell.score = [Vote scoreForSongWithId:queueSong.objectId];
@@ -194,23 +183,6 @@
 }
 
 # pragma mark - Helpers
-
-- (void)configureTableView {
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
-}
-
-- (void)configureNotificationObservers {
-    
-    // Parse notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshQueue) name:ParseRoomManagerUpdatedQueueNotification object:nil];
-    
-    // Spotify notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
-    
-}
 
 - (void)loadParseCredentials {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];

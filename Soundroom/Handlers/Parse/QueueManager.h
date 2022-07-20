@@ -14,16 +14,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface QueueManager : NSObject
 
-@property (strong, nonatomic) NSMutableArray <QueueSong *> *queue;
-
 + (instancetype)shared;
 
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId;
 
+- (void)resetQueue;
 - (void)fetchQueue;
 - (void)updateQueueSong:(QueueSong *)song;
 - (void)removeQueueSong:(QueueSong *)song;
 - (void)insertQueueSong:(QueueSong *)song;
+- (NSMutableArray <QueueSong *> *)queue;
 
 @end
 

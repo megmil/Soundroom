@@ -39,6 +39,11 @@
 
 # pragma mark - Fetch Queue
 
+- (void)resetQueue {
+    _queue = [NSMutableArray <QueueSong *> array];
+    _scores = [NSMutableArray <NSNumber *> array];
+}
+
 - (void)fetchQueue {
     
     NSString *roomId = [[RoomManager shared] currentRoomId];
