@@ -8,8 +8,9 @@
 #import "RoomViewController.h"
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
-#import "ParseRoomManager.h"
 #import "ParseUserManager.h"
+#import "ParseRoomManager.h"
+#import "ParseQueueManager.h"
 #import "QueueSong.h"
 #import "Song.h"
 #import "SongCell.h"
@@ -94,10 +95,10 @@
 
 - (IBAction)leaveRoom:(id)sender {
     if ([self isCurrentUserHost]) {
-        [[ParseRoomManager shared] removeAllUsersWithCompletion:nil];
+        [[ParseRoomManager shared] removeAllUsers];
         return;
     }
-    [[ParseRoomManager shared] removeUserWithId:[ParseUserManager currentUserId] completion:nil];
+    [[ParseRoomManager shared] removeUserWithId:[ParseUserManager currentUserId]];
 }
 
 
@@ -113,7 +114,7 @@
     QueueSong *queueSong = self.queue[indexPath.row];
     
     cell.objectId = queueSong.objectId;
-    cell.score = queueSong.score;
+    cell.score = [ParseQueueManager scoreForSongWithId:queueSong.objectId];
     cell.cellType = QueueSongCell;
     cell.voteState = [Vote voteStateForSongWithId:queueSong.objectId];
     
@@ -143,7 +144,11 @@
 
 - (IBAction)didTapPlay:(id)sender {
     self.currentSong = self.queue.firstObject;
-    [[SpotifySessionManager shared] playSongWithSpotifyURI:self.currentSong.spotifyURI];
+    [[SpotifyAPIManager shared] getSongWithSpotifyId:self.currentSong.spotifyId completion:^(Song *song, NSError *error) {
+        if (song) {
+            [[SpotifySessionManager shared] playSongWithSpotifyURI:song.spotifyURI];
+        }
+    }];
 }
 
 # pragma mark - Live Query
@@ -164,14 +169,12 @@
     self.subscription = [self.client subscribeToQuery:query];
     
     // new song added to queue
-    [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
+    self.subscription = [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         [[ParseRoomManager shared] refreshQueue];
     }];
     
     // queue song is updated
-    [self.subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
+    self.subscription = [self.subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         [[ParseRoomManager shared] refreshQueue];
     }];
     

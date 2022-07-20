@@ -74,7 +74,7 @@
     
     PFQuery *query = [PFQuery queryWithClassName:@"Invitation"];
     [query whereKey:@"userId" equalTo:userId];
-    [query whereKey:@"isPending" equalTo:NO];
+    [query whereKey:@"isPending" equalTo:@(NO)];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects) {
