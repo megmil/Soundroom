@@ -30,6 +30,8 @@
 		0422999A287DE1270086612E /* ParseRoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229999287DE1270086612E /* ParseRoomManager.m */; };
 		042299AB287E86630086612E /* ConfigureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299AA287E86630086612E /* ConfigureView.m */; };
 		042299BD288092C40086612E /* RoomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299BC288092C40086612E /* RoomNavigationController.m */; };
+		042D626D28876A81005DE8E7 /* Vote.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D626C28876A81005DE8E7 /* Vote.m */; };
+		042D627328876ACC005DE8E7 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D627228876ACC005DE8E7 /* Invitation.m */; };
 		04785C8028813094001AF277 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C7F28813094001AF277 /* AccountView.m */; };
 		04785C8C2886198F001AF277 /* SpotifySessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C8B2886198F001AF277 /* SpotifySessionManager.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
@@ -100,6 +102,10 @@
 		042299AA287E86630086612E /* ConfigureView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureView.m; sourceTree = "<group>"; };
 		042299BB288092C40086612E /* RoomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomNavigationController.h; sourceTree = "<group>"; };
 		042299BC288092C40086612E /* RoomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomNavigationController.m; sourceTree = "<group>"; };
+		042D626B28876A81005DE8E7 /* Vote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vote.h; sourceTree = "<group>"; };
+		042D626C28876A81005DE8E7 /* Vote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Vote.m; sourceTree = "<group>"; };
+		042D627128876ACC005DE8E7 /* Invitation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
+		042D627228876ACC005DE8E7 /* Invitation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
 		04785C7E28813094001AF277 /* AccountView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
 		04785C7F28813094001AF277 /* AccountView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		04785C8A2886198F001AF277 /* SpotifySessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifySessionManager.h; sourceTree = "<group>"; };
@@ -212,12 +218,9 @@
 		0417B5A02874B937001D6B04 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				0417B5C12874E4D7001D6B04 /* Room.h */,
-				0417B5C22874E4D7001D6B04 /* Room.m */,
+				042D626A288769D7005DE8E7 /* Parse */,
 				0417B5B52874E377001D6B04 /* Song.h */,
 				0417B5B62874E377001D6B04 /* Song.m */,
-				0417B5CA2874F6E6001D6B04 /* QueueSong.h */,
-				0417B5CB2874F6E6001D6B04 /* QueueSong.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -302,6 +305,21 @@
 				0417B5AA2874D394001D6B04 /* SearchViewController.m */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		042D626A288769D7005DE8E7 /* Parse */ = {
+			isa = PBXGroup;
+			children = (
+				0417B5C12874E4D7001D6B04 /* Room.h */,
+				0417B5C22874E4D7001D6B04 /* Room.m */,
+				0417B5CA2874F6E6001D6B04 /* QueueSong.h */,
+				0417B5CB2874F6E6001D6B04 /* QueueSong.m */,
+				042D626B28876A81005DE8E7 /* Vote.h */,
+				042D626C28876A81005DE8E7 /* Vote.m */,
+				042D627128876ACC005DE8E7 /* Invitation.h */,
+				042D627228876ACC005DE8E7 /* Invitation.m */,
+			);
+			path = Parse;
 			sourceTree = "<group>";
 		};
 		049304A628762AA9006AA9A3 /* Resources */ = {
@@ -587,6 +605,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				042D627328876ACC005DE8E7 /* Invitation.m in Sources */,
 				0417B5C32874E4D7001D6B04 /* Room.m in Sources */,
 				0417B5B72874E377001D6B04 /* Song.m in Sources */,
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
@@ -606,6 +625,7 @@
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				042299BD288092C40086612E /* RoomNavigationController.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */,
+				042D626D28876A81005DE8E7 /* Vote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
 				04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */,
 			);

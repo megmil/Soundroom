@@ -21,12 +21,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
-- (void)inviteUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
-- (void)addUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
-- (void)removeUserWithId:(NSString *)userId completion:(PFBooleanResultBlock _Nullable)completion;
-- (void)removeAllUsersWithCompletion:(PFBooleanResultBlock _Nullable)completion;
+- (void)inviteUserWithId:(NSString *)userId;
+- (void)addUserWithId:(NSString *)userId;
+- (void)removeUserWithId:(NSString *)userId;
+- (void)removeAllUsers;
 
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId spotifyURI:(NSString *)spotifyURI completion:(PFBooleanResultBlock _Nullable)completion;
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId;
 - (NSMutableArray <QueueSong *> *)queue;
 - (void)refreshQueue;
 

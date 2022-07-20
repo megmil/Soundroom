@@ -6,27 +6,27 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Vote.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, CellType) {
+    AddSongCell,
+    AddUserCell,
+    QueueSongCell
+};
+
 @interface SongCell : UITableViewCell
 
+@property (nonatomic) CellType cellType;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *subtitle;
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) NSString *objectId;
 
-@property (nonatomic) BOOL isAddSongCell;
-@property (nonatomic) BOOL isUserCell;
-@property (nonatomic) BOOL isQueueSongCell;
-
+@property (nonatomic) VoteState voteState;
 @property (strong, nonatomic) NSNumber *score;
-@property (nonatomic) BOOL isUpvoted;
-@property (nonatomic) BOOL isDownvoted;
-@property (nonatomic) BOOL isNotVoted;
-
 @property (strong, nonatomic) NSString *spotifyId;
-@property (strong, nonatomic) NSString *spotifyURI;
 
 @end
 

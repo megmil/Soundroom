@@ -27,29 +27,29 @@
 
 #pragma mark - Invitees and Members
 
-- (void)inviteUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
+- (void)inviteUserWithId:(NSString *)userId {
     if (_currentRoom) {
         [_currentRoom addUniqueObject:userId forKey:@"invitedIds"];
-        [_currentRoom saveInBackgroundWithBlock:completion];
+        [_currentRoom saveInBackground];
     }
 }
 
-- (void)addUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
+- (void)addUserWithId:(NSString *)userId {
     if (_currentRoom) {
         [_currentRoom addUniqueObject:userId forKey:@"memberIds"];
-        [_currentRoom saveInBackgroundWithBlock:completion];
+        [_currentRoom saveInBackground];
     }
 }
 
-- (void)removeUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion {
+- (void)removeUserWithId:(NSString *)userId {
     if (_currentRoom) {
         [_currentRoom removeObject:userId forKey:@"invitedIds"];
         [_currentRoom removeObject:userId forKey:@"memberIds"];
-        [_currentRoom saveInBackgroundWithBlock:completion];
+        [_currentRoom saveInBackground];
     }
 }
 
-- (void)removeAllUsersWithCompletion:(PFBooleanResultBlock)completion {
+- (void)removeAllUsers {
     if (_currentRoom) {
         [QueueSong deleteAllQueueSongsWithRoomId:_currentRoomId];
         [_currentRoom deleteEventually];
@@ -58,9 +58,12 @@
 
 # pragma mark - Queue
 
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId spotifyURI:(NSString *)spotifyURI completion:(PFBooleanResultBlock)completion {
+- (void)requestSongWithSpotifyId:(NSString *)spotifyId {
     if (_currentRoom) {
-        [QueueSong requestSongWithSpotifyId:spotifyId spotifyURI:spotifyURI roomId:_currentRoomId completion:completion];
+        QueueSong *newSong = [QueueSong new];
+        newSong.roomId = _currentRoomId;
+        newSong.spotifyId = spotifyId;
+        [newSong saveInBackground];
     }
 }
 

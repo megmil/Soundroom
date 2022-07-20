@@ -14,8 +14,7 @@
 @dynamic roomId;
 @dynamic title;
 @dynamic hostId;
-@dynamic invitedIds;
-@dynamic memberIds;
+@dynamic currentSongId;
 
 + (nonnull NSString *)parseClassName {
     return @"Room";
@@ -25,7 +24,6 @@
     Room *newRoom = [Room new];
     newRoom.title = title;
     newRoom.hostId = [ParseUserManager currentUserId];
-    newRoom.memberIds = [NSMutableArray arrayWithObject:[ParseUserManager currentUserId]];
     [newRoom saveInBackgroundWithBlock:completion];
 }
 

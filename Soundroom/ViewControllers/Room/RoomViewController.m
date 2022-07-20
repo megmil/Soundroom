@@ -114,14 +114,8 @@
     
     cell.objectId = queueSong.objectId;
     cell.score = queueSong.score;
-    
-    cell.isQueueSongCell = YES;
-    cell.isAddSongCell = NO;
-    cell.isUserCell = NO;
-    
-    cell.isUpvoted = [queueSong isUpvotedByCurrentUser];
-    cell.isDownvoted = [queueSong isDownvotedByCurrentUser];
-    cell.isNotVoted = [queueSong isNotVotedByCurrentUser];
+    cell.cellType = QueueSongCell;
+    cell.voteState = [Vote voteStateForSongWithId:queueSong.objectId];
     
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
         if (song) {
@@ -129,7 +123,6 @@
             cell.subtitle = song.artist;
             cell.image = song.albumImage;
             cell.spotifyId = song.spotifyId;
-            cell.spotifyURI = song.spotifyURI;
         }
     }];
     

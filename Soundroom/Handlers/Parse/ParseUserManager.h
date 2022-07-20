@@ -21,10 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)currentUserId;
 + (BOOL)isLoggedIn;
 
-+ (void)upvoteQueueSongWithId:(NSString *)queueSongId;
-+ (void)downvoteQueueSongWithId:(NSString *)queueSongId;
-+ (void)unvoteQueueSongWithId:(NSString *)queueSongId;
-
 @end
 
 NS_ASSUME_NONNULL_END
