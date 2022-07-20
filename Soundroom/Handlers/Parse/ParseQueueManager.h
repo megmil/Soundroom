@@ -11,8 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ParseQueueManager : NSObject
 
-+ (NSNumber *)scoreForSongWithId:(NSString *)songId;
-
 @end
 
 NS_ASSUME_NONNULL_END

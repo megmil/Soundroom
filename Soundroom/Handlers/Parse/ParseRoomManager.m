@@ -13,7 +13,6 @@
 @implementation ParseRoomManager {
     Room *_currentRoom;
     NSString *_hostId;
-    NSMutableArray <QueueSong *> *_queue;
 }
 
 + (instancetype)shared {
