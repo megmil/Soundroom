@@ -7,7 +7,7 @@
 
 #import "QueueManager.h"
 #import "RoomManager.h"
-#import "Vote.h"
+#import "VoteManager.h"
 
 @implementation QueueManager {
     NSMutableArray <QueueSong *> *_queue;
@@ -68,7 +68,7 @@
     // calculate score for each queue song
     _scores = [NSMutableArray arrayWithCapacity:_queue.count];
     for (QueueSong *song in _queue) {
-        NSNumber *score = [Vote scoreForSongWithId:song.objectId];
+        NSNumber *score = [VoteManager scoreForSongWithId:song.objectId];
         [_scores addObject:score];
     }
     
@@ -116,7 +116,7 @@
 
 - (void)_insertQueueSong:(QueueSong *)song {
     
-    NSUInteger score = [[Vote scoreForSongWithId:song.objectId] intValue];
+    NSUInteger score = [[VoteManager scoreForSongWithId:song.objectId] intValue];
     
     // empty queue
     if (!_queue || !_queue.count) {

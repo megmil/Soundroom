@@ -7,7 +7,6 @@
 
 #import "SongCell.h"
 #import "QueueSong.h"
-#import "Vote.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "QueueManager.h"
@@ -118,13 +117,13 @@
     // if already upvoted, set as unvoted
     if (self.voteState == Upvoted) {
         self.voteState = NotVoted;
-        [Vote incrementSongWithId:self.objectId byAmount:@(0)];
+        [VoteManager incrementSongWithId:_objectId byAmount:@(0)];
         return;
     }
     
     // set as upvoted
     self.voteState = Upvoted;
-    [Vote incrementSongWithId:self.objectId byAmount:@(1)];
+    [VoteManager incrementSongWithId:self.objectId byAmount:@(1)];
     
 }
 
@@ -133,13 +132,13 @@
     // if already downvoted, set as downvoted
     if (self.voteState == Downvoted) {
         self.voteState = NotVoted;
-        [Vote incrementSongWithId:self.objectId byAmount:@(0)];
+        [VoteManager incrementSongWithId:self.objectId byAmount:@(0)];
         return;
     }
     
     // set as upvoted
     self.voteState = Downvoted;
-    [Vote incrementSongWithId:self.objectId byAmount:@(-1)];
+    [VoteManager incrementSongWithId:self.objectId byAmount:@(-1)];
 
 }
 

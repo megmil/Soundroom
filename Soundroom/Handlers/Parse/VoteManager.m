@@ -12,6 +12,10 @@
 
 @implementation VoteManager
 
++ (void)incrementSong:(QueueSong *)song byAmount:(NSNumber *)amount {
+    [self incrementSongWithId:song.objectId byAmount:amount];
+}
+
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount {
     
     NSString *userId = [ParseUserManager currentUserId];
@@ -77,6 +81,10 @@
     NSNumber *finalScore = [NSNumber numberWithDouble:score];
     return finalScore;
     
+}
+
++ (NSNumber *)scoreForSong:(QueueSong *)song {
+    return [self scoreForSongWithId:song.objectId];
 }
 
 + (VoteState)voteStateForSongWithId:(NSString *)songId {

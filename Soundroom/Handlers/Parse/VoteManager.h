@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "QueueSong.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,6 +17,8 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 };
 
 @interface VoteManager : NSObject
+
++ (NSNumber *)scoreForSong:(QueueSong *)song;
 
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount;
 + (VoteState)voteStateForSongWithId:(NSString *)songId;
