@@ -11,6 +11,7 @@
 #import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "QueueManager.h"
+#import "VoteManager.h"
 #import "QueueSong.h"
 #import "Song.h"
 #import "SongCell.h"
@@ -67,21 +68,35 @@
 }
 
 - (void)updateQueueData {
-    [self.tableView reloadData];
+    [_tableView reloadData];
 }
 
+# pragma mark - IBActions
 
-
-
-
-
-
-- (IBAction)leaveRoom:(id)sender {
-    if ([self isCurrentUserHost]) {
-        [[CurrentRoomManager shared] removeAllUsers];
+- (IBAction)didTapLeaveRoom:(id)sender {
+    
+    if ([[RoomManager shared] isCurrentUserHost]) {
+        [[RoomManager shared] deleteCurrentRoom];
         return;
     }
-    [[ParseRoomManager shared] removeUserWithId:[ParseUserManager currentUserId]];
+    
+    [[RoomManager shared] leaveCurrentRoom];
+    
+}
+
+- (IBAction)didTapPlay:(id)sender {
+    
+    NSString *currentSongId = [[RoomManager shared] currentSongId];
+    QueueSong *currentSong = [PFQuery getObjectOfClass:@"QueueSong" objectId:currentSongId];
+    
+    if (currentSong) {
+        NSString *currentSongSpotifyId = currentSong.spotifyId;
+        [[SpotifyAPIManager shared] getSongWithSpotifyId:currentSongSpotifyId completion:^(Song *song, NSError *error) {
+            if (song) {
+                [[SpotifySessionManager shared] playSongWithSpotifyURI:song.spotifyURI];
+            }
+        }];
+    }
 }
 
 
@@ -97,16 +112,17 @@
     QueueSong *queueSong = [[QueueManager shared] queue][indexPath.row];
     
     cell.objectId = queueSong.objectId;
-    cell.score = [Vote scoreForSongWithId:queueSong.objectId];
+    cell.spotifyId = queueSong.spotifyId;
     cell.cellType = QueueSongCell;
-    cell.voteState = [Vote voteStateForSongWithId:queueSong.objectId];
+    cell.voteState = [VoteManager voteStateForSong:queueSong];
+    cell.score = [VoteManager scoreForSong:queueSong];
     
+    // get spotify metadata
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
         if (song) {
             cell.title = song.title;
             cell.subtitle = song.artist;
             cell.image = song.albumImage;
-            cell.spotifyId = song.spotifyId;
         }
     }];
     
@@ -123,15 +139,6 @@
     if (![[SpotifySessionManager shared] isSessionAuthorized]) {
         [[SpotifySessionManager shared] authorizeSession];
     }
-}
-
-- (IBAction)didTapPlay:(id)sender {
-    self.currentSong = self.queue.firstObject;
-    [[SpotifyAPIManager shared] getSongWithSpotifyId:self.currentSong.spotifyId completion:^(Song *song, NSError *error) {
-        if (song) {
-            [[SpotifySessionManager shared] playSongWithSpotifyURI:song.spotifyURI];
-        }
-    }];
 }
 
 # pragma mark - Live Query
@@ -198,15 +205,6 @@
     [query whereKey:@"roomId" equalTo:[[CurrentRoomManager shared] currentRoomId]]; // TODO: should update room id
     [query orderByAscending:@"score"];
     return query;
-}
-
-- (BOOL)isCurrentUserHost {
-    NSString *currentUserId = [ParseUserManager currentUserId];
-    NSString *hostId = [[CurrentRoomManager shared] currentHostId];
-    if (currentUserId && hostId) {
-        return [currentUserId isEqualToString:hostId];
-    }
-    return NO;
 }
 
 @end

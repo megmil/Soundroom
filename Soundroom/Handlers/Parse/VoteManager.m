@@ -87,6 +87,10 @@
     return [self scoreForSongWithId:song.objectId];
 }
 
++ (VoteState)voteStateForSong:(QueueSong *)song {
+    return [self voteStateForSongWithId:song.objectId];
+}
+
 + (VoteState)voteStateForSongWithId:(NSString *)songId {
     
     if ([self didUpvoteSongWithId:songId]) {

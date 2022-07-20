@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)leaveCurrentRoom;
 - (void)deleteCurrentRoom;
 
+- (BOOL)isCurrentUserHost;
+
 @end
 
 NS_ASSUME_NONNULL_END

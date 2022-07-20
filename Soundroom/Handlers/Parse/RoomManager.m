@@ -86,6 +86,10 @@
         return;
     }
     
+    // TODO: delete invitation
+    
+    // TODO: delete queue
+    
     _currentRoom = nil;
     _currentRoomId = nil;
     _currentRoomName = nil;
@@ -129,6 +133,18 @@
     for (PFObject *object in objects) {
         [object deleteEventually];
     }
+}
+
+- (BOOL)isCurrentUserHost {
+    
+    NSString *currentUserId = [ParseUserManager currentUserId];
+    
+    if (_currentHostId && currentUserId) {
+        return [_currentHostId isEqualToString:currentUserId];
+    }
+    
+    return NO;
+    
 }
 
 @end

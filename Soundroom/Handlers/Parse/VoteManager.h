@@ -19,6 +19,7 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 @interface VoteManager : NSObject
 
 + (NSNumber *)scoreForSong:(QueueSong *)song;
++ (VoteState)voteStateForSong:(QueueSong *)song;
 
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount;
 + (VoteState)voteStateForSongWithId:(NSString *)songId;
