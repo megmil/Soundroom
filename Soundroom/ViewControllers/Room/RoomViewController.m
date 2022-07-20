@@ -16,6 +16,7 @@
 #import "QueueSong.h"
 #import "Song.h"
 #import "SongCell.h"
+#import "SNDParseManager.h"
 @import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -184,16 +185,16 @@
         return;
     }
     
-    PFQuery *songQuery = [self queryForQueueSongsWithRoomId:roomId];
-    _subscription = [_client subscribeToQuery:songQuery];
+    PFQuery *query = [[SNDParseManager shared] queryForCurrentQueue];
+    _subscription = [_client subscribeToQuery:query];
     
-    // create handler
+    // new song request is created
     _subscription = [_subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
         [[QueueManager shared] insertQueueSong:song];
     }];
     
-    // delete handler
+    // song request is removed
     _subscription = [_subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
         [[QueueManager shared] removeQueueSong:song];
@@ -210,12 +211,6 @@
     _appId = [credentials objectForKey:@"parse-app-id"];
     _clientKey = [credentials objectForKey:@"parse-client-key"];
     didLoadCredentials = YES;
-}
-
-- (PFQuery *)queryForQueueSongsWithRoomId:(NSString * _Nonnull)roomId {
-    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query whereKey:@"objectId" equalTo:roomId];
-    return query;
 }
 
 @end

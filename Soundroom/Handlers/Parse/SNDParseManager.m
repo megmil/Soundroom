@@ -40,4 +40,10 @@
     return query;
 }
 
+- (PFQuery *)queryForCurrentQueue {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query whereKey:@"roomId" equalTo:[[RoomManager shared] currentRoomId]];
+    return query;
+}
+
 @end

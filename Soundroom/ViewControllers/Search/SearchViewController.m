@@ -120,4 +120,8 @@
     return self.searchTypeControl.selectedSegmentIndex == 0;
 }
 
+- (IBAction)didTapScreen:(id)sender {
+    [self.view endEditing:YES];
+}
+
 @end
