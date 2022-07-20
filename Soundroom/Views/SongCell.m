@@ -10,6 +10,8 @@
 #import "Vote.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
+#import "QueueManager.h"
+#import "InvitationManager.h"
 
 @implementation SongCell {
     
@@ -101,11 +103,11 @@
 - (void)addItem {
     
     if (_cellType == AddSongCell) {
-        [[RoomManager shared] requestSongWithSpotifyId:_objectId];
+        [QueueManager requestSongWithSpotifyId:_objectId];
         return;
     }
     
-    [[RoomManager shared] inviteUserWithId:_objectId];
+    [InvitationManager inviteUserWithId:_objectId];
     
 }
 

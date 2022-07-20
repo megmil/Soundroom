@@ -23,6 +23,30 @@
     return shared;
 }
 
+# pragma mark - Fetch
+
+- (void)fetchCurrentRoom {
+    
+    NSString *currentUserId = [ParseUserManager currentUserId];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"Invitation"];
+    [query whereKey:@"userId" equalTo:currentUserId];
+    [query whereKey:@"isPending" equalTo:@(NO)];
+    
+    // check for accepted invitation
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            // user is already in a room
+            Room *room = objects.firstObject; // objects.count should always be 1
+            [self joinRoom:room];
+        } else {
+            // user is not in a room
+            [self leaveCurrentRoom];
+        }
+    }];
+    
+}
+
 # pragma mark - Join/Leave
 
 - (void)joinRoomWithId:(NSString * _Nonnull)currentRoomId {
@@ -41,21 +65,35 @@
 }
 
 - (void)joinRoom:(Room * _Nonnull)room {
+    
+    if (_currentRoom == room) {
+        return;
+    }
+    
     _currentRoom = room;
     _currentRoomId = room.objectId;
     _currentRoomName = room.title;
     _currentHostId = room.hostId;
     _currentSongId = room.currentSongId;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
+    
 }
 
 - (void)leaveCurrentRoom {
+    
+    if (_currentRoom == nil) {
+        return;
+    }
+    
     _currentRoom = nil;
     _currentRoomId = nil;
     _currentRoomName = nil;
     _currentHostId = nil;
     _currentSongId = nil;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
+    
 }
 
 - (void)deleteCurrentRoom {

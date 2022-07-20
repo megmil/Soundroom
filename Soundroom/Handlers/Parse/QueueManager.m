@@ -5,11 +5,11 @@
 //  Created by Megan Miller on 7/19/22.
 //
 
-#import "ParseQueueManager.h"
+#import "QueueManager.h"
 #import "RoomManager.h"
 #import "Vote.h"
 
-@implementation ParseQueueManager {
+@implementation QueueManager {
     NSMutableArray <QueueSong *> *_queue;
     NSMutableArray <NSNumber *> *_scores;
 }
@@ -23,7 +23,19 @@
     return shared;
 }
 
-// TODO: delete queue songs when room is deleted
+# pragma mark - QueueSongs
+
++ (void)requestSongWithSpotifyId:(NSString *)spotifyId {
+    
+    NSString *currentRoomId = [[RoomManager shared] currentRoomId];
+    if (currentRoomId) {
+        QueueSong *newSong = [QueueSong new];
+        newSong.spotifyId = spotifyId;
+        newSong.roomId = currentRoomId;
+        [newSong saveInBackground];
+    }
+    
+}
 
 # pragma mark - Fetch Queue
 

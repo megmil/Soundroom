@@ -10,7 +10,7 @@
 #import "SpotifySessionManager.h"
 #import "ParseUserManager.h"
 #import "ParseRoomManager.h"
-#import "ParseQueueManager.h"
+#import "QueueManager.h"
 #import "QueueSong.h"
 #import "Song.h"
 #import "SongCell.h"
@@ -47,7 +47,7 @@
 # pragma mark - Queue
 
 - (void)refreshQueue {
-    self.queue = [[ParseQueueManager shared] queue];
+    self.queue = [[QueueManager shared] queue];
 }
 
 - (void)startPlayingQueue {
