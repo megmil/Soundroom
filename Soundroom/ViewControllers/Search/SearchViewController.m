@@ -64,11 +64,7 @@
         cell.subtitle = song.artist;
         cell.image = song.albumImage;
         cell.objectId = song.spotifyId;
-        cell.spotifyId = song.spotifyId;
-        cell.spotifyURI = song.spotifyURI;
-        cell.isAddSongCell = YES;
-        cell.isUserCell = NO;
-        cell.isQueueSongCell = NO;
+        cell.cellType = AddSongCell;
         return cell;
     }
     
@@ -77,10 +73,9 @@
     cell.subtitle = [user valueForKey:@"username"];
     cell.image = [UIImage imageNamed:@"check"]; // TODO: avatar images
     cell.objectId = user.objectId;
-    cell.isAddSongCell = NO;
-    cell.isUserCell = YES;
-    cell.isQueueSongCell = NO;
+    cell.cellType = AddUserCell;
     return cell;
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
