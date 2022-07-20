@@ -68,7 +68,25 @@
 }
 
 - (void)updateQueueData {
+    [self updateCurrentSongData];
     [_tableView reloadData];
+}
+
+- (void)updateCurrentSongData {
+    
+    NSString *currentSongId = [[RoomManager shared] currentSongId];
+    NSString *currentSpotifyId = [QueueManager getSpotifyIdForSongWithId:currentSongId];
+    
+    if (currentSpotifyId) {
+        [[SpotifyAPIManager shared] getSongWithSpotifyId:currentSpotifyId completion:^(Song *song, NSError *error) {
+            if (song) {
+                self->_currentSongTitleLabel.text = song.title;
+                self->_currentSongArtistLabel.text = song.artist;
+                self->_currentSongAlbumImageView.image = song.albumImage;
+            }
+        }];
+    }
+    
 }
 
 # pragma mark - IBActions
@@ -86,17 +104,10 @@
 
 - (IBAction)didTapPlay:(id)sender {
     
-    NSString *currentSongId = [[RoomManager shared] currentSongId];
-    QueueSong *currentSong = [PFQuery getObjectOfClass:@"QueueSong" objectId:currentSongId];
-    
-    if (currentSong) {
-        NSString *currentSongSpotifyId = currentSong.spotifyId;
-        [[SpotifyAPIManager shared] getSongWithSpotifyId:currentSongSpotifyId completion:^(Song *song, NSError *error) {
-            if (song) {
-                [[SpotifySessionManager shared] playSongWithSpotifyURI:song.spotifyURI];
-            }
-        }];
-    }
+    // TODO: get current song from top of queue
+    // TODO: remove song from queue
+    // TODO: add song to room
+    // TODO: play song: [[SpotifySessionManager shared] playSongWithSpotifyURI:song.spotifyURI];
 }
 
 
@@ -169,24 +180,6 @@
     }];
     
     // TODO: queue song is deleted
-}
-
-# pragma mark - Setters
-
-- (void)setQueue:(NSMutableArray<QueueSong *> *)queue {
-    _queue = queue;
-    [self.tableView reloadData];
-}
-
-- (void)setCurrentSong:(QueueSong *)currentSong {
-    _currentSong = currentSong;
-    [[SpotifyAPIManager shared] getSongWithSpotifyId:currentSong.spotifyId completion:^(Song *song, NSError *error) {
-        if (song) {
-            self.currentSongTitleLabel.text = song.title;
-            self.currentSongArtistLabel.text = song.artist;
-            self.currentSongAlbumImageView.image = song.albumImage;
-        }
-    }];
 }
 
 # pragma mark - Helpers

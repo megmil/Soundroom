@@ -37,6 +37,14 @@
     
 }
 
++ (NSString *)getSpotifyIdForSongWithId:(NSString *)songId {
+    QueueSong *song = [PFQuery getObjectOfClass:@"QueueSong" objectId:songId];
+    if (song) {
+        return song.spotifyId;
+    }
+    return nil;
+}
+
 # pragma mark - Fetch Queue
 
 - (void)resetQueue {

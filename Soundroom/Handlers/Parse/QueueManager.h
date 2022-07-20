@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared;
 
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId;
++ (NSString *)getSpotifyIdForSongWithId:(NSString *)songId;
 
 - (void)resetQueue;
 - (void)fetchQueue;
