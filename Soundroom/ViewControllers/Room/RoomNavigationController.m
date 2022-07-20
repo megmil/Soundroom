@@ -25,9 +25,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[RoomManager shared] fetchCurrentRoom];
+    [self loadRoomStatus];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToLobby) name:RoomManagerLeftRoomNotification object:nil];
     [self configureLiveClient];
+}
+
+- (void)loadRoomStatus {
+    
+    [[RoomManager shared] fetchCurrentRoom];
+    
+    // check if room was fetched
+    if (![[RoomManager shared] isInRoom]) {
+        // if not, go to lobby
+        [self goToLobby];
+    }
+    
 }
 
 - (void)configureLiveClient {
@@ -72,7 +84,7 @@
     
     // accepted invitation is deleted
     _subscription = [_subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        // TODO: ?
+        [[RoomManager shared] leaveCurrentRoom];
     }];
     
 }

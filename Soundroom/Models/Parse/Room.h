@@ -17,10 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *hostId;
 @property (nonatomic, strong) NSString *currentSongId;
 
-+ (void)createRoomWithTitle:(NSString *)title completion:(PFBooleanResultBlock _Nullable)completion;
-+ (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock _Nullable)completion;
-+ (void)getCurrentRoomWithCompletion:(PFBooleanResultBlock _Nullable)completion;
-
 @end
 
 NS_ASSUME_NONNULL_END

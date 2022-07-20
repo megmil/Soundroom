@@ -17,7 +17,7 @@
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
     // check for duplicate
-    [self isDuplicateInvitationForUserWithID:userId roomId:roomId completion:^(BOOL isDuplicate, NSError *error) {
+    [self isDuplicateInvitationForUserWithId:userId roomId:roomId completion:^(BOOL isDuplicate, NSError *error) {
         if (!isDuplicate) {
             // user has not yet been invited
             Invitation *newInvitation = [Invitation new];
@@ -30,7 +30,25 @@
     
 }
 
-+ (void)isDuplicateInvitationForUserWithID:(NSString *)userId roomId:(NSString *)roomId completion:(PFBooleanResultBlock)completion {
++ (void)registerHostForRoomWithId:(NSString *)roomId {
+    
+    NSString *userId = [ParseUserManager currentUserId];
+    
+    // check for duplicate
+    [self isDuplicateInvitationForUserWithId:userId roomId:roomId completion:^(BOOL isDuplicate, NSError *error) {
+        if (!isDuplicate) {
+            // user has not yet been invited
+            Invitation *newInvitation = [Invitation new];
+            newInvitation.userId = userId;
+            newInvitation.roomId = roomId;
+            newInvitation.isPending = NO;
+            [newInvitation saveInBackground];
+        }
+    }];
+    
+}
+
++ (void)isDuplicateInvitationForUserWithId:(NSString *)userId roomId:(NSString *)roomId completion:(PFBooleanResultBlock)completion {
     
     PFQuery *query = [PFQuery queryWithClassName:@"Invitation"];
     [query whereKey:@"userId" equalTo:userId];

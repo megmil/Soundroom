@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *currentRoomName;
 @property (nonatomic, strong) NSString *currentHostId;
 @property (nonatomic, strong) NSString *currentSongId;
+@property (nonatomic) BOOL isInRoom;
 
 + (instancetype)shared;
 

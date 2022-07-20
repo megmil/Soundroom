@@ -8,6 +8,7 @@
 #import "RoomManager.h"
 #import "QueueSong.h"
 #import "ParseUserManager.h"
+#import "InvitationManager.h"
 @import ParseLiveQuery;
 
 @implementation RoomManager {
@@ -26,6 +27,20 @@
 - (void)updateRoomWithCurrentSongId:(NSString *)currentSongId {
     [_currentRoom setValue:currentSongId forKey:@"currentSongId"];
     [_currentRoom saveInBackground];
+}
+
++ (void)createRoomWithTitle:(NSString *)title {
+    // create room
+    Room *newRoom = [Room new];
+    newRoom.title = title;
+    newRoom.hostId = [ParseUserManager currentUserId];
+    [newRoom saveInBackground];
+    [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            // create accepted invitation for host
+            [InvitationManager addHostToRoomWithId:newRoom.objectId];
+        }
+    }];
 }
 
 # pragma mark - Fetch
@@ -80,6 +95,7 @@
     _currentRoomName = room.title;
     _currentHostId = room.hostId;
     _currentSongId = room.currentSongId;
+    _isInRoom = YES;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
     
@@ -100,6 +116,7 @@
     _currentRoomName = nil;
     _currentHostId = nil;
     _currentSongId = nil;
+    _isInRoom = NO;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
     
