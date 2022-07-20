@@ -7,10 +7,9 @@
 
 #import <Foundation/Foundation.h>
 #import "Room.h"
-#import "QueueSong.h"
 
-#define CurrentRoomManagerJoinedRoomNotification @"CurrentRoomManagerJoinedRoomNotification"
-#define CurrentRoomManagerLeftRoomNotification @"CurrentRoomManagerLeftRoomNotification"
+#define RoomManagerJoinedRoomNotification @"CurrentRoomManagerJoinedRoomNotification"
+#define RoomManagerLeftRoomNotification @"CurrentRoomManagerLeftRoomNotification"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,12 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
-- (void)removeAllUsers;
-
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId;
-
 - (void)joinRoomWithId:(NSString * _Nonnull)currentRoomId;
+- (void)joinRoom:(Room * _Nonnull)room;
 - (void)leaveCurrentRoom;
+- (void)deleteCurrentRoom;
 
 @end
 

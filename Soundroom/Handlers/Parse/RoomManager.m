@@ -23,26 +23,6 @@
     return shared;
 }
 
-#pragma mark - Invitees and Members
-
-- (void)removeAllUsers {
-    if (_currentRoom) {
-        [QueueSong deleteAllQueueSongsWithRoomId:_currentRoomId];
-        [_currentRoom deleteEventually];
-    }
-}
-
-# pragma mark - Queue
-
-- (void)requestSongWithSpotifyId:(NSString *)spotifyId {
-    if (_currentRoom) {
-        QueueSong *newSong = [QueueSong new];
-        newSong.roomId = _currentRoomId;
-        newSong.spotifyId = spotifyId;
-        [newSong saveInBackground];
-    }
-}
-
 # pragma mark - Join/Leave
 
 - (void)joinRoomWithId:(NSString * _Nonnull)currentRoomId {
@@ -60,13 +40,13 @@
     
 }
 
-- (void)joinRoom:(Room *)room {
+- (void)joinRoom:(Room * _Nonnull)room {
     _currentRoom = room;
     _currentRoomId = room.objectId;
     _currentRoomName = room.title;
     _currentHostId = room.hostId;
     _currentSongId = room.currentSongId;
-    [[NSNotificationCenter defaultCenter] postNotificationName:CurrentRoomManagerJoinedRoomNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
 }
 
 - (void)leaveCurrentRoom {
@@ -75,7 +55,7 @@
     _currentRoomName = nil;
     _currentHostId = nil;
     _currentSongId = nil;
-    [[NSNotificationCenter defaultCenter] postNotificationName:CurrentRoomManagerLeftRoomNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
 }
 
 - (void)deleteCurrentRoom {

@@ -57,22 +57,24 @@
     
     // room that matches query is created
     [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[ParseRoomManager shared] setCurrentRoomId:object.objectId];
+        Room *room = (Room *)object;
+        [[RoomManager shared] joinRoom:room];
     }];
     
     // room enters query
     [self.subscription addEnterHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[ParseRoomManager shared] setCurrentRoomId:object.objectId];
+        Room *room = (Room *)object;
+        [[RoomManager shared] joinRoom:room];
     }];
     
     // room leaves query
     [self.subscription addLeaveHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[RoomManager shared] reset];
+        [[RoomManager shared] leaveCurrentRoom];
     }];
     
     // room is deleted
     [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[RoomManager shared] reset];
+        [[RoomManager shared] leaveCurrentRoom];
     }];
     
 }

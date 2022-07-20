@@ -9,7 +9,7 @@
 #import "QueueSong.h"
 #import "Vote.h"
 #import "ParseUserManager.h"
-#import "ParseRoomManager.h"
+#import "RoomManager.h"
 
 @implementation SongCell {
     
@@ -64,8 +64,7 @@
         
         _addButton = [UIButton new];
         _addButton.userInteractionEnabled = YES;
-        [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
-        [_addButton addTarget:self action:@selector(addSong) forControlEvents:UIControlEventTouchUpInside];
+        [_addButton addTarget:self action:@selector(addItem) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_addButton];
         
         _upvoteButton = [UIButton new];
@@ -102,11 +101,11 @@
 - (void)addItem {
     
     if (_cellType == AddSongCell) {
-        [[CurrentRoomManager shared] requestSongWithSpotifyId:_objectId];
+        [[RoomManager shared] requestSongWithSpotifyId:_objectId];
         return;
     }
     
-    [[ParseRoomManager shared] inviteUserWithId:_objectId];
+    [[RoomManager shared] inviteUserWithId:_objectId];
     
 }
 

@@ -29,7 +29,8 @@
 
 - (void)fetchQueue {
     
-    NSString *roomId = [[ParseRoomManager shared] currentRoomId];
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    
     if (roomId) {
         PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
         [query whereKey:@"roomId" equalTo:roomId];

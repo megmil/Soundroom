@@ -22,7 +22,7 @@
 
 + (void)inviteUserWithId:(NSString *)userId {
     
-    NSString *roomId = [[CurrentRoomManager shared] currentRoomId];
+    NSString *roomId = [[RoomManager shared] currentRoomId];
     
     // check for duplicate
     [self didInviteUserWithId:userId roomId:roomId completion:^(BOOL succeeded, NSError *error) {

@@ -6,7 +6,7 @@
 //
 
 #import "LobbyViewController.h"
-#import "ParseRoomManager.h"
+#import "RoomManager.h"
 
 @interface LobbyViewController ()
 
@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:RoomManagerJoinedRoomNotification object:nil];
 }
 
 - (void)goToRoom {

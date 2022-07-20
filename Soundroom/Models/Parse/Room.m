@@ -40,7 +40,7 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *rooms, NSError *error) {
         if (rooms.count == 1) {
             Room *room = rooms.firstObject;
-            [[CurrentRoomManager shared] setCurrentRoomId:room.objectId];
+            [[RoomManager shared] joinRoom:room];
             completion(room, error);
         } else {
             completion(nil, error);
