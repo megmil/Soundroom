@@ -9,7 +9,7 @@
 #import "LobbyViewController.h"
 #import "RoomViewController.h"
 #import "ParseUserManager.h"
-#import "ParseRoomManager.h"
+#import "CurrentRoomManager.h"
 @import ParseLiveQuery;
 
 @interface RoomNavigationController ()
@@ -67,12 +67,12 @@
     
     // room leaves query
     [self.subscription addLeaveHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[ParseRoomManager shared] reset];
+        [[CurrentRoomManager shared] reset];
     }];
     
     // room is deleted
     [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[ParseRoomManager shared] reset];
+        [[CurrentRoomManager shared] reset];
     }];
     
 }

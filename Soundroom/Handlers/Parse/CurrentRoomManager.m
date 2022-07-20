@@ -5,12 +5,12 @@
 //  Created by Megan Miller on 7/12/22.
 //
 
-#import "ParseRoomManager.h"
+#import "CurrentRoomManager.h"
 #import "QueueSong.h"
 #import "ParseUserManager.h"
 @import ParseLiveQuery;
 
-@implementation ParseRoomManager {
+@implementation CurrentRoomManager {
     Room *_currentRoom;
     NSString *_hostId;
 }
@@ -25,28 +25,6 @@
 }
 
 #pragma mark - Invitees and Members
-
-- (void)inviteUserWithId:(NSString *)userId {
-    if (_currentRoom) {
-        [_currentRoom addUniqueObject:userId forKey:@"invitedIds"];
-        [_currentRoom saveInBackground];
-    }
-}
-
-- (void)addUserWithId:(NSString *)userId {
-    if (_currentRoom) {
-        [_currentRoom addUniqueObject:userId forKey:@"memberIds"];
-        [_currentRoom saveInBackground];
-    }
-}
-
-- (void)removeUserWithId:(NSString *)userId {
-    if (_currentRoom) {
-        [_currentRoom removeObject:userId forKey:@"invitedIds"];
-        [_currentRoom removeObject:userId forKey:@"memberIds"];
-        [_currentRoom saveInBackground];
-    }
-}
 
 - (void)removeAllUsers {
     if (_currentRoom) {

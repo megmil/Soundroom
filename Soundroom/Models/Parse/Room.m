@@ -7,7 +7,7 @@
 
 #import "Room.h"
 #import "ParseUserManager.h"
-#import "ParseRoomManager.h"
+#import "CurrentRoomManager.h"
 
 @implementation Room
 
@@ -40,7 +40,7 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *rooms, NSError *error) {
         if (rooms.count == 1) {
             Room *room = rooms.firstObject;
-            [[ParseRoomManager shared] setCurrentRoomId:room.objectId];
+            [[CurrentRoomManager shared] setCurrentRoomId:room.objectId];
             completion(room, error);
         } else {
             completion(nil, error);

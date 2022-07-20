@@ -75,9 +75,9 @@
 # pragma mark - Room Status
 
 - (void)loadRoom {
-    self.roomTitleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
+    self.roomTitleLabel.text = [[CurrentRoomManager shared] currentRoomTitle];
     [self configureLiveSubscriptions];
-    [[ParseRoomManager shared] refreshQueue];
+    [[CurrentRoomManager shared] refreshQueue];
 }
 
 - (void)refreshRoom {
@@ -89,7 +89,7 @@
 
 - (IBAction)leaveRoom:(id)sender {
     if ([self isCurrentUserHost]) {
-        [[ParseRoomManager shared] removeAllUsers];
+        [[CurrentRoomManager shared] removeAllUsers];
         return;
     }
     [[ParseRoomManager shared] removeUserWithId:[ParseUserManager currentUserId]];
@@ -164,12 +164,12 @@
     
     // new song added to queue
     self.subscription = [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[ParseRoomManager shared] refreshQueue];
+        [[CurrentRoomManager shared] refreshQueue];
     }];
     
     // queue song is updated
     self.subscription = [self.subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[ParseRoomManager shared] refreshQueue];
+        [[CurrentRoomManager shared] refreshQueue];
     }];
     
     // TODO: queue song is deleted
@@ -223,14 +223,14 @@
 
 - (PFQuery *)queueSongsQuery {
     PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-    [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]]; // TODO: should update room id
+    [query whereKey:@"roomId" equalTo:[[CurrentRoomManager shared] currentRoomId]]; // TODO: should update room id
     [query orderByAscending:@"score"];
     return query;
 }
 
 - (BOOL)isCurrentUserHost {
     NSString *currentUserId = [ParseUserManager currentUserId];
-    NSString *hostId = [[ParseRoomManager shared] currentHostId];
+    NSString *hostId = [[CurrentRoomManager shared] currentHostId];
     if (currentUserId && hostId) {
         return [currentUserId isEqualToString:hostId];
     }

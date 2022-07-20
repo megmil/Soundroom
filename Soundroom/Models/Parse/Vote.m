@@ -7,7 +7,7 @@
 
 #import "Vote.h"
 #import "ParseUserManager.h"
-#import "ParseRoomManager.h"
+#import "CurrentRoomManager.h"
 
 @implementation Vote
 
@@ -24,7 +24,7 @@
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount {
     
     NSString *userId = [ParseUserManager currentUserId];
-    NSString *roomId = [[ParseRoomManager shared] currentRoomId];
+    NSString *roomId = [[CurrentRoomManager shared] currentRoomId];
     
     // check for duplicate
     [self getVotesForSongWithId:songId userId:userId roomId:roomId completion:^(PFObject *object, NSError *error) {
@@ -68,7 +68,7 @@
 + (NSNumber *)scoreForSongWithId:(NSString *)songId {
     
     double __block score = 0;
-    NSString *roomId = [[ParseRoomManager shared] currentRoomId];
+    NSString *roomId = [[CurrentRoomManager shared] currentRoomId];
     
     if (roomId) {
         PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
@@ -141,7 +141,7 @@
 + (PFQuery *)queryWithSongId:(NSString *)songId {
     
     NSString *userId = [ParseUserManager currentUserId];
-    NSString *roomId = [[ParseRoomManager shared] currentRoomId];
+    NSString *roomId = [[CurrentRoomManager shared] currentRoomId];
     
     PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
     [query whereKey:@"songId" equalTo:songId];

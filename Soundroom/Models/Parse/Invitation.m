@@ -7,7 +7,7 @@
 
 #import "Invitation.h"
 #import "ParseUserManager.h"
-#import "ParseRoomManager.h"
+#import "CurrentRoomManager.h"
 
 @implementation Invitation
 
@@ -22,7 +22,7 @@
 
 + (void)inviteUserWithId:(NSString *)userId {
     
-    NSString *roomId = [[ParseRoomManager shared] currentRoomId];
+    NSString *roomId = [[CurrentRoomManager shared] currentRoomId];
     
     // check for duplicate
     [self didInviteUserWithId:userId roomId:roomId completion:^(BOOL succeeded, NSError *error) {

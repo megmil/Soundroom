@@ -102,7 +102,7 @@
 - (void)addItem {
     
     if (_cellType == AddSongCell) {
-        [[ParseRoomManager shared] requestSongWithSpotifyId:_objectId];
+        [[CurrentRoomManager shared] requestSongWithSpotifyId:_objectId];
         return;
     }
     
