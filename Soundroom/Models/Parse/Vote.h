@@ -10,12 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, VoteState) {
-    Upvoted,
-    Downvoted,
-    NotVoted
-};
-
 @interface Vote : PFObject<PFSubclassing>
 
 @property (nonatomic, strong) NSString *objectId;
@@ -23,10 +17,6 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 @property (nonatomic, strong) NSString *userId;
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSNumber *increment;
-
-+ (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount;
-+ (VoteState)voteStateForSongWithId:(NSString *)songId;
-+ (NSNumber *)scoreForSongWithId:(NSString *)songId;
 
 @end
 

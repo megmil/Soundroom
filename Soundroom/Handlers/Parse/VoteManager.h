@@ -9,7 +9,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, VoteState) {
+    Upvoted,
+    Downvoted,
+    NotVoted
+};
+
 @interface VoteManager : NSObject
+
++ (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount;
++ (VoteState)voteStateForSongWithId:(NSString *)songId;
++ (NSNumber *)scoreForSongWithId:(NSString *)songId;
 
 @end
 
