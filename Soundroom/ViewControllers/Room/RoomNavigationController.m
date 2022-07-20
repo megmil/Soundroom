@@ -11,6 +11,7 @@
 #import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "InvitationManager.h"
+#import "QueryManager.h"
 #import "Invitation.h"
 @import ParseLiveQuery;
 
@@ -67,7 +68,7 @@
     _subscription = nil;
     
     // get query for invitations accepted by current user
-    PFQuery *queryForAcceptedInvitations = [InvitationManager queryForAcceptedInvitations];
+    PFQuery *queryForAcceptedInvitations = [[QueryManager shared] queryForAcceptedInvitations];
     _subscription = [_client subscribeToQuery:queryForAcceptedInvitations];
     
     // accepted invitation is created (current user created room)

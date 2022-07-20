@@ -8,6 +8,7 @@
 #import "InvitationManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
+#import "QueryManager.h"
 #import "Invitation.h"
 
 @implementation InvitationManager
@@ -50,7 +51,7 @@
 
 + (void)didJoinRoomForUserId:userId completion:(PFBooleanResultBlock)completion {
     
-    PFQuery *query = [self queryForAcceptedInvitations];
+    PFQuery *query = [[QueryManager shared] queryForAcceptedInvitations];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects && objects.count) {
             // user has joined a room
@@ -99,12 +100,5 @@
 }
 
  */
-
-+ (PFQuery *)queryForAcceptedInvitations {
-    PFQuery *query = [PFQuery queryWithClassName:@"Invitation"];
-    [query whereKey:@"userId" equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:@"isPending" equalTo:@(NO)];
-    return query;
-}
 
 @end

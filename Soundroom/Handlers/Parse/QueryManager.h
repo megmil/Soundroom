@@ -1,5 +1,5 @@
 //
-//  InvitationManager.h
+//  QueryManager.h
 //  Soundroom
 //
 //  Created by Megan Miller on 7/20/22.
@@ -10,10 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface InvitationManager : NSObject
+@interface QueryManager : NSObject
 
-+ (void)inviteUserWithId:(NSString *)userId;
-+ (void)registerHostForRoomWithId:(NSString *)roomId;
+@property (nonatomic, strong) PFQuery *queryForAcceptedInvitations;
+
++ (instancetype)shared;
 
 @end
 

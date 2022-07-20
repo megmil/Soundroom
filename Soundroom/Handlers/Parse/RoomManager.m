@@ -9,6 +9,7 @@
 #import "QueueSong.h"
 #import "ParseUserManager.h"
 #import "InvitationManager.h"
+#import "QueryManager.h"
 #import "Invitation.h"
 @import ParseLiveQuery;
 
@@ -47,7 +48,7 @@
 
 - (void)fetchCurrentRoom {
     
-    PFQuery *query = [InvitationManager queryForAcceptedInvitations];
+    PFQuery *query = [[QueryManager shared] queryForAcceptedInvitations];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects && objects.count) {
             // user is already in a room
