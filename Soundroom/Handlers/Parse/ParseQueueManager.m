@@ -25,43 +25,6 @@
 
 // TODO: delete queue songs when room is deleted
 
-# pragma mark - Update Queue
-
-- (void)_updateQueueSong:(QueueSong *)song {
-    [self removeQueueSong:song];
-    [self insertQueueSong:song];
-}
-
-- (void)_removeQueueSong:(QueueSong *)song {
-    NSUInteger index = [_queue indexOfObject:song];
-    if (index) {
-        [_queue removeObjectAtIndex:index];
-        [_scores removeObjectAtIndex:index];
-    }
-}
-
-- (void)_insertQueueSong:(QueueSong *)song {
-    
-    NSUInteger score = [[Vote scoreForSongWithId:song.objectId] intValue];
-    
-    // empty queue
-    if (!_queue || !_queue.count) {
-        _queue = [NSMutableArray arrayWithObject:song];
-        _scores = [NSMutableArray arrayWithObject:@(score)];
-        return;
-    }
-    
-    // insert queue song at lowest position
-    for (NSUInteger i = _scores.count - 1; i >= 0; i--) {
-        NSUInteger current = [[_scores objectAtIndex:i] intValue];
-        if (score <= current || i == 0) {
-            [_queue insertObject:song atIndex:i];
-            [_scores insertObject:@(score) atIndex:i];
-            return;
-        }
-    }
-}
-
 # pragma mark - Fetch Queue
 
 - (void)fetchQueue {
@@ -118,7 +81,44 @@
     
 }
 
-# pragma mark - Public
+# pragma mark - Update Queue: Private
+
+- (void)_updateQueueSong:(QueueSong *)song {
+    [self removeQueueSong:song];
+    [self insertQueueSong:song];
+}
+
+- (void)_removeQueueSong:(QueueSong *)song {
+    NSUInteger index = [_queue indexOfObject:song];
+    if (index) {
+        [_queue removeObjectAtIndex:index];
+        [_scores removeObjectAtIndex:index];
+    }
+}
+
+- (void)_insertQueueSong:(QueueSong *)song {
+    
+    NSUInteger score = [[Vote scoreForSongWithId:song.objectId] intValue];
+    
+    // empty queue
+    if (!_queue || !_queue.count) {
+        _queue = [NSMutableArray arrayWithObject:song];
+        _scores = [NSMutableArray arrayWithObject:@(score)];
+        return;
+    }
+    
+    // insert queue song at lowest position
+    for (NSUInteger i = _scores.count - 1; i >= 0; i--) {
+        NSUInteger current = [[_scores objectAtIndex:i] intValue];
+        if (score <= current || i == 0) {
+            [_queue insertObject:song atIndex:i];
+            [_scores insertObject:@(score) atIndex:i];
+            return;
+        }
+    }
+}
+
+# pragma mark - Update Queue: Public
 
 - (void)updateQueueSong:(QueueSong *)song {
     [self _updateQueueSong:song];

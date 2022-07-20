@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
+- (void)fetchQueue;
 - (void)updateQueueSong:(QueueSong *)song;
 - (void)removeQueueSong:(QueueSong *)song;
 - (void)insertQueueSong:(QueueSong *)song;
