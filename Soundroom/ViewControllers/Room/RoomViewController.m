@@ -180,7 +180,7 @@
         return;
     }
     
-    PFQuery *songQuery = [self queryQueueSongsWithRoomId:roomId];
+    PFQuery *songQuery = [self queryForQueueSongsWithRoomId:roomId];
     _subscription = [_client subscribeToQuery:songQuery];
     
     // create handler
@@ -208,7 +208,7 @@
     didLoadCredentials = YES;
 }
 
-- (PFQuery *)queryQueueSongsWithRoomId:(NSString * _Nonnull)roomId {
+- (PFQuery *)queryForQueueSongsWithRoomId:(NSString * _Nonnull)roomId {
     PFQuery *query = [PFQuery queryWithClassName:@"Room"];
     [query whereKey:@"objectId" equalTo:roomId];
     return query;

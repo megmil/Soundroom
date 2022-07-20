@@ -20,6 +20,7 @@
 }
 
 - (void)goToRoom {
+    [self dismissViewControllerAnimated:YES completion:nil]; // dismiss configureVC
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // dismiss self
 }
 

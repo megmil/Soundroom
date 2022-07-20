@@ -159,13 +159,17 @@
 # pragma mark - Update Queue: Public
 
 - (void)updateQueueSong:(QueueSong *)song {
-    [self _updateQueueSong:song];
-    [self postUpdatedQueueNotification];
+    if ([_queue containsObject:song]) {
+        [self _updateQueueSong:song];
+        [self postUpdatedQueueNotification];
+    }
 }
 
 - (void)removeQueueSong:(QueueSong *)song {
-    [self _removeQueueSong:song];
-    [self postUpdatedQueueNotification];
+    if ([_queue containsObject:song]) {
+        [self _removeQueueSong:song];
+        [self postUpdatedQueueNotification];
+    }
 }
 
 - (void)insertQueueSong:(QueueSong *)song {

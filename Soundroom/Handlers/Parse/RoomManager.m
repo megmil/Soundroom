@@ -9,6 +9,7 @@
 #import "QueueSong.h"
 #import "ParseUserManager.h"
 #import "InvitationManager.h"
+#import "Invitation.h"
 @import ParseLiveQuery;
 
 @implementation RoomManager {
@@ -34,11 +35,10 @@
     Room *newRoom = [Room new];
     newRoom.title = title;
     newRoom.hostId = [ParseUserManager currentUserId];
-    [newRoom saveInBackground];
     [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             // create accepted invitation for host
-            [InvitationManager addHostToRoomWithId:newRoom.objectId];
+            [InvitationManager registerHostForRoomWithId:newRoom.objectId];
         }
     }];
 }
@@ -47,18 +47,12 @@
 
 - (void)fetchCurrentRoom {
     
-    NSString *currentUserId = [ParseUserManager currentUserId];
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"Invitation"];
-    [query whereKey:@"userId" equalTo:currentUserId];
-    [query whereKey:@"isPending" equalTo:@(NO)];
-    
-    // check for accepted invitation
+    PFQuery *query = [InvitationManager queryForAcceptedInvitations];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
+        if (objects && objects.count) {
             // user is already in a room
-            Room *room = objects.firstObject; // objects.count should always be 1
-            [self joinRoom:room];
+            Invitation *invitation = objects.firstObject; // objects.count should always be 1
+            [self joinRoomWithId:invitation.roomId];
         } else {
             // user is not in a room
             [self leaveCurrentRoom];
@@ -69,18 +63,16 @@
 
 # pragma mark - Join/Leave
 
-- (void)joinRoomWithId:(NSString * _Nonnull)currentRoomId {
+- (void)joinRoomWithId:(NSString * _Nonnull)roomId {
     
-    if (_currentRoomId == currentRoomId) {
+    if (_currentRoomId == roomId) {
         return;
     }
     
-    [Room getRoomWithId:currentRoomId completion:^(PFObject *object, NSError *error) {
-        if (object) {
-            Room *room = (Room *)object;
-            [self joinRoom:room];
-        }
-    }];
+    Room *room = [PFQuery getObjectOfClass:@"Room" objectId:roomId];
+    if (room) {
+        [self joinRoom:room];
+    }
     
 }
 
@@ -125,11 +117,9 @@
 - (void)deleteCurrentRoom {
     
     // delete room
-    [Room getRoomWithId:_currentRoomId completion:^(PFObject *object, NSError *error) {
-        if (object) {
-            [object deleteEventually];
-        }
-    }];
+    if (_currentRoom) {
+        [_currentRoom deleteEventually];
+    }
     
     // delete all queue songs, votes, and invitations linked to room
     [self deleteAllRoomObjectsWithClassName:@"QueueSong"];

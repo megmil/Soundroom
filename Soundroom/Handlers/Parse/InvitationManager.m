@@ -35,14 +35,29 @@
     NSString *userId = [ParseUserManager currentUserId];
     
     // check for duplicate
-    [self isDuplicateInvitationForUserWithId:userId roomId:roomId completion:^(BOOL isDuplicate, NSError *error) {
-        if (!isDuplicate) {
-            // user has not yet been invited
+    [self didJoinRoomForUserId:userId completion:^(BOOL didJoinRoom, NSError *error) {
+        if (!didJoinRoom) {
+            // user has not yet joined a room
             Invitation *newInvitation = [Invitation new];
             newInvitation.userId = userId;
             newInvitation.roomId = roomId;
             newInvitation.isPending = NO;
             [newInvitation saveInBackground];
+        }
+    }];
+    
+}
+
++ (void)didJoinRoomForUserId:userId completion:(PFBooleanResultBlock)completion {
+    
+    PFQuery *query = [self queryForAcceptedInvitations];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects && objects.count) {
+            // user has joined a room
+            completion(YES, error);
+        } else {
+            // user has not yet joined a room
+            completion(NO, error);
         }
     }];
     
@@ -83,24 +98,6 @@
     [self deleteEventually];
 }
 
-- (void)isInRoomWithCompletion:(PFBooleanResultBlock)completion {
-    
-    NSString *userId = [ParseUserManager currentUserId];
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"Invitation"];
-    [query whereKey:@"userId" equalTo:userId];
-    [query whereKey:@"isPending" equalTo:@(NO)];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
-            // user is already in a room
-            completion(YES, error);
-        } else {
-            // user is not already in a room
-            completion(NO, error);
-        }
-    }];
-}
  */
 
 + (PFQuery *)queryForAcceptedInvitations {

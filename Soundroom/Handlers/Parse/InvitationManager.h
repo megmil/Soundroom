@@ -13,9 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface InvitationManager : NSObject
 
 + (void)inviteUserWithId:(NSString *)userId;
-
 + (void)registerHostForRoomWithId:(NSString *)roomId;
-
 + (PFQuery *)queryForAcceptedInvitations;
 
 @end
