@@ -11,6 +11,7 @@
 #import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "QueueManager.h"
+#import "InvitationManager.h"
 #import "VoteManager.h"
 #import "QueueSong.h"
 #import "Song.h"
@@ -75,15 +76,18 @@
 # pragma mark - Notification Selectors
 
 - (void)loadRoomData {
-    _roomNameLabel.text = [[RoomManager shared] currentRoomName];
-    [[QueueManager shared] fetchQueue];
-    [self configureSongSubscriptions];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
+        [[QueueManager shared] fetchQueue];
+        [self configureSongSubscriptions];
+    });
 }
 
 - (void)clearRoomData {
-    // TODO: fill in defaults
-    _roomNameLabel.text = @"";
-    [[QueueManager shared] resetQueue];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        self->_roomNameLabel.text = @"";
+        [[QueueManager shared] resetQueue];
+    });
 }
 
 - (void)updateQueueData {
@@ -126,11 +130,11 @@
 - (IBAction)didTapLeaveRoom:(id)sender {
     
     if ([[RoomManager shared] isCurrentUserHost]) {
-        [[RoomManager shared] deleteCurrentRoom];
+        [InvitationManager removeAllMembersFromRoom];
         return;
     }
     
-    [[RoomManager shared] leaveCurrentRoom];
+    [InvitationManager deleteAcceptedInvitations];
     
 }
 

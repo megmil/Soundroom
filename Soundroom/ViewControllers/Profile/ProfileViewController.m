@@ -50,6 +50,7 @@
 - (void)didTapUserLogout {
     [ParseUserManager logoutWithCompletion:^(NSError *error) {
         if (!error) {
+            [[SpotifySessionManager shared] signOut];
             [self goToLogin];
         }
     }];

@@ -11,7 +11,7 @@
 #import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "InvitationManager.h"
-#import "QueryManager.h"
+#import "SNDParseManager.h"
 #import "Invitation.h"
 @import ParseLiveQuery;
 
@@ -68,8 +68,8 @@
     _subscription = nil;
     
     // get query for invitations accepted by current user
-    PFQuery *queryForAcceptedInvitations = [[QueryManager shared] queryForAcceptedInvitations];
-    _subscription = [_client subscribeToQuery:queryForAcceptedInvitations];
+    PFQuery *query = [[SNDParseManager shared] queryForAcceptedInvitations];
+    _subscription = [_client subscribeToQuery:query];
     
     // accepted invitation is created (current user created room)
     _subscription = [_subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
@@ -84,7 +84,7 @@
     }];
     
     // accepted invitation is deleted
-    _subscription = [_subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    _subscription = [_subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         [[RoomManager shared] leaveCurrentRoom];
     }];
     

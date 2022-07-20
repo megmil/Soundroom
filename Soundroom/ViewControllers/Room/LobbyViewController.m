@@ -20,8 +20,10 @@
 }
 
 - (void)goToRoom {
-    [self dismissViewControllerAnimated:YES completion:nil]; // dismiss configureVC
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // dismiss self
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self dismissViewControllerAnimated:YES completion:nil]; // dismiss configureVC
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // dismiss self
+    });
 }
 
 @end

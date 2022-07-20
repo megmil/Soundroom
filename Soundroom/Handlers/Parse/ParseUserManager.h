@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock _Nullable)completion;
 
-+ (NSString *)currentUserId; // TODO: properties?
++ (NSString *)currentUserId;
 + (BOOL)isLoggedIn;
 
 @end

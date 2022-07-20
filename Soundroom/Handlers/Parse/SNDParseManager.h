@@ -10,11 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueryManager : NSObject
+@interface SNDParseManager : NSObject
 
 @property (nonatomic, strong) PFQuery *queryForAcceptedInvitations;
+@property (nonatomic, strong) PFQuery *queryForAllRoomMembers;
 
 + (instancetype)shared;
+
++ (void)deleteAllObjects:(NSArray *)objects;
 
 @end
 

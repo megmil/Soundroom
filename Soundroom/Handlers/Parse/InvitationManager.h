@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)inviteUserWithId:(NSString *)userId;
 + (void)registerHostForRoomWithId:(NSString *)roomId;
++ (void)deleteAcceptedInvitations;
++ (void)removeAllMembersFromRoom;
 
 @end
 

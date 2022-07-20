@@ -8,10 +8,24 @@
 #import "InvitationManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
-#import "QueryManager.h"
+#import "SNDParseManager.h"
 #import "Invitation.h"
 
 @implementation InvitationManager
+
++ (void)deleteAcceptedInvitations {
+    PFQuery *query = [[SNDParseManager shared] queryForAcceptedInvitations];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [SNDParseManager deleteAllObjects:objects];
+    }];
+}
+
++ (void)removeAllMembersFromRoom {
+    PFQuery *query = [[SNDParseManager shared] queryForAllRoomMembers];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [SNDParseManager deleteAllObjects:objects];
+    }];
+}
 
 + (void)inviteUserWithId:(NSString *)userId {
     
@@ -51,7 +65,7 @@
 
 + (void)didJoinRoomForUserId:userId completion:(PFBooleanResultBlock)completion {
     
-    PFQuery *query = [[QueryManager shared] queryForAcceptedInvitations];
+    PFQuery *query = [[SNDParseManager shared] queryForAcceptedInvitations];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects && objects.count) {
             // user has joined a room

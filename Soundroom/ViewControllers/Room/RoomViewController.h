@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RoomViewController : UIViewController {
-    BOOL didLoadCredentials; // TODO: rename
+    BOOL didLoadCredentials;
 }
 
 @property (strong, nonatomic) NSString *server;

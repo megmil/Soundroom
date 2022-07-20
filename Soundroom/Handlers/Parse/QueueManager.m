@@ -131,7 +131,6 @@
         [_queue removeObjectAtIndex:index];
         [_scores removeObjectAtIndex:index];
     }
-    // TODO: delete queue song and votes?
 }
 
 - (void)_insertQueueSong:(QueueSong *)song {

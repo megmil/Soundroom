@@ -9,7 +9,8 @@
 #import "QueueSong.h"
 #import "ParseUserManager.h"
 #import "InvitationManager.h"
-#import "QueryManager.h"
+#import "QueueManager.h"
+#import "SNDParseManager.h"
 #import "Invitation.h"
 @import ParseLiveQuery;
 
@@ -48,7 +49,7 @@
 
 - (void)fetchCurrentRoom {
     
-    PFQuery *query = [[QueryManager shared] queryForAcceptedInvitations];
+    PFQuery *query = [[SNDParseManager shared] queryForAcceptedInvitations];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects && objects.count) {
             // user is already in a room
@@ -100,9 +101,8 @@
         return;
     }
     
-    // TODO: delete invitation
-    
-    // TODO: delete queue
+    [InvitationManager deleteAcceptedInvitations];
+    [[QueueManager shared] resetQueue];
     
     _currentRoom = nil;
     _currentRoomId = nil;
@@ -138,14 +138,8 @@
     PFQuery *query = [PFQuery queryWithClassName:className];
     [query whereKey:@"roomId" equalTo:_currentRoomId];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [self deleteAllObjects:objects];
+        [SNDParseManager deleteAllObjects:objects];
     }];
-}
-
-- (void)deleteAllObjects:(NSArray *)objects {
-    for (PFObject *object in objects) {
-        [object deleteEventually];
-    }
 }
 
 - (BOOL)isCurrentUserHost {
