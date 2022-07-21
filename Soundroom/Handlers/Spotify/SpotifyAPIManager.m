@@ -13,7 +13,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 @implementation SpotifyAPIManager
 
 + (instancetype)shared {
-    static SpotifyAPIManager *sharedManager = nil;
+    static SpotifyAPIManager *sharedManager;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedManager = [[self alloc] init];

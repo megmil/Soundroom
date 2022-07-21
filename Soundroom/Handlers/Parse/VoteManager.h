@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 + (instancetype)shared;
 
 - (void)getVoteStateForSongWithId:(NSString *)songId completion:(void (^)(VoteState voteState))completion;
-- (void)resetLocalVoteData;
+- (void)resetLocalVotes;
 
 + (void)scoreForSong:(QueueSong *)song initialScore:(NSNumber *)initialScore completion:(void (^)(NSNumber * _Nullable result))completion;
 + (VoteState)voteStateForSong:(QueueSong *)song;

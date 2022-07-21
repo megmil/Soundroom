@@ -22,8 +22,6 @@
     if ([object isKindOfClass:[QueueSong class]]) {
         QueueSong *song = (QueueSong *)object;
         return [self.objectId isEqualToString:song.objectId];
-    } else if ([object isKindOfClass:[NSString class]]) {
-        return [self.objectId isEqualToString:object];
     }
     
     return NO;

@@ -64,7 +64,7 @@
 
 # pragma mark - Fetch Queue
 
-- (void)resetQueue {
+- (void)resetLocalQueue {
     _queue = [NSMutableArray <QueueSong *> array];
     _scores = [NSMutableArray <NSNumber *> array];
 }
@@ -106,7 +106,7 @@
         [permutationArray sortWithOptions:0 usingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSNumber *lhs = [scores objectAtIndex:[obj1 intValue]];
             NSNumber *rhs = [scores objectAtIndex:[obj2 intValue]];
-            return [lhs compare:rhs];
+            return [rhs compare:lhs];
         }];
         
         // use the permutation to re-order the queue and scores
@@ -126,9 +126,15 @@
 
 # pragma mark - Update Queue: Private
 
-- (void)_updateQueueSong:(QueueSong *)song completion:(void (^)(BOOL succeeded))completion {
-    [self _removeQueueSong:song];
-    [self _insertQueueSong:song completion:completion];
+- (void)_updateQueueSongWithId:(NSString *)songId completion:(void (^)(BOOL succeeded))completion {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query getObjectInBackgroundWithId:songId block:^(PFObject *object, NSError *error) {
+        if (object) {
+            QueueSong *song = (QueueSong *)object;
+            [self _removeQueueSong:song];
+            [self _insertQueueSong:song completion:completion];
+        }
+    }];
 }
 
 - (void)_removeQueueSong:(QueueSong *)song {
@@ -141,28 +147,23 @@
 
 - (void)_insertQueueSong:(QueueSong *)song completion:(void (^)(BOOL succeeded))completion {
     
-    [VoteManager scoreForSongWithId:song.objectId completion:^(NSNumber *result) {
+    [VoteManager scoreForSongWithId:song.objectId completion:^(NSNumber *score) {
         
-        NSUInteger score = [result unsignedIntegerValue];
+        NSUInteger index = [self->_scores indexOfObjectPassingTest:^BOOL(NSNumber *obj, NSUInteger idx, BOOL *stop) {
+            return [obj compare:score] == NSOrderedAscending; // return true for the earliest obj in _scores where score > obj
+        }];
         
-        // empty queue
-        if (!self->_queue || !self->_queue.count) {
-            self->_queue = [NSMutableArray arrayWithObject:song];
-            self->_scores = [NSMutableArray arrayWithObject:@(score)];
+        // edge cases: empty arrays or score is not greater than any item in scores array
+        if (index == NSNotFound) {
+            [self->_queue addObject:song];
+            [self->_scores addObject:score];
             completion(YES);
             return;
         }
-            
-        // insert queue song at lowest position
-        for (NSUInteger i = self->_scores.count - 1; i >= 0; i--) {
-            NSUInteger current = [[self->_scores objectAtIndex:i] unsignedIntegerValue];
-            if (score <= current || i == 0) {
-                [self->_queue insertObject:song atIndex:i]; // TODO: i + 1
-                [self->_scores insertObject:@(score) atIndex:i];
-                completion(YES);
-                return;
-            }
-        }
+        
+        [self->_queue insertObject:song atIndex:index];
+        [self->_scores insertObject:score atIndex:index];
+        completion(YES);
         
     }];
     
@@ -171,21 +172,16 @@
 # pragma mark - Update Queue: Public
 
 - (void)updateQueueSongWithId:(NSString * _Nonnull )songId {
-    QueueSong *song = [PFQuery getObjectOfClass:@"QueueSong" objectId:songId];
-    if (song && [_queue containsObject:song]) {
-        [self _updateQueueSong:song completion:^(BOOL succeeded) {
-            if (succeeded) {
-                [self postUpdatedQueueNotification];
-            }
-        }];
-    }
+    [self _updateQueueSongWithId:songId completion:^(BOOL succeeded) {
+        if (succeeded) {
+            [self postUpdatedQueueNotification];
+        }
+    }];
 }
 
 - (void)removeQueueSong:(QueueSong *)song {
-    if ([_queue containsObject:song]) {
-        [self _removeQueueSong:song];
-        [self postUpdatedQueueNotification];
-    }
+    [self _removeQueueSong:song];
+    [self postUpdatedQueueNotification];
 }
 
 - (void)insertQueueSong:(QueueSong *)song {

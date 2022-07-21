@@ -90,13 +90,14 @@
 - (void)clearRoomData {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = @"";
-        [[QueueManager shared] resetQueue];
+        [[QueueManager shared] resetLocalQueue];
+        [[VoteManager shared] resetLocalVotes];
     });
 }
 
 - (void)updateQueueData {
     [self updateCurrentSongData];
-    [[VoteManager shared] resetLocalVoteData];
+    [[VoteManager shared] resetLocalVotes];
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self->_tableView reloadData];
     });

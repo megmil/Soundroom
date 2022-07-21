@@ -31,8 +31,8 @@
     _imageView.frame = CGRectMake(20.f, 8.f, 50.f, 50.f);
     _addButton.frame = CGRectMake(self.contentView.frame.size.width - 50.f - 20.f, 8.f, 50.f, 50.f);
     
-    CGFloat imageToLabels = _imageView.frame.origin.x + _imageView.frame.size.width + 8.f;
-    CGFloat labelsToButton = _addButton.frame.origin.x + 8.f;
+    const CGFloat imageToLabels = _imageView.frame.origin.x + _imageView.frame.size.width + 8.f;
+    const CGFloat labelsToButton = _addButton.frame.origin.x + 8.f;
     
     _titleLabel.frame = CGRectMake(imageToLabels, _imageView.frame.origin.y + 6.f, labelsToButton - imageToLabels, 19.f);
     _subtitleLabel.frame = CGRectMake(_titleLabel.frame.origin.x, _titleLabel.frame.origin.y + _titleLabel.frame.size.height + 3.f, _titleLabel.frame.size.width, 16.f);
@@ -115,14 +115,14 @@
 
 - (void)didTapDownvote {
     
-    // if already downvoted, set as downvoted
+    // if already downvoted, set as unvoted
     if (self.voteState == Downvoted) {
         self.voteState = NotVoted;
         [VoteManager incrementSongWithId:self.objectId byAmount:@(0)];
         return;
     }
     
-    // set as upvoted
+    // set as downvoted
     self.voteState = Downvoted;
     [VoteManager incrementSongWithId:self.objectId byAmount:@(-1)];
 
@@ -143,7 +143,14 @@
 }
 
 - (void)setScore:(NSNumber *)score {
+    
+    if (!score) {
+        _scoreLabel.text = @"0";
+        return;
+    }
+    
     _scoreLabel.text = [score stringValue];
+    
 }
 
 - (void)setVoteState:(VoteState)voteState {

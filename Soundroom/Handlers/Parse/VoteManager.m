@@ -76,23 +76,13 @@
     
     PFQuery *query = [[SNDParseManager shared] queryForAllVotesInRoom];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        
         for (Vote *vote in objects) {
-            
-            PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-            [query getObjectInBackgroundWithId:vote.songId block:^(PFObject *object, NSError *error) {
-                if (object) {
-                    
-                    QueueSong *song = (QueueSong *)object;
-                    NSUInteger index = [queue indexOfObject:song];
-                    
-                    if (index != NSNotFound) {
-                        NSNumber *currentScore = [scores objectAtIndex:index];
-                        NSNumber *newScore = @(currentScore.integerValue + vote.increment.integerValue);
-                        [scores replaceObjectAtIndex:index withObject:newScore];
-                    }
-                }
-            }];
+            NSUInteger index = [[queue valueForKey:@"objectId"] indexOfObject:vote.songId];
+            if (index != NSNotFound) {
+                NSNumber *currentScore = [scores objectAtIndex:index];
+                NSNumber *newScore = @(currentScore.integerValue + vote.increment.integerValue);
+                [scores replaceObjectAtIndex:index withObject:newScore];
+            }
         }
         completion(scores);
     }];
@@ -126,7 +116,7 @@
     }];
 }
 
-- (void)resetLocalVoteData {
+- (void)resetLocalVotes {
     _upvotedSongIds = [NSMutableSet<NSString *> set];
     _downvotedSongIds = [NSMutableSet<NSString *> set];
     _didLoadUserVotes = NO;
@@ -134,7 +124,7 @@
 
 - (void)loadUserVotesWithCompletion:(void (^)(BOOL succeeded))completion {
     
-    [self resetLocalVoteData];
+    [self resetLocalVotes];
     
     if ([[RoomManager shared] isInRoom]) {
         PFQuery *query = [[SNDParseManager shared] queryForCurrentUserVotes];

@@ -105,7 +105,7 @@
     }
     
     [InvitationManager deleteAcceptedInvitations];
-    [[QueueManager shared] resetQueue];
+    [[QueueManager shared] resetLocalQueue];
     
     _currentRoom = nil;
     _currentRoomId = nil;

@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)playTopSong;
 
-- (void)resetQueue;
+- (void)resetLocalQueue;
 - (void)fetchQueue;
 - (void)updateQueueSongWithId:(NSString * _Nonnull)songId;
 - (void)removeQueueSong:(QueueSong *)song;
