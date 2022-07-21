@@ -157,8 +157,9 @@
 
 # pragma mark - Update Queue: Public
 
-- (void)updateQueueSong:(QueueSong *)song {
-    if ([_queue containsObject:song]) {
+- (void)updateQueueSongWithId:(NSString * _Nonnull )songId {
+    QueueSong *song = [PFQuery getObjectOfClass:@"QueueSong" objectId:songId];
+    if (song && [_queue containsObject:song]) {
         [self _updateQueueSong:song];
         [self postUpdatedQueueNotification];
     }

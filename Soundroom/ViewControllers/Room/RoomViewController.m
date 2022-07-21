@@ -15,6 +15,7 @@
 #import "VoteManager.h"
 #import "QueueSong.h"
 #import "Song.h"
+#import "Vote.h"
 #import "SongCell.h"
 #import "SNDParseManager.h"
 @import ParseLiveQuery;
@@ -29,7 +30,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
+@property (strong, nonatomic) PFLiveQuerySubscription *invitationSubscription;
+@property (strong, nonatomic) PFLiveQuerySubscription *voteSubscription;
 
 @end
 
@@ -80,7 +82,7 @@
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
         [[QueueManager shared] fetchQueue];
-        [self configureSongSubscriptions];
+        [self configureInvitationSubscription];
     });
 }
 
@@ -172,12 +174,12 @@
     return 66.f;
 }
 
-# pragma mark - Live Query
+# pragma mark - Subscriptions
 
-- (void)configureSongSubscriptions {
+- (void)configureInvitationSubscription {
     
     // reset subscriptions
-    _subscription = nil;
+    _invitationSubscription = nil;
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
@@ -185,19 +187,47 @@
         return;
     }
     
-    PFQuery *query = [[SNDParseManager shared] queryForCurrentQueue];
-    _subscription = [_client subscribeToQuery:query];
+    PFQuery *songsQuery = [[SNDParseManager shared] queryForCurrentQueue];
+    _invitationSubscription = [_client subscribeToQuery:songsQuery];
     
     // new song request is created
-    _subscription = [_subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    _invitationSubscription = [_invitationSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
         [[QueueManager shared] insertQueueSong:song];
     }];
     
     // song request is removed
-    _subscription = [_subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    _invitationSubscription = [_invitationSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
         [[QueueManager shared] removeQueueSong:song];
+    }];
+    
+}
+
+- (void)configureVoteSubscription {
+    
+    // reset subscriptions
+    _voteSubscription = nil;
+    
+    // check for valid roomId
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    if (!roomId) {
+        return;
+    }
+    
+    PFQuery *songsQuery = [[SNDParseManager shared] queryForScoreUpdates];
+    _voteSubscription = [_client subscribeToQuery:songsQuery];
+    
+    // vote is created
+    _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Vote *vote = (Vote *)object;
+        [[QueueManager shared] updateQueueSongWithId:vote.songId];
+    }];
+    
+    // vote is updated
+    _voteSubscription = [_voteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Vote *vote = (Vote *)object;
+        [[QueueManager shared] updateQueueSongWithId:vote.songId];
     }];
     
 }

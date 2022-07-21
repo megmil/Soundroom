@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)resetQueue;
 - (void)fetchQueue;
-- (void)updateQueueSong:(QueueSong *)song;
+- (void)updateQueueSongWithId:(NSString * _Nonnull)songId;
 - (void)removeQueueSong:(QueueSong *)song;
 - (void)insertQueueSong:(QueueSong *)song;
 - (NSMutableArray <QueueSong *> *)queue;
