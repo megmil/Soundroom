@@ -8,6 +8,7 @@
 #import "VoteManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
+#import "SNDParseManager.h"
 #import "Vote.h"
 
 @implementation VoteManager
@@ -18,11 +19,8 @@
 
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount {
     
-    NSString *userId = [ParseUserManager currentUserId];
-    NSString *roomId = [[RoomManager shared] currentRoomId];
-    
     // check for duplicate
-    [self getVotesForSongWithId:songId userId:userId roomId:roomId completion:^(PFObject *object, NSError *error) {
+    [self getVotesForSongWithId:songId completion:^(PFObject *object, NSError *error) {
         if (object) {
             // update duplicate vote
             Vote *vote = (Vote *)object;
@@ -32,8 +30,8 @@
             // create new vote
             Vote *newVote = [Vote new];
             newVote.songId = songId;
-            newVote.userId = userId;
-            newVote.roomId = roomId;
+            newVote.userId = [ParseUserManager currentUserId];
+            newVote.roomId = [[RoomManager shared] currentRoomId];
             newVote.increment = amount;
             [newVote saveInBackground];
         }
@@ -41,13 +39,9 @@
     
 }
 
-+ (void)getVotesForSongWithId:(NSString *)songId userId:(NSString *)userId roomId:(NSString *)roomId completion:(PFObjectResultBlock)completion {
++ (void)getVotesForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion {
     
-    PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
-    [query whereKey:@"songId" equalTo:songId];
-    [query whereKey:@"userId" equalTo:userId];
-    [query whereKey:@"roomId" equalTo:roomId];
-    
+    PFQuery *query = [SNDParseManager queryForUserVotesWithSongId:songId];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects) {
             // this song has already been voted on (should only be one object)
@@ -60,25 +54,36 @@
     
 }
 
++ (void)getAllVotesForSongWithId:(NSString *)songId {
+    PFQuery *query = [SNDParseManager queryForAllVotesWithSongId:songId];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            for (PFObject *object in objects) {
+                
+            }
+        }
+    }];
+}
+
 + (NSNumber *)scoreForSongWithId:(NSString *)songId {
     
-    double __block score = 0;
+    NSNumber *finalScore = 0;
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
     if (roomId) {
+        __block int score = 0;
         PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
         [query whereKey:@"songId" equalTo:songId];
         [query whereKey:@"roomId" equalTo:roomId];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (objects) {
                 for (Vote *vote in objects) {
-                    score += [vote.increment doubleValue];
+                    score += [vote.increment intValue];
                 }
             }
         }];
     }
     
-    NSNumber *finalScore = [NSNumber numberWithDouble:score];
     return finalScore;
     
 }

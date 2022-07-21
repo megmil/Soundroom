@@ -83,6 +83,7 @@
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
         [[QueueManager shared] fetchQueue];
         [self configureInvitationSubscription];
+        [self configureVoteSubscription];
     });
 }
 
@@ -215,8 +216,8 @@
         return;
     }
     
-    PFQuery *songsQuery = [[SNDParseManager shared] queryForScoreUpdates];
-    _voteSubscription = [_client subscribeToQuery:songsQuery];
+    PFQuery *scoresQuery = [[SNDParseManager shared] queryForScoreUpdates];
+    _voteSubscription = [_client subscribeToQuery:scoresQuery];
     
     // vote is created
     _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
@@ -225,7 +226,7 @@
     }];
     
     // vote is updated
-    _voteSubscription = [_voteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    _voteSubscription = [_voteSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Vote *vote = (Vote *)object;
         [[QueueManager shared] updateQueueSongWithId:vote.songId];
     }];

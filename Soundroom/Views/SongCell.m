@@ -65,7 +65,7 @@
         
         _addButton = [UIButton new];
         _addButton.userInteractionEnabled = YES;
-        [_addButton addTarget:self action:@selector(addItem) forControlEvents:UIControlEventTouchUpInside];
+        [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_addButton];
         
         _upvoteButton = [UIButton new];
@@ -85,21 +85,9 @@
     return self;
 }
 
-- (void)setTitle:(NSString *)title {
-    _titleLabel.text = title;
-}
+# pragma mark - Buttons
 
-- (void)setSubtitle:(NSString *)subtitle {
-    _subtitleLabel.text = subtitle;
-}
-
-- (void)setImage:(UIImage *)image {
-    _imageView.image = image;
-}
-
-# pragma mark - Add Song/User Cell
-
-- (void)addItem {
+- (void)didTapAdd {
     
     if (_cellType == AddSongCell) {
         [QueueManager requestSongWithSpotifyId:_objectId];
@@ -109,8 +97,6 @@
     [InvitationManager inviteUserWithId:_objectId];
     
 }
-
-# pragma mark - QueueSongCell Public
 
 - (void)didTapUpvote {
     
@@ -142,11 +128,23 @@
 
 }
 
+# pragma mark - Setters
+
+- (void)setTitle:(NSString *)title {
+    _titleLabel.text = title;
+}
+
+- (void)setSubtitle:(NSString *)subtitle {
+    _subtitleLabel.text = subtitle;
+}
+
+- (void)setImage:(UIImage *)image {
+    _imageView.image = image;
+}
+
 - (void)setScore:(NSNumber *)score {
     _scoreLabel.text = [score stringValue];
 }
-
-# pragma mark - Vote State
 
 - (void)setVoteState:(VoteState)voteState {
     
@@ -164,8 +162,6 @@
     }
     
 }
-
-# pragma mark - Cell Type
 
 - (void)setCellType:(CellType)cellType {
     

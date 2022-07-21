@@ -88,6 +88,9 @@
     _scores = [NSMutableArray arrayWithCapacity:_queue.count];
     for (QueueSong *song in _queue) {
         NSNumber *score = [VoteManager scoreForSongWithId:song.objectId];
+        if (!score) {
+            score = @(0);
+        }
         [_scores addObject:score];
     }
     
@@ -121,13 +124,13 @@
 # pragma mark - Update Queue: Private
 
 - (void)_updateQueueSong:(QueueSong *)song {
-    [self removeQueueSong:song];
-    [self insertQueueSong:song];
+    [self _removeQueueSong:song];
+    [self _insertQueueSong:song];
 }
 
 - (void)_removeQueueSong:(QueueSong *)song {
     NSUInteger index = [_queue indexOfObject:song];
-    if (index) {
+    if (index != NSNotFound) {
         [_queue removeObjectAtIndex:index];
         [_scores removeObjectAtIndex:index];
     }
@@ -148,7 +151,7 @@
     for (NSUInteger i = _scores.count - 1; i >= 0; i--) {
         NSUInteger current = [[_scores objectAtIndex:i] intValue];
         if (score <= current || i == 0) {
-            [_queue insertObject:song atIndex:i];
+            [_queue insertObject:song atIndex:i]; // TODO: i + 1
             [_scores insertObject:@(score) atIndex:i];
             return;
         }

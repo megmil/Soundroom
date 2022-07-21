@@ -95,7 +95,7 @@
     
 }
 
-- (void)leaveCurrentRoom {
+- (void)_leaveCurrentRoom {
     
     if (_currentRoom == nil) {
         return;
@@ -111,15 +111,18 @@
     _currentSongId = nil;
     _isInRoom = NO;
     
+}
+
+- (void)leaveCurrentRoom {
+    [self _leaveCurrentRoom];
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
-    
 }
 
 - (void)deleteCurrentRoom {
     
     // delete room
     if (_currentRoom) {
-        [_currentRoom deleteEventually];
+        [_currentRoom deleteInBackground];
     }
     
     // delete all queue songs, votes, and invitations linked to room
@@ -128,7 +131,7 @@
     [self deleteAllRoomObjectsWithClassName:@"Invitation"];
     
     // clear properties
-    [self leaveCurrentRoom];
+    [self _leaveCurrentRoom];
     
 }
 

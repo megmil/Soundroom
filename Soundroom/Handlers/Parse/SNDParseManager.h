@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)deleteAllObjects:(NSArray *)objects;
 
++ (PFQuery *)queryForUserVotesWithSongId:(NSString *)songId;
++ (PFQuery *)queryForAllVotesWithSongId:(NSString *)songId;
+
 @end
 
 NS_ASSUME_NONNULL_END
