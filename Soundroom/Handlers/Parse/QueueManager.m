@@ -126,9 +126,9 @@
 
 # pragma mark - Update Queue: Private
 
-- (void)_updateQueueSong:(QueueSong *)song {
+- (void)_updateQueueSong:(QueueSong *)song completion:(void (^)(BOOL succeeded))completion {
     [self _removeQueueSong:song];
-    [self _insertQueueSong:song];
+    [self _insertQueueSong:song completion:completion];
 }
 
 - (void)_removeQueueSong:(QueueSong *)song {
@@ -139,7 +139,7 @@
     }
 }
 
-- (void)_insertQueueSong:(QueueSong *)song {
+- (void)_insertQueueSong:(QueueSong *)song completion:(void (^)(BOOL succeeded))completion {
     
     [VoteManager scoreForSongWithId:song.objectId completion:^(NSNumber *result) {
         
@@ -149,6 +149,7 @@
         if (!self->_queue || !self->_queue.count) {
             self->_queue = [NSMutableArray arrayWithObject:song];
             self->_scores = [NSMutableArray arrayWithObject:@(score)];
+            completion(YES);
             return;
         }
             
@@ -158,11 +159,13 @@
             if (score <= current || i == 0) {
                 [self->_queue insertObject:song atIndex:i]; // TODO: i + 1
                 [self->_scores insertObject:@(score) atIndex:i];
+                completion(YES);
                 return;
             }
         }
         
     }];
+    
 }
 
 # pragma mark - Update Queue: Public
@@ -170,8 +173,11 @@
 - (void)updateQueueSongWithId:(NSString * _Nonnull )songId {
     QueueSong *song = [PFQuery getObjectOfClass:@"QueueSong" objectId:songId];
     if (song && [_queue containsObject:song]) {
-        [self _updateQueueSong:song];
-        [self postUpdatedQueueNotification];
+        [self _updateQueueSong:song completion:^(BOOL succeeded) {
+            if (succeeded) {
+                [self postUpdatedQueueNotification];
+            }
+        }];
     }
 }
 
@@ -183,8 +189,11 @@
 }
 
 - (void)insertQueueSong:(QueueSong *)song {
-    [self _insertQueueSong:song];
-    [self postUpdatedQueueNotification];
+    [self _insertQueueSong:song completion:^(BOOL succeeded) {
+        if (succeeded) {
+            [self postUpdatedQueueNotification];
+        }
+    }];
 }
 
 - (NSMutableArray <QueueSong *> *)queue {
