@@ -125,11 +125,16 @@
         });
     }];
 }
-- (void)loadUserVotesWithCompletion:(void (^)(BOOL succeeded))completion {
-    
+
+- (void)resetLocalVoteData {
     _upvotedSongIds = [NSMutableSet<NSString *> set];
     _downvotedSongIds = [NSMutableSet<NSString *> set];
     _didLoadUserVotes = NO;
+}
+
+- (void)loadUserVotesWithCompletion:(void (^)(BOOL succeeded))completion {
+    
+    [self resetLocalVoteData];
     
     if ([[RoomManager shared] isInRoom]) {
         PFQuery *query = [[SNDParseManager shared] queryForCurrentUserVotes];

@@ -96,6 +96,7 @@
 
 - (void)updateQueueData {
     [self updateCurrentSongData];
+    [[VoteManager shared] resetLocalVoteData];
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self->_tableView reloadData];
     });
