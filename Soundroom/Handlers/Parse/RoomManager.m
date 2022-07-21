@@ -71,10 +71,13 @@
         return;
     }
     
-    Room *room = [PFQuery getObjectOfClass:@"Room" objectId:roomId];
-    if (room) {
-        [self joinRoom:room];
-    }
+    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
+    [query getObjectInBackgroundWithId:roomId block:^(PFObject *object, NSError *error) {
+        if (object) {
+            Room *room = (Room *)object;
+            [self joinRoom:room];
+        }
+    }];
     
 }
 

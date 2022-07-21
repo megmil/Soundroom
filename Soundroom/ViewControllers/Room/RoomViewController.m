@@ -104,6 +104,9 @@
 - (void)updateCurrentSongData {
     
     NSString *currentSongId = [[RoomManager shared] currentSongId];
+    [QueueManager]
+    
+    
     NSString *currentSpotifyId = [QueueManager getSpotifyIdForSongWithId:currentSongId];
     
     // get spotify metadata
@@ -157,7 +160,7 @@
     cell.spotifyId = queueSong.spotifyId;
     cell.cellType = QueueSongCell;
     cell.voteState = [VoteManager voteStateForSong:queueSong];
-    cell.score = [VoteManager scoreForSong:queueSong];
+    cell.score = [[QueueManager shared] scores][indexPath.row];
     
     // get spotify metadata
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
@@ -216,7 +219,7 @@
         return;
     }
     
-    PFQuery *scoresQuery = [[SNDParseManager shared] queryForScoreUpdates];
+    PFQuery *scoresQuery = [[SNDParseManager shared] queryForAllVotesInRoom];
     _voteSubscription = [_client subscribeToQuery:scoresQuery];
     
     // vote is created

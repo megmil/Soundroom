@@ -8,6 +8,8 @@
 #import "QueueManager.h"
 #import "RoomManager.h"
 #import "VoteManager.h"
+#import "Vote.h"
+#import "SNDParseManager.h"
 
 @implementation QueueManager {
     NSMutableArray <QueueSong *> *_queue;
@@ -48,12 +50,16 @@
     
 }
 
-+ (NSString *)getSpotifyIdForSongWithId:(NSString *)songId {
-    QueueSong *song = [PFQuery getObjectOfClass:@"QueueSong" objectId:songId];
-    if (song) {
-        return song.spotifyId;
-    }
-    return nil;
++ (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+    [query getObjectInBackgroundWithId:songId block:^(PFObject *object, NSError *error) {
+        if (object) {
+            QueueSong *song = (QueueSong *)object;
+            completion(song.spotifyId, error);
+        } else {
+            completion(nil, error);
+        }
+    }];
 }
 
 # pragma mark - Fetch Queue
@@ -83,42 +89,39 @@
 }
 
 - (void)sortQueue {
-    
     // calculate score for each queue song
-    _scores = [NSMutableArray arrayWithCapacity:_queue.count];
-    for (QueueSong *song in _queue) {
-        NSNumber *score = [VoteManager scoreForSongWithId:song.objectId];
-        if (!score) {
-            score = @(0);
+    [VoteManager loadScoresForQueue:_queue completion:^(NSMutableArray<NSNumber *> *scores) {
+        
+        if (!scores) {
+            return;
         }
-        [_scores addObject:score];
-    }
-    
-    // create permutation array to log order change
-    NSMutableArray <NSNumber *> *permutationArray = [NSMutableArray arrayWithCapacity:_queue.count];
-    for (NSUInteger i = 0; i != _queue.count; i++) {
-        [permutationArray addObject:[NSNumber numberWithInteger:i]];
-    }
-    
-    // sort permutation array according to scores
-    [permutationArray sortWithOptions:0 usingComparator:^NSComparisonResult(id obj1, id obj2) {
-        NSNumber *lhs = [_scores objectAtIndex:[obj1 intValue]];
-        NSNumber *rhs = [_scores objectAtIndex:[obj2 intValue]];
-        return [lhs compare:rhs];
+        
+        // create permutation array to log order change
+        NSMutableArray <NSNumber *> *permutationArray = [NSMutableArray arrayWithCapacity:scores.count];
+        for (NSUInteger i = 0; i != scores.count; i++) {
+            [permutationArray addObject:[NSNumber numberWithInteger:i]];
+        }
+        
+        // sort permutation array according to scores
+        [permutationArray sortWithOptions:0 usingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSNumber *lhs = [scores objectAtIndex:[obj1 intValue]];
+            NSNumber *rhs = [scores objectAtIndex:[obj2 intValue]];
+            return [lhs compare:rhs];
+        }];
+        
+        // use the permutation to re-order the queue and scores
+        NSMutableArray <QueueSong *> *sortedQueue = [NSMutableArray arrayWithCapacity:scores.count];
+        NSMutableArray <NSNumber *> *sortedScores = [NSMutableArray arrayWithCapacity:scores.count];
+        [permutationArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSUInteger pos = [obj intValue];
+            [sortedQueue addObject:[self->_queue objectAtIndex:pos]];
+            [sortedScores addObject:[scores objectAtIndex:pos]];
+        }];
+        
+        self->_queue = sortedQueue;
+        self->_scores = sortedScores;
+        
     }];
-    
-    // use the permutation to re-order the queue and scores
-    NSMutableArray <QueueSong *> *sortedQueue = [NSMutableArray arrayWithCapacity:_queue.count];
-    NSMutableArray <NSNumber *> *sortedScores = [NSMutableArray arrayWithCapacity:_queue.count];
-    [permutationArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSUInteger pos = [obj intValue];
-        [sortedQueue addObject:[_queue objectAtIndex:pos]];
-        [sortedScores addObject:[_scores objectAtIndex:pos]];
-    }];
-    
-    _queue = sortedQueue;
-    _scores = sortedScores;
-    
 }
 
 # pragma mark - Update Queue: Private
@@ -138,24 +141,28 @@
 
 - (void)_insertQueueSong:(QueueSong *)song {
     
-    NSUInteger score = [[VoteManager scoreForSongWithId:song.objectId] intValue];
-    
-    // empty queue
-    if (!_queue || !_queue.count) {
-        _queue = [NSMutableArray arrayWithObject:song];
-        _scores = [NSMutableArray arrayWithObject:@(score)];
-        return;
-    }
-    
-    // insert queue song at lowest position
-    for (NSUInteger i = _scores.count - 1; i >= 0; i--) {
-        NSUInteger current = [[_scores objectAtIndex:i] intValue];
-        if (score <= current || i == 0) {
-            [_queue insertObject:song atIndex:i]; // TODO: i + 1
-            [_scores insertObject:@(score) atIndex:i];
+    [VoteManager scoreForSongWithId:song.objectId completion:^(NSNumber *result) {
+        
+        NSUInteger score = [result unsignedIntegerValue];
+        
+        // empty queue
+        if (!self->_queue || !self->_queue.count) {
+            self->_queue = [NSMutableArray arrayWithObject:song];
+            self->_scores = [NSMutableArray arrayWithObject:@(score)];
             return;
         }
-    }
+            
+        // insert queue song at lowest position
+        for (NSUInteger i = self->_scores.count - 1; i >= 0; i--) {
+            NSUInteger current = [[self->_scores objectAtIndex:i] unsignedIntegerValue];
+            if (score <= current || i == 0) {
+                [self->_queue insertObject:song atIndex:i]; // TODO: i + 1
+                [self->_scores insertObject:@(score) atIndex:i];
+                return;
+            }
+        }
+        
+    }];
 }
 
 # pragma mark - Update Queue: Public
@@ -182,6 +189,10 @@
 
 - (NSMutableArray <QueueSong *> *)queue {
     return _queue;
+}
+
+- (NSMutableArray<NSNumber *> *)scores {
+    return _scores;
 }
 
 

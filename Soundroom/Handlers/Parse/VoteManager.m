@@ -54,42 +54,60 @@
     
 }
 
-+ (void)getAllVotesForSongWithId:(NSString *)songId {
-    PFQuery *query = [SNDParseManager queryForAllVotesWithSongId:songId];
++ (void)loadScoresForQueue:(NSMutableArray <QueueSong *> *)queue completion:(void (^)(NSMutableArray <NSNumber *> *scores))completion {
+    
+    NSMutableArray <NSNumber *> *scores = [NSMutableArray arrayWithCapacity:queue.count];
+    for (NSUInteger i = 0; i != queue.count; i++) {
+        [scores addObject:@(0)];
+    }
+    
+    PFQuery *query = [[SNDParseManager shared] queryForAllVotesInRoom];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
-            for (PFObject *object in objects) {
-                
+        
+        for (Vote *vote in objects) {
+            
+            QueueSong *song = [PFQuery getObjectOfClass:@"QueueSong" objectId:vote.songId];
+            NSUInteger index = [queue indexOfObject:song];
+            
+            if (index != NSNotFound) {
+                NSNumber *currentScore = [scores objectAtIndex:index];
+                NSNumber *newScore = @(currentScore.integerValue + vote.increment.integerValue);
+                [scores replaceObjectAtIndex:index withObject:newScore];
             }
+            
         }
+        
+        completion(scores);
+        
     }];
 }
 
-+ (NSNumber *)scoreForSongWithId:(NSString *)songId {
-    
-    NSNumber *finalScore = 0;
-    NSString *roomId = [[RoomManager shared] currentRoomId];
-    
-    if (roomId) {
-        __block int score = 0;
-        PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
-        [query whereKey:@"songId" equalTo:songId];
-        [query whereKey:@"roomId" equalTo:roomId];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (objects) {
-                for (Vote *vote in objects) {
-                    score += [vote.increment intValue];
-                }
-            }
-        }];
-    }
-    
-    return finalScore;
-    
++ (void)scoreForSongWithId:(NSString *)songId completion:(void (^)(NSNumber *result))completion {
+    PFQuery *query = [SNDParseManager queryForAllVotesWithSongId:songId];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        __block NSInteger score = 0;
+        for (Vote *vote in objects) {
+            score += vote.increment.integerValue;
+        }
+        completion(@(score));
+    }];
 }
 
-+ (NSNumber *)scoreForSong:(QueueSong *)song {
-    return [self scoreForSongWithId:song.objectId];
++ (void)scoreForSongWithId:(NSString *)songId initialScore:(NSNumber *)initialScore completion:(void (^)(NSNumber *result))completion {
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    PFQuery *query = [SNDParseManager queryForAllVotesWithSongId:songId];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        __block NSInteger score = initialScore.integerValue;
+        dispatch_async(queue, ^{
+            if (completion) {
+                for (Vote *vote in objects) {
+                    score += vote.increment.integerValue;
+                }
+                completion(@(score));
+            }
+        });
+    }];
 }
 
 + (VoteState)voteStateForSong:(QueueSong *)song {
@@ -112,34 +130,27 @@
 
 + (BOOL)didUpvoteSongWithId:(NSString *)songId {
     
-    BOOL __block didUpvote = NO;
-    
     PFQuery *query = [self queryWithSongId:songId];
     [query whereKey:@"increment" equalTo:@(1)];
-
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
-            didUpvote = YES;
-        }
-    }];
+    NSArray *objects = [query findObjects];
+    if (objects) {
+        return YES;
+    }
     
-    return didUpvote;
+    return NO;
 }
 
 + (BOOL)didDownvoteSongWithId:(NSString *)songId {
     
-    BOOL __block didDownvote = NO;
-    
     PFQuery *query = [self queryWithSongId:songId];
     [query whereKey:@"increment" equalTo:@(-1)];
+    NSArray *objects = [query findObjects];
+    if (objects) {
+        return YES;
+    }
     
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
-            didDownvote = YES;
-        }
-    }];
+    return NO;
     
-    return didDownvote;
 }
 
 + (BOOL)didNotVoteSongWithId:(NSString *)songId {

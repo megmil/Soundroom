@@ -18,12 +18,15 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 
 @interface VoteManager : NSObject
 
-+ (NSNumber *)scoreForSong:(QueueSong *)song;
++ (void)scoreForSong:(QueueSong *)song initialScore:(NSNumber *)initialScore completion:(void (^)(NSNumber * _Nullable result))completion;
 + (VoteState)voteStateForSong:(QueueSong *)song;
 
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount;
 + (VoteState)voteStateForSongWithId:(NSString *)songId;
-+ (NSNumber *)scoreForSongWithId:(NSString *)songId;
++ (void)scoreForSongWithId:(NSString *)songId initialScore:(NSNumber *)initialScore completion:(void (^)(NSNumber * _Nullable result))completion;
+
++ (void)loadScoresForQueue:(NSMutableArray <QueueSong *> *)queue completion:(void (^)(NSMutableArray <NSNumber *> * _Nullable scores))completion;
++ (void)scoreForSongWithId:(NSString *)songId completion:(void (^)(NSNumber *result))completion;
 
 @end
 

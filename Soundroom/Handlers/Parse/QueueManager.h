@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared;
 
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId;
-+ (NSString *)getSpotifyIdForSongWithId:(NSString *)songId;
++ (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion;
 
 - (void)playTopSong;
 
@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeQueueSong:(QueueSong *)song;
 - (void)insertQueueSong:(QueueSong *)song;
 - (NSMutableArray <QueueSong *> *)queue;
+- (NSMutableArray <NSNumber *> *)scores;
 
 @end
 

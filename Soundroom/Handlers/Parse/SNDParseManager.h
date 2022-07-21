@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PFQuery *queryForAcceptedInvitations; // TODO: rename all
 @property (nonatomic, strong) PFQuery *queryForAllRoomMembers;
 @property (nonatomic, strong) PFQuery *queryForCurrentQueue;
-@property (nonatomic, strong) PFQuery *queryForScoreUpdates;
+@property (nonatomic, strong) PFQuery *queryForAllVotesInRoom;
 
 + (instancetype)shared;
 

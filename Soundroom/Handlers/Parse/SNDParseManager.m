@@ -46,7 +46,7 @@
     return query;
 }
 
-- (PFQuery *)queryForScoreUpdates {
+- (PFQuery *)queryForAllVotesInRoom {
     PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
     [query whereKey:@"roomId" equalTo:[[RoomManager shared] currentRoomId]];
     return query;
