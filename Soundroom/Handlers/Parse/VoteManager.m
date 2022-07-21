@@ -11,7 +11,20 @@
 #import "SNDParseManager.h"
 #import "Vote.h"
 
-@implementation VoteManager
+@implementation VoteManager {
+    NSMutableSet <NSString *> *_upvotedSongIds;
+    NSMutableSet <NSString *> *_downvotedSongIds;
+    BOOL _didLoadUserVotes;
+}
+
++ (instancetype)shared {
+    static dispatch_once_t once;
+    static id shared;
+    dispatch_once(&once, ^{
+        shared = [[self alloc] init];
+    });
+    return shared;
+}
 
 + (void)incrementSong:(QueueSong *)song byAmount:(NSNumber *)amount {
     [self incrementSongWithId:song.objectId byAmount:amount];
@@ -66,19 +79,22 @@
         
         for (Vote *vote in objects) {
             
-            QueueSong *song = [PFQuery getObjectOfClass:@"QueueSong" objectId:vote.songId];
-            NSUInteger index = [queue indexOfObject:song];
-            
-            if (index != NSNotFound) {
-                NSNumber *currentScore = [scores objectAtIndex:index];
-                NSNumber *newScore = @(currentScore.integerValue + vote.increment.integerValue);
-                [scores replaceObjectAtIndex:index withObject:newScore];
-            }
-            
+            PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
+            [query getObjectInBackgroundWithId:vote.songId block:^(PFObject *object, NSError *error) {
+                if (object) {
+                    
+                    QueueSong *song = (QueueSong *)object;
+                    NSUInteger index = [queue indexOfObject:song];
+                    
+                    if (index != NSNotFound) {
+                        NSNumber *currentScore = [scores objectAtIndex:index];
+                        NSNumber *newScore = @(currentScore.integerValue + vote.increment.integerValue);
+                        [scores replaceObjectAtIndex:index withObject:newScore];
+                    }
+                }
+            }];
         }
-        
         completion(scores);
-        
     }];
 }
 
@@ -109,65 +125,64 @@
         });
     }];
 }
-
-+ (VoteState)voteStateForSong:(QueueSong *)song {
-    return [self voteStateForSongWithId:song.objectId];
+- (void)loadUserVotesWithCompletion:(void (^)(BOOL succeeded))completion {
+    
+    _upvotedSongIds = [NSMutableSet<NSString *> set];
+    _downvotedSongIds = [NSMutableSet<NSString *> set];
+    _didLoadUserVotes = NO;
+    
+    if ([[RoomManager shared] isInRoom]) {
+        PFQuery *query = [[SNDParseManager shared] queryForCurrentUserVotes];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            for (Vote *vote in objects) {
+                if (vote.increment.intValue == 1) {
+                    [self->_upvotedSongIds addObject:vote.songId];
+                } else if (vote.increment.intValue == -1) {
+                    [self->_downvotedSongIds addObject:vote.songId];
+                }
+            }
+            self->_didLoadUserVotes = YES;
+            completion(YES);
+        }];
+    }
+    
 }
 
-+ (VoteState)voteStateForSongWithId:(NSString *)songId {
+- (void)getVoteStateForSongWithId:(NSString *)songId completion:(void (^)(VoteState voteState))completion {
+    
+    if (_didLoadUserVotes) {
+        [self _getVoteStateForSongWithId:songId completion:completion];
+        return;
+    }
+    
+    [self loadUserVotesWithCompletion:^(BOOL succeeded) {
+        [self _getVoteStateForSongWithId:songId completion:completion];
+    }];
+    
+}
+
+- (void)_getVoteStateForSongWithId:(NSString *)songId completion:(void (^)(VoteState voteState))completion {
     
     if ([self didUpvoteSongWithId:songId]) {
-        return Upvoted;
+        completion(Upvoted);
+        return;
     }
     
     if ([self didDownvoteSongWithId:songId]) {
-        return Downvoted;
+        completion(Downvoted);
+        return;
     }
     
-    return NotVoted;
+    completion(NotVoted);
     
 }
 
-+ (BOOL)didUpvoteSongWithId:(NSString *)songId {
-    
-    PFQuery *query = [self queryWithSongId:songId];
-    [query whereKey:@"increment" equalTo:@(1)];
-    NSArray *objects = [query findObjects];
-    if (objects) {
-        return YES;
-    }
-    
-    return NO;
+- (BOOL)didUpvoteSongWithId:(NSString *)songId {
+    return [_upvotedSongIds containsObject:songId];
 }
 
-+ (BOOL)didDownvoteSongWithId:(NSString *)songId {
-    
-    PFQuery *query = [self queryWithSongId:songId];
-    [query whereKey:@"increment" equalTo:@(-1)];
-    NSArray *objects = [query findObjects];
-    if (objects) {
-        return YES;
-    }
-    
-    return NO;
-    
-}
-
-+ (BOOL)didNotVoteSongWithId:(NSString *)songId {
-    return ![self didUpvoteSongWithId:songId] && ![self didDownvoteSongWithId:songId];
-}
-
-+ (PFQuery *)queryWithSongId:(NSString *)songId {
-    
-    NSString *userId = [ParseUserManager currentUserId];
-    NSString *roomId = [[RoomManager shared] currentRoomId];
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
-    [query whereKey:@"songId" equalTo:songId];
-    [query whereKey:@"userId" equalTo:userId];
-    [query whereKey:@"roomId" equalTo:roomId];
-    
-    return query;
+- (BOOL)didDownvoteSongWithId:(NSString *)songId {
+    return [_downvotedSongIds containsObject:songId];
 }
 
 @end

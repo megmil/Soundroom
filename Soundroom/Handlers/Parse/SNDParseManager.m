@@ -52,6 +52,22 @@
     return query;
 }
 
+- (PFQuery *)queryForCurrentUpvotes {
+    PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
+    [query whereKey:@"userId" equalTo:[ParseUserManager currentUserId]];
+    [query whereKey:@"roomId" equalTo:[[RoomManager shared] currentRoomId]];
+    [query whereKey:@"increment" equalTo:@(1)];
+    return query;
+}
+
+- (PFQuery *)queryForCurrentDownvotes {
+    PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
+    [query whereKey:@"userId" equalTo:[ParseUserManager currentUserId]];
+    [query whereKey:@"roomId" equalTo:[[RoomManager shared] currentRoomId]];
+    [query whereKey:@"increment" equalTo:@(-1)];
+    return query;
+}
+
 + (PFQuery *)queryForUserVotesWithSongId:(NSString *)songId {
     PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
     [query whereKey:@"userId" equalTo:[ParseUserManager currentUserId]];

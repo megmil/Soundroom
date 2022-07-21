@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PFQuery *queryForAllRoomMembers;
 @property (nonatomic, strong) PFQuery *queryForCurrentQueue;
 @property (nonatomic, strong) PFQuery *queryForAllVotesInRoom;
+@property (nonatomic, strong) PFQuery *queryForCurrentUpvotes;
+@property (nonatomic, strong) PFQuery *queryForCurrentDownvotes;
+@property (nonatomic, strong) PFQuery *queryForCurrentUserVotes;
 
 + (instancetype)shared;
 

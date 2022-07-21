@@ -18,6 +18,10 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 
 @interface VoteManager : NSObject
 
++ (instancetype)shared;
+
+- (void)getVoteStateForSongWithId:(NSString *)songId completion:(void (^)(VoteState voteState))completion;
+
 + (void)scoreForSong:(QueueSong *)song initialScore:(NSNumber *)initialScore completion:(void (^)(NSNumber * _Nullable result))completion;
 + (VoteState)voteStateForSong:(QueueSong *)song;
 

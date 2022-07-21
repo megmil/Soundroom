@@ -104,14 +104,8 @@
 - (void)updateCurrentSongData {
     
     NSString *currentSongId = [[RoomManager shared] currentSongId];
-    [QueueManager]
-    
-    
-    NSString *currentSpotifyId = [QueueManager getSpotifyIdForSongWithId:currentSongId];
-    
-    // get spotify metadata
-    if (currentSpotifyId) {
-        [[SpotifyAPIManager shared] getSongWithSpotifyId:currentSpotifyId completion:^(Song *song, NSError *error) {
+    [QueueManager getSpotifyIdForSongWithId:currentSongId completion:^(NSString *spotifyId, NSError *error) {
+        [[SpotifyAPIManager shared] getSongWithSpotifyId:spotifyId completion:^(Song *song, NSError *error) { // TODO: get song with QueueSong?
             if (song) {
                 // update views
                 self->_currentSongTitleLabel.text = song.title;
@@ -124,8 +118,7 @@
                 }
             }
         }];
-    }
-    
+    }];
 }
 
 # pragma mark - IBActions
@@ -159,8 +152,12 @@
     cell.objectId = queueSong.objectId;
     cell.spotifyId = queueSong.spotifyId;
     cell.cellType = QueueSongCell;
-    cell.voteState = [VoteManager voteStateForSong:queueSong];
     cell.score = [[QueueManager shared] scores][indexPath.row];
+    
+    // get vote status
+    [[VoteManager shared] getVoteStateForSongWithId:queueSong.objectId completion:^(VoteState voteState) {
+        cell.voteState = voteState;
+    }];
     
     // get spotify metadata
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
