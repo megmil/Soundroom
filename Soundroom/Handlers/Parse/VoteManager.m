@@ -157,6 +157,7 @@
     
     [self loadUserVotesWithCompletion:^(BOOL succeeded) {
         [self _getVoteStateForSongWithId:songId completion:completion];
+        return;
     }];
     
 }

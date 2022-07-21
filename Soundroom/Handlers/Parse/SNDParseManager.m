@@ -68,6 +68,13 @@
     return query;
 }
 
+- (PFQuery *)queryForCurrentUserVotes {
+    PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
+    [query whereKey:@"userId" equalTo:[ParseUserManager currentUserId]];
+    [query whereKey:@"roomId" equalTo:[[RoomManager shared] currentRoomId]];
+    return query;
+}
+
 + (PFQuery *)queryForUserVotesWithSongId:(NSString *)songId {
     PFQuery *query = [PFQuery queryWithClassName:@"Vote"];
     [query whereKey:@"userId" equalTo:[ParseUserManager currentUserId]];

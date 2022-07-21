@@ -155,6 +155,7 @@
     cell.score = [[QueueManager shared] scores][indexPath.row];
     
     // get vote status
+    cell.voteState = NotVoted;
     [[VoteManager shared] getVoteStateForSongWithId:queueSong.objectId completion:^(VoteState voteState) {
         cell.voteState = voteState;
     }];
