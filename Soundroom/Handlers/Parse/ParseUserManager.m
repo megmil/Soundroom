@@ -34,16 +34,6 @@
     [PFUser logOutInBackgroundWithBlock:completion];
 }
 
-# pragma mark - Search
-
-+ (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFUser query];
-    [query whereKey:@"username" matchesRegex:username modifiers:@"i"]; // ignore case
-    [query whereKey:@"username" notEqualTo:[self currentUserId]];
-    query.limit = 20;
-    [query findObjectsInBackgroundWithBlock:completion];
-}
-
 # pragma mark - Current User Data
 
 + (NSString *)currentUserId {

@@ -8,15 +8,44 @@
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 
+#define RoomClass @"Room"
+#define QueueSongClass @"QueueSong"
+#define VoteClass @"Vote"
+#define InvitationClass @"Invitation"
+
+#define userIdKey @"userId"
+#define roomIdKey @"roomId"
+#define isPendingKey @"isPending"
+#define usernameKey @"username"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface QueryManager : NSObject
 
-+ (void)getInvitationsAcceptedByCurrentUserWithCompletion:(PFArrayResultBlock)completion; // TODO: rename all?
-+ (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
-+ (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
+// get PFObjects
++ (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion;
++ (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
++ (void)getSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;
++ (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion; // TODO: rename all?
 + (void)getVotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getVotesByCurrentUserInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
++ (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion;
++ (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
++ (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
+
+// get values
++ (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion;
++ (void)didCurrentUserAcceptRoomInvitationWithCompletion:(PFBooleanResultBlock)completion;
++ (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;
+
+// delete PFObjects
++ (void)deleteAllObjectsInCurrentRoom;
++ (void)deleteInvitationsAcceptedByCurrentUser;
++ (void)deleteInvitationsForCurrentRoom;
+
+// create PFObjects
+
+// update PFObjects
 
 @end
 

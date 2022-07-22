@@ -8,7 +8,7 @@
 #import "VoteManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
-#import "SNDParseManager.h"
+#import "QueryManager.h"
 #import "Vote.h"
 
 @implementation VoteManager {
@@ -74,8 +74,7 @@
         [scores addObject:@(0)];
     }
     
-    PFQuery *query = [[SNDParseManager shared] queryForAllVotesInRoom];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    [QueryManager getVotesInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         for (Vote *vote in objects) {
             NSUInteger index = [[queue valueForKey:@"objectId"] indexOfObject:vote.songId];
             if (index != NSNotFound) {
@@ -89,6 +88,7 @@
 }
 
 + (void)scoreForSongWithId:(NSString *)songId completion:(void (^)(NSNumber *result))completion {
+    
     PFQuery *query = [SNDParseManager queryForAllVotesWithSongId:songId];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         __block NSInteger score = 0;
@@ -96,23 +96,6 @@
             score += vote.increment.integerValue;
         }
         completion(@(score));
-    }];
-}
-
-+ (void)scoreForSongWithId:(NSString *)songId initialScore:(NSNumber *)initialScore completion:(void (^)(NSNumber *result))completion {
-    
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    PFQuery *query = [SNDParseManager queryForAllVotesWithSongId:songId];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        __block NSInteger score = initialScore.integerValue;
-        dispatch_async(queue, ^{
-            if (completion) {
-                for (Vote *vote in objects) {
-                    score += vote.increment.integerValue;
-                }
-                completion(@(score));
-            }
-        });
     }];
 }
 

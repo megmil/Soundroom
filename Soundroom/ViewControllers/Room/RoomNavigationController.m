@@ -67,7 +67,7 @@
     // reset subscriptions
     _subscription = nil;
     
-    // get query for invitations accepted by current user
+    // get query for invitations accepted by current user    
     PFQuery *query = [[SNDParseManager shared] queryForAcceptedInvitations];
     _subscription = [_client subscribeToQuery:query];
     

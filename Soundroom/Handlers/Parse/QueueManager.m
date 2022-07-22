@@ -9,7 +9,7 @@
 #import "RoomManager.h"
 #import "VoteManager.h"
 #import "Vote.h"
-#import "SNDParseManager.h"
+#import "QueryManager.h"
 
 @implementation QueueManager {
     NSMutableArray <QueueSong *> *_queue;
@@ -41,6 +41,7 @@
 + (void)requestSongWithSpotifyId:(NSString *)spotifyId {
     
     NSString *currentRoomId = [[RoomManager shared] currentRoomId];
+    
     if (currentRoomId) {
         QueueSong *newSong = [QueueSong new];
         newSong.spotifyId = spotifyId;
@@ -48,18 +49,6 @@
         [newSong saveInBackground];
     }
     
-}
-
-+ (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-    [query getObjectInBackgroundWithId:songId block:^(PFObject *object, NSError *error) {
-        if (object) {
-            QueueSong *song = (QueueSong *)object;
-            completion(song.spotifyId, error);
-        } else {
-            completion(nil, error);
-        }
-    }];
 }
 
 # pragma mark - Fetch Queue
@@ -70,22 +59,13 @@
 }
 
 - (void)fetchQueue {
-    
-    NSString *roomId = [[RoomManager shared] currentRoomId];
-    
-    if (roomId) {
-        PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-        [query whereKey:@"roomId" equalTo:roomId];
-        [query orderByAscending:@"createdAt"];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (objects) {
-                self->_queue = (NSMutableArray <QueueSong *> *)objects;
-                [self sortQueue];
-                [self postUpdatedQueueNotification];
-            }
-        }];
-    }
-    
+    [QueryManager getSongsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            self->_queue = (NSMutableArray <QueueSong *> *)objects;
+            [self sortQueue];
+            [self postUpdatedQueueNotification];
+        }
+    }];
 }
 
 - (void)sortQueue {
@@ -127,8 +107,7 @@
 # pragma mark - Update Queue: Private
 
 - (void)_updateQueueSongWithId:(NSString *)songId completion:(void (^)(BOOL succeeded))completion {
-    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-    [query getObjectInBackgroundWithId:songId block:^(PFObject *object, NSError *error) {
+    [QueryManager getSongWithId:songId completion:^(PFObject *object, NSError *error) {
         if (object) {
             QueueSong *song = (QueueSong *)object;
             [self _removeQueueSong:song];

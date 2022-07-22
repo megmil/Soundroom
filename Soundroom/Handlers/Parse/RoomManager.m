@@ -10,7 +10,7 @@
 #import "ParseUserManager.h"
 #import "InvitationManager.h"
 #import "QueueManager.h"
-#import "SNDParseManager.h"
+#import "QueryManager.h"
 #import "Invitation.h"
 @import ParseLiveQuery;
 
@@ -49,11 +49,10 @@
 
 - (void)fetchCurrentRoom {
     
-    PFQuery *query = [[SNDParseManager shared] queryForAcceptedInvitations];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects && objects.count) {
+    [QueryManager getInvitationAcceptedByCurrentUserWithCompletion:^(PFObject *object, NSError *error) {
+        if (object) {
             // user is already in a room
-            Invitation *invitation = objects.firstObject; // objects.count should always be 1
+            Invitation *invitation = (Invitation *)object;
             [self joinRoomWithId:invitation.roomId];
         } else {
             // user is not in a room
@@ -71,8 +70,7 @@
         return;
     }
     
-    PFQuery *query = [PFQuery queryWithClassName:@"Room"];
-    [query getObjectInBackgroundWithId:roomId block:^(PFObject *object, NSError *error) {
+    [QueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Room *room = (Room *)object;
             [self joinRoom:room];
@@ -130,8 +128,6 @@
     
     // delete all queue songs, votes, and invitations linked to room
     [self deleteAllRoomObjectsWithClassName:@"QueueSong"];
-    [self deleteAllRoomObjectsWithClassName:@"Vote"];
-    [self deleteAllRoomObjectsWithClassName:@"Invitation"];
     
     // clear properties
     [self _leaveCurrentRoom];
@@ -139,14 +135,6 @@
 }
 
 # pragma mark - Helpers
-
-- (void)deleteAllRoomObjectsWithClassName:(NSString *)className {
-    PFQuery *query = [PFQuery queryWithClassName:className];
-    [query whereKey:@"roomId" equalTo:_currentRoomId];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [SNDParseManager deleteAllObjects:objects];
-    }];
-}
 
 - (BOOL)isCurrentUserHost {
     
