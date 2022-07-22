@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VoteManager.h"
+#import "RoomManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

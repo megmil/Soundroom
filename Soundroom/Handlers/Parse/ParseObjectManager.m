@@ -7,9 +7,10 @@
 
 #import "ParseObjectManager.h"
 #import "ParseUserManager.h"
-#import "RoomManager.h"
 #import "ParseQueryManager.h"
+#import "RoomManager.h"
 #import "Room.h"
+#import "QueueSong.h"
 #import "Vote.h"
 #import "Invitation.h"
 
@@ -62,6 +63,18 @@
 
 # pragma mark - QueueSong
 
++ (void)createSongRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId {
+    
+    NSString *currentRoomId = [[RoomManager shared] currentRoomId];
+    
+    if (currentRoomId) {
+        QueueSong *newSong = [QueueSong new];
+        newSong.spotifyId = spotifyId;
+        newSong.roomId = currentRoomId;
+        [newSong saveInBackground];
+    }
+    
+}
 
 
 # pragma mark - Vote
