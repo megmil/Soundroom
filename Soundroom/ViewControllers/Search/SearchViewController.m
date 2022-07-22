@@ -28,9 +28,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    _tableView.rowHeight = 66.f;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     // TODO: simplify
     if (self.isUserSearch) {
@@ -77,10 +78,6 @@
     cell.cellType = AddUserCell;
     return cell;
     
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 66.f;
 }
 
 #pragma mark - Search Bar

@@ -28,7 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *invitationSubscription;
+@property (strong, nonatomic) PFLiveQuerySubscription *songSubscription;
 @property (strong, nonatomic) PFLiveQuerySubscription *voteSubscription;
 
 @end
@@ -51,6 +51,7 @@
 - (void)configureTableView {
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.rowHeight = 66.f;
     [_tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
 }
 
@@ -81,7 +82,7 @@
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
     });
-    [self configureInvitationSubscription];
+    [self configureSongSubcription];
     [self configureVoteSubscription];
 }
 
@@ -162,22 +163,32 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    // hosts can swipe to delete any cell
     if ([[RoomManager shared] isCurrentUserHost]) {
-        
+        return YES;
+    }
+    
+    // TODO: members can swipe to delete songs they requested
+    
+    return NO;
+    
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        QueueSong *song = [[RoomManager shared] queue][indexPath.row];
+        [ParseObjectManager deleteQueueSong:song];
     }
     
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 66.f;
-}
-
 # pragma mark - Subscriptions
 
-- (void)configureInvitationSubscription {
+- (void)configureSongSubcription {
     
     // reset subscriptions
-    _invitationSubscription = nil;
+    _songSubscription = nil;
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
@@ -186,16 +197,16 @@
     }
     
     PFQuery *query = [ParseQueryManager queryForSongsInCurrentRoom];
-    _invitationSubscription = [_client subscribeToQuery:query];
+    _songSubscription = [_client subscribeToQuery:query];
     
     // new song request is created
-    _invitationSubscription = [_invitationSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    _songSubscription = [_songSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
         [[RoomManager shared] insertQueueSong:song];
     }];
     
     // song request is removed
-    _invitationSubscription = [_invitationSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    _songSubscription = [_songSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
         [[RoomManager shared] removeQueueSong:song];
     }];
