@@ -71,8 +71,22 @@
 + (void)getVotesByCurrentUserInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFQuery queryWithClassName:VoteClass];
     [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]]; // TODO: is roomId necessary?
     [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getVotesForSongWithId:(NSString *)songId completion:(PFArrayResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
+    [query whereKey:songIdKey equalTo:songId];
+    // TODO: is roomId necessary?
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getVoteByCurrentUserForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
+    [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
+    [query whereKey:songIdKey equalTo:songId];
+    [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one vote per song per user
 }
 
 # pragma mark - Invitation
@@ -81,10 +95,7 @@
     PFQuery *query = [PFQuery queryWithClassName:RoomClass];
     [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
     [query whereKey:isPendingKey equalTo:@(NO)];
-    query.limit = 1; // should only be one accepted invitation per user
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        completion(objects.firstObject, error);
-    }];
+    [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one accepted invitation per user
 }
 
 + (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion {

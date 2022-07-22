@@ -15,6 +15,7 @@
 
 #define userIdKey @"userId"
 #define roomIdKey @"roomId"
+#define songIdKey @"songId"
 #define isPendingKey @"isPending"
 #define usernameKey @"username"
 
@@ -29,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion; // TODO: rename all?
 + (void)getVotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getVotesByCurrentUserInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
++ (void)getVotesForSongWithId:(NSString *)songId completion:(PFArrayResultBlock)completion;
++ (void)getVoteByCurrentUserForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion;
 + (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;

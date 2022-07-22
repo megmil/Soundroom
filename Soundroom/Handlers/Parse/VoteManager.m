@@ -31,9 +31,7 @@
 }
 
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount {
-    
-    // check for duplicate
-    [self getVotesForSongWithId:songId completion:^(PFObject *object, NSError *error) {
+    [QueryManager getVoteByCurrentUserForSongWithId:songId completion:^(PFObject *object, NSError *error) {
         if (object) {
             // update duplicate vote
             Vote *vote = (Vote *)object;
@@ -49,22 +47,6 @@
             [newVote saveInBackground];
         }
     }];
-    
-}
-
-+ (void)getVotesForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion {
-    
-    PFQuery *query = [SNDParseManager queryForUserVotesWithSongId:songId];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
-            // this song has already been voted on (should only be one object)
-            completion(objects.firstObject, nil);
-        } else {
-            // this song has not been voted on
-            completion(nil, error);
-        }
-    }];
-    
 }
 
 + (void)loadScoresForQueue:(NSMutableArray <QueueSong *> *)queue completion:(void (^)(NSMutableArray <NSNumber *> *scores))completion {
@@ -87,10 +69,8 @@
     }];
 }
 
-+ (void)scoreForSongWithId:(NSString *)songId completion:(void (^)(NSNumber *result))completion {
-    
-    PFQuery *query = [SNDParseManager queryForAllVotesWithSongId:songId];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
++ (void)getScoreForSongWithId:(NSString *)songId completion:(void (^)(NSNumber *result))completion {
+    [QueryManager getVotesForSongWithId:songId completion:^(NSArray *objects, NSError *error) {
         __block NSInteger score = 0;
         for (Vote *vote in objects) {
             score += vote.increment.integerValue;
@@ -109,20 +89,17 @@
     
     [self resetLocalVotes];
     
-    if ([[RoomManager shared] isInRoom]) {
-        PFQuery *query = [[SNDParseManager shared] queryForCurrentUserVotes];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            for (Vote *vote in objects) {
-                if (vote.increment.intValue == 1) {
-                    [self->_upvotedSongIds addObject:vote.songId];
-                } else if (vote.increment.intValue == -1) {
-                    [self->_downvotedSongIds addObject:vote.songId];
-                }
+    [QueryManager getVotesByCurrentUserInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
+        for (Vote *vote in objects) {
+            if (vote.increment.intValue == 1) {
+                [self->_upvotedSongIds addObject:vote.songId];
+            } else if (vote.increment.intValue == -1) {
+                [self->_downvotedSongIds addObject:vote.songId];
             }
-            self->_didLoadUserVotes = YES;
-            completion(YES);
-        }];
-    }
+        }
+        self->_didLoadUserVotes = YES;
+        completion(YES);
+    }];
     
 }
 

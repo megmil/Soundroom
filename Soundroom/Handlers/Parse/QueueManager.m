@@ -126,7 +126,7 @@
 
 - (void)_insertQueueSong:(QueueSong *)song completion:(void (^)(BOOL succeeded))completion {
     
-    [VoteManager scoreForSongWithId:song.objectId completion:^(NSNumber *score) {
+    [VoteManager getScoreForSongWithId:song.objectId completion:^(NSNumber *score) {
         
         NSUInteger index = [self->_scores indexOfObjectPassingTest:^BOOL(NSNumber *obj, NSUInteger idx, BOOL *stop) {
             return [obj compare:score] == NSOrderedAscending; // return true for the earliest obj in _scores where score > obj

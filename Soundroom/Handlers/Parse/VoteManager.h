@@ -23,12 +23,9 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 - (void)getVoteStateForSongWithId:(NSString *)songId completion:(void (^)(VoteState voteState))completion;
 - (void)resetLocalVotes;
 
-+ (void)scoreForSong:(QueueSong *)song initialScore:(NSNumber *)initialScore completion:(void (^)(NSNumber * _Nullable result))completion;
-+ (VoteState)voteStateForSong:(QueueSong *)song;
 + (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount;
-+ (VoteState)voteStateForSongWithId:(NSString *)songId;
 + (void)loadScoresForQueue:(NSMutableArray <QueueSong *> *)queue completion:(void (^)(NSMutableArray <NSNumber *> * _Nullable scores))completion;
-+ (void)scoreForSongWithId:(NSString *)songId completion:(void (^)(NSNumber *result))completion;
++ (void)getScoreForSongWithId:(NSString *)songId completion:(void (^)(NSNumber *result))completion;
 
 @end
 
