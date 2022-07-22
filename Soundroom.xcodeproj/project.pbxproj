@@ -42,6 +42,7 @@
 		04DF2F3F28886A8500FD28E4 /* InvitationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F3E28886A8500FD28E4 /* InvitationManager.m */; };
 		04DF2F42288872C600FD28E4 /* VoteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F41288872C600FD28E4 /* VoteManager.m */; };
 		04DF2F482888A57300FD28E4 /* SNDParseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F472888A57300FD28E4 /* SNDParseManager.m */; };
+		04DF2F4B288A1A5A00FD28E4 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4A288A1A5A00FD28E4 /* QueryManager.m */; };
 		2A8C38DE55CFE15D8D15AD07 /* Pods_Soundroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D03DCE9A1C7558DDDF0ED670 /* Pods_Soundroom.framework */; };
 /* End PBXBuildFile section */
 
@@ -128,6 +129,8 @@
 		04DF2F41288872C600FD28E4 /* VoteManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VoteManager.m; sourceTree = "<group>"; };
 		04DF2F462888A57300FD28E4 /* SNDParseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SNDParseManager.h; sourceTree = "<group>"; };
 		04DF2F472888A57300FD28E4 /* SNDParseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SNDParseManager.m; sourceTree = "<group>"; };
+		04DF2F49288A1A5900FD28E4 /* QueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueryManager.h; sourceTree = "<group>"; };
+		04DF2F4A288A1A5A00FD28E4 /* QueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueryManager.m; sourceTree = "<group>"; };
 		05BA8035371BF12C93686B44 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5AC9246B9074C30C2C8BD3E1 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
 		6746B66977F4F2E15378B150 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -314,6 +317,8 @@
 				04DF2F41288872C600FD28E4 /* VoteManager.m */,
 				04DF2F462888A57300FD28E4 /* SNDParseManager.h */,
 				04DF2F472888A57300FD28E4 /* SNDParseManager.m */,
+				04DF2F49288A1A5900FD28E4 /* QueryManager.h */,
+				04DF2F4A288A1A5A00FD28E4 /* QueryManager.m */,
 			);
 			path = Parse;
 			sourceTree = "<group>";
@@ -635,6 +640,7 @@
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
 				049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */,
+				04DF2F4B288A1A5A00FD28E4 /* QueryManager.m in Sources */,
 				04DF2F3F28886A8500FD28E4 /* InvitationManager.m in Sources */,
 				04785C8028813094001AF277 /* AccountView.m in Sources */,
 				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,

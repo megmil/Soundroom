@@ -39,6 +39,7 @@
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFUser query];
     [query whereKey:@"username" matchesRegex:username modifiers:@"i"]; // ignore case
+    [query whereKey:@"username" notEqualTo:[self currentUserId]];
     query.limit = 20;
     [query findObjectsInBackgroundWithBlock:completion];
 }
