@@ -64,7 +64,7 @@
 }
 
 - (void)toggleSpotifyLoginStatus {
-    self.spotifyAccountView.isLoggedIn = !self.spotifyAccountView.isLoggedIn;
+    _spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
 }
 
 @end

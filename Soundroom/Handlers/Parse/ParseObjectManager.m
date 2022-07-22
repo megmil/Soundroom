@@ -76,6 +76,22 @@
     
 }
 
++ (void)deleteQueueSong:(QueueSong *)song {
+    
+    // store songId
+    NSString *songId = song.objectId;
+    
+    // delete attached votes
+    [ParseQueryManager getVotesForSongWithId:songId completion:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            [self deleteObjects:objects];
+        }
+    }];
+    
+    // delete queue song
+    [song deleteInBackground];
+    
+}
 
 # pragma mark - Vote
 

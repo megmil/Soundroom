@@ -194,7 +194,7 @@
                         <outlet property="currentSongTitleLabel" destination="eDn-vJ-DT5" id="UGy-Ig-ZKk"/>
                         <outlet property="playButton" destination="TdI-DB-BCd" id="GFF-xb-Fak"/>
                         <outlet property="roomNameLabel" destination="gE4-oq-sK0" id="Csb-UD-zBf"/>
-                        <outlet property="tableView" destination="74f-57-bil" id="QRj-cf-ldM"/>
+                        <outlet property="tableView" destination="74f-57-bil" id="b2d-ao-DqK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lok-fq-ngw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
