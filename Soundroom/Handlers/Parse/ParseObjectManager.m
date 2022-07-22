@@ -153,6 +153,24 @@
     }];
 }
 
++ (void)acceptInvitationWithId:(NSString *)invitationId {
+    [ParseQueryManager getInvitationWithId:invitationId completion:^(PFObject *object, NSError *error) {
+        if (object) {
+            Invitation *invitation = (Invitation *)object;
+            [invitation setValue:@(YES) forKey:isPendingKey];
+            [invitation saveInBackground];
+        }
+    }];
+}
+
++ (void)deleteInvitationWithId:(NSString *)invitationId {
+    [ParseQueryManager getInvitationWithId:invitationId completion:^(PFObject *object, NSError *error) {
+        if (object) {
+            [object deleteInBackground];
+        }
+    }];
+}
+
 # pragma mark - Helpers
 
 + (void)deleteObjectsInRoomWithId:(NSString *)roomId className:(NSString *)className {

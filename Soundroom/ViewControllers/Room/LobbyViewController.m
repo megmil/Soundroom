@@ -10,6 +10,8 @@
 
 @interface LobbyViewController ()
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @end
 
 @implementation LobbyViewController

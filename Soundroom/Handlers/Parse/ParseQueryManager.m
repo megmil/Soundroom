@@ -104,6 +104,11 @@
 
 # pragma mark - Invitation
 
++ (void)getInvitationWithId:(NSString *)invitationId completion:(PFObjectResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
+    [query getObjectInBackgroundWithId:invitationId block:completion];
+}
+
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion {
     PFQuery *query = [self queryForInvitationsAcceptedByCurrentUser];
     [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one accepted invitation per user

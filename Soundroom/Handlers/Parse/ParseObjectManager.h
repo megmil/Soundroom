@@ -18,10 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)updateCurrentRoomWithCurrentSongId:(NSString *)currentSongId;
 + (void)updateCurrentUserVoteForSongWithId:(NSString *)songId score:(NSNumber *)score;
++ (void)acceptInvitationWithId:(NSString *)invitationId;
 
 + (void)deleteCurrentRoomAndAttachedObjects;
 + (void)deleteQueueSong:(QueueSong *)song;
 + (void)deleteInvitationsAcceptedByCurrentUser;
++ (void)deleteInvitationWithId:(NSString *)invitationId;
 
 @end
 

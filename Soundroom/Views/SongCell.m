@@ -171,7 +171,7 @@
     
 }
 
-- (void)setCellType:(CellType)cellType {
+- (void)setCellType:(SongCellType)cellType {
     
     _cellType = cellType;
     

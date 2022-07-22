@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getVotesByCurrentUserInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getVotesForSongWithId:(NSString *)songId completion:(PFArrayResultBlock)completion;
 + (void)getVoteByCurrentUserForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;
++ (void)getInvitationWithId:(NSString *)invitationId completion:(PFObjectResultBlock)completion;
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion;
 + (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
