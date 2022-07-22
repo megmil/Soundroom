@@ -38,7 +38,7 @@
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
 		049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* LoginViewController.m */; };
-		04CC546A288B275000FC5707 /* SongTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC5469288B275000FC5707 /* SongTableView.m */; };
+		04CC5470288B401200FC5707 /* UITableView+AnimationControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */; };
 		04DF2F4B288A1A5A00FD28E4 /* ParseQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4A288A1A5A00FD28E4 /* ParseQueryManager.m */; };
 		04DF2F4E288B064000FD28E4 /* ParseObjectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4D288B064000FD28E4 /* ParseObjectManager.m */; };
 		2A8C38DE55CFE15D8D15AD07 /* Pods_Soundroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D03DCE9A1C7558DDDF0ED670 /* Pods_Soundroom.framework */; };
@@ -119,8 +119,8 @@
 		049304B82877CB0B006AA9A3 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		049304C9287C8A04006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		049304CA287C8A04006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		04CC5468288B275000FC5707 /* SongTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SongTableView.h; sourceTree = "<group>"; };
-		04CC5469288B275000FC5707 /* SongTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SongTableView.m; sourceTree = "<group>"; };
+		04CC546E288B401200FC5707 /* UITableView+AnimationControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+AnimationControl.h"; sourceTree = "<group>"; };
+		04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+AnimationControl.m"; sourceTree = "<group>"; };
 		04DF2F49288A1A5900FD28E4 /* ParseQueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseQueryManager.h; sourceTree = "<group>"; };
 		04DF2F4A288A1A5A00FD28E4 /* ParseQueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseQueryManager.m; sourceTree = "<group>"; };
 		04DF2F4C288B064000FD28E4 /* ParseObjectManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseObjectManager.h; sourceTree = "<group>"; };
@@ -245,8 +245,6 @@
 				042299AA287E86630086612E /* ConfigureView.m */,
 				04785C7E28813094001AF277 /* AccountView.h */,
 				04785C7F28813094001AF277 /* AccountView.m */,
-				04CC5468288B275000FC5707 /* SongTableView.h */,
-				04CC5469288B275000FC5707 /* SongTableView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -338,6 +336,7 @@
 		049304A628762AA9006AA9A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				04CC5471288B408F00FC5707 /* Extensions */,
 				0417B56B2874B75F001D6B04 /* SceneDelegate.h */,
 				0417B56C2874B75F001D6B04 /* SceneDelegate.m */,
 				0417B5682874B75F001D6B04 /* AppDelegate.h */,
@@ -357,6 +356,15 @@
 				04229999287DE1270086612E /* RoomManager.m */,
 			);
 			path = Handlers;
+			sourceTree = "<group>";
+		};
+		04CC5471288B408F00FC5707 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				04CC546E288B401200FC5707 /* UITableView+AnimationControl.h */,
+				04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		9FFFBC745A92601850297CB2 /* Frameworks */ = {
@@ -628,8 +636,8 @@
 				04785C8C2886198F001AF277 /* SpotifySessionManager.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
-				04CC546A288B275000FC5707 /* SongTableView.m in Sources */,
 				049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */,
+				04CC5470288B401200FC5707 /* UITableView+AnimationControl.m in Sources */,
 				04DF2F4B288A1A5A00FD28E4 /* ParseQueryManager.m in Sources */,
 				04785C8028813094001AF277 /* AccountView.m in Sources */,
 				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,

@@ -16,7 +16,7 @@
 #import "Song.h"
 #import "Vote.h"
 #import "SongCell.h"
-#import "SongTableView.h"
+#import "UITableView+AnimationControl.h"
 @import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -25,7 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentSongArtistLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *currentSongAlbumImageView;
-@property (weak, nonatomic) IBOutlet SongTableView *tableView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @property (strong, nonatomic) PFLiveQueryClient *client;
@@ -96,7 +96,7 @@
 - (void)updateQueueViews {
     [self updateCurrentSongViews];
     dispatch_async(dispatch_get_main_queue(), ^(void){
-        [self->_tableView reloadData];
+        [self->_tableView reloadDataWithAnimation];
     });
 }
 

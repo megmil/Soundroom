@@ -11,6 +11,7 @@
 #import "ParseUserManager.h"
 #import "ParseQueryManager.h"
 #import "SongCell.h"
+#import "UITableView+AnimationControl.h"
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
@@ -83,8 +84,18 @@
 #pragma mark - Search Bar
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(sendSearchRequest) object:nil];
+    [self performSelector:@selector(sendSearchRequest) withObject:nil afterDelay:0.4f];
+}
+
+- (void)sendSearchRequest {
+    
+    NSString *searchText = _searchBar.text;
     
     if (searchText.length == 0) {
+        _songs = nil;
+        _users = nil;
+        [_tableView reloadDataWithAnimation];
         return;
     }
     
@@ -94,13 +105,14 @@
     }
     
     [self searchUsersWithQuery:searchText];
+    
 }
 
 - (void)searchSongsWithQuery:(NSString *)query {
     [[SpotifyAPIManager shared] getSongsWithQuery:query completion:^(NSArray *songs, NSError *error) {
         if (songs) {
-            self.songs = (NSMutableArray<Song *> *)songs;
-            [self.tableView reloadData];
+            self->_songs = (NSMutableArray<Song *> *)songs;
+            [self->_tableView reloadDataWithAnimation];
         }
     }];
 }
@@ -108,8 +120,8 @@
 - (void)searchUsersWithQuery:(NSString *)query {
     [ParseQueryManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
         if (users) {
-            self.users = (NSMutableArray<PFUser *> *)users;
-            [self.tableView reloadData];
+            self->_users = (NSMutableArray<PFUser *> *)users;
+            [self->_tableView reloadDataWithAnimation];
         }
     }];
 }
