@@ -6,8 +6,6 @@
 //
 
 #import "SongCell.h"
-#import "QueueSong.h"
-#import "ParseUserManager.h"
 #import "ParseObjectManager.h"
 #import "RoomManager.h"
 

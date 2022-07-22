@@ -6,8 +6,6 @@
 //
 
 #import "Invitation.h"
-#import "ParseUserManager.h"
-#import "RoomManager.h"
 
 @implementation Invitation
 

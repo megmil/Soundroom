@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)deleteCurrentRoomAndAttachedObjects;
 + (void)deleteQueueSong:(QueueSong *)song;
 + (void)deleteInvitationsAcceptedByCurrentUser;
-+ (void)deleteInvitationsForCurrentRoom;
 
 @end
 

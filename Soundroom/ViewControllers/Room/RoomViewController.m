@@ -8,13 +8,10 @@
 #import "RoomViewController.h"
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
-#import "ParseUserManager.h"
-#import "ParseQueryManager.h"
 #import "ParseObjectManager.h"
 #import "RoomManager.h"
 #import "QueueSong.h"
 #import "Song.h"
-#import "Vote.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 

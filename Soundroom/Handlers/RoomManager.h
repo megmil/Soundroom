@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Room.h"
 #import "QueueSong.h"
 
 #define RoomManagerJoinedRoomNotification @"CurrentRoomManagerJoinedRoomNotification"

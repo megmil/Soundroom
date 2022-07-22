@@ -6,8 +6,6 @@
 //
 
 #import "Vote.h"
-#import "ParseUserManager.h"
-#import "RoomManager.h"
 
 @implementation Vote
 

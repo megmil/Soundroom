@@ -6,10 +6,9 @@
 //
 
 #import "SearchViewController.h"
-#import "Song.h"
 #import "SpotifyAPIManager.h"
-#import "ParseUserManager.h"
 #import "ParseQueryManager.h"
+#import "Song.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 

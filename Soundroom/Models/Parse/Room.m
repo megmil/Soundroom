@@ -6,8 +6,6 @@
 //
 
 #import "Room.h"
-#import "ParseUserManager.h"
-#import "RoomManager.h"
 
 @implementation Room
 

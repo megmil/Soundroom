@@ -153,12 +153,6 @@
     }];
 }
 
-+ (void)deleteInvitationsForCurrentRoom {
-    [ParseQueryManager getInvitationsForCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
-        [self deleteObjects:objects];
-    }];
-}
-
 # pragma mark - Helpers
 
 + (void)deleteObjectsInRoomWithId:(NSString *)roomId className:(NSString *)className {

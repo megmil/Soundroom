@@ -8,11 +8,7 @@
 #import "RoomNavigationController.h"
 #import "LobbyViewController.h"
 #import "RoomViewController.h"
-#import "ParseUserManager.h"
-#import "ParseQueryManager.h"
 #import "RoomManager.h"
-#import "Invitation.h"
-@import ParseLiveQuery;
 
 @interface RoomNavigationController ()
 
@@ -47,15 +43,6 @@
         RoomViewController *roomVC = [self.viewControllers firstObject];
         [roomVC presentViewController:lobbyVC animated:YES completion:nil];
     });
-}
-
-- (void)loadCredentials {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
-    NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-    _server = [credentials objectForKey:@"parse-live-server"];
-    _appId = [credentials objectForKey:@"parse-app-id"];
-    _clientKey = [credentials objectForKey:@"parse-client-key"];
-    didLoadCredentials = YES;
 }
 
 @end

@@ -8,7 +8,7 @@
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
-#import "QueueSong.h"
+#import "QueueSong.h" // TODO: move logic that requires QueueSong import?
 
 @implementation ParseQueryManager
 

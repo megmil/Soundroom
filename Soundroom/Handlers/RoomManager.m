@@ -6,14 +6,13 @@
 //
 
 #import "RoomManager.h"
-#import "QueueSong.h"
 #import "ParseUserManager.h"
 #import "ParseObjectManager.h"
 #import "ParseQueryManager.h"
 #import "ParseLiveQueryManager.h"
-#import "Invitation.h"
+#import "Room.h"
 #import "Vote.h"
-@import ParseLiveQuery;
+#import "Invitation.h"
 
 @implementation RoomManager {
     
