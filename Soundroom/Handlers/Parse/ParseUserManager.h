@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock _Nullable)completion;
 + (void)logoutWithCompletion:(PFUserLogoutResultBlock _Nullable)completion;
 
-+ (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock _Nullable)completion;
-
 + (NSString *)currentUserId;
 + (BOOL)isLoggedIn;
 

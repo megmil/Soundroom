@@ -96,13 +96,24 @@
     
 }
 
+- (void)clearRoomData {
+    
+    if ([self isCurrentUserHost]) {
+        [self clearAllRoomData];
+        return;
+    }
+    
+    [self clearLocalRoomData];
+    
+}
+
 - (void)clearLocalRoomData {
     
     if (_currentRoom == nil) {
         return;
     }
     
-    // TODO: delete invitation to room
+    // TODO: clear local queue, invitations, and votes
     
     _currentRoom = nil;
     _currentRoomId = nil;
@@ -117,7 +128,7 @@
 
 - (void)clearAllRoomData {
     // delete room and attached songs, invitations, and votes
-    [QueryManager deleteCurrentRoomAndAttachedObjects];
+    [QueryManager deleteCurrentRoomAndAttachedObjects]; // TODO: completion to make sure we don't load room that should be deleted
     [self clearLocalRoomData];
 }
 

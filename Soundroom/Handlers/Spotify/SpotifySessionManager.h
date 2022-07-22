@@ -25,12 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared;
 
 - (void)authorizeSession;
-- (void)applicationWillResignActive;
-- (void)applicationDidBecomeActive;
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
 - (void)signOut;
 - (void)playSongWithSpotifyURI:(NSString *)spotifyURI;
 - (BOOL)isSessionAuthorized;
+- (void)applicationWillResignActive;
+- (void)applicationDidBecomeActive;
 
 @end
 

@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 
-// get PFObject values
+// get other values
 + (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion;
 + (void)didCurrentUserAcceptRoomInvitationWithCompletion:(PFBooleanResultBlock)completion;
 + (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;

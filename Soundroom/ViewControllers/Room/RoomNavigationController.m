@@ -85,7 +85,7 @@
     
     // accepted invitation is deleted
     _subscription = [_subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[RoomManager shared] clearLocalRoomData];
+        [[RoomManager shared] clearRoomData];
     }];
     
 }

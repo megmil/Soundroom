@@ -81,18 +81,18 @@
 - (void)loadRoomData {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
-        [[QueueManager shared] fetchQueue];
-        [self configureInvitationSubscription];
-        [self configureVoteSubscription];
     });
+    [[QueueManager shared] fetchQueue];
+    [self configureInvitationSubscription];
+    [self configureVoteSubscription];
 }
 
 - (void)clearRoomData {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = @"";
-        [[QueueManager shared] resetLocalQueue];
-        [[VoteManager shared] resetLocalVotes];
     });
+    [[QueueManager shared] resetLocalQueue];
+    [[VoteManager shared] resetLocalVotes];
 }
 
 - (void)updateQueueData {
@@ -130,14 +130,7 @@
 }
 
 - (IBAction)didTapLeaveRoom:(id)sender {
-    
-    if ([[RoomManager shared] isCurrentUserHost]) {
-        [InvitationManager removeAllMembersFromRoom];
-        return;
-    }
-    
-    [InvitationManager deleteAcceptedInvitations];
-    
+    [QueryManager deleteInvitationsAcceptedByCurrentUser];
 }
 
 # pragma mark - TableView

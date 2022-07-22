@@ -31,10 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)joinRoomWithId:(NSString * _Nonnull)currentRoomId;
 - (void)joinRoom:(Room * _Nonnull)room;
-- (void)clearLocalRoomData;
-- (void)clearAllRoomData;
 
-- (BOOL)isCurrentUserHost;
+- (void)clearRoomData;
 
 @end
 
