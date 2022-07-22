@@ -17,9 +17,9 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 - [x] Integrates at least one SDK or API
 - [x] Ability to log in / logout as a user
 - [x] Ability to sign up with a new user profile
-- [ ] Uses at least one gesture
+- [x] Uses at least one gesture
 - [x] Incorporates at least one external library to add visual polish
-- [ ] Uses at least one animation
+- [x] Uses at least one animation
 
 
 ## 2. Product Spec
@@ -29,7 +29,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 #### Required Stories
 - [x] Users can create rooms
 - [x] Users can join private rooms
-- [ ] Users can play the room queue through the Spotify app
+- [x] Users can play the room queue through the Spotify app
 - [x] Users can vote on songs
 - [x] Songs change position in the queue based on their "score"
 - [x] Users can search songs
@@ -37,7 +37,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 - [ ] Users can view details on past sessions
 - [ ] Alerts the user when the queue is empty
 - [x] Users can leave a room
-- [ ] Hosts can swipe to remove a song from the queue
+- [x] Hosts can swipe to remove a song from the queue
 
 #### Stretch goals
 - [ ] Users can save past session queues as a Spotify playlist
