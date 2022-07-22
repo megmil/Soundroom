@@ -9,8 +9,8 @@
 #import "LobbyViewController.h"
 #import "RoomViewController.h"
 #import "ParseUserManager.h"
-#import "RoomManager.h"
 #import "ParseQueryManager.h"
+#import "RoomManager.h"
 #import "Invitation.h"
 @import ParseLiveQuery;
 

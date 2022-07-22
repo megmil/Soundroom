@@ -9,15 +9,13 @@
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
 #import "ParseUserManager.h"
+#import "ParseQueryManager.h"
+#import "ParseObjectManager.h"
 #import "RoomManager.h"
-#import "QueueManager.h"
-#import "InvitationManager.h"
-#import "VoteManager.h"
 #import "QueueSong.h"
 #import "Song.h"
 #import "Vote.h"
 #import "SongCell.h"
-#import "ParseQueryManager.h"
 @import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -57,10 +55,11 @@
 }
 
 - (void)configureObservers {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomData) name:RoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomData) name:RoomManagerLeftRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueData) name:QueueManagerUpdatedQueueNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueData) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomViews) name:RoomManagerLeftRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:RoomManagerUpdatedQueueNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentSongViews) name:RoomManagerUpdatedCurrentSongNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
 }
 
 - (void)authorizeSpotifySession {
@@ -78,80 +77,74 @@
 
 # pragma mark - Notification Selectors
 
-- (void)loadRoomData {
+- (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
     });
-    [[QueueManager shared] fetchQueue];
     [self configureInvitationSubscription];
     [self configureVoteSubscription];
 }
 
-- (void)clearRoomData {
+- (void)clearRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = @"";
     });
-    [[QueueManager shared] resetLocalQueue];
-    [[VoteManager shared] resetLocalVotes];
 }
 
-- (void)updateQueueData {
-    [self updateCurrentSongData];
-    [[VoteManager shared] resetLocalVotes];
+- (void)updateQueueViews {
+    [self updateCurrentSongViews];
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self->_tableView reloadData];
     });
 }
 
-- (void)updateCurrentSongData {
+- (void)updateCurrentSongViews {
     
     NSString *currentSongId = [[RoomManager shared] currentSongId];
-    [QueueManager getSpotifyIdForSongWithId:currentSongId completion:^(NSString *spotifyId, NSError *error) {
-        [[SpotifyAPIManager shared] getSongWithSpotifyId:spotifyId completion:^(Song *song, NSError *error) { // TODO: get song with QueueSong?
-            if (song) {
-                // update views
-                self->_currentSongTitleLabel.text = song.title;
-                self->_currentSongArtistLabel.text = song.artist;
-                self->_currentSongAlbumImageView.image = song.albumImage;
-                
-                // if current user is host, play song
-                if ([[RoomManager shared] isCurrentUserHost]) {
-                    [[SpotifySessionManager shared] playSongWithSpotifyURI:song.spotifyURI];
-                }
-            }
-        }];
+    
+    [[SpotifyAPIManager shared] getSpotifySongForQueueSongWithId:currentSongId completion:^(Song *song, NSError *error) {
+        
+        if (song) {
+            
+            // update views
+            self->_currentSongTitleLabel.text = song.title;
+            self->_currentSongArtistLabel.text = song.artist;
+            self->_currentSongAlbumImageView.image = song.albumImage;
+            
+        }
+        
     }];
 }
 
 # pragma mark - IBActions
 
 - (IBAction)didTapPlay:(id)sender {
-    [[QueueManager shared] playTopSong];
+    [[RoomManager shared] playTopSong];
 }
 
 - (IBAction)didTapLeaveRoom:(id)sender {
-    [ParseQueryManager deleteInvitationsAcceptedByCurrentUser];
+    [ParseObjectManager deleteInvitationsAcceptedByCurrentUser];
 }
 
 # pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[QueueManager shared] queue].count;
+    return [[RoomManager shared] queue].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
-    QueueSong *queueSong = [[QueueManager shared] queue][indexPath.row];
+    QueueSong *queueSong = [[RoomManager shared] queue][indexPath.row];
     
     cell.objectId = queueSong.objectId;
     cell.spotifyId = queueSong.spotifyId;
     cell.cellType = QueueSongCell;
-    cell.score = [[QueueManager shared] scores][indexPath.row];
+    cell.score = [[RoomManager shared] scores][indexPath.row];
     
     // get vote status
     cell.voteState = NotVoted;
-    [[VoteManager shared] getVoteStateForSongWithId:queueSong.objectId completion:^(VoteState voteState) {
+    [[RoomManager shared] getVoteStateForSongWithId:queueSong.objectId completion:^(VoteState voteState) {
         cell.voteState = voteState;
     }];
     
@@ -190,13 +183,13 @@
     // new song request is created
     _invitationSubscription = [_invitationSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
-        [[QueueManager shared] insertQueueSong:song];
+        [[RoomManager shared] insertQueueSong:song];
     }];
     
     // song request is removed
     _invitationSubscription = [_invitationSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
-        [[QueueManager shared] removeQueueSong:song];
+        [[RoomManager shared] removeQueueSong:song];
     }];
     
 }
@@ -218,13 +211,13 @@
     // vote is created
     _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Vote *vote = (Vote *)object;
-        [[QueueManager shared] updateQueueSongWithId:vote.songId];
+        [[RoomManager shared] updateQueueSongWithId:vote.songId];
     }];
     
     // vote is updated
     _voteSubscription = [_voteSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Vote *vote = (Vote *)object;
-        [[QueueManager shared] updateQueueSongWithId:vote.songId];
+        [[RoomManager shared] updateQueueSongWithId:vote.songId];
     }];
     
 }

@@ -14,5 +14,6 @@
 
 - (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion;
 - (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Song *song, NSError *error))completion;
+- (void)getSpotifySongForQueueSongWithId:(NSString *)queueSongId completion:(void(^)(Song *song, NSError *error))completion;
 
 @end

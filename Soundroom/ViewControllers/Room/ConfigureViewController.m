@@ -7,7 +7,7 @@
 
 #import "ConfigureViewController.h"
 #import "ConfigureView.h"
-#import "RoomManager.h"
+#import "ParseObjectManager.h"
 
 @interface ConfigureViewController () <ConfigureViewDelegate>
 
@@ -23,7 +23,7 @@
 }
 
 - (void)createRoom {
-    [RoomManager createRoomWithTitle:_configureView.title];
+    [ParseObjectManager createRoomWithTitle:_configureView.title];
 }
 
 - (void)inviteMembers {

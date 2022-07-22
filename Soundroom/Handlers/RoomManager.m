@@ -83,9 +83,11 @@
     _isInRoom = YES;
     
     [self setLocalQueueData];
-    [self setLocalVoteData];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
+    [self loadUserVotesWithCompletion:^(BOOL succeeded) {
+        if (succeeded) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
+        }
+    }];
     
 }
 
@@ -118,10 +120,7 @@
     _queue = [NSMutableArray <QueueSong *> array];
     _scores = [NSMutableArray <NSNumber *> array];
     
-    // clear local vote data
-    _upvotedSongIds = [NSMutableSet<NSString *> set];
-    _downvotedSongIds = [NSMutableSet<NSString *> set];
-    _didLoadUserVotes = NO;
+    [self clearLocalVoteData];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
     
@@ -210,8 +209,9 @@
 }
 
 - (void)sortQueue {
+    
     // calculate score for each queue song
-    [self loadScoresForQueue:_queue completion:^(NSMutableArray<NSNumber *> *scores) {
+    [self fetchQueueScoresWithCompletion:^(NSMutableArray<NSNumber *> *scores) {
         
         if (!scores) {
             return;
@@ -243,6 +243,7 @@
         self->_scores = sortedScores;
         
     }];
+    
 }
 
 
@@ -301,7 +302,7 @@
 
 - (void)loadUserVotesWithCompletion:(void (^)(BOOL succeeded))completion {
     
-    [self resetLocalVotes];
+    [self clearLocalVoteData];
     
     [ParseQueryManager getVotesByCurrentUserInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         for (Vote *vote in objects) {
@@ -341,6 +342,11 @@
     return [_downvotedSongIds containsObject:songId];
 }
 
+- (void)clearLocalVoteData {
+    _upvotedSongIds = [NSMutableSet<NSString *> set];
+    _downvotedSongIds = [NSMutableSet<NSString *> set];
+    _didLoadUserVotes = NO;
+}
 
 # pragma mark - Playback
 
@@ -351,7 +357,8 @@
         [self _removeQueueSong:topSong];
         
         // save current song to room
-        [[RoomManager shared] updateRoomWithCurrentSongId:topSong.objectId];
+        [ParseObjectManager updateCurrentRoomWithCurrentSongId:topSong.objectId];
+        
     }
 }
 

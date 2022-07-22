@@ -9,6 +9,7 @@
 #import "Song.h"
 #import "SpotifyAPIManager.h"
 #import "ParseUserManager.h"
+#import "ParseQueryManager.h"
 #import "SongCell.h"
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
@@ -108,7 +109,7 @@
 }
 
 - (void)searchUsersWithQuery:(NSString *)query {
-    [ParseUserManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
+    [ParseQueryManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
         if (users) {
             self.users = (NSMutableArray<PFUser *> *)users;
             [self.tableView reloadData];

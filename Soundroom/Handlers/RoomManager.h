@@ -12,6 +12,7 @@
 #define RoomManagerJoinedRoomNotification @"CurrentRoomManagerJoinedRoomNotification"
 #define RoomManagerLeftRoomNotification @"CurrentRoomManagerLeftRoomNotification"
 #define RoomManagerUpdatedQueueNotification @"RoomManagerUpdatedQueueNotification"
+#define RoomManagerUpdatedCurrentSongNotification @"RoomManagerUpdatedCurrentSongNotification"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,6 +46,9 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 - (void)updateQueueSongWithId:(NSString *)songId;
 
 - (void)getVoteStateForSongWithId:(NSString *)songId completion:(void (^)(VoteState voteState))completion;
+- (void)clearLocalVoteData;
+
+- (void)playTopSong;
 
 @end
 

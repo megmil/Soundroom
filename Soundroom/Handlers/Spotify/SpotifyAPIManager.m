@@ -7,6 +7,7 @@
 
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
+#import "ParseQueryManager.h"
 
 static NSString * const baseURLString = @"https://api.spotify.com";
 
@@ -78,6 +79,16 @@ static NSString * const baseURLString = @"https://api.spotify.com";
     }
     
     completion(nil, nil);
+}
+
+- (void)getSpotifySongForQueueSongWithId:(NSString *)queueSongId completion:(void (^)(Song *, NSError *))completion {
+    
+    [ParseQueryManager getSpotifyIdForSongWithId:queueSongId completion:^(NSString *spotifyId, NSError *error) {
+        
+        [self getSongWithSpotifyId:spotifyId completion:completion];
+        
+    }];
+    
 }
 
 # pragma mark - Helpers

@@ -8,9 +8,8 @@
 #import "SongCell.h"
 #import "QueueSong.h"
 #import "ParseUserManager.h"
+#import "ParseObjectManager.h"
 #import "RoomManager.h"
-#import "QueueManager.h"
-#import "InvitationManager.h"
 
 @implementation SongCell {
     
@@ -90,41 +89,45 @@
 - (void)didTapAdd {
     
     if (_cellType == AddSongCell) {
-        [QueueManager requestSongWithSpotifyId:_objectId];
+        [ParseObjectManager createSongRequestInCurrentRoomWithSpotifyId:_objectId];
         return;
     }
     
-    [InvitationManager inviteUserWithId:_objectId];
+    [ParseObjectManager createInvitationToCurrentRoomForUserWithId:_objectId];
     
 }
 
 - (void)didTapUpvote {
     
+    [[RoomManager shared] clearLocalVoteData];
+    
     // if already upvoted, set as unvoted
-    if (self.voteState == Upvoted) {
+    if (_voteState == Upvoted) {
         self.voteState = NotVoted;
-        [VoteManager incrementSongWithId:_objectId byAmount:@(0)];
+        [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(0)];
         return;
     }
     
     // set as upvoted
     self.voteState = Upvoted;
-    [VoteManager incrementSongWithId:self.objectId byAmount:@(1)];
+    [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(1)];
     
 }
 
 - (void)didTapDownvote {
     
+    [[RoomManager shared] clearLocalVoteData];
+    
     // if already downvoted, set as unvoted
-    if (self.voteState == Downvoted) {
+    if (_voteState == Downvoted) {
         self.voteState = NotVoted;
-        [VoteManager incrementSongWithId:self.objectId byAmount:@(0)];
+        [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(0)];
         return;
     }
     
     // set as downvoted
     self.voteState = Downvoted;
-    [VoteManager incrementSongWithId:self.objectId byAmount:@(-1)];
+    [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(-1)];
 
 }
 
