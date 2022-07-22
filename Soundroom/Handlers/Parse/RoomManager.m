@@ -8,14 +8,20 @@
 #import "RoomManager.h"
 #import "QueueSong.h"
 #import "ParseUserManager.h"
-#import "InvitationManager.h"
 #import "QueueManager.h"
-#import "QueryManager.h"
+#import "ParseQueryManager.h"
 #import "Invitation.h"
 @import ParseLiveQuery;
 
 @implementation RoomManager {
     Room *_currentRoom;
+    
+    NSMutableArray <QueueSong *> *_queue;
+    NSMutableArray <NSNumber *> *_scores;
+    
+    NSMutableSet <NSString *> *_upvotedSongIds;
+    NSMutableSet <NSString *> *_downvotedSongIds;
+    BOOL _didLoadUserVotes;
 }
 
 + (instancetype)shared {
@@ -27,29 +33,11 @@
     return shared;
 }
 
-- (void)updateRoomWithCurrentSongId:(NSString *)currentSongId {
-    [_currentRoom setValue:currentSongId forKey:@"currentSongId"];
-    [_currentRoom saveInBackground];
-}
-
-+ (void)createRoomWithTitle:(NSString *)title {
-    // create room
-    Room *newRoom = [Room new];
-    newRoom.title = title;
-    newRoom.hostId = [ParseUserManager currentUserId];
-    [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            // create accepted invitation for host
-            [InvitationManager registerHostForRoomWithId:newRoom.objectId];
-        }
-    }];
-}
-
-# pragma mark - Fetch
+# pragma mark - Public
 
 - (void)fetchCurrentRoom {
     
-    [QueryManager getInvitationAcceptedByCurrentUserWithCompletion:^(PFObject *object, NSError *error) {
+    [ParseQueryManager getInvitationAcceptedByCurrentUserWithCompletion:^(PFObject *object, NSError *error) {
         if (object) {
             // user is already in a room
             Invitation *invitation = (Invitation *)object;
@@ -62,15 +50,13 @@
     
 }
 
-# pragma mark - Join/Leave
-
-- (void)joinRoomWithId:(NSString * _Nonnull)roomId {
+- (void)joinRoomWithId:(NSString *)roomId {
     
     if (_currentRoomId == roomId) {
         return;
     }
     
-    [QueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
+    [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Room *room = (Room *)object;
             [self joinRoom:room];
@@ -78,6 +64,19 @@
     }];
     
 }
+
+- (void)clearRoomData {
+    
+    if ([self isCurrentUserHost]) {
+        [self clearAllRoomData];
+        return;
+    }
+    
+    [self clearLocalRoomData];
+    
+}
+
+# pragma mark - Private
 
 - (void)joinRoom:(Room * _Nonnull)room {
     
@@ -93,17 +92,6 @@
     _isInRoom = YES;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
-    
-}
-
-- (void)clearRoomData {
-    
-    if ([self isCurrentUserHost]) {
-        [self clearAllRoomData];
-        return;
-    }
-    
-    [self clearLocalRoomData];
     
 }
 
@@ -128,7 +116,7 @@
 
 - (void)clearAllRoomData {
     // delete room and attached songs, invitations, and votes
-    [QueryManager deleteCurrentRoomAndAttachedObjects]; // TODO: completion to make sure we don't load room that should be deleted
+    [ParseQueryManager deleteCurrentRoomAndAttachedObjects]; // TODO: completion to make sure we don't load room that should be deleted
     [self clearLocalRoomData];
 }
 

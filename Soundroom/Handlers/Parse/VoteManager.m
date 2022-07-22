@@ -8,7 +8,7 @@
 #import "VoteManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
-#import "QueryManager.h"
+#import "ParseQueryManager.h"
 #import "Vote.h"
 
 @implementation VoteManager {
@@ -26,29 +26,6 @@
     return shared;
 }
 
-+ (void)incrementSong:(QueueSong *)song byAmount:(NSNumber *)amount {
-    [self incrementSongWithId:song.objectId byAmount:amount];
-}
-
-+ (void)incrementSongWithId:(NSString *)songId byAmount:(NSNumber *)amount {
-    [QueryManager getVoteByCurrentUserForSongWithId:songId completion:^(PFObject *object, NSError *error) {
-        if (object) {
-            // update duplicate vote
-            Vote *vote = (Vote *)object;
-            vote.increment = amount;
-            [vote saveInBackground];
-        } else {
-            // create new vote
-            Vote *newVote = [Vote new];
-            newVote.songId = songId;
-            newVote.userId = [ParseUserManager currentUserId];
-            newVote.roomId = [[RoomManager shared] currentRoomId];
-            newVote.increment = amount;
-            [newVote saveInBackground];
-        }
-    }];
-}
-
 + (void)loadScoresForQueue:(NSMutableArray <QueueSong *> *)queue completion:(void (^)(NSMutableArray <NSNumber *> *scores))completion {
     
     NSMutableArray <NSNumber *> *scores = [NSMutableArray arrayWithCapacity:queue.count];
@@ -56,7 +33,7 @@
         [scores addObject:@(0)];
     }
     
-    [QueryManager getVotesInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
+    [ParseQueryManager getVotesInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         for (Vote *vote in objects) {
             NSUInteger index = [[queue valueForKey:@"objectId"] indexOfObject:vote.songId];
             if (index != NSNotFound) {
@@ -70,7 +47,7 @@
 }
 
 + (void)getScoreForSongWithId:(NSString *)songId completion:(void (^)(NSNumber *result))completion {
-    [QueryManager getVotesForSongWithId:songId completion:^(NSArray *objects, NSError *error) {
+    [ParseQueryManager getVotesForSongWithId:songId completion:^(NSArray *objects, NSError *error) {
         __block NSInteger score = 0;
         for (Vote *vote in objects) {
             score += vote.increment.integerValue;
@@ -89,7 +66,7 @@
     
     [self resetLocalVotes];
     
-    [QueryManager getVotesByCurrentUserInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
+    [ParseQueryManager getVotesByCurrentUserInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         for (Vote *vote in objects) {
             if (vote.increment.intValue == 1) {
                 [self->_upvotedSongIds addObject:vote.songId];

@@ -16,12 +16,13 @@
 #define userIdKey @"userId"
 #define roomIdKey @"roomId"
 #define songIdKey @"songId"
+#define currentSongIdKey @"currentSongId"
 #define isPendingKey @"isPending"
 #define usernameKey @"username"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueryManager : NSObject
+@interface ParseQueryManager : NSObject
 
 // live queries
 + (PFQuery *)queryForInvitationsAcceptedByCurrentUser;
@@ -45,11 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion;
 + (void)didCurrentUserAcceptRoomInvitationWithCompletion:(PFBooleanResultBlock)completion;
 + (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;
-
-// delete PFObjects
-+ (void)deleteCurrentRoomAndAttachedObjects;
-+ (void)deleteInvitationsAcceptedByCurrentUser;
-+ (void)deleteInvitationsForCurrentRoom;
 
 @end
 

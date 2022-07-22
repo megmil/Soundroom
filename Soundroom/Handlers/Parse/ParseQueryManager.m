@@ -5,12 +5,12 @@
 //  Created by Megan Miller on 7/21/22.
 //
 
-#import "QueryManager.h"
+#import "ParseQueryManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "QueueSong.h"
 
-@implementation QueryManager
+@implementation ParseQueryManager
 
 # pragma mark - Live Queries
 
@@ -48,26 +48,6 @@
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion {
     PFQuery *query = [PFQuery queryWithClassName:RoomClass];
     [query getObjectInBackgroundWithId:roomId block:completion];
-}
-
-+ (void)deleteCurrentRoomAndAttachedObjects {
-    
-    // store roomId
-    NSString *roomId = [[RoomManager shared] currentRoomId];
-    
-    // delete attached objects
-    [self deleteObjectsInRoomWithId:roomId className:QueueSongClass];
-    [self deleteObjectsInRoomWithId:roomId className:VoteClass];
-    [self deleteObjectsInRoomWithId:roomId className:InvitationClass];
-    
-    // delete room
-    [self getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
-        if (object) {
-            Room *room = (Room *)object;
-            [room deleteInBackground];
-        }
-    }];
-    
 }
 
 # pragma mark - Song
@@ -165,34 +145,6 @@
             completion(NO, error);
         }
     }];
-}
-
-+ (void)deleteInvitationsAcceptedByCurrentUser {
-    [self getInvitationsAcceptedForCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
-        [self deleteObjects:objects];
-    }];
-}
-
-+ (void)deleteInvitationsForCurrentRoom {
-    [self getInvitationsForCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
-        [self deleteObjects:objects];
-    }];
-}
-
-# pragma mark - Helpers
-
-+ (void)deleteObjectsInRoomWithId:(NSString *)roomId className:(NSString *)className {
-    PFQuery *query = [PFQuery queryWithClassName:className];
-    [query whereKey:roomIdKey equalTo:roomId];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [self deleteObjects:objects];
-    }];
-}
-
-+ (void)deleteObjects:(NSArray *)objects {
-    for (PFObject *object in objects) {
-        [object deleteInBackground];
-    }
 }
 
 @end

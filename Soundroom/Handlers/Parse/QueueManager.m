@@ -9,7 +9,7 @@
 #import "RoomManager.h"
 #import "VoteManager.h"
 #import "Vote.h"
-#import "QueryManager.h"
+#import "ParseQueryManager.h"
 
 @implementation QueueManager {
     NSMutableArray <QueueSong *> *_queue;
@@ -59,7 +59,7 @@
 }
 
 - (void)fetchQueue {
-    [QueryManager getSongsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
+    [ParseQueryManager getSongsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         if (objects) {
             self->_queue = (NSMutableArray <QueueSong *> *)objects;
             [self sortQueue];
@@ -107,7 +107,7 @@
 # pragma mark - Update Queue: Private
 
 - (void)_updateQueueSongWithId:(NSString *)songId completion:(void (^)(BOOL succeeded))completion {
-    [QueryManager getSongWithId:songId completion:^(PFObject *object, NSError *error) {
+    [ParseQueryManager getSongWithId:songId completion:^(PFObject *object, NSError *error) {
         if (object) {
             QueueSong *song = (QueueSong *)object;
             [self _removeQueueSong:song];

@@ -17,7 +17,7 @@
 #import "Song.h"
 #import "Vote.h"
 #import "SongCell.h"
-#import "QueryManager.h"
+#import "ParseQueryManager.h"
 @import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -130,7 +130,7 @@
 }
 
 - (IBAction)didTapLeaveRoom:(id)sender {
-    [QueryManager deleteInvitationsAcceptedByCurrentUser];
+    [ParseQueryManager deleteInvitationsAcceptedByCurrentUser];
 }
 
 # pragma mark - TableView
@@ -184,7 +184,7 @@
         return;
     }
     
-    PFQuery *query = [QueryManager queryForSongsInCurrentRoom];
+    PFQuery *query = [ParseQueryManager queryForSongsInCurrentRoom];
     _invitationSubscription = [_client subscribeToQuery:query];
     
     // new song request is created
@@ -212,7 +212,7 @@
         return;
     }
     
-    PFQuery *query = [QueryManager queryForVotesInCurrentRoom];
+    PFQuery *query = [ParseQueryManager queryForVotesInCurrentRoom];
     _voteSubscription = [_client subscribeToQuery:query];
     
     // vote is created
