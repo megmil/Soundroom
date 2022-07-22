@@ -16,6 +16,7 @@
 #import "Song.h"
 #import "Vote.h"
 #import "SongCell.h"
+#import "SongTableView.h"
 @import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -24,7 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentSongArtistLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *currentSongAlbumImageView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet SongTableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @property (strong, nonatomic) PFLiveQueryClient *client;
