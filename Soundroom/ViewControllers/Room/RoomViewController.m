@@ -17,7 +17,6 @@
 #import "Vote.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
-@import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -27,10 +26,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *currentSongAlbumImageView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
-
-@property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *songSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *voteSubscription;
 
 @end
 
@@ -43,7 +38,6 @@
     [self configureTableView];
     [self configureObservers];
     [self authorizeSpotifySession];
-    [self configureLiveClient];
     
 }
 
@@ -70,21 +64,12 @@
     }
 }
 
-- (void)configureLiveClient {
-    if (!didLoadCredentials) {
-        [self loadParseCredentials];
-    }
-    _client = [[PFLiveQueryClient alloc] initWithServer:_server applicationId:_appId clientKey:_clientKey];
-}
-
 # pragma mark - Notification Selectors
 
 - (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
     });
-    [self configureSongSubcription];
-    [self configureVoteSubscription];
 }
 
 - (void)clearRoomViews {
@@ -182,75 +167,6 @@
         [ParseObjectManager deleteQueueSong:song];
     }
     
-}
-
-# pragma mark - Subscriptions
-
-- (void)configureSongSubcription {
-    
-    // reset subscriptions
-    _songSubscription = nil;
-    
-    // check for valid roomId
-    NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (!roomId) {
-        return;
-    }
-    
-    PFQuery *query = [ParseQueryManager queryForSongsInCurrentRoom];
-    _songSubscription = [_client subscribeToQuery:query];
-    
-    // new song request is created
-    _songSubscription = [_songSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-        [[RoomManager shared] insertQueueSong:song];
-    }];
-    
-    // song request is removed
-    _songSubscription = [_songSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-        [[RoomManager shared] removeQueueSong:song];
-    }];
-    
-}
-
-- (void)configureVoteSubscription {
-    
-    // reset subscriptions
-    _voteSubscription = nil;
-    
-    // check for valid roomId
-    NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (!roomId) {
-        return;
-    }
-    
-    PFQuery *query = [ParseQueryManager queryForVotesInCurrentRoom];
-    _voteSubscription = [_client subscribeToQuery:query];
-    
-    // vote is created
-    _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Vote *vote = (Vote *)object;
-        [[RoomManager shared] updateQueueSongWithId:vote.songId];
-    }];
-    
-    // vote is updated
-    _voteSubscription = [_voteSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Vote *vote = (Vote *)object;
-        [[RoomManager shared] updateQueueSongWithId:vote.songId];
-    }];
-    
-}
-
-# pragma mark - Helpers
-
-- (void)loadParseCredentials {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
-    NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-    _server = [credentials objectForKey:@"parse-live-server"];
-    _appId = [credentials objectForKey:@"parse-app-id"];
-    _clientKey = [credentials objectForKey:@"parse-client-key"];
-    didLoadCredentials = YES;
 }
 
 @end

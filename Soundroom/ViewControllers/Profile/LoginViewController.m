@@ -7,6 +7,7 @@
 
 #import "LoginViewController.h"
 #import "ParseUserManager.h"
+#import "ParseLiveQueryManager.h"
 #import "SceneDelegate.h"
 
 @interface LoginViewController ()
@@ -36,6 +37,7 @@
     
     [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
+            [[ParseLiveQueryManager shared] configureInvitationSubscription];
             [self goToTabBar];
         }
     }];
@@ -53,6 +55,7 @@
     
     [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
         if (user) {
+            [[ParseLiveQueryManager shared] configureInvitationSubscription];
             [self goToTabBar];
         }
     }];

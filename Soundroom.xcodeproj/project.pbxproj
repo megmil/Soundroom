@@ -39,6 +39,7 @@
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
 		049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* LoginViewController.m */; };
 		04CC5470288B401200FC5707 /* UITableView+AnimationControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */; };
+		04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC5473288B4F4D00FC5707 /* ParseLiveQueryManager.m */; };
 		04DF2F4B288A1A5A00FD28E4 /* ParseQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4A288A1A5A00FD28E4 /* ParseQueryManager.m */; };
 		04DF2F4E288B064000FD28E4 /* ParseObjectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4D288B064000FD28E4 /* ParseObjectManager.m */; };
 		2A8C38DE55CFE15D8D15AD07 /* Pods_Soundroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D03DCE9A1C7558DDDF0ED670 /* Pods_Soundroom.framework */; };
@@ -121,6 +122,8 @@
 		049304CA287C8A04006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		04CC546E288B401200FC5707 /* UITableView+AnimationControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+AnimationControl.h"; sourceTree = "<group>"; };
 		04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+AnimationControl.m"; sourceTree = "<group>"; };
+		04CC5472288B4F4D00FC5707 /* ParseLiveQueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseLiveQueryManager.h; sourceTree = "<group>"; };
+		04CC5473288B4F4D00FC5707 /* ParseLiveQueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseLiveQueryManager.m; sourceTree = "<group>"; };
 		04DF2F49288A1A5900FD28E4 /* ParseQueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseQueryManager.h; sourceTree = "<group>"; };
 		04DF2F4A288A1A5A00FD28E4 /* ParseQueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseQueryManager.m; sourceTree = "<group>"; };
 		04DF2F4C288B064000FD28E4 /* ParseObjectManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseObjectManager.h; sourceTree = "<group>"; };
@@ -305,6 +308,8 @@
 				04DF2F4A288A1A5A00FD28E4 /* ParseQueryManager.m */,
 				04DF2F4C288B064000FD28E4 /* ParseObjectManager.h */,
 				04DF2F4D288B064000FD28E4 /* ParseObjectManager.m */,
+				04CC5472288B4F4D00FC5707 /* ParseLiveQueryManager.h */,
+				04CC5473288B4F4D00FC5707 /* ParseLiveQueryManager.m */,
 			);
 			path = Parse;
 			sourceTree = "<group>";
@@ -648,6 +653,7 @@
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
 				042299AB287E86630086612E /* ConfigureView.m in Sources */,
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
+				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				042299BD288092C40086612E /* RoomNavigationController.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */,

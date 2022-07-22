@@ -16,9 +16,6 @@
 
 @interface RoomNavigationController ()
 
-@property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
-
 @end
 
 @implementation RoomNavigationController
@@ -27,7 +24,6 @@
     [super viewDidLoad];
     [self loadRoomStatus];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToLobby) name:RoomManagerLeftRoomNotification object:nil];
-    [self configureLiveClient];
 }
 
 - (void)loadRoomStatus {
@@ -42,14 +38,6 @@
     
 }
 
-- (void)configureLiveClient {
-    if (!didLoadCredentials) {
-        [self loadCredentials];
-    }
-    _client = [[PFLiveQueryClient alloc] initWithServer:_server applicationId:_appId clientKey:_clientKey];
-    [self configureInvitationSubscriptions];
-}
-
 - (void)goToLobby {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -59,34 +47,6 @@
         RoomViewController *roomVC = [self.viewControllers firstObject];
         [roomVC presentViewController:lobbyVC animated:YES completion:nil];
     });
-}
-
-- (void)configureInvitationSubscriptions {
-    
-    // reset subscriptions
-    _subscription = nil;
-    
-    // get query for invitations accepted by current user
-    PFQuery *query = [ParseQueryManager queryForInvitationsAcceptedByCurrentUser];
-    _subscription = [_client subscribeToQuery:query];
-    
-    // accepted invitation is created (current user created room)
-    _subscription = [_subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Invitation *invitation = (Invitation *)object;
-        [[RoomManager shared] joinRoomWithId:invitation.roomId];
-    }];
-    
-    // pending invitation is accepted (current user accepted invite)
-    _subscription = [_subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Invitation *invitation = (Invitation *)object;
-        [[RoomManager shared] joinRoomWithId:invitation.roomId];
-    }];
-    
-    // accepted invitation is deleted
-    _subscription = [_subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[RoomManager shared] clearRoomData];
-    }];
-    
 }
 
 - (void)loadCredentials {

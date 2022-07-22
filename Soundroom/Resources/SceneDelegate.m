@@ -9,6 +9,7 @@
 #import "SpotifySessionManager.h"
 #import "LoginViewController.h"
 #import "ParseUserManager.h"
+#import "ParseLiveQueryManager.h"
 
 @interface SceneDelegate ()
 
@@ -23,6 +24,8 @@
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         self.window.rootViewController = userLoginVC;
+    } else {
+        [[ParseLiveQueryManager shared] configureInvitationSubscription];
     }
     
 }

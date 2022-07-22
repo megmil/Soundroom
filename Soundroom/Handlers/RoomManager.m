@@ -10,6 +10,7 @@
 #import "ParseUserManager.h"
 #import "ParseObjectManager.h"
 #import "ParseQueryManager.h"
+#import "ParseLiveQueryManager.h"
 #import "Invitation.h"
 #import "Vote.h"
 @import ParseLiveQuery;
@@ -85,6 +86,8 @@
     [self setLocalQueueData];
     [self loadUserVotesWithCompletion:^(BOOL succeeded) {
         if (succeeded) {
+            [[ParseLiveQueryManager shared] configureSongSubcription];
+            [[ParseLiveQueryManager shared] configureVoteSubscription];
             [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
         }
     }];

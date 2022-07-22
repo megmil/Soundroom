@@ -9,6 +9,8 @@
 #import "SpotifySessionManager.h"
 #import "QueueSong.h"
 #import "Room.h"
+#import "Vote.h"
+#import "Invitation.h"
 #import <Parse/Parse.h>
 
 @interface AppDelegate ()
@@ -23,6 +25,8 @@
     // model configuration
     [QueueSong registerSubclass];
     [Room registerSubclass];
+    [Vote registerSubclass];
+    [Invitation registerSubclass];
     
     // parse configuration
     ParseClientConfiguration *configuration = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
