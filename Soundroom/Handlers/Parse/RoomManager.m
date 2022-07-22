@@ -56,7 +56,7 @@
             [self joinRoomWithId:invitation.roomId];
         } else {
             // user is not in a room
-            [self leaveCurrentRoom];
+            [self clearLocalRoomData];
         }
     }];
     
@@ -96,14 +96,13 @@
     
 }
 
-- (void)_leaveCurrentRoom {
+- (void)clearLocalRoomData {
     
     if (_currentRoom == nil) {
         return;
     }
     
-    [InvitationManager deleteAcceptedInvitations];
-    [[QueueManager shared] resetLocalQueue];
+    // TODO: delete invitation to room
     
     _currentRoom = nil;
     _currentRoomId = nil;
@@ -112,26 +111,14 @@
     _currentSongId = nil;
     _isInRoom = NO;
     
-}
-
-- (void)leaveCurrentRoom {
-    [self _leaveCurrentRoom];
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
+    
 }
 
-- (void)deleteCurrentRoom {
-    
-    // delete room
-    if (_currentRoom) {
-        [_currentRoom deleteInBackground];
-    }
-    
-    // delete all queue songs, votes, and invitations linked to room
-    [self deleteAllRoomObjectsWithClassName:@"QueueSong"];
-    
-    // clear properties
-    [self _leaveCurrentRoom];
-    
+- (void)clearAllRoomData {
+    // delete room and attached songs, invitations, and votes
+    [QueryManager deleteCurrentRoomAndAttachedObjects];
+    [self clearLocalRoomData];
 }
 
 # pragma mark - Helpers

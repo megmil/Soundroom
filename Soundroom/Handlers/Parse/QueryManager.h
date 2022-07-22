@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;
 
 // delete PFObjects
-+ (void)deleteAllObjectsInCurrentRoom;
++ (void)deleteCurrentRoomAndAttachedObjects;
 + (void)deleteInvitationsAcceptedByCurrentUser;
 + (void)deleteInvitationsForCurrentRoom;
 

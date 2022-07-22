@@ -50,10 +50,24 @@
     [query getObjectInBackgroundWithId:roomId block:completion];
 }
 
-+ (void)deleteAllObjectsInCurrentRoom {
-    [self deleteAllObjectsInCurrentRoomWithClassName:QueueSongClass];
-    [self deleteAllObjectsInCurrentRoomWithClassName:VoteClass];
-    [self deleteAllObjectsInCurrentRoomWithClassName:InvitationClass];
++ (void)deleteCurrentRoomAndAttachedObjects {
+    
+    // store roomId
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    
+    // delete attached objects
+    [self deleteObjectsInRoomWithId:roomId className:QueueSongClass];
+    [self deleteObjectsInRoomWithId:roomId className:VoteClass];
+    [self deleteObjectsInRoomWithId:roomId className:InvitationClass];
+    
+    // delete room
+    [self getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
+        if (object) {
+            Room *room = (Room *)object;
+            [room deleteInBackground];
+        }
+    }];
+    
 }
 
 # pragma mark - Song
@@ -167,9 +181,9 @@
 
 # pragma mark - Helpers
 
-+ (void)deleteAllObjectsInCurrentRoomWithClassName:(NSString *)className {
++ (void)deleteObjectsInRoomWithId:(NSString *)roomId className:(NSString *)className {
     PFQuery *query = [PFQuery queryWithClassName:className];
-    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    [query whereKey:roomIdKey equalTo:roomId];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         [self deleteObjects:objects];
     }];
