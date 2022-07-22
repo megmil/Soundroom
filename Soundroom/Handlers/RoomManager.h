@@ -25,15 +25,16 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 @interface RoomManager : NSObject
 
 // room data
-@property (nonatomic, strong) NSString *currentRoomId;
-@property (nonatomic, strong) NSString *currentRoomName;
-@property (nonatomic, strong) NSString *currentHostId;
-@property (nonatomic, strong) NSString *currentSongId;
-@property (nonatomic) BOOL isInRoom;
+@property (nonatomic, strong, readonly) NSString *currentRoomId;
+@property (nonatomic, strong, readonly) NSString *currentRoomName;
+@property (nonatomic, strong, readonly) NSString *currentHostId;
+@property (nonatomic, strong, readonly) NSString *currentSongId;
+@property (nonatomic, readonly) BOOL isInRoom;
+@property (nonatomic, readonly) BOOL isCurrentUserHost;
 
 // queue data
-@property (nonatomic, strong) NSMutableArray <QueueSong *> *queue;
-@property (nonatomic, strong) NSMutableArray <NSNumber *> *scores;
+@property (nonatomic, strong, readonly) NSMutableArray <QueueSong *> *queue;
+@property (nonatomic, strong, readonly) NSMutableArray <NSNumber *> *scores;
 
 + (instancetype)shared;
 
