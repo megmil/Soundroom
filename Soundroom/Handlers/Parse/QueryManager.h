@@ -23,6 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface QueryManager : NSObject
 
+// live queries
++ (PFQuery *)queryForInvitationsAcceptedByCurrentUser;
++ (PFQuery *)queryForSongsInCurrentRoom;
++ (PFQuery *)queryForVotesInCurrentRoom;
+
 // get PFObjects
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion;
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
@@ -36,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 
-// get values
+// get PFObject values
 + (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion;
 + (void)didCurrentUserAcceptRoomInvitationWithCompletion:(PFBooleanResultBlock)completion;
 + (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;
@@ -45,10 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)deleteAllObjectsInCurrentRoom;
 + (void)deleteInvitationsAcceptedByCurrentUser;
 + (void)deleteInvitationsForCurrentRoom;
-
-// create PFObjects
-
-// update PFObjects
 
 @end
 

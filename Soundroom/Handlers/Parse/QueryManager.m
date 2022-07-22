@@ -12,6 +12,27 @@
 
 @implementation QueryManager
 
+# pragma mark - Live Queries
+
++ (PFQuery *)queryForInvitationsAcceptedByCurrentUser {
+    PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
+    [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
+    [query whereKey:isPendingKey equalTo:@(NO)];
+    return query;
+}
+
++ (PFQuery *)queryForSongsInCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:QueueSongClass];
+    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    return query;
+}
+
++ (PFQuery *)queryForVotesInCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
+    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    return query;
+}
+
 # pragma mark - User
 
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion {
@@ -43,8 +64,7 @@
 }
 
 + (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:QueueSongClass];
-    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    PFQuery *query = [self queryForSongsInCurrentRoom];
     [query orderByAscending:@"createdAt"];
     [query findObjectsInBackgroundWithBlock:completion];
 }
@@ -63,8 +83,7 @@
 # pragma mark - Vote
 
 + (void)getVotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
-    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    PFQuery *query = [self queryForVotesInCurrentRoom];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
@@ -92,9 +111,7 @@
 # pragma mark - Invitation
 
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:RoomClass];
-    [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:isPendingKey equalTo:@(NO)];
+    PFQuery *query = [self queryForInvitationsAcceptedByCurrentUser];
     [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one accepted invitation per user
 }
 

@@ -17,7 +17,7 @@
 #import "Song.h"
 #import "Vote.h"
 #import "SongCell.h"
-#import "SNDParseManager.h"
+#import "QueryManager.h"
 @import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -191,8 +191,8 @@
         return;
     }
     
-    PFQuery *songsQuery = [[SNDParseManager shared] queryForCurrentQueue];
-    _invitationSubscription = [_client subscribeToQuery:songsQuery];
+    PFQuery *query = [QueryManager queryForSongsInCurrentRoom];
+    _invitationSubscription = [_client subscribeToQuery:query];
     
     // new song request is created
     _invitationSubscription = [_invitationSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
@@ -219,8 +219,8 @@
         return;
     }
     
-    PFQuery *scoresQuery = [[SNDParseManager shared] queryForAllVotesInRoom];
-    _voteSubscription = [_client subscribeToQuery:scoresQuery];
+    PFQuery *query = [QueryManager queryForVotesInCurrentRoom];
+    _voteSubscription = [_client subscribeToQuery:query];
     
     // vote is created
     _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
