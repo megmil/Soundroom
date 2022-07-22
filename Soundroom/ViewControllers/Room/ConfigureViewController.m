@@ -7,7 +7,7 @@
 
 #import "ConfigureViewController.h"
 #import "ConfigureView.h"
-#import "Room.h"
+#import "ParseObjectManager.h"
 
 @interface ConfigureViewController () <ConfigureViewDelegate>
 
@@ -23,11 +23,7 @@
 }
 
 - (void)createRoom {
-    [Room createRoomWithTitle:self.configureView.title completion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // dismiss self
-        }
-    }];
+    [ParseObjectManager createRoomWithTitle:_configureView.title];
 }
 
 - (void)inviteMembers {

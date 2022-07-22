@@ -6,11 +6,10 @@
 //
 
 #import "AppDelegate.h"
-#import "Parse/Parse.h"
-#import "SpotifyAuthClient.h"
-#import "LoginViewController.h"
+#import "SpotifySessionManager.h"
 #import "QueueSong.h"
 #import "Room.h"
+#import <Parse/Parse.h>
 
 @interface AppDelegate ()
 
@@ -21,9 +20,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    // model configuration
     [QueueSong registerSubclass];
     [Room registerSubclass];
     
+    // parse configuration
     ParseClientConfiguration *configuration = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
         NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:path];
@@ -31,7 +32,6 @@
         configuration.clientKey = [dictionary objectForKey:@"parse-client-key"];
         configuration.server = @"https://parseapi.back4app.com";
     }];
-
     [Parse initializeWithConfiguration:configuration];
     
     return YES;
@@ -41,6 +41,14 @@
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
     return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    [[SpotifySessionManager shared] applicationWillResignActive];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [[SpotifySessionManager shared] applicationDidBecomeActive];
 }
 
 @end

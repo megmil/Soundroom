@@ -6,100 +6,154 @@
 //
 
 #import "RoomViewController.h"
-#import "LobbyViewController.h"
 #import "SpotifyAPIManager.h"
-#import "ParseRoomManager.h"
+#import "SpotifySessionManager.h"
 #import "ParseUserManager.h"
+#import "ParseQueryManager.h"
+#import "ParseObjectManager.h"
+#import "RoomManager.h"
 #import "QueueSong.h"
 #import "Song.h"
+#import "Vote.h"
 #import "SongCell.h"
 @import ParseLiveQuery;
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currentSongArtistLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *currentSongAlbumImageView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) NSMutableArray <QueueSong *> *queue;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *subscription;
+@property (strong, nonatomic) PFLiveQuerySubscription *invitationSubscription;
+@property (strong, nonatomic) PFLiveQuerySubscription *voteSubscription;
 
 @end
 
 @implementation RoomViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
+    [self configureTableView];
+    [self configureObservers];
+    [self authorizeSpotifySession];
+    [self configureLiveClient];
     
-    [self configureClient];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoom) name:ParseRoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoom) name:ParseRoomManagerUpdatedQueueNotification object:nil];
 }
 
-- (void)loadRoom {
-    self.titleLabel.text = [[ParseRoomManager shared] currentRoomTitle];
-    [self configureLiveSubscriptions];
-    [[ParseRoomManager shared] refreshQueue];
+# pragma mark - ViewDidLoad Helpers
+
+- (void)configureTableView {
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
 }
 
-- (void)refreshRoom {
+- (void)configureObservers {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomViews) name:RoomManagerLeftRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:RoomManagerUpdatedQueueNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentSongViews) name:RoomManagerUpdatedCurrentSongNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
+}
+
+- (void)authorizeSpotifySession {
+    if (![[SpotifySessionManager shared] isSessionAuthorized]) {
+        [[SpotifySessionManager shared] authorizeSession];
+    }
+}
+
+- (void)configureLiveClient {
+    if (!didLoadCredentials) {
+        [self loadParseCredentials];
+    }
+    _client = [[PFLiveQueryClient alloc] initWithServer:_server applicationId:_appId clientKey:_clientKey];
+}
+
+# pragma mark - Notification Selectors
+
+- (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void){
-        [self configureLiveSubscriptions];
-        self.queue = [[ParseRoomManager shared] queue];
-        [self.tableView reloadData];
+        self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
+    });
+    [self configureInvitationSubscription];
+    [self configureVoteSubscription];
+}
+
+- (void)clearRoomViews {
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        self->_roomNameLabel.text = @"";
     });
 }
 
-- (IBAction)leaveRoom:(id)sender {
-    if ([self isCurrentUserHost]) {
-        [[ParseRoomManager shared] removeAllUsersWithCompletion:nil];
-        return;
-    }
-    [[ParseRoomManager shared] removeUserWithId:[ParseUserManager currentUserId] completion:nil];
+- (void)updateQueueViews {
+    [self updateCurrentSongViews];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self->_tableView reloadData];
+    });
 }
 
-- (BOOL)isCurrentUserHost {
-    NSString *currentUserId = [ParseUserManager currentUserId];
-    NSString *hostId = [[ParseRoomManager shared] currentHostId];
-    if (currentUserId && hostId) {
-        return [currentUserId isEqualToString:hostId];
-    }
-    return NO;
+- (void)updateCurrentSongViews {
+    
+    NSString *currentSongId = [[RoomManager shared] currentSongId];
+    
+    [[SpotifyAPIManager shared] getSpotifySongForQueueSongWithId:currentSongId completion:^(Song *song, NSError *error) {
+        
+        if (song) {
+            
+            // update views
+            self->_currentSongTitleLabel.text = song.title;
+            self->_currentSongArtistLabel.text = song.artist;
+            self->_currentSongAlbumImageView.image = song.albumImage;
+            
+        }
+        
+    }];
 }
 
-# pragma mark - Table View
+# pragma mark - IBActions
+
+- (IBAction)didTapPlay:(id)sender {
+    [[RoomManager shared] playTopSong];
+}
+
+- (IBAction)didTapLeaveRoom:(id)sender {
+    [ParseObjectManager deleteInvitationsAcceptedByCurrentUser];
+}
+
+# pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.queue.count;
+    return [[RoomManager shared] queue].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
-    QueueSong *queueSong = self.queue[indexPath.row];
+    QueueSong *queueSong = [[RoomManager shared] queue][indexPath.row];
     
     cell.objectId = queueSong.objectId;
-    cell.score = queueSong.score;
+    cell.spotifyId = queueSong.spotifyId;
+    cell.cellType = QueueSongCell;
+    cell.score = [[RoomManager shared] scores][indexPath.row];
     
-    cell.isQueueSongCell = YES;
-    cell.isAddSongCell = NO;
-    cell.isUserCell = NO;
+    // get vote status
+    cell.voteState = NotVoted;
+    [[RoomManager shared] getVoteStateForSongWithId:queueSong.objectId completion:^(VoteState voteState) {
+        cell.voteState = voteState;
+    }];
     
-    cell.isUpvoted = [queueSong isUpvotedByCurrentUser];
-    cell.isDownvoted = [queueSong isDownvotedByCurrentUser];
-    cell.isNotVoted = [queueSong isNotVotedByCurrentUser];
-    
+    // get spotify metadata
     [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
         if (song) {
             cell.title = song.title;
             cell.subtitle = song.artist;
             cell.image = song.albumImage;
-            cell.spotifyId = song.spotifyId;
         }
     }];
     
@@ -110,60 +164,73 @@
     return 66.f;
 }
 
-# pragma mark - Live Query
+# pragma mark - Subscriptions
 
-- (void)configureClient {
-    
-    if (!credentialsLoaded) {
-        [self loadCredentials];
-    }
-    
-    self.client = [[PFLiveQueryClient alloc] initWithServer:self.server applicationId:self.appId clientKey:self.clientKey];
-    
-}
-
-- (void)configureLiveSubscriptions {
+- (void)configureInvitationSubscription {
     
     // reset subscriptions
-    self.subscription = nil;
+    _invitationSubscription = nil;
     
-    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-    self.subscription = [self.client subscribeToQuery:query];
+    // check for valid roomId
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    if (!roomId) {
+        return;
+    }
     
-    // new song added to queue
-    [self.subscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    PFQuery *query = [ParseQueryManager queryForSongsInCurrentRoom];
+    _invitationSubscription = [_client subscribeToQuery:query];
+    
+    // new song request is created
+    _invitationSubscription = [_invitationSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
-        [[ParseRoomManager shared] refreshQueue];
+        [[RoomManager shared] insertQueueSong:song];
     }];
     
-    // queue song is updated
-    [self.subscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    // song request is removed
+    _invitationSubscription = [_invitationSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         QueueSong *song = (QueueSong *)object;
-        [[ParseRoomManager shared] refreshQueue];
+        [[RoomManager shared] removeQueueSong:song];
     }];
     
-    // queue song is deleted
-    /*
-    [self.subscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-    }];
-     */
 }
 
-- (void)loadCredentials {
+- (void)configureVoteSubscription {
+    
+    // reset subscriptions
+    _voteSubscription = nil;
+    
+    // check for valid roomId
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    if (!roomId) {
+        return;
+    }
+    
+    PFQuery *query = [ParseQueryManager queryForVotesInCurrentRoom];
+    _voteSubscription = [_client subscribeToQuery:query];
+    
+    // vote is created
+    _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Vote *vote = (Vote *)object;
+        [[RoomManager shared] updateQueueSongWithId:vote.songId];
+    }];
+    
+    // vote is updated
+    _voteSubscription = [_voteSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Vote *vote = (Vote *)object;
+        [[RoomManager shared] updateQueueSongWithId:vote.songId];
+    }];
+    
+}
+
+# pragma mark - Helpers
+
+- (void)loadParseCredentials {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
     NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-    self.server = [credentials objectForKey:@"parse-live-server"];
-    self.appId = [credentials objectForKey:@"parse-app-id"];
-    self.clientKey = [credentials objectForKey:@"parse-client-key"];
-    credentialsLoaded = YES;
-}
-
-- (PFQuery *)queueSongsQuery {
-    PFQuery *query = [PFQuery queryWithClassName:@"QueueSong"];
-    [query whereKey:@"roomId" equalTo:[[ParseRoomManager shared] currentRoomId]]; // TODO: should update room id
-    [query orderByAscending:@"score"];
-    return query;
+    _server = [credentials objectForKey:@"parse-live-server"];
+    _appId = [credentials objectForKey:@"parse-app-id"];
+    _clientKey = [credentials objectForKey:@"parse-client-key"];
+    didLoadCredentials = YES;
 }
 
 @end

@@ -7,10 +7,9 @@
 
 #import "SearchViewController.h"
 #import "Song.h"
-#import "QueueSong.h"
-#import "UIImageView+AFNetworking.h"
 #import "SpotifyAPIManager.h"
 #import "ParseUserManager.h"
+#import "ParseQueryManager.h"
 #import "SongCell.h"
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
@@ -66,9 +65,7 @@
         cell.subtitle = song.artist;
         cell.image = song.albumImage;
         cell.objectId = song.spotifyId;
-        cell.isAddSongCell = YES;
-        cell.isUserCell = NO;
-        cell.isQueueSongCell = NO;
+        cell.cellType = AddSongCell;
         return cell;
     }
     
@@ -77,10 +74,9 @@
     cell.subtitle = [user valueForKey:@"username"];
     cell.image = [UIImage imageNamed:@"check"]; // TODO: avatar images
     cell.objectId = user.objectId;
-    cell.isAddSongCell = NO;
-    cell.isUserCell = YES;
-    cell.isQueueSongCell = NO;
+    cell.cellType = AddUserCell;
     return cell;
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -113,7 +109,7 @@
 }
 
 - (void)searchUsersWithQuery:(NSString *)query {
-    [ParseUserManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
+    [ParseQueryManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
         if (users) {
             self.users = (NSMutableArray<PFUser *> *)users;
             [self.tableView reloadData];
@@ -123,6 +119,10 @@
 
 - (BOOL)isSongSearch {
     return self.searchTypeControl.selectedSegmentIndex == 0;
+}
+
+- (IBAction)didTapScreen:(id)sender {
+    [self.view endEditing:YES];
 }
 
 @end

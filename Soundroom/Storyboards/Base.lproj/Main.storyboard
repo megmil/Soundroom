@@ -119,7 +119,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Leave"/>
                                 <connections>
-                                    <action selector="leaveRoom:" destination="8w9-aH-PUH" eventType="touchUpInside" id="xBX-kt-dWV"/>
+                                    <action selector="didTapLeaveRoom:" destination="8w9-aH-PUH" eventType="touchUpInside" id="xBX-kt-dWV"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eDn-vJ-DT5">
@@ -147,6 +147,14 @@
                                     <segment title="Mine"/>
                                 </segments>
                             </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TdI-DB-BCd">
+                                <rect key="frame" x="354" y="159.5" width="40" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="play.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="didTapPlay:" destination="8w9-aH-PUH" eventType="touchUpInside" id="0h1-Su-Cff"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="02V-ze-mHY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -154,14 +162,13 @@
                             <constraint firstItem="74f-57-bil" firstAttribute="trailing" secondItem="02V-ze-mHY" secondAttribute="trailing" id="1Sy-Yr-fjZ"/>
                             <constraint firstItem="02V-ze-mHY" firstAttribute="trailing" secondItem="6uv-fz-1ef" secondAttribute="trailing" constant="20" id="3Sq-Gx-rQd"/>
                             <constraint firstItem="z8N-s0-9jf" firstAttribute="leading" secondItem="02V-ze-mHY" secondAttribute="leading" constant="20" id="ACX-4P-MMy"/>
-                            <constraint firstItem="02V-ze-mHY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="sHX-HO-3zw" secondAttribute="trailing" constant="20" id="Beh-3K-iD8"/>
                             <constraint firstItem="74f-57-bil" firstAttribute="leading" secondItem="02V-ze-mHY" secondAttribute="leading" id="CBU-h2-taN"/>
                             <constraint firstItem="u6v-za-tdU" firstAttribute="centerY" secondItem="iKd-Al-IDj" secondAttribute="centerY" id="GYD-UP-kno"/>
-                            <constraint firstItem="02V-ze-mHY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="eDn-vJ-DT5" secondAttribute="trailing" constant="20" id="H8e-x7-kXT"/>
                             <constraint firstItem="02V-ze-mHY" firstAttribute="trailing" secondItem="u6v-za-tdU" secondAttribute="trailing" constant="20" id="LNX-8K-TAe"/>
                             <constraint firstItem="iKd-Al-IDj" firstAttribute="leading" secondItem="02V-ze-mHY" secondAttribute="leading" constant="20" id="M9f-x3-uHh"/>
                             <constraint firstItem="74f-57-bil" firstAttribute="bottom" secondItem="02V-ze-mHY" secondAttribute="bottom" id="Mfz-0U-inS"/>
                             <constraint firstItem="iKd-Al-IDj" firstAttribute="top" secondItem="z8N-s0-9jf" secondAttribute="bottom" constant="20" id="PpS-W2-kN9"/>
+                            <constraint firstItem="02V-ze-mHY" firstAttribute="trailing" secondItem="TdI-DB-BCd" secondAttribute="trailing" constant="20" id="VVI-yW-erH"/>
                             <constraint firstItem="gE4-oq-sK0" firstAttribute="top" secondItem="02V-ze-mHY" secondAttribute="top" id="aXT-6T-DPC"/>
                             <constraint firstItem="sHX-HO-3zw" firstAttribute="leading" secondItem="z8N-s0-9jf" secondAttribute="trailing" constant="10" id="awG-Ud-auu"/>
                             <constraint firstItem="z8N-s0-9jf" firstAttribute="top" secondItem="gE4-oq-sK0" secondAttribute="bottom" constant="20" id="boJ-cG-uls"/>
@@ -172,15 +179,22 @@
                             <constraint firstItem="6uv-fz-1ef" firstAttribute="top" secondItem="02V-ze-mHY" secondAttribute="top" id="loA-5V-1ta"/>
                             <constraint firstItem="3Vh-33-Am4" firstAttribute="centerY" secondItem="gE4-oq-sK0" secondAttribute="centerY" id="ltq-RE-OND"/>
                             <constraint firstItem="3Vh-33-Am4" firstAttribute="leading" secondItem="gE4-oq-sK0" secondAttribute="trailing" constant="8" id="lya-hF-OQt"/>
+                            <constraint firstItem="TdI-DB-BCd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eDn-vJ-DT5" secondAttribute="trailing" constant="10" id="mvK-dJ-wFF"/>
+                            <constraint firstItem="TdI-DB-BCd" firstAttribute="centerY" secondItem="z8N-s0-9jf" secondAttribute="centerY" id="o8b-EZ-YFV"/>
                             <constraint firstItem="6uv-fz-1ef" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3Vh-33-Am4" secondAttribute="trailing" constant="8" id="qf0-d5-k3r"/>
                             <constraint firstItem="u6v-za-tdU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iKd-Al-IDj" secondAttribute="trailing" constant="8" id="sdX-ze-6BQ"/>
                             <constraint firstItem="gE4-oq-sK0" firstAttribute="leading" secondItem="02V-ze-mHY" secondAttribute="leading" constant="20" id="vAD-xw-bU6"/>
+                            <constraint firstItem="TdI-DB-BCd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sHX-HO-3zw" secondAttribute="trailing" constant="10" id="vMZ-nD-Sf0"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="wnx-Ap-gx2"/>
                     <connections>
+                        <outlet property="currentSongAlbumImageView" destination="z8N-s0-9jf" id="93Q-XB-Tre"/>
+                        <outlet property="currentSongArtistLabel" destination="sHX-HO-3zw" id="7bJ-Ot-O7P"/>
+                        <outlet property="currentSongTitleLabel" destination="eDn-vJ-DT5" id="UGy-Ig-ZKk"/>
+                        <outlet property="playButton" destination="TdI-DB-BCd" id="GFF-xb-Fak"/>
+                        <outlet property="roomNameLabel" destination="gE4-oq-sK0" id="Csb-UD-zBf"/>
                         <outlet property="tableView" destination="74f-57-bil" id="QRj-cf-ldM"/>
-                        <outlet property="titleLabel" destination="gE4-oq-sK0" id="Csb-UD-zBf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lok-fq-ngw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -370,6 +384,10 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2sZ-uS-lUH"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="dfU-ex-OFH" appends="YES" id="bQu-PP-mJc"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="tEW-J4-60g"/>
                     <connections>
@@ -380,6 +398,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1qf-jH-UPx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="dfU-ex-OFH">
+                    <connections>
+                        <action selector="didTapScreen:" destination="06Y-Re-yMA" id="PzR-6H-pEA"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="920" y="-220"/>
         </scene>
@@ -409,6 +432,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="OCt-xl-qSi"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="LXa-29-WZw" firstAttribute="trailing" secondItem="OCt-xl-qSi" secondAttribute="trailing" id="5Yt-9h-A7c"/>
                             <constraint firstItem="WHf-9a-A3C" firstAttribute="top" secondItem="OCt-xl-qSi" secondAttribute="top" id="7P9-Gq-196"/>
@@ -421,6 +445,9 @@
                             <constraint firstItem="6oU-Nr-VPD" firstAttribute="leading" secondItem="OCt-xl-qSi" secondAttribute="leading" constant="75" id="qAc-aM-2bt"/>
                             <constraint firstItem="6oU-Nr-VPD" firstAttribute="top" secondItem="WHf-9a-A3C" secondAttribute="bottom" constant="5" id="vVu-lA-5Kh"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="YAm-PY-oQ0" appends="YES" id="QWP-Z1-4oy"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Search" image="magnifyingglass" catalog="system" id="kb2-DM-I9s"/>
                     <connections>
@@ -430,6 +457,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SMw-zg-16G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="YAm-PY-oQ0">
+                    <connections>
+                        <action selector="didTapScreen:" destination="RPp-YR-1zU" id="E8k-VC-2EA"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-549.27536231884062" y="568.52678571428567"/>
         </scene>
@@ -439,6 +471,7 @@
         <image name="hifispeaker.fill" catalog="system" width="111" height="128"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
+        <image name="play.fill" catalog="system" width="116" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

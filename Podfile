@@ -7,7 +7,6 @@ target 'Soundroom' do
 
   # Pods for Soundroom
   pod 'AFNetworking'
-  pod 'OAuth2-ObjC'
   pod 'Parse'
   pod 'SkyFloatingLabelTextField'
   pod 'ParseLiveQuery'

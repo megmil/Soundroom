@@ -68,13 +68,15 @@
 
 - (void)setIsLoggedIn:(BOOL)isLoggedIn {
     _isLoggedIn = isLoggedIn;
-    if (isLoggedIn) {
-        _statusImageView.image = [UIImage systemImageNamed:@"checkmark.circle"];
-        [_actionButton setImage:[UIImage systemImageNamed:@"rectangle.portrait.and.arrow.right"] forState:UIControlStateNormal];
-        return;
-    }
-    _statusImageView.image = [UIImage systemImageNamed:@"exclamationmark.triangle"];
-    [_actionButton setImage:[UIImage systemImageNamed:@"person.fill"] forState:UIControlStateNormal];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        if (isLoggedIn) {
+            self->_statusImageView.image = [UIImage systemImageNamed:@"checkmark.circle"];
+            [self->_actionButton setImage:[UIImage systemImageNamed:@"rectangle.portrait.and.arrow.right"] forState:UIControlStateNormal];
+            return;
+        }
+        self->_statusImageView.image = [UIImage systemImageNamed:@"exclamationmark.triangle"];
+        [self->_actionButton setImage:[UIImage systemImageNamed:@"person.fill"] forState:UIControlStateNormal];
+    });
 }
 
 - (void)didTapActionButton {

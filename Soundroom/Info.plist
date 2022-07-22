@@ -4,6 +4,7 @@
 <dict>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>spotify</string>
 		<string>soundroom</string>
 	</array>
 	<key>CFBundleURLTypes</key>
@@ -15,6 +16,7 @@
 			<string>com.metauniversity.Soundroom</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>metau-soundroom</string>
 				<string>soundroom</string>
 			</array>
 		</dict>
