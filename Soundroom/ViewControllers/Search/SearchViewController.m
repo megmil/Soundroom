@@ -93,9 +93,7 @@
     NSString *searchText = _searchBar.text;
     
     if (searchText.length == 0) {
-        _songs = nil;
-        _users = nil;
-        [_tableView reloadDataWithAnimation];
+        [self clearSearchData];
         return;
     }
     
@@ -106,6 +104,12 @@
     
     [self searchUsersWithQuery:searchText];
     
+}
+
+- (void)clearSearchData {
+    _songs = nil;
+    _users = nil;
+    [_tableView reloadDataWithAnimation];
 }
 
 - (void)searchSongsWithQuery:(NSString *)query {
