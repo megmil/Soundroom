@@ -8,6 +8,7 @@
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
+#import "Room.h"
 #import "QueueSong.h" // TODO: move logic that requires QueueSong import?
 
 @implementation ParseQueryManager
@@ -48,6 +49,40 @@
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion {
     PFQuery *query = [PFQuery queryWithClassName:RoomClass];
     [query getObjectInBackgroundWithId:roomId block:completion];
+}
+
++ (void)getRoomsWithPendingInvitationsToCurrentUserWithCompletion:(PFArrayResultBlock)completion {
+    
+    [self getInvitationsForCurrentUserWithCompletion:^(NSArray *objects, NSError *error) {
+        
+        if (!objects || !objects.count) {
+            completion(nil, error);
+            return;
+        }
+        
+        NSArray <Invitation *> *invitations = objects;
+        __block NSMutableArray <Room *> *rooms = [NSMutableArray <Room *> array];
+        
+        for (NSUInteger i = 0; i != invitations.count; i++) {
+            
+            [self getRoomWithId:invitations[i].roomId completion:^(PFObject *object, NSError *error) {
+                
+                if (object) {
+                    
+                    Room *room = (Room *)object;
+                    [rooms addObject:room];
+                    
+                    if (i + 1 == invitations.count) {
+                        completion(rooms, error);
+                    }
+                    
+                }
+                
+            }];
+            
+        }
+        
+    }];
 }
 
 # pragma mark - Song
@@ -124,6 +159,12 @@
 + (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getInvitationsForCurrentUserWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
+    [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
