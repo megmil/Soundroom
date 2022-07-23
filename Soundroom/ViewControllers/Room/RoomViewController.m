@@ -37,8 +37,6 @@
     
 }
 
-# pragma mark - ViewDidLoad Helpers
-
 - (void)configureTableView {
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -52,12 +50,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:RoomManagerUpdatedQueueNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentSongViews) name:RoomManagerUpdatedCurrentSongNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
-}
-
-- (void)authorizeSpotifySession {
-    if (![[SpotifySessionManager shared] isSessionAuthorized]) {
-        [[SpotifySessionManager shared] authorizeSession];
-    }
 }
 
 # pragma mark - Notification Selectors
@@ -75,7 +67,7 @@
 }
 
 - (void)updateQueueViews {
-    [self authorizeSpotifySession]; // TODO: move?
+    [[SpotifySessionManager shared] authorizeSession]; // TODO: move?
     [self updateCurrentSongViews];
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self->_tableView reloadDataWithAnimation];
@@ -107,7 +99,7 @@
 }
 
 - (IBAction)didTapLeaveRoom:(id)sender {
-    [ParseObjectManager deleteInvitationsAcceptedByCurrentUser];
+    [self leaveRoomAlert];
 }
 
 # pragma mark - TableView
@@ -163,6 +155,41 @@
         QueueSong *song = [[RoomManager shared] queue][indexPath.row];
         [ParseObjectManager deleteQueueSong:song];
     }
+    
+}
+
+# pragma mark - Alerts
+
+- (void)leaveRoomAlert {
+    
+    NSString *title = @"Leave Room";
+    NSString *message = @"Are you sure you want to leave this room?";
+    if ([[RoomManager shared] isCurrentUserHost]) {
+        title = @"End Session?";
+        message = @"Are you sure you want to end this session?";
+    }
+    
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:title
+                                message:message
+                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelButton = [UIAlertAction
+                                   actionWithTitle:@"Cancel"
+                                   style:UIAlertActionStyleCancel
+                                   handler:^(UIAlertAction *action) { return; }];
+    
+    UIAlertAction *leaveButton = [UIAlertAction
+                                  actionWithTitle:@"Leave"
+                                  style:UIAlertActionStyleDestructive
+                                  handler:^(UIAlertAction *action) {
+                                    [ParseObjectManager deleteInvitationsAcceptedByCurrentUser];
+                                }];
+
+   [alert addAction:cancelButton];
+   [alert addAction:leaveButton];
+
+   [self presentViewController:alert animated:YES completion:nil];
     
 }
 

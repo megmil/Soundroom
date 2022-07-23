@@ -52,8 +52,14 @@
 # pragma mark - Session Manager
 
 - (void)authorizeSession {
+    
+    if ([self isSessionAuthorized]) {
+        return;
+    }
+    
     SPTScope requestedScope = SPTAppRemoteControlScope;
     [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
+    
 }
 
 - (void)signOut {
