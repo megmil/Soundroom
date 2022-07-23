@@ -38,15 +38,17 @@
 
 # pragma mark - Room
 
-- (void)fetchCurrentRoom {
+- (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion {
     
     [ParseQueryManager getInvitationAcceptedByCurrentUserWithCompletion:^(PFObject *object, NSError *error) {
         if (object) {
             // user is already in a room
+            completion(YES, error);
             Invitation *invitation = (Invitation *)object;
             [self joinRoomWithId:invitation.roomId];
         } else {
             // user is not in a room
+            completion(NO, error);
             [self clearLocalRoomData];
         }
     }];

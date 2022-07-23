@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, VoteState) {
 
 + (instancetype)shared;
 
-- (void)fetchCurrentRoom;
+- (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
 - (void)joinRoomWithId:(NSString *)currentRoomId;
 - (void)clearRoomData;
 
