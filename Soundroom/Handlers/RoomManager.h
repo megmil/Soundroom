@@ -15,10 +15,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, VoteState) {
-    Upvoted,
-    Downvoted,
-    NotVoted
+typedef NS_ENUM(NSInteger, VoteState) {
+    Upvoted = 1,
+    NotVoted = 0,
+    Downvoted = -1
 };
 
 @interface RoomManager : NSObject

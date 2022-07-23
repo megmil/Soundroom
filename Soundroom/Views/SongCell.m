@@ -66,11 +66,13 @@
         [self.contentView addSubview:_addButton];
         
         _upvoteButton = [UIButton new];
-        [_upvoteButton addTarget:self action:@selector(didTapUpvote) forControlEvents:UIControlEventTouchUpInside];
+        _upvoteButton.tag = Upvoted;
+        [_upvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_upvoteButton];
         
         _downvoteButton = [UIButton new];
-        [_downvoteButton addTarget:self action:@selector(didTapDownvote) forControlEvents:UIControlEventTouchUpInside];
+        _downvoteButton.tag = Downvoted;
+        [_downvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_downvoteButton];
         
         _scoreLabel = [UILabel new];
@@ -95,38 +97,17 @@
     
 }
 
-- (void)didTapUpvote {
+- (void)didTapVote:(UIButton *)sender {
     
     [[RoomManager shared] clearLocalVoteData];
     
-    // if already upvoted, set as unvoted
-    if (_voteState == Upvoted) {
+    if (_voteState != NotVoted) {
         self.voteState = NotVoted;
-        [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(0)];
-        return;
+    } else {
+        self.voteState = sender.tag;
     }
     
-    // set as upvoted
-    self.voteState = Upvoted;
-    [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(1)];
-    
-}
-
-- (void)didTapDownvote {
-    
-    [[RoomManager shared] clearLocalVoteData];
-    
-    // if already downvoted, set as unvoted
-    if (_voteState == Downvoted) {
-        self.voteState = NotVoted;
-        [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(0)];
-        return;
-    }
-    
-    // set as downvoted
-    self.voteState = Downvoted;
-    [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(-1)];
-
+    [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(_voteState)];
 }
 
 # pragma mark - Setters
