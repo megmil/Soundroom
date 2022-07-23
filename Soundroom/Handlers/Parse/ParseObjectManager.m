@@ -157,7 +157,7 @@
     [ParseQueryManager getInvitationWithId:invitationId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Invitation *invitation = (Invitation *)object;
-            [invitation setValue:@(YES) forKey:isPendingKey];
+            [invitation setValue:@(NO) forKey:isPendingKey];
             [invitation saveInBackground];
         }
     }];

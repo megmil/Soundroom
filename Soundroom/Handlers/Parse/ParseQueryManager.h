@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
-#import "Invitation.h"
 
 #define RoomClass @"Room"
 #define QueueSongClass @"QueueSong"
@@ -35,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // room
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
-+ (void)getRoomsWithPendingInvitationsToCurrentUserWithCompletion:(PFArrayResultBlock)completion;
++ (void)getRoomsForInvitations:(NSArray *)invitations completion:(PFArrayResultBlock)completion;
 
 // song
 + (void)getSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;

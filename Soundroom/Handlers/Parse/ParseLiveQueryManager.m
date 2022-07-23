@@ -12,7 +12,11 @@
 #import "Vote.h"
 #import "Invitation.h"
 
-@implementation ParseLiveQueryManager
+@implementation ParseLiveQueryManager {
+    PFQuery *_invitationLiveQuery;
+    PFQuery *_songLiveQuery;
+    PFQuery *_voteLiveQuery;
+}
 
 + (instancetype)shared {
     static dispatch_once_t once;
@@ -42,14 +46,15 @@
     
 }
 
-- (void)configureInvitationSubscription {
+- (void)configureUserLiveSubscription {
     
-    // reset subscriptions
-    _invitationSubscription = nil;
+    if (_invitationLiveQuery) {
+        [_client unsubscribeFromQuery:_invitationLiveQuery];
+    }
     
     // get query for invitations accepted by current user
-    PFQuery *query = [ParseQueryManager queryForInvitationsAcceptedByCurrentUser];
-    _invitationSubscription = [_client subscribeToQuery:query];
+    _invitationLiveQuery = [ParseQueryManager queryForInvitationsAcceptedByCurrentUser];
+    _invitationSubscription = [_client subscribeToQuery:_invitationLiveQuery];
     
     // accepted invitation is created (current user created room)
     _invitationSubscription = [_invitationSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
@@ -70,10 +75,16 @@
     
 }
 
-- (void)configureSongSubcription {
+- (void)configureRoomLiveSubscriptions {
+    [self configureSongSubscription];
+    [self configureVoteSubscription];
+}
+
+- (void)configureSongSubscription {
     
-    // reset subscriptions
-    _songSubscription = nil;
+    if (_songLiveQuery) {
+        [_client unsubscribeFromQuery:_songLiveQuery];
+    }
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
@@ -81,8 +92,8 @@
         return;
     }
     
-    PFQuery *query = [ParseQueryManager queryForSongsInCurrentRoom];
-    _songSubscription = [_client subscribeToQuery:query];
+    _songLiveQuery = [ParseQueryManager queryForSongsInCurrentRoom];
+    _songSubscription = [_client subscribeToQuery:_songLiveQuery];
     
     // new song request is created
     _songSubscription = [_songSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
@@ -100,8 +111,9 @@
 
 - (void)configureVoteSubscription {
     
-    // reset subscriptions
-    _voteSubscription = nil;
+    if (_voteLiveQuery) {
+        [_client unsubscribeFromQuery:_voteLiveQuery];
+    }
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
@@ -109,8 +121,8 @@
         return;
     }
     
-    PFQuery *query = [ParseQueryManager queryForVotesInCurrentRoom];
-    _voteSubscription = [_client subscribeToQuery:query];
+    _voteLiveQuery = [ParseQueryManager queryForVotesInCurrentRoom];
+    _voteSubscription = [_client subscribeToQuery:_voteLiveQuery];
     
     // vote is created
     _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
@@ -124,6 +136,15 @@
         [[RoomManager shared] updateQueueSongWithId:vote.songId];
     }];
     
+}
+
+- (void)clearUserLiveSubscriptions {
+    [_client unsubscribeFromQuery:_invitationLiveQuery];
+}
+
+- (void)clearRoomLiveSubscriptions {
+    [_client unsubscribeFromQuery:_songLiveQuery];
+    [_client unsubscribeFromQuery:_voteLiveQuery];
 }
 
 @end

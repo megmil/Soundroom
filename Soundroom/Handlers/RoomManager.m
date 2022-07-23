@@ -85,7 +85,7 @@
     [self setLocalQueueData];
     [self loadUserVotesWithCompletion:^(BOOL succeeded) {
         if (succeeded) {
-            [[ParseLiveQueryManager shared] configureSongSubcription];
+            [[ParseLiveQueryManager shared] configureRoomLiveSubscriptions];
             [[ParseLiveQueryManager shared] configureVoteSubscription];
             [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
         }

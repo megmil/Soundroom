@@ -34,7 +34,6 @@
     
     [self configureTableView];
     [self configureObservers];
-    [self authorizeSpotifySession];
     
 }
 
@@ -76,6 +75,7 @@
 }
 
 - (void)updateQueueViews {
+    [self authorizeSpotifySession]; // TODO: move?
     [self updateCurrentSongViews];
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self->_tableView reloadDataWithAnimation];

@@ -6,6 +6,8 @@
 //
 
 #import "ParseUserManager.h"
+#import "ParseLiveQueryManager.h"
+#import "SpotifySessionManager.h"
 
 @implementation ParseUserManager
 
@@ -27,14 +29,34 @@
 }
 
 + (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock)completion {
-    [PFUser logInWithUsernameInBackground:username password:password block:completion];
+    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
+        if (user) {
+            [[ParseLiveQueryManager shared] configureUserLiveSubscription];
+            completion(user, error);
+        } else {
+            completion(nil, error);
+        }
+    }];
 }
 
 + (void)logoutWithCompletion:(PFUserLogoutResultBlock)completion {
-    [PFUser logOutInBackgroundWithBlock:completion];
+    [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
+        if (!error) {
+            [[SpotifySessionManager shared] signOut];
+            [[ParseLiveQueryManager shared] clearUserLiveSubscriptions];
+            completion(nil);
+        } else {
+            completion(error);
+        }
+    }];
 }
 
 # pragma mark - Current User Data
+
++ (NSString *)currentUsername {
+    PFUser *currentUser = [PFUser currentUser];
+    return currentUser.username;
+}
 
 + (NSString *)currentUserId {
     PFUser *currentUser = [PFUser currentUser];

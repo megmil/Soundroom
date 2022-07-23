@@ -25,7 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.usernameLabel.text = [[PFUser currentUser] valueForKey:@"username"];
+    self.usernameLabel.text = [ParseUserManager currentUsername];
     
     self.soundroomAccountView.isUserAccountView = YES;
     self.soundroomAccountView.isLoggedIn = YES;
@@ -50,7 +50,6 @@
 - (void)didTapUserLogout {
     [ParseUserManager logoutWithCompletion:^(NSError *error) {
         if (!error) {
-            [[SpotifySessionManager shared] signOut];
             [self goToLogin];
         }
     }];

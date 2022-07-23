@@ -17,6 +17,7 @@
 @interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) NSMutableArray <Invitation *> *invitations;
 @property (strong, nonatomic) NSMutableArray <Room *> *rooms;
 
 @end
@@ -42,12 +43,28 @@
 # pragma mark - Invitations
 
 - (void)loadRooms {
-    [ParseQueryManager getRoomsWithPendingInvitationsToCurrentUserWithCompletion:^(NSArray *objects, NSError *error) {
-        if (objects) {
-            self->_rooms = (NSMutableArray <Room *> *)objects;
-            [self->_tableView reloadDataWithAnimation];
+    
+    [ParseQueryManager getInvitationsForCurrentUserWithCompletion:^(NSArray *invitationObjects, NSError *error) {
+        
+        if (invitationObjects) {
+            
+            self->_invitations = (NSMutableArray <Invitation *> *)invitationObjects;
+            
+            [ParseQueryManager getRoomsForInvitations:invitationObjects completion:^(NSArray *roomObjects, NSError *error) {
+                
+                if (roomObjects) {
+                    
+                    self->_rooms = (NSMutableArray <Room *> *)roomObjects;
+                    [self->_tableView reloadDataWithAnimation];
+                    
+                }
+                
+            }];
+            
         }
+        
     }];
+    
 }
 
 # pragma mark - Table View
@@ -65,10 +82,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     RoomCell *cell = [tableView dequeueReusableCellWithIdentifier:@"InvitationCell"];
+    Invitation *invitation = _invitations[indexPath.row];
     Room *room = _rooms[indexPath.row];
     cell.title = room.title;
     // TODO: set image
-    cell.objectId = room.objectId;
+    cell.objectId = invitation.objectId;
     cell.cellType = InvitationCell;
     return cell;
 }

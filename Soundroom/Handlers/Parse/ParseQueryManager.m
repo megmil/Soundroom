@@ -9,6 +9,7 @@
 #import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "Room.h"
+#import "Invitation.h"
 #import "QueueSong.h" // TODO: move logic that requires QueueSong import?
 
 @implementation ParseQueryManager
@@ -51,38 +52,29 @@
     [query getObjectInBackgroundWithId:roomId block:completion];
 }
 
-+ (void)getRoomsWithPendingInvitationsToCurrentUserWithCompletion:(PFArrayResultBlock)completion {
++ (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(PFArrayResultBlock)completion {
     
-    [self getInvitationsForCurrentUserWithCompletion:^(NSArray *objects, NSError *error) {
+    __block NSMutableArray <Room *> *rooms = [NSMutableArray <Room *> array];
+    
+    for (NSUInteger i = 0; i != invitations.count; i++) {
         
-        if (!objects || !objects.count) {
-            completion(nil, error);
-            return;
-        }
-        
-        NSArray <Invitation *> *invitations = objects;
-        __block NSMutableArray <Room *> *rooms = [NSMutableArray <Room *> array];
-        
-        for (NSUInteger i = 0; i != invitations.count; i++) {
+        [self getRoomWithId:invitations[i].roomId completion:^(PFObject *object, NSError *error) {
             
-            [self getRoomWithId:invitations[i].roomId completion:^(PFObject *object, NSError *error) {
+            if (object) {
                 
-                if (object) {
-                    
-                    Room *room = (Room *)object;
-                    [rooms addObject:room];
-                    
-                    if (i + 1 == invitations.count) {
-                        completion(rooms, error);
-                    }
-                    
+                Room *room = (Room *)object;
+                [rooms addObject:room];
+                
+                if (i + 1 == invitations.count) {
+                    completion(rooms, error);
                 }
                 
-            }];
+            }
             
-        }
+        }];
         
-    }];
+    }
+    
 }
 
 # pragma mark - Song
