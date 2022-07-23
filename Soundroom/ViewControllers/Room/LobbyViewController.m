@@ -45,6 +45,7 @@
     [ParseQueryManager getRoomsWithPendingInvitationsToCurrentUserWithCompletion:^(NSArray *objects, NSError *error) {
         if (objects) {
             self->_rooms = (NSMutableArray <Room *> *)objects;
+            [self->_tableView reloadDataWithAnimation];
         }
     }];
 }

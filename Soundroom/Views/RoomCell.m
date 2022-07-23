@@ -22,28 +22,29 @@
     
     [super layoutSubviews];
     
-    const CGFloat imageSize = 50.f;
-    const CGFloat buttonSize = 30.f;
+    const CGFloat imageSize = 60.f;
+    const CGFloat buttonSize = 32.f;
     
     const CGFloat viewHeight = self.contentView.frame.size.height;
     const CGFloat viewWidth = self.contentView.frame.size.width;
     
-    const CGFloat padding = 8.f;
-    const CGFloat leftSidePadding = 20.f;
-    const CGFloat rightSidePadding = viewWidth - leftSidePadding;
-    const CGFloat buttonTopPadding = (viewHeight - (buttonSize + (padding * 2.f))) / 2.f;
+    const CGFloat padding = 15.f;
+    const CGFloat imageTopPadding = 8.f;
+    const CGFloat sidePadding = 20.f;
+    const CGFloat rightSideLimit = viewWidth - sidePadding;
+    const CGFloat buttonTopPadding = (viewHeight - buttonSize) / 2.f;
     
-    _imageView.frame = CGRectMake(leftSidePadding, padding, imageSize, imageSize);
-    _rejectButton.frame = CGRectMake(rightSidePadding - buttonSize, buttonTopPadding, buttonSize, buttonSize);
+    _imageView.frame = CGRectMake(sidePadding, imageTopPadding, imageSize, imageSize);
+    _rejectButton.frame = CGRectMake(rightSideLimit - buttonSize, buttonTopPadding, buttonSize, buttonSize);
     
-    CGFloat acceptButtonOriginX = CGRectGetMinX(_rejectButton.frame) - padding;
+    const CGFloat acceptButtonOriginX = CGRectGetMinX(_rejectButton.frame) - buttonSize - padding;
     
     _acceptButton.frame = CGRectMake(acceptButtonOriginX, buttonTopPadding, buttonSize, buttonSize);
     
     [_titleLabel sizeToFit];
     
     const CGFloat titleLabelOriginX = CGRectGetMaxX(_imageView.frame) + padding;
-    const CGFloat titleLabelOriginY = CGRectGetMinY(_imageView.frame) - (( CGRectGetHeight(_imageView.frame) - CGRectGetHeight(_titleLabel.frame) ) / 2.f);
+    const CGFloat titleLabelOriginY = CGRectGetMinY(_imageView.frame) + (( imageSize - CGRectGetHeight(_titleLabel.frame) ) / 2.f);
     const CGFloat titleLabelWidth = CGRectGetMinX(_acceptButton.frame) - padding - titleLabelOriginX;
 
     _titleLabel.frame = CGRectMake(titleLabelOriginX, titleLabelOriginY, titleLabelWidth, _titleLabel.frame.size.height);
@@ -58,6 +59,7 @@
         
         _imageView = [UIImageView new];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.backgroundColor = [UIColor purpleColor];
         [self.contentView addSubview:_imageView];
         
         _titleLabel = [UILabel new];
@@ -66,11 +68,15 @@
         [self.contentView addSubview:_titleLabel];
         
         _acceptButton = [UIButton new];
+        _acceptButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+        _acceptButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
         [_acceptButton setImage:[UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
         [_acceptButton addTarget:self action:@selector(didTapAcceptInvitation) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_acceptButton];
         
         _rejectButton = [UIButton new];
+        _rejectButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+        _rejectButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
         [_rejectButton setImage:[UIImage systemImageNamed:@"multiply.circle"] forState:UIControlStateNormal];
         [_rejectButton addTarget:self action:@selector(didTapRejectInvitation) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_rejectButton];
