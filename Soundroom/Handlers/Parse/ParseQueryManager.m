@@ -16,10 +16,9 @@
 
 # pragma mark - Live Queries
 
-+ (PFQuery *)queryForInvitationsAcceptedByCurrentUser {
++ (PFQuery *)queryForInvitationsForCurrentUser {
     PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
     [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:isPendingKey equalTo:@(NO)];
     return query;
 }
 
@@ -137,7 +136,9 @@
 }
 
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion {
-    PFQuery *query = [self queryForInvitationsAcceptedByCurrentUser];
+    PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
+    [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
+    [query whereKey:isPendingKey equalTo:@(NO)];
     [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one accepted invitation per user
 }
 
@@ -155,8 +156,7 @@
 }
 
 + (void)getInvitationsForCurrentUserWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
-    [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
+    PFQuery *query = [self queryForInvitationsForCurrentUser];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 

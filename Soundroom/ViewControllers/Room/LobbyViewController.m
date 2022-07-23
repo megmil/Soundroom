@@ -8,6 +8,7 @@
 #import "LobbyViewController.h"
 #import "RoomManager.h"
 #import "ParseQueryManager.h"
+#import "ParseLiveQueryManager.h"
 #import "RoomCell.h"
 #import "Room.h"
 #import "Invitation.h"
@@ -17,8 +18,8 @@
 @interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSMutableArray <Invitation *> *invitations;
 @property (strong, nonatomic) NSMutableArray <Room *> *rooms;
+@property (strong, nonatomic) NSMutableArray <Invitation *> *invitations;
 
 @end
 
@@ -31,6 +32,8 @@
     [self loadRooms];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:RoomManagerJoinedRoomNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRooms) name:ParseLiveQueryManagerUpdatedPendingInvitationsNotification object:nil];
+    
 }
 
 - (void)goToRoom {

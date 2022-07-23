@@ -46,38 +46,57 @@
     
 }
 
-- (void)configureUserLiveSubscription {
+- (void)configureRoomLiveSubscriptions {
+    [self configureSongSubscription];
+    [self configureVoteSubscription];
+}
+
+- (void)configureUserLiveSubscriptions {
     
     if (_invitationLiveQuery) {
         [_client unsubscribeFromQuery:_invitationLiveQuery];
     }
     
     // get query for invitations accepted by current user
-    _invitationLiveQuery = [ParseQueryManager queryForInvitationsAcceptedByCurrentUser];
+    _invitationLiveQuery = [ParseQueryManager queryForInvitationsForCurrentUser];
     _invitationSubscription = [_client subscribeToQuery:_invitationLiveQuery];
     
-    // accepted invitation is created (current user created room)
+    // invitation is created
     _invitationSubscription = [_invitationSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        
         Invitation *invitation = (Invitation *)object;
-        [[RoomManager shared] joinRoomWithId:invitation.roomId];
+        
+        if (invitation.isPending) {
+            // another user invited current user to their room
+            [[NSNotificationCenter defaultCenter] postNotificationName:ParseLiveQueryManagerUpdatedPendingInvitationsNotification object:nil];
+        } else {
+            // current user created room: auto-join
+            [[RoomManager shared] joinRoomWithId:invitation.roomId];
+        }
+        
     }];
     
-    // pending invitation is accepted (current user accepted invite)
+    // invitation is updated: current user accepted invite
     _invitationSubscription = [_invitationSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Invitation *invitation = (Invitation *)object;
         [[RoomManager shared] joinRoomWithId:invitation.roomId];
     }];
     
-    // accepted invitation is deleted
+    // invitation is deleted
     _invitationSubscription = [_invitationSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[RoomManager shared] clearRoomData];
+        
+        Invitation *invitation = (Invitation *)object;
+        
+        if (invitation.isPending) {
+            // invitation was revoked
+            [[NSNotificationCenter defaultCenter] postNotificationName:ParseLiveQueryManagerUpdatedPendingInvitationsNotification object:nil];
+        } else {
+            // current user left or was removed from room
+            [[RoomManager shared] clearRoomData];
+        }
+        
     }];
     
-}
-
-- (void)configureRoomLiveSubscriptions {
-    [self configureSongSubscription];
-    [self configureVoteSubscription];
 }
 
 - (void)configureSongSubscription {

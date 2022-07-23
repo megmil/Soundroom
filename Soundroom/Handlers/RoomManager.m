@@ -82,11 +82,12 @@
     _currentSongId = room.currentSongId;
     _isInRoom = YES;
     
+    // configure live subscriptions for current room data
+    [[ParseLiveQueryManager shared] configureRoomLiveSubscriptions];
+    
     [self setLocalQueueData];
     [self loadUserVotesWithCompletion:^(BOOL succeeded) {
         if (succeeded) {
-            [[ParseLiveQueryManager shared] configureRoomLiveSubscriptions];
-            [[ParseLiveQueryManager shared] configureVoteSubscription];
             [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
         }
     }];
@@ -123,6 +124,7 @@
     _scores = [NSMutableArray <NSNumber *> array];
     
     [self clearLocalVoteData];
+    [[ParseLiveQueryManager shared] clearRoomLiveSubscriptions];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
     

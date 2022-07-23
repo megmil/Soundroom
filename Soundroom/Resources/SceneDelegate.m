@@ -26,7 +26,7 @@
         self.window.rootViewController = userLoginVC;
     } else {
         // else, configure live subscriptions for current user data
-        [[ParseLiveQueryManager shared] configureUserLiveSubscription];
+        [[ParseLiveQueryManager shared] configureUserLiveSubscriptions];
     }
     
 }

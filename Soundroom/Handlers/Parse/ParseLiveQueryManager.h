@@ -9,6 +9,8 @@
 #import <Parse/Parse.h>
 @import ParseLiveQuery;
 
+#define ParseLiveQueryManagerUpdatedPendingInvitationsNotification @"ParseLiveQueryManagerUpdatedPendingInvitationsNotification"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ParseLiveQueryManager : NSObject
@@ -20,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) PFLiveQuerySubscription *songSubscription;
 @property (strong, nonatomic) PFLiveQuerySubscription *voteSubscription;
 
-- (void)configureUserLiveSubscription;
+- (void)configureUserLiveSubscriptions;
 - (void)configureRoomLiveSubscriptions;
 
 - (void)clearUserLiveSubscriptions;

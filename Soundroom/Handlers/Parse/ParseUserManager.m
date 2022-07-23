@@ -31,7 +31,7 @@
 + (void)loginWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock)completion {
     [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
         if (user) {
-            [[ParseLiveQueryManager shared] configureUserLiveSubscription];
+            [[ParseLiveQueryManager shared] configureUserLiveSubscriptions];
             completion(user, error);
         } else {
             completion(nil, error);

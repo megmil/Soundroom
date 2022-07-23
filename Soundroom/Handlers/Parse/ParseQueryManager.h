@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ParseQueryManager : NSObject
 
 // live queries
-+ (PFQuery *)queryForInvitationsAcceptedByCurrentUser;
++ (PFQuery *)queryForInvitationsForCurrentUser;
 + (PFQuery *)queryForSongsInCurrentRoom;
 + (PFQuery *)queryForVotesInCurrentRoom;
 
