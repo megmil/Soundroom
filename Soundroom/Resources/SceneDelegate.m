@@ -25,7 +25,8 @@
         LoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         self.window.rootViewController = userLoginVC;
     } else {
-        [[ParseLiveQueryManager shared] configureInvitationSubscription];
+        // else, configure live subscriptions for current user data
+        [[ParseLiveQueryManager shared] configureUserLiveSubscriptions];
     }
     
 }

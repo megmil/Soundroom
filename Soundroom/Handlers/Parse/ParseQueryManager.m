@@ -8,27 +8,34 @@
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
-#import "QueueSong.h" // TODO: move logic that requires QueueSong import?
+#import "Room.h"
+#import "Invitation.h"
+#import "Request.h" // TODO: move logic that requires Request import?
 
 @implementation ParseQueryManager
 
 # pragma mark - Live Queries
 
-+ (PFQuery *)queryForInvitationsAcceptedByCurrentUser {
++ (PFQuery *)queryForInvitationsForCurrentUser {
     PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
     [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:isPendingKey equalTo:@(NO)];
     return query;
 }
 
-+ (PFQuery *)queryForSongsInCurrentRoom {
-    PFQuery *query = [PFQuery queryWithClassName:QueueSongClass];
++ (PFQuery *)queryForRequestsInCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:RequestClass];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
     return query;
 }
 
-+ (PFQuery *)queryForVotesInCurrentRoom {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
++ (PFQuery *)queryForUpvotesInCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:UpvoteClass];
+    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    return query;
+}
+
++ (PFQuery *)queryForDownvotesInCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:DownvoteClass];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
     return query;
 }
@@ -50,24 +57,48 @@
     [query getObjectInBackgroundWithId:roomId block:completion];
 }
 
-# pragma mark - Song
-
-+ (void)getSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:QueueSongClass];
-    [query getObjectInBackgroundWithId:songId block:completion];
++ (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(PFArrayResultBlock)completion {
+    
+    __block NSMutableArray <Room *> *rooms = [NSMutableArray <Room *> array];
+    __block NSUInteger counter = 0; // counter to completion
+    
+    for (NSUInteger i = 0; i != invitations.count; i++) {
+        
+        [self getRoomWithId:invitations[i].roomId completion:^(PFObject *object, NSError *error) {
+            
+            if (object) {
+                Room *room = (Room *)object;
+                [rooms addObject:room];
+            }
+            
+            if (++counter == invitations.count) {
+                completion(rooms, error);
+            }
+            
+        }];
+        
+    }
+    
 }
 
-+ (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [self queryForSongsInCurrentRoom];
+# pragma mark - Request
+
++ (void)getRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:RequestClass];
+    [query getObjectInBackgroundWithId:requestId block:completion];
+}
+
++ (void)getRequestsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [self queryForRequestsInCurrentRoom];
     [query orderByAscending:@"createdAt"];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
-+ (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion {
-    [self getSongWithId:songId completion:^(PFObject *object, NSError *error) {
++ (void)getSpotifyIdForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion {
+    [self getRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
         if (object) {
-            QueueSong *song = (QueueSong *)object;
-            completion(song.spotifyId, error);
+            Request *request = (Request *)object;
+            completion(request.spotifyId, error);
         } else {
             completion(nil, error);
         }
@@ -76,36 +107,53 @@
 
 # pragma mark - Vote
 
-+ (void)getVotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [self queryForVotesInCurrentRoom];
++ (void)getUpvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [self queryForUpvotesInCurrentRoom];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
-+ (void)getVotesByCurrentUserInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
++ (void)getDownvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [self queryForDownvotesInCurrentRoom];
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getUpvotesForRequestWithId:(NSString *)requestId completion:(PFArrayResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:UpvoteClass];
+    [query whereKey:requestIdKey equalTo:requestId];
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getDownvotesForRequestWithId:(NSString *)requestId completion:(PFArrayResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:DownvoteClass];
+    [query whereKey:requestIdKey equalTo:requestId];
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getUpvoteByCurrentUserForRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:UpvoteClass];
     [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]]; // TODO: is roomId necessary?
-    [query findObjectsInBackgroundWithBlock:completion];
+    [query whereKey:requestIdKey equalTo:requestId];
+    [query getFirstObjectInBackgroundWithBlock:completion]; // should only be 1 vote per user per request
 }
 
-+ (void)getVotesForSongWithId:(NSString *)songId completion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
-    [query whereKey:songIdKey equalTo:songId];
-    // TODO: is roomId necessary?
-    [query findObjectsInBackgroundWithBlock:completion];
-}
-
-+ (void)getVoteByCurrentUserForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
++ (void)getDownvoteByCurrentUserForRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:DownvoteClass];
     [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:songIdKey equalTo:songId];
-    [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one vote per song per user
+    [query whereKey:requestIdKey equalTo:requestId];
+    [query getFirstObjectInBackgroundWithBlock:completion]; // should only be 1 vote per user per request
 }
 
 # pragma mark - Invitation
 
++ (void)getInvitationWithId:(NSString *)invitationId completion:(PFObjectResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
+    [query getObjectInBackgroundWithId:invitationId block:completion];
+}
+
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion {
-    PFQuery *query = [self queryForInvitationsAcceptedByCurrentUser];
+    PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
+    [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
+    [query whereKey:isPendingKey equalTo:@(NO)];
     [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one accepted invitation per user
 }
 
@@ -119,6 +167,12 @@
 + (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getInvitationsPendingForCurrentUserWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [self queryForInvitationsForCurrentUser];
+    [query whereKey:isPendingKey equalTo:@(YES)];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 

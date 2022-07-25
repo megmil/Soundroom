@@ -10,13 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Vote : PFObject<PFSubclassing>
+@interface Upvote : PFObject<PFSubclassing>
 
 @property (nonatomic, strong) NSString *objectId;
-@property (nonatomic, strong) NSString *songId;
-@property (nonatomic, strong) NSString *userId;
+@property (nonatomic, strong) NSString *requestId;
 @property (nonatomic, strong) NSString *roomId;
-@property (nonatomic, strong) NSNumber *increment;
+@property (nonatomic, strong) NSString *userId;
 
 @end
 

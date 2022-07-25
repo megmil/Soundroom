@@ -9,7 +9,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, RoomCellType) {
+    InvitationCell,
+    HistoryCell
+};
+
 @interface RoomCell : UITableViewCell
+
+@property (strong, nonatomic) NSString *title;
+@property (strong, nonatomic) UIImage *image; // TODO: room cover image
+@property (strong, nonatomic) NSString *objectId;
+@property (nonatomic) RoomCellType cellType;
 
 @end
 

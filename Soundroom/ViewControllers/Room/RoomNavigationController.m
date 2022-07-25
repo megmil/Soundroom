@@ -23,15 +23,13 @@
 }
 
 - (void)loadRoomStatus {
-    
-    [[RoomManager shared] fetchCurrentRoom];
-    
-    // check if room was fetched
-    if (![[RoomManager shared] isInRoom]) {
-        // if not, go to lobby
-        [self goToLobby];
-    }
-    
+    // attempt to fetch room
+    [[RoomManager shared] fetchCurrentRoomWithCompletion:^(BOOL didFindRoom, NSError *error) {
+        if (!didFindRoom) {
+            // if there is no room, go to lobby
+            [self goToLobby];
+        }
+    }];
 }
 
 - (void)goToLobby {

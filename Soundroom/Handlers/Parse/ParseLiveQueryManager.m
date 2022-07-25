@@ -8,11 +8,17 @@
 #import "ParseLiveQueryManager.h"
 #import "ParseQueryManager.h"
 #import "RoomManager.h"
-#import "QueueSong.h"
-#import "Vote.h"
+#import "Request.h"
+#import "Upvote.h"
+#import "Downvote.h"
 #import "Invitation.h"
 
-@implementation ParseLiveQueryManager
+@implementation ParseLiveQueryManager {
+    PFQuery *_invitationLiveQuery;
+    PFQuery *_requestLiveQuery;
+    PFQuery *_upvoteLiveQuery;
+    PFQuery *_downvoteLiveQuery;
+}
 
 + (instancetype)shared {
     static dispatch_once_t once;
@@ -42,38 +48,81 @@
     
 }
 
-- (void)configureInvitationSubscription {
+# pragma mark - Public
+
+- (void)configureRoomLiveSubscriptions {
+    [self configureRequestSubscription];
+    [self configureUpvoteSubscription];
+    [self configureDownvoteSubscription];
+}
+
+- (void)clearUserLiveSubscriptions {
+    [_client unsubscribeFromQuery:_invitationLiveQuery];
+}
+
+- (void)clearRoomLiveSubscriptions {
+    [_client unsubscribeFromQuery:_requestLiveQuery];
+    [_client unsubscribeFromQuery:_upvoteLiveQuery];
+    [_client unsubscribeFromQuery:_downvoteLiveQuery];
+}
+
+# pragma mark - Invitations
+
+- (void)configureUserLiveSubscriptions {
     
-    // reset subscriptions
-    _invitationSubscription = nil;
+    if (_invitationLiveQuery) {
+        [_client unsubscribeFromQuery:_invitationLiveQuery];
+    }
     
     // get query for invitations accepted by current user
-    PFQuery *query = [ParseQueryManager queryForInvitationsAcceptedByCurrentUser];
-    _invitationSubscription = [_client subscribeToQuery:query];
+    _invitationLiveQuery = [ParseQueryManager queryForInvitationsForCurrentUser];
+    _invitationSubscription = [_client subscribeToQuery:_invitationLiveQuery];
     
-    // accepted invitation is created (current user created room)
+    // invitation is created
     _invitationSubscription = [_invitationSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        
         Invitation *invitation = (Invitation *)object;
-        [[RoomManager shared] joinRoomWithId:invitation.roomId];
+        
+        if (invitation.isPending) {
+            // another user invited current user to their room
+            [[NSNotificationCenter defaultCenter] postNotificationName:ParseLiveQueryManagerUpdatedPendingInvitationsNotification object:nil];
+        } else {
+            // current user created room: auto-join
+            [[RoomManager shared] joinRoomWithId:invitation.roomId];
+        }
+        
     }];
     
-    // pending invitation is accepted (current user accepted invite)
+    // invitation is updated: current user accepted invite
     _invitationSubscription = [_invitationSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Invitation *invitation = (Invitation *)object;
         [[RoomManager shared] joinRoomWithId:invitation.roomId];
     }];
     
-    // accepted invitation is deleted
+    // invitation is deleted
     _invitationSubscription = [_invitationSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        [[RoomManager shared] clearRoomData];
+        
+        Invitation *invitation = (Invitation *)object;
+        
+        if (invitation.isPending) {
+            // invitation was rejected or revoked
+            [[NSNotificationCenter defaultCenter] postNotificationName:ParseLiveQueryManagerUpdatedPendingInvitationsNotification object:nil];
+        } else {
+            // current user left or was removed from room
+            [[RoomManager shared] clearRoomData];
+        }
+        
     }];
     
 }
 
-- (void)configureSongSubcription {
+# pragma mark - Requests
+
+- (void)configureRequestSubscription {
     
-    // reset subscriptions
-    _songSubscription = nil;
+    if (_requestLiveQuery) {
+        [_client unsubscribeFromQuery:_requestLiveQuery];
+    }
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
@@ -81,27 +130,30 @@
         return;
     }
     
-    PFQuery *query = [ParseQueryManager queryForSongsInCurrentRoom];
-    _songSubscription = [_client subscribeToQuery:query];
+    _requestLiveQuery = [ParseQueryManager queryForRequestsInCurrentRoom];
+    _requestSubscription = [_client subscribeToQuery:_requestLiveQuery];
     
-    // new song request is created
-    _songSubscription = [_songSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-        [[RoomManager shared] insertQueueSong:song];
+    // new request is created
+    _requestSubscription = [_requestSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Request *request = (Request *)object;
+        [[RoomManager shared] insertRequest:request];
     }];
     
-    // song request is removed
-    _songSubscription = [_songSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-        [[RoomManager shared] removeQueueSong:song];
+    // request is removed
+    _requestSubscription = [_requestSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Request *request = (Request *)object;
+        [[RoomManager shared] removeRequestWithId:request.objectId];
     }];
     
 }
 
-- (void)configureVoteSubscription {
+# pragma mark - Votes
+
+- (void)configureUpvoteSubscription {
     
-    // reset subscriptions
-    _voteSubscription = nil;
+    if (_upvoteLiveQuery) {
+        [_client unsubscribeFromQuery:_upvoteLiveQuery];
+    }
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
@@ -109,19 +161,48 @@
         return;
     }
     
-    PFQuery *query = [ParseQueryManager queryForVotesInCurrentRoom];
-    _voteSubscription = [_client subscribeToQuery:query];
+    _upvoteLiveQuery = [ParseQueryManager queryForUpvotesInCurrentRoom];
+    _upvoteSubscription = [_client subscribeToQuery:_upvoteLiveQuery];
     
-    // vote is created
-    _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Vote *vote = (Vote *)object;
-        [[RoomManager shared] updateQueueSongWithId:vote.songId];
+    // upvote is created
+    _upvoteSubscription = [_upvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Upvote *upvote = (Upvote *)object;
+        [[RoomManager shared] incrementScoreForRequestWithId:upvote.requestId amount:@(1)];
     }];
     
-    // vote is updated
-    _voteSubscription = [_voteSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Vote *vote = (Vote *)object;
-        [[RoomManager shared] updateQueueSongWithId:vote.songId];
+    // upvote is deleted
+    _upvoteSubscription = [_upvoteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Upvote *upvote = (Upvote *)object;
+        [[RoomManager shared] incrementScoreForRequestWithId:upvote.requestId amount:@(-1)];
+    }];
+    
+}
+
+- (void)configureDownvoteSubscription {
+    
+    if (_downvoteLiveQuery) {
+        [_client unsubscribeFromQuery:_downvoteLiveQuery];
+    }
+    
+    // check for valid roomId
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    if (!roomId) {
+        return;
+    }
+    
+    _downvoteLiveQuery = [ParseQueryManager queryForDownvotesInCurrentRoom];
+    _downvoteSubscription = [_client subscribeToQuery:_downvoteLiveQuery];
+    
+    // downvote is created
+    _downvoteSubscription = [_downvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Downvote *downvote = (Downvote *)object;
+        [[RoomManager shared] incrementScoreForRequestWithId:downvote.requestId amount:@(-1)];
+    }];
+    
+    // downvote is deleted
+    _downvoteSubscription = [_downvoteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Downvote *downvote = (Downvote *)object;
+        [[RoomManager shared] incrementScoreForRequestWithId:downvote.requestId amount:@(1)];
     }];
     
 }

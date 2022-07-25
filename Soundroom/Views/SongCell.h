@@ -10,15 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, CellType) {
-    AddSongCell,
-    AddUserCell,
-    QueueSongCell
+typedef NS_ENUM(NSUInteger, SongCellType) {
+    TrackCell,
+    UserCell,
+    QueueCell
 };
 
 @interface SongCell : UITableViewCell
 
-@property (nonatomic) CellType cellType;
+@property (nonatomic) SongCellType cellType;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *subtitle;
 @property (strong, nonatomic) UIImage *image;
@@ -26,7 +26,6 @@ typedef NS_ENUM(NSUInteger, CellType) {
 
 @property (nonatomic) VoteState voteState;
 @property (strong, nonatomic) NSNumber *score;
-@property (strong, nonatomic) NSString *spotifyId;
 
 @end
 

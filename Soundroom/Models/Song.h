@@ -2,26 +2,32 @@
 //  Song.h
 //  Soundroom
 //
-//  Created by Megan Miller on 7/5/22.
+//  Created by Megan Miller on 7/23/22.
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "Track.h"
+#import "Request.h"
+
+typedef NS_ENUM(NSInteger, VoteState) {
+    Upvoted = 1,
+    NotVoted = 0,
+    Downvoted = -1
+};
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Song : NSObject
 
+@property (nonatomic, strong) Track *track;
+@property (nonatomic, strong) NSString *requestId;
 @property (nonatomic, strong) NSString *spotifyId;
-@property (nonatomic, strong) NSString *spotifyURI;
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSString *artist;
-@property (nonatomic, strong) NSString *albumTitle;
-@property (nonatomic, strong) UIImage *albumImage;
-@property (nonatomic, strong) NSString *durationString;
+@property (nonatomic, strong) NSNumber *score;
+@property (nonatomic) VoteState voteState;
 
-+ (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response;
-+ (Song *)songWithJSONResponse:(NSDictionary *)response;
++ (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSMutableArray <Song *> *songs))completion;
++ (void)songWithRequest:(Request *)request completion:(void (^)(Song *song))completion;
++ (void)loadVotesForQueue:(NSMutableArray <Song *> *)queue completion:(void (^)(NSMutableArray <Song *> *result))completion;
 
 @end
 

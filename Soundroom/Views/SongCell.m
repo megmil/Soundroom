@@ -66,11 +66,13 @@
         [self.contentView addSubview:_addButton];
         
         _upvoteButton = [UIButton new];
-        [_upvoteButton addTarget:self action:@selector(didTapUpvote) forControlEvents:UIControlEventTouchUpInside];
+        _upvoteButton.tag = Upvoted;
+        [_upvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_upvoteButton];
         
         _downvoteButton = [UIButton new];
-        [_downvoteButton addTarget:self action:@selector(didTapDownvote) forControlEvents:UIControlEventTouchUpInside];
+        _downvoteButton.tag = Downvoted;
+        [_downvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_downvoteButton];
         
         _scoreLabel = [UILabel new];
@@ -86,8 +88,8 @@
 
 - (void)didTapAdd {
     
-    if (_cellType == AddSongCell) {
-        [ParseObjectManager createSongRequestInCurrentRoomWithSpotifyId:_objectId];
+    if (_cellType == TrackCell) {
+        [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:_objectId];
         return;
     }
     
@@ -95,37 +97,15 @@
     
 }
 
-- (void)didTapUpvote {
+- (void)didTapVote:(UIButton *)sender {
     
-    [[RoomManager shared] clearLocalVoteData];
-    
-    // if already upvoted, set as unvoted
-    if (_voteState == Upvoted) {
-        self.voteState = NotVoted;
-        [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(0)];
-        return;
+    if (_voteState == sender.tag) {
+        _voteState = NotVoted;
+    } else {
+        _voteState = sender.tag;
     }
     
-    // set as upvoted
-    self.voteState = Upvoted;
-    [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(1)];
-    
-}
-
-- (void)didTapDownvote {
-    
-    [[RoomManager shared] clearLocalVoteData];
-    
-    // if already downvoted, set as unvoted
-    if (_voteState == Downvoted) {
-        self.voteState = NotVoted;
-        [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(0)];
-        return;
-    }
-    
-    // set as downvoted
-    self.voteState = Downvoted;
-    [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(-1)];
+    [[RoomManager shared] updateCurrentUserVoteForRequestWithId:_objectId voteState:_voteState];
 
 }
 
@@ -171,16 +151,16 @@
     
 }
 
-- (void)setCellType:(CellType)cellType {
+- (void)setCellType:(SongCellType)cellType {
     
     _cellType = cellType;
     
-    BOOL isAddCell = !(cellType == QueueSongCell);
+    BOOL isAddCell = !(cellType == QueueCell);
     [self setIsAddCell:isAddCell];
     
-    if (cellType == AddSongCell) {
+    if (cellType == TrackCell) {
         [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal]; // TODO: check if already added
-    } else if (cellType == AddUserCell) {
+    } else if (cellType == UserCell) {
         [_addButton setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal]; // TODO: check if already added
     }
     

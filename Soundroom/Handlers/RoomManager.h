@@ -6,7 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "QueueSong.h"
+#import "Request.h"
+#import "Song.h" // need for votestate
+#import "Upvote.h"
+#import "Downvote.h"
 
 #define RoomManagerJoinedRoomNotification @"CurrentRoomManagerJoinedRoomNotification"
 #define RoomManagerLeftRoomNotification @"CurrentRoomManagerLeftRoomNotification"
@@ -15,39 +18,30 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, VoteState) {
-    Upvoted,
-    Downvoted,
-    NotVoted
-};
-
 @interface RoomManager : NSObject
 
 // room data
-@property (nonatomic, strong, readonly) NSString *currentRoomId;
-@property (nonatomic, strong, readonly) NSString *currentRoomName;
-@property (nonatomic, strong, readonly) NSString *currentHostId;
-@property (nonatomic, strong, readonly) NSString *currentSongId;
-@property (nonatomic, readonly) BOOL isInRoom;
-@property (nonatomic, readonly) BOOL isCurrentUserHost;
-
-// queue data
-@property (nonatomic, strong, readonly) NSMutableArray <QueueSong *> *queue;
-@property (nonatomic, strong, readonly) NSMutableArray <NSNumber *> *scores;
+- (NSString *)currentRoomId;
+- (NSString *)currentRoomName;
+- (NSString *)currentHostId;
+- (NSString *)currentSongId;
+- (NSMutableArray <Song *> *)queue;
+- (BOOL)isInRoom;
+- (BOOL)isCurrentUserHost;
 
 + (instancetype)shared;
 
-- (void)fetchCurrentRoom;
+- (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
 - (void)joinRoomWithId:(NSString *)currentRoomId;
 - (void)clearRoomData;
 
-- (void)insertQueueSong:(QueueSong *)song;
-- (void)removeQueueSong:(QueueSong *)song;
-- (void)updateQueueSongWithId:(NSString *)songId;
+- (void)insertRequest:(Request *)request;
+- (void)removeRequestWithId:(NSString *)requestId;
 
-- (void)getVoteStateForSongWithId:(NSString *)songId completion:(void (^)(VoteState voteState))completion;
-- (void)clearLocalVoteData;
+- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount;
+- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 
+- (void)reloadTrackData;
 - (void)playTopSong;
 
 @end

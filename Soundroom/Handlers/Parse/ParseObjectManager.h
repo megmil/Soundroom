@@ -6,22 +6,24 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "QueueSong.h"
+#import "Song.h" // need for VoteState
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ParseObjectManager : NSObject
 
 + (void)createRoomWithTitle:(NSString *)title;
-+ (void)createSongRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId;
++ (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId;
 + (void)createInvitationToCurrentRoomForUserWithId:(NSString *)userId;
 
 + (void)updateCurrentRoomWithCurrentSongId:(NSString *)currentSongId;
-+ (void)updateCurrentUserVoteForSongWithId:(NSString *)songId score:(NSNumber *)score;
++ (void)acceptInvitationWithId:(NSString *)invitationId;
++ (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 
 + (void)deleteCurrentRoomAndAttachedObjects;
-+ (void)deleteQueueSong:(QueueSong *)song;
++ (void)deleteRequestWithId:(NSString *)requestId;
 + (void)deleteInvitationsAcceptedByCurrentUser;
++ (void)deleteInvitationWithId:(NSString *)invitationId;
 
 @end
 

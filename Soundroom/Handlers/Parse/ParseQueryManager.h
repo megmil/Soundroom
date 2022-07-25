@@ -9,13 +9,14 @@
 #import <Parse/Parse.h>
 
 #define RoomClass @"Room"
-#define QueueSongClass @"QueueSong"
-#define VoteClass @"Vote"
+#define RequestClass @"Request"
+#define UpvoteClass @"Upvote"
+#define DownvoteClass @"Downvote"
 #define InvitationClass @"Invitation"
 
 #define userIdKey @"userId"
 #define roomIdKey @"roomId"
-#define songIdKey @"songId"
+#define requestIdKey @"requestId"
 #define currentSongIdKey @"currentSongId"
 #define isPendingKey @"isPending"
 #define usernameKey @"username"
@@ -25,25 +26,39 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ParseQueryManager : NSObject
 
 // live queries
-+ (PFQuery *)queryForInvitationsAcceptedByCurrentUser;
-+ (PFQuery *)queryForSongsInCurrentRoom;
-+ (PFQuery *)queryForVotesInCurrentRoom;
++ (PFQuery *)queryForInvitationsForCurrentUser;
++ (PFQuery *)queryForRequestsInCurrentRoom;
++ (PFQuery *)queryForUpvotesInCurrentRoom;
++ (PFQuery *)queryForDownvotesInCurrentRoom;
 
-// get PFObjects
+// user
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion;
+
+// room
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
-+ (void)getSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;
-+ (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion; // TODO: rename all?
-+ (void)getVotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
-+ (void)getVotesByCurrentUserInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
-+ (void)getVotesForSongWithId:(NSString *)songId completion:(PFArrayResultBlock)completion;
-+ (void)getVoteByCurrentUserForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;
++ (void)getRoomsForInvitations:(NSArray *)invitations completion:(PFArrayResultBlock)completion;
+
+// request
++ (void)getRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
++ (void)getRequestsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
+
+// upvote/downvote
++ (void)getUpvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
++ (void)getDownvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
++ (void)getUpvotesForRequestWithId:(NSString *)requestId completion:(PFArrayResultBlock)completion;
++ (void)getDownvotesForRequestWithId:(NSString *)requestId completion:(PFArrayResultBlock)completion;
++ (void)getUpvoteByCurrentUserForRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
++ (void)getDownvoteByCurrentUserForRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
+
+// invitation
++ (void)getInvitationWithId:(NSString *)invitationId completion:(PFObjectResultBlock)completion;
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion;
 + (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
++ (void)getInvitationsPendingForCurrentUserWithCompletion:(PFArrayResultBlock)completion;
 
-// get other values
-+ (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion;
+// key values
++ (void)getSpotifyIdForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion;
 + (void)didCurrentUserAcceptRoomInvitationWithCompletion:(PFBooleanResultBlock)completion;
 + (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;
 
