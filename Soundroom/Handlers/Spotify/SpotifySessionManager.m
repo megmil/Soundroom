@@ -6,6 +6,7 @@
 //
 
 #import "SpotifySessionManager.h"
+#import "RoomManager.h"
 
 @implementation SpotifySessionManager
 
@@ -116,7 +117,7 @@
 # pragma mark - SPTAppRemotePlayerStateDelegate
 
 - (void)playerStateDidChange:(nonnull id<SPTAppRemotePlayerState>)playerState {
-    //
+    NSLog(@"%ld", playerState.playbackPosition);
 }
 
 # pragma mark - SceneDelegate

@@ -27,12 +27,15 @@
 @implementation RoomViewController
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
-
     [self configureTableView];
     [self configureObservers];
     
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self updateQueueViews];
 }
 
 - (void)configureTableView {
@@ -75,13 +78,11 @@
 
 - (void)updateCurrentSongViews {
     Track *track = [[RoomManager shared] currentTrack];
-    if (track) {
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            self->_currentSongTitleLabel.text = track.title;
-            self->_currentSongArtistLabel.text = track.artist;
-            self->_currentSongAlbumImageView.image = track.albumImage;
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_currentSongTitleLabel.text = track.title;
+        self->_currentSongArtistLabel.text = track.artist;
+        self->_currentSongAlbumImageView.image = track.albumImage;
+    });
 }
 
 - (void)updateTrackViews {

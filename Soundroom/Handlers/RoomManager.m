@@ -32,27 +32,21 @@
 # pragma mark - Public: Live Query
 
 - (void)joinRoomWithId:(NSString *)roomId {
-    
     if (self.currentRoomId == roomId) {
         return;
     }
-    
     [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         Room *room = (Room *)object;
         [self joinRoom:room];
     }];
-    
 }
 
 - (void)clearRoomData {
-    
     if ([self isCurrentUserHost]) {
         [self clearAllRoomData];
         return;
     }
-    
     [self clearLocalRoomData];
-    
 }
 
 - (void)insertRequest:(Request *)request {
