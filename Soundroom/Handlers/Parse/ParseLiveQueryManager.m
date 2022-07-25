@@ -105,7 +105,7 @@
         Invitation *invitation = (Invitation *)object;
         
         if (invitation.isPending) {
-            // invitation was revoked
+            // invitation was rejected or revoked
             [[NSNotificationCenter defaultCenter] postNotificationName:ParseLiveQueryManagerUpdatedPendingInvitationsNotification object:nil];
         } else {
             // current user left or was removed from room

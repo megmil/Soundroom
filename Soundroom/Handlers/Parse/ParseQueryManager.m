@@ -60,20 +60,19 @@
 + (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(PFArrayResultBlock)completion {
     
     __block NSMutableArray <Room *> *rooms = [NSMutableArray <Room *> array];
+    __block NSUInteger counter = 0; // counter to completion
     
     for (NSUInteger i = 0; i != invitations.count; i++) {
         
         [self getRoomWithId:invitations[i].roomId completion:^(PFObject *object, NSError *error) {
             
             if (object) {
-                
                 Room *room = (Room *)object;
                 [rooms addObject:room];
-                
-                if (i + 1 == invitations.count) {
-                    completion(rooms, error);
-                }
-                
+            }
+            
+            if (++counter == invitations.count) {
+                completion(rooms, error);
             }
             
         }];
@@ -171,8 +170,9 @@
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
-+ (void)getInvitationsForCurrentUserWithCompletion:(PFArrayResultBlock)completion {
++ (void)getInvitationsPendingForCurrentUserWithCompletion:(PFArrayResultBlock)completion {
     PFQuery *query = [self queryForInvitationsForCurrentUser];
+    [query whereKey:isPendingKey equalTo:@(YES)];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 

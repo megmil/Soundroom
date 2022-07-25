@@ -47,24 +47,42 @@
 
 - (void)loadRooms {
     
-    [ParseQueryManager getInvitationsForCurrentUserWithCompletion:^(NSArray *invitationObjects, NSError *error) {
+    [self fetchPendingRoomsWithCompletion:^(BOOL succeeded, NSError *error) {
         
-        if (invitationObjects) {
-            
-            self->_invitations = (NSMutableArray <Invitation *> *)invitationObjects;
-            
-            [ParseQueryManager getRoomsForInvitations:invitationObjects completion:^(NSArray *roomObjects, NSError *error) {
-                
-                if (roomObjects) {
-                    
-                    self->_rooms = (NSMutableArray <Room *> *)roomObjects;
-                    [self->_tableView reloadDataWithAnimation];
-                    
-                }
-                
-            }];
-            
+        if (!succeeded) {
+            self->_rooms = [NSMutableArray <Room *> array];
+            self->_invitations = [NSMutableArray <Invitation *> array];
+            [self->_tableView reloadData];
         }
+        
+        [self->_tableView reloadDataWithAnimation];
+        
+    }];
+    
+}
+
+- (void)fetchPendingRoomsWithCompletion:(PFBooleanResultBlock)completion {
+    
+    [ParseQueryManager getInvitationsPendingForCurrentUserWithCompletion:^(NSArray *invitations, NSError *error) {
+        
+        if (!invitations || !invitations.count) {
+            completion(NO, error);
+            return;
+        }
+        
+        [ParseQueryManager getRoomsForInvitations:invitations completion:^(NSArray *rooms, NSError *error) {
+            
+            if (!rooms || !rooms.count || invitations.count != rooms.count) {
+                completion(NO, error);
+                return;
+            }
+            
+            self->_invitations = (NSMutableArray <Invitation *> *)invitations;
+            self->_rooms = (NSMutableArray <Room *> *)rooms;
+            completion(YES, nil);
+
+            
+        }];
         
     }];
     

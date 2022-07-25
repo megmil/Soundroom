@@ -15,10 +15,8 @@
 #import "Invitation.h"
 
 @implementation RoomManager {
-    
     Room *_room;
     NSMutableArray <Song *> *_queue;
-    
 }
 
 + (instancetype)shared {
