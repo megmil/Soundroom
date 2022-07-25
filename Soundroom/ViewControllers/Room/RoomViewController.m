@@ -164,17 +164,21 @@
                                 }];
 
    [alert addAction:retryButton];
-   [self presentViewController:alert animated:YES completion:nil];
     
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 - (void)leaveRoomAlert {
     
     NSString *title = @"Leave Room";
     NSString *message = @"Are you sure you want to leave this room?";
+    NSString *buttonMessage = @"Leave";
     if ([[RoomManager shared] isCurrentUserHost]) {
         title = @"End Session?";
         message = @"Are you sure you want to end this session?";
+        buttonMessage = @"End";
     }
     
     UIAlertController *alert = [UIAlertController
@@ -188,7 +192,7 @@
                                    handler:^(UIAlertAction *action) { return; }];
     
     UIAlertAction *leaveButton = [UIAlertAction
-                                  actionWithTitle:@"Leave"
+                                  actionWithTitle:buttonMessage
                                   style:UIAlertActionStyleDestructive
                                   handler:^(UIAlertAction *action) {
                                     [ParseObjectManager deleteInvitationsAcceptedByCurrentUser];
@@ -197,7 +201,9 @@
    [alert addAction:cancelButton];
    [alert addAction:leaveButton];
 
-   [self presentViewController:alert animated:YES completion:nil];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self presentViewController:alert animated:YES completion:nil];
+    });
     
 }
 
