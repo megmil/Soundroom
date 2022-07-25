@@ -10,8 +10,6 @@
 #import "SpotifySessionManager.h"
 #import "ParseObjectManager.h"
 #import "RoomManager.h"
-#import "QueueSong.h"
-#import "Song.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 
@@ -31,7 +29,7 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    
+
     [self configureTableView];
     [self configureObservers];
     
@@ -49,7 +47,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomViews) name:RoomManagerLeftRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:RoomManagerUpdatedQueueNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentSongViews) name:RoomManagerUpdatedCurrentSongNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:SpotifyAPIManagerFailedAccessTokenNotification object:nil];
 }
 
 # pragma mark - Notification Selectors
@@ -57,6 +56,7 @@
 - (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
+        [self updateQueueViews];
     });
 }
 
@@ -67,7 +67,6 @@
 }
 
 - (void)updateQueueViews {
-    [[SpotifySessionManager shared] authorizeSession]; // TODO: move?
     [self updateCurrentSongViews];
     dispatch_async(dispatch_get_main_queue(), ^(void){
         [self->_tableView reloadDataWithAnimation];
@@ -75,21 +74,11 @@
 }
 
 - (void)updateCurrentSongViews {
-    
-    NSString *currentSongId = [[RoomManager shared] currentSongId];
-    
-    [[SpotifyAPIManager shared] getSpotifySongForQueueSongWithId:currentSongId completion:^(Song *song, NSError *error) {
-        
-        if (song) {
-            
-            // update views
-            self->_currentSongTitleLabel.text = song.title;
-            self->_currentSongArtistLabel.text = song.artist;
-            self->_currentSongAlbumImageView.image = song.albumImage;
-            
-        }
-        
-    }];
+    // TODO: get info
+}
+
+- (void)updateTrackViews {
+    [[RoomManager shared] updateTrackData];
 }
 
 # pragma mark - IBActions
@@ -111,27 +100,17 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
-    QueueSong *queueSong = [[RoomManager shared] queue][indexPath.row];
+    Song *song = [[RoomManager shared] queue][indexPath.row];
     
-    cell.objectId = queueSong.objectId;
-    cell.spotifyId = queueSong.spotifyId;
+    cell.objectId = song.requestId;
+    cell.score = song.score;
+    cell.voteState = song.voteState;
     cell.cellType = QueueSongCell;
-    cell.score = [[RoomManager shared] scores][indexPath.row];
     
-    // get vote status
-    cell.voteState = NotVoted;
-    [[RoomManager shared] getVoteStateForSongWithId:queueSong.objectId completion:^(VoteState voteState) {
-        cell.voteState = voteState;
-    }];
-    
-    // get spotify metadata
-    [[SpotifyAPIManager shared] getSongWithSpotifyId:queueSong.spotifyId completion:^(Song *song, NSError *error) {
-        if (song) {
-            cell.title = song.title;
-            cell.subtitle = song.artist;
-            cell.image = song.albumImage;
-        }
-    }];
+    // track data
+    cell.title = song.track.title;
+    cell.subtitle = song.track.artist;
+    cell.image = song.track.albumImage;
     
     return cell;
 }
@@ -152,13 +131,35 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        QueueSong *song = [[RoomManager shared] queue][indexPath.row];
-        [ParseObjectManager deleteQueueSong:song];
+        Song *song = [[RoomManager shared] queue][indexPath.row];
+        [ParseObjectManager deleteRequestWithId:song.requestId];
     }
     
 }
 
 # pragma mark - Alerts
+
+- (void)failedSpotifyAuthenticationAlert {
+    
+    NSString *title = @"Failed to authorize";
+    NSString *message = @"Could not connect to Spotify in time to load queue data.";
+    
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:title
+                                message:message
+                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *retryButton = [UIAlertAction
+                                  actionWithTitle:@"Try Again"
+                                  style:UIAlertActionStyleDefault
+                                  handler:^(UIAlertAction *action) {
+                                    [[SpotifySessionManager shared] authorizeSession];
+                                }];
+
+   [alert addAction:retryButton];
+   [self presentViewController:alert animated:YES completion:nil];
+    
+}
 
 - (void)leaveRoomAlert {
     

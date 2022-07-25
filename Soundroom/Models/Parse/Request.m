@@ -5,22 +5,22 @@
 //  Created by Megan Miller on 7/5/22.
 //
 
-#import "QueueSong.h"
+#import "Request.h"
 
-@implementation QueueSong
+@implementation Request
 
 @dynamic objectId;
 @dynamic roomId;
 @dynamic spotifyId;
 
 + (nonnull NSString *)parseClassName {
-    return @"QueueSong";
+    return @"Request";
 }
 
 - (BOOL)isEqual:(id)object {
     
-    if ([object isKindOfClass:[QueueSong class]]) {
-        QueueSong *song = (QueueSong *)object;
+    if ([object isKindOfClass:[Request class]]) {
+        Request *song = (Request *)object;
         return [self.objectId isEqualToString:song.objectId];
     }
     

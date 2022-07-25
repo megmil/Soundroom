@@ -20,11 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) PFLiveQueryClient *client;
 @property (strong, nonatomic) PFLiveQuerySubscription *invitationSubscription;
 @property (strong, nonatomic) PFLiveQuerySubscription *songSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *voteSubscription;
+@property (strong, nonatomic) PFLiveQuerySubscription *upvoteSubscription;
+@property (strong, nonatomic) PFLiveQuerySubscription *downvoteSubscription;
 
 - (void)configureUserLiveSubscriptions;
 - (void)configureRoomLiveSubscriptions;
-
 - (void)clearUserLiveSubscriptions;
 - (void)clearRoomLiveSubscriptions;
 

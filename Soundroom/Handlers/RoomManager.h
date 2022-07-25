@@ -6,7 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "QueueSong.h"
+#import "Request.h"
+#import "Song.h"
+#import "Upvote.h"
+#import "Downvote.h"
 
 #define RoomManagerJoinedRoomNotification @"CurrentRoomManagerJoinedRoomNotification"
 #define RoomManagerLeftRoomNotification @"CurrentRoomManagerLeftRoomNotification"
@@ -15,25 +18,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, VoteState) {
-    Upvoted = 1,
-    NotVoted = 0,
-    Downvoted = -1
-};
-
 @interface RoomManager : NSObject
 
 // room data
-@property (nonatomic, strong, readonly) NSString *currentRoomId;
-@property (nonatomic, strong, readonly) NSString *currentRoomName;
-@property (nonatomic, strong, readonly) NSString *currentHostId;
-@property (nonatomic, strong, readonly) NSString *currentSongId;
-@property (nonatomic, readonly) BOOL isInRoom;
-@property (nonatomic, readonly) BOOL isCurrentUserHost;
-
-// queue data
-@property (nonatomic, strong, readonly) NSMutableArray <QueueSong *> *queue;
-@property (nonatomic, strong, readonly) NSMutableArray <NSNumber *> *scores;
+- (NSString *)currentRoomId;
+- (NSString *)currentRoomName;
+- (NSString *)currentHostId;
+- (NSString *)currentSongId;
+- (NSMutableArray <Song *> *)queue;
+- (BOOL)isInRoom;
+- (BOOL)isCurrentUserHost;
 
 + (instancetype)shared;
 
@@ -41,13 +35,15 @@ typedef NS_ENUM(NSInteger, VoteState) {
 - (void)joinRoomWithId:(NSString *)currentRoomId;
 - (void)clearRoomData;
 
-- (void)insertQueueSong:(QueueSong *)song;
-- (void)removeQueueSong:(QueueSong *)song;
-- (void)updateQueueSongWithId:(NSString *)songId;
+- (void)insertSongWithRequest:(Request *)request;
+- (void)removeSongWithRequestId:(NSString *)requestId;
 
-- (void)getVoteStateForSongWithId:(NSString *)songId completion:(void (^)(VoteState voteState))completion;
-- (void)clearLocalVoteData;
+- (void)updateQueueWithCreatedUpvote:(Upvote *)upvote;
+- (void)updateQueueWithCreatedDownvote:(Downvote *)downvote;
+- (void)updateQueueWithDeletedUpvote:(Upvote *)upvote;
+- (void)updateQueueWithDeletedDownvote:(Downvote *)downvote;
 
+- (void)updateTrackData;
 - (void)playTopSong;
 
 @end

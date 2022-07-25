@@ -9,13 +9,14 @@
 #import <Parse/Parse.h>
 
 #define RoomClass @"Room"
-#define QueueSongClass @"QueueSong"
-#define VoteClass @"Vote"
+#define RequestClass @"Request"
+#define UpvoteClass @"Upvote"
+#define DownvoteClass @"Downvote"
 #define InvitationClass @"Invitation"
 
 #define userIdKey @"userId"
 #define roomIdKey @"roomId"
-#define songIdKey @"songId"
+#define requestIdKey @"requestId"
 #define currentSongIdKey @"currentSongId"
 #define isPendingKey @"isPending"
 #define usernameKey @"username"
@@ -27,7 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 // live queries
 + (PFQuery *)queryForInvitationsForCurrentUser;
 + (PFQuery *)queryForSongsInCurrentRoom;
-+ (PFQuery *)queryForVotesInCurrentRoom;
++ (PFQuery *)queryForUpvotesInCurrentRoom;
++ (PFQuery *)queryForDownvotesInCurrentRoom;
 
 // user
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion;
@@ -40,11 +42,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;
 + (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 
-// vote
-+ (void)getVotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
-+ (void)getVotesByCurrentUserInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
-+ (void)getVotesForSongWithId:(NSString *)songId completion:(PFArrayResultBlock)completion;
-+ (void)getVoteByCurrentUserForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;
+// upvote/downvote
++ (void)getUpvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
++ (void)getDownvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
++ (void)getUpvotesForRequestWithId:(NSString *)requestId completion:(PFArrayResultBlock)completion;
++ (void)getDownvotesForRequestWithId:(NSString *)requestId completion:(PFArrayResultBlock)completion;
++ (void)getUpvoteByCurrentUserForRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
++ (void)getDownvoteByCurrentUserForRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
 
 // invitation
 + (void)getInvitationWithId:(NSString *)invitationId completion:(PFObjectResultBlock)completion;

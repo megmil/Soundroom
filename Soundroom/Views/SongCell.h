@@ -26,7 +26,6 @@ typedef NS_ENUM(NSUInteger, SongCellType) {
 
 @property (nonatomic) VoteState voteState;
 @property (strong, nonatomic) NSNumber *score;
-@property (strong, nonatomic) NSString *spotifyId;
 
 @end
 

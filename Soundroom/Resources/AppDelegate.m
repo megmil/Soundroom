@@ -7,9 +7,10 @@
 
 #import "AppDelegate.h"
 #import "SpotifySessionManager.h"
-#import "QueueSong.h"
+#import "Request.h"
 #import "Room.h"
-#import "Vote.h"
+#import "Upvote.h"
+#import "Downvote.h"
 #import "Invitation.h"
 #import <Parse/Parse.h>
 
@@ -23,9 +24,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // model configuration
-    [QueueSong registerSubclass];
     [Room registerSubclass];
-    [Vote registerSubclass];
+    [Request registerSubclass];
+    [Upvote registerSubclass];
+    [Downvote registerSubclass];
     [Invitation registerSubclass];
     
     // parse configuration
@@ -37,6 +39,9 @@
         configuration.server = @"https://parseapi.back4app.com";
     }];
     [Parse initializeWithConfiguration:configuration];
+    
+    // spotify authorization
+    [[SpotifySessionManager shared] authorizeSession];
     
     return YES;
 }

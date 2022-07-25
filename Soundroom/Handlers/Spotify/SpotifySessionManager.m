@@ -52,14 +52,12 @@
 # pragma mark - Session Manager
 
 - (void)authorizeSession {
-    
     if ([self isSessionAuthorized]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:SpotifySessionManagerAuthorizedNotificaton object:self];
         return;
     }
-    
     SPTScope requestedScope = SPTAppRemoteControlScope;
     [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
-    
 }
 
 - (void)signOut {
@@ -69,7 +67,7 @@
 }
 
 - (BOOL)isSessionAuthorized {
-    return _sessionManager.session;
+    return _sessionManager.session.accessToken;
 }
 
 # pragma mark - App Remote

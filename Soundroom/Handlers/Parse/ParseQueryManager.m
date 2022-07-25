@@ -10,7 +10,7 @@
 #import "RoomManager.h"
 #import "Room.h"
 #import "Invitation.h"
-#import "QueueSong.h" // TODO: move logic that requires QueueSong import?
+#import "Request.h" // TODO: move logic that requires QueueSong import?
 
 @implementation ParseQueryManager
 
@@ -23,13 +23,19 @@
 }
 
 + (PFQuery *)queryForSongsInCurrentRoom {
-    PFQuery *query = [PFQuery queryWithClassName:QueueSongClass];
+    PFQuery *query = [PFQuery queryWithClassName:RequestClass];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
     return query;
 }
 
-+ (PFQuery *)queryForVotesInCurrentRoom {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
++ (PFQuery *)queryForUpvotesInCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:UpvoteClass];
+    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    return query;
+}
+
++ (PFQuery *)queryForDownvotesInCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:DownvoteClass];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
     return query;
 }
@@ -76,10 +82,10 @@
     
 }
 
-# pragma mark - Song
+# pragma mark - Request
 
 + (void)getSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:QueueSongClass];
+    PFQuery *query = [PFQuery queryWithClassName:RequestClass];
     [query getObjectInBackgroundWithId:songId block:completion];
 }
 
@@ -92,7 +98,7 @@
 + (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion {
     [self getSongWithId:songId completion:^(PFObject *object, NSError *error) {
         if (object) {
-            QueueSong *song = (QueueSong *)object;
+            Request *song = (Request *)object;
             completion(song.spotifyId, error);
         } else {
             completion(nil, error);
@@ -102,30 +108,40 @@
 
 # pragma mark - Vote
 
-+ (void)getVotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [self queryForVotesInCurrentRoom];
++ (void)getUpvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [self queryForUpvotesInCurrentRoom];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
-+ (void)getVotesByCurrentUserInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
++ (void)getDownvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [self queryForDownvotesInCurrentRoom];
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getUpvotesForRequestWithId:(NSString *)requestId completion:(PFArrayResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:UpvoteClass];
+    [query whereKey:requestIdKey equalTo:requestId];
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getDownvotesForRequestWithId:(NSString *)requestId completion:(PFArrayResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:DownvoteClass];
+    [query whereKey:requestIdKey equalTo:requestId];
+    [query findObjectsInBackgroundWithBlock:completion];
+}
+
++ (void)getUpvoteByCurrentUserForRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:UpvoteClass];
     [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]]; // TODO: is roomId necessary?
-    [query findObjectsInBackgroundWithBlock:completion];
+    [query whereKey:requestIdKey equalTo:requestId];
+    [query getFirstObjectInBackgroundWithBlock:completion]; // should only be 1 vote per user per request
 }
 
-+ (void)getVotesForSongWithId:(NSString *)songId completion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
-    [query whereKey:songIdKey equalTo:songId];
-    // TODO: is roomId necessary?
-    [query findObjectsInBackgroundWithBlock:completion];
-}
-
-+ (void)getVoteByCurrentUserForSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:VoteClass];
++ (void)getDownvoteByCurrentUserForRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion {
+    PFQuery *query = [PFQuery queryWithClassName:DownvoteClass];
     [query whereKey:userIdKey equalTo:[ParseUserManager currentUserId]];
-    [query whereKey:songIdKey equalTo:songId];
-    [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one vote per song per user
+    [query whereKey:requestIdKey equalTo:requestId];
+    [query getFirstObjectInBackgroundWithBlock:completion]; // should only be 1 vote per user per request
 }
 
 # pragma mark - Invitation

@@ -8,14 +8,16 @@
 #import "ParseLiveQueryManager.h"
 #import "ParseQueryManager.h"
 #import "RoomManager.h"
-#import "QueueSong.h"
-#import "Vote.h"
+#import "Request.h"
+#import "Upvote.h"
+#import "Downvote.h"
 #import "Invitation.h"
 
 @implementation ParseLiveQueryManager {
     PFQuery *_invitationLiveQuery;
     PFQuery *_songLiveQuery;
-    PFQuery *_voteLiveQuery;
+    PFQuery *_upvoteLiveQuery;
+    PFQuery *_downvoteLiveQuery;
 }
 
 + (instancetype)shared {
@@ -46,10 +48,25 @@
     
 }
 
+# pragma mark - Public
+
 - (void)configureRoomLiveSubscriptions {
     [self configureSongSubscription];
-    [self configureVoteSubscription];
+    [self configureUpvoteSubscription];
+    [self configureDownvoteSubscription];
 }
+
+- (void)clearUserLiveSubscriptions {
+    [_client unsubscribeFromQuery:_invitationLiveQuery];
+}
+
+- (void)clearRoomLiveSubscriptions {
+    [_client unsubscribeFromQuery:_songLiveQuery];
+    [_client unsubscribeFromQuery:_upvoteLiveQuery];
+    [_client unsubscribeFromQuery:_downvoteLiveQuery];
+}
+
+# pragma mark - Invitations
 
 - (void)configureUserLiveSubscriptions {
     
@@ -99,6 +116,8 @@
     
 }
 
+# pragma mark - Requests
+
 - (void)configureSongSubscription {
     
     if (_songLiveQuery) {
@@ -116,22 +135,24 @@
     
     // new song request is created
     _songSubscription = [_songSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-        [[RoomManager shared] insertQueueSong:song];
+        Request *request = (Request *)object;
+        [[RoomManager shared] insertSongWithRequest:request];
     }];
     
     // song request is removed
     _songSubscription = [_songSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        QueueSong *song = (QueueSong *)object;
-        [[RoomManager shared] removeQueueSong:song];
+        Request *request = (Request *)object;
+        [[RoomManager shared] removeSongWithRequestId:request.objectId];
     }];
     
 }
 
-- (void)configureVoteSubscription {
+# pragma mark - Votes
+
+- (void)configureUpvoteSubscription {
     
-    if (_voteLiveQuery) {
-        [_client unsubscribeFromQuery:_voteLiveQuery];
+    if (_upvoteLiveQuery) {
+        [_client unsubscribeFromQuery:_upvoteLiveQuery];
     }
     
     // check for valid roomId
@@ -140,30 +161,50 @@
         return;
     }
     
-    _voteLiveQuery = [ParseQueryManager queryForVotesInCurrentRoom];
-    _voteSubscription = [_client subscribeToQuery:_voteLiveQuery];
+    _upvoteLiveQuery = [ParseQueryManager queryForUpvotesInCurrentRoom];
+    _upvoteSubscription = [_client subscribeToQuery:_upvoteLiveQuery];
     
-    // vote is created
-    _voteSubscription = [_voteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Vote *vote = (Vote *)object;
-        [[RoomManager shared] updateQueueSongWithId:vote.songId];
+    // upvote is created
+    _upvoteSubscription = [_upvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Upvote *upvote = (Upvote *)object;
+        [[RoomManager shared] updateQueueWithCreatedUpvote:upvote];
     }];
     
-    // vote is updated
-    _voteSubscription = [_voteSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
-        Vote *vote = (Vote *)object;
-        [[RoomManager shared] updateQueueSongWithId:vote.songId];
+    // upvote is deleted
+    _upvoteSubscription = [_upvoteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Upvote *upvote = (Upvote *)object;
+        [[RoomManager shared] updateQueueWithDeletedUpvote:upvote];
     }];
     
 }
 
-- (void)clearUserLiveSubscriptions {
-    [_client unsubscribeFromQuery:_invitationLiveQuery];
-}
-
-- (void)clearRoomLiveSubscriptions {
-    [_client unsubscribeFromQuery:_songLiveQuery];
-    [_client unsubscribeFromQuery:_voteLiveQuery];
+- (void)configureDownvoteSubscription {
+    
+    if (_downvoteLiveQuery) {
+        [_client unsubscribeFromQuery:_downvoteLiveQuery];
+    }
+    
+    // check for valid roomId
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    if (!roomId) {
+        return;
+    }
+    
+    _downvoteLiveQuery = [ParseQueryManager queryForDownvotesInCurrentRoom];
+    _downvoteSubscription = [_client subscribeToQuery:_downvoteLiveQuery];
+    
+    // downvote is created
+    _downvoteSubscription = [_downvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Downvote *downvote = (Downvote *)object;
+        [[RoomManager shared] updateQueueWithCreatedDownvote:downvote];
+    }];
+    
+    // downvote is deleted
+    _downvoteSubscription = [_downvoteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Downvote *downvote = (Downvote *)object;
+        [[RoomManager shared] updateQueueWithDeletedDownvote:downvote];
+    }];
+    
 }
 
 @end

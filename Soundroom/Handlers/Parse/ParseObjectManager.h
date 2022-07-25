@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "QueueSong.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,11 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)createInvitationToCurrentRoomForUserWithId:(NSString *)userId;
 
 + (void)updateCurrentRoomWithCurrentSongId:(NSString *)currentSongId;
-+ (void)updateCurrentUserVoteForSongWithId:(NSString *)songId score:(NSNumber *)score;
 + (void)acceptInvitationWithId:(NSString *)invitationId;
++ (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId score:(NSNumber *)score;
 
 + (void)deleteCurrentRoomAndAttachedObjects;
-+ (void)deleteQueueSong:(QueueSong *)song;
++ (void)deleteRequestWithId:(NSString *)requestId;
 + (void)deleteInvitationsAcceptedByCurrentUser;
 + (void)deleteInvitationWithId:(NSString *)invitationId;
 

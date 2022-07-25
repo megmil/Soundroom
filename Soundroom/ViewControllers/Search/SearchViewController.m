@@ -18,7 +18,7 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchTypeControl;
 
-@property (nonatomic, strong) NSMutableArray<Song *> *songs;
+@property (nonatomic, strong) NSMutableArray<Track *> *songs;
 @property (nonatomic, strong) NSMutableArray<PFUser *> *users;
 
 @end
@@ -61,7 +61,7 @@
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
     
     if ([self isSongSearch]) {
-        Song *song = self.songs[indexPath.row];
+        Track *song = self.songs[indexPath.row];
         cell.title = song.title;
         cell.subtitle = song.artist;
         cell.image = song.albumImage;
@@ -114,7 +114,7 @@
 - (void)searchSongsWithQuery:(NSString *)query {
     [[SpotifyAPIManager shared] getSongsWithQuery:query completion:^(NSArray *songs, NSError *error) {
         if (songs) {
-            self->_songs = (NSMutableArray<Song *> *)songs;
+            self->_songs = (NSMutableArray<Track *> *)songs;
             [self->_tableView reloadDataWithAnimation];
         }
     }];

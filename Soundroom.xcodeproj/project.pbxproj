@@ -19,18 +19,18 @@
 		0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5A42874CED2001D6B04 /* ProfileViewController.m */; };
 		0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5AA2874D394001D6B04 /* SearchViewController.m */; };
 		0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B02874E0B6001D6B04 /* RoomViewController.m */; };
-		0417B5B72874E377001D6B04 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B62874E377001D6B04 /* Song.m */; };
+		0417B5B72874E377001D6B04 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5B62874E377001D6B04 /* Track.m */; };
 		0417B5C32874E4D7001D6B04 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C22874E4D7001D6B04 /* Room.m */; };
 		0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SongCell.m */; };
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
-		0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* QueueSong.m */; };
+		0417B5CC2874F6E6001D6B04 /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* Request.m */; };
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
 		0422999A287DE1270086612E /* RoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229999287DE1270086612E /* RoomManager.m */; };
 		042299AB287E86630086612E /* ConfigureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299AA287E86630086612E /* ConfigureView.m */; };
 		042299BD288092C40086612E /* RoomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299BC288092C40086612E /* RoomNavigationController.m */; };
-		042D626D28876A81005DE8E7 /* Vote.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D626C28876A81005DE8E7 /* Vote.m */; };
+		042D626D28876A81005DE8E7 /* Upvote.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D626C28876A81005DE8E7 /* Upvote.m */; };
 		042D627328876ACC005DE8E7 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D627228876ACC005DE8E7 /* Invitation.m */; };
 		04785C8028813094001AF277 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C7F28813094001AF277 /* AccountView.m */; };
 		04785C8C2886198F001AF277 /* SpotifySessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C8B2886198F001AF277 /* SpotifySessionManager.m */; };
@@ -40,6 +40,8 @@
 		049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* LoginViewController.m */; };
 		04CC5470288B401200FC5707 /* UITableView+AnimationControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */; };
 		04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC5473288B4F4D00FC5707 /* ParseLiveQueryManager.m */; };
+		04CEE28F288C7A4A00F821E8 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CEE28E288C7A4A00F821E8 /* Song.m */; };
+		04CEE292288C8FF900F821E8 /* Downvote.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CEE291288C8FF900F821E8 /* Downvote.m */; };
 		04DF2F4B288A1A5A00FD28E4 /* ParseQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4A288A1A5A00FD28E4 /* ParseQueryManager.m */; };
 		04DF2F4E288B064000FD28E4 /* ParseObjectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4D288B064000FD28E4 /* ParseObjectManager.m */; };
 		2A8C38DE55CFE15D8D15AD07 /* Pods_Soundroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D03DCE9A1C7558DDDF0ED670 /* Pods_Soundroom.framework */; };
@@ -84,16 +86,16 @@
 		0417B5AA2874D394001D6B04 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		0417B5AF2874E0B6001D6B04 /* RoomViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomViewController.h; sourceTree = "<group>"; };
 		0417B5B02874E0B6001D6B04 /* RoomViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomViewController.m; sourceTree = "<group>"; };
-		0417B5B52874E377001D6B04 /* Song.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Song.h; sourceTree = "<group>"; };
-		0417B5B62874E377001D6B04 /* Song.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
+		0417B5B52874E377001D6B04 /* Track.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		0417B5B62874E377001D6B04 /* Track.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		0417B5C12874E4D7001D6B04 /* Room.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		0417B5C22874E4D7001D6B04 /* Room.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		0417B5C42874F5D6001D6B04 /* SongCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SongCell.h; sourceTree = "<group>"; };
 		0417B5C52874F5D6001D6B04 /* SongCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SongCell.m; sourceTree = "<group>"; };
 		0417B5C72874F5F2001D6B04 /* RoomCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomCell.h; sourceTree = "<group>"; };
 		0417B5C82874F5F2001D6B04 /* RoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomCell.m; sourceTree = "<group>"; };
-		0417B5CA2874F6E6001D6B04 /* QueueSong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueueSong.h; sourceTree = "<group>"; };
-		0417B5CB2874F6E6001D6B04 /* QueueSong.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueueSong.m; sourceTree = "<group>"; };
+		0417B5CA2874F6E6001D6B04 /* Request.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Request.h; sourceTree = "<group>"; };
+		0417B5CB2874F6E6001D6B04 /* Request.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
 		0422998C287D2FA70086612E /* LobbyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LobbyViewController.h; sourceTree = "<group>"; };
 		0422998D287D2FA70086612E /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
 		0422998F287D2FAF0086612E /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
@@ -106,8 +108,8 @@
 		042299AA287E86630086612E /* ConfigureView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureView.m; sourceTree = "<group>"; };
 		042299BB288092C40086612E /* RoomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomNavigationController.h; sourceTree = "<group>"; };
 		042299BC288092C40086612E /* RoomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomNavigationController.m; sourceTree = "<group>"; };
-		042D626B28876A81005DE8E7 /* Vote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vote.h; sourceTree = "<group>"; };
-		042D626C28876A81005DE8E7 /* Vote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Vote.m; sourceTree = "<group>"; };
+		042D626B28876A81005DE8E7 /* Upvote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Upvote.h; sourceTree = "<group>"; };
+		042D626C28876A81005DE8E7 /* Upvote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Upvote.m; sourceTree = "<group>"; };
 		042D627128876ACC005DE8E7 /* Invitation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
 		042D627228876ACC005DE8E7 /* Invitation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
 		04785C7E28813094001AF277 /* AccountView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
@@ -124,6 +126,10 @@
 		04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+AnimationControl.m"; sourceTree = "<group>"; };
 		04CC5472288B4F4D00FC5707 /* ParseLiveQueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseLiveQueryManager.h; sourceTree = "<group>"; };
 		04CC5473288B4F4D00FC5707 /* ParseLiveQueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseLiveQueryManager.m; sourceTree = "<group>"; };
+		04CEE28D288C7A4A00F821E8 /* Song.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Song.h; sourceTree = "<group>"; };
+		04CEE28E288C7A4A00F821E8 /* Song.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
+		04CEE290288C8FF900F821E8 /* Downvote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Downvote.h; sourceTree = "<group>"; };
+		04CEE291288C8FF900F821E8 /* Downvote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Downvote.m; sourceTree = "<group>"; };
 		04DF2F49288A1A5900FD28E4 /* ParseQueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseQueryManager.h; sourceTree = "<group>"; };
 		04DF2F4A288A1A5A00FD28E4 /* ParseQueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseQueryManager.m; sourceTree = "<group>"; };
 		04DF2F4C288B064000FD28E4 /* ParseObjectManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseObjectManager.h; sourceTree = "<group>"; };
@@ -231,8 +237,10 @@
 			isa = PBXGroup;
 			children = (
 				042D626A288769D7005DE8E7 /* Parse */,
-				0417B5B52874E377001D6B04 /* Song.h */,
-				0417B5B62874E377001D6B04 /* Song.m */,
+				0417B5B52874E377001D6B04 /* Track.h */,
+				0417B5B62874E377001D6B04 /* Track.m */,
+				04CEE28D288C7A4A00F821E8 /* Song.h */,
+				04CEE28E288C7A4A00F821E8 /* Song.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -328,10 +336,12 @@
 			children = (
 				0417B5C12874E4D7001D6B04 /* Room.h */,
 				0417B5C22874E4D7001D6B04 /* Room.m */,
-				0417B5CA2874F6E6001D6B04 /* QueueSong.h */,
-				0417B5CB2874F6E6001D6B04 /* QueueSong.m */,
-				042D626B28876A81005DE8E7 /* Vote.h */,
-				042D626C28876A81005DE8E7 /* Vote.m */,
+				0417B5CA2874F6E6001D6B04 /* Request.h */,
+				0417B5CB2874F6E6001D6B04 /* Request.m */,
+				042D626B28876A81005DE8E7 /* Upvote.h */,
+				042D626C28876A81005DE8E7 /* Upvote.m */,
+				04CEE290288C8FF900F821E8 /* Downvote.h */,
+				04CEE291288C8FF900F821E8 /* Downvote.m */,
 				042D627128876ACC005DE8E7 /* Invitation.h */,
 				042D627228876ACC005DE8E7 /* Invitation.m */,
 			);
@@ -633,9 +643,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04CEE28F288C7A4A00F821E8 /* Song.m in Sources */,
 				042D627328876ACC005DE8E7 /* Invitation.m in Sources */,
 				0417B5C32874E4D7001D6B04 /* Room.m in Sources */,
-				0417B5B72874E377001D6B04 /* Song.m in Sources */,
+				0417B5B72874E377001D6B04 /* Track.m in Sources */,
 				0417B56A2874B75F001D6B04 /* AppDelegate.m in Sources */,
 				049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */,
 				04785C8C2886198F001AF277 /* SpotifySessionManager.m in Sources */,
@@ -648,6 +659,7 @@
 				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
+				04CEE292288C8FF900F821E8 /* Downvote.m in Sources */,
 				04DF2F4E288B064000FD28E4 /* ParseObjectManager.m in Sources */,
 				0422999A287DE1270086612E /* RoomManager.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
@@ -656,8 +668,8 @@
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				042299BD288092C40086612E /* RoomNavigationController.m in Sources */,
-				0417B5CC2874F6E6001D6B04 /* QueueSong.m in Sources */,
-				042D626D28876A81005DE8E7 /* Vote.m in Sources */,
+				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
+				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
 				04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */,
 			);

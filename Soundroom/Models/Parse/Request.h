@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface QueueSong : PFObject<PFSubclassing>
+@interface Request : PFObject<PFSubclassing>
 
 @property (nonatomic, strong) NSString *objectId;
 @property (nonatomic, strong) NSString *roomId;

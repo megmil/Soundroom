@@ -99,15 +99,14 @@
 
 - (void)didTapVote:(UIButton *)sender {
     
-    [[RoomManager shared] clearLocalVoteData];
-    
-    if (_voteState != NotVoted) {
-        self.voteState = NotVoted;
+    if (_voteState == sender.tag) {
+        _voteState = NotVoted;
     } else {
-        self.voteState = sender.tag;
+        _voteState = sender.tag;
     }
     
-    [ParseObjectManager updateCurrentUserVoteForSongWithId:_objectId score:@(_voteState)];
+    [ParseObjectManager updateCurrentUserVoteForRequestWithId:_objectId score:@(_voteState)];
+
 }
 
 # pragma mark - Setters
