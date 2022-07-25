@@ -11,9 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, SongCellType) {
-    AddSongCell,
-    AddUserCell,
-    QueueSongCell
+    TrackCell,
+    UserCell,
+    QueueCell
 };
 
 @interface SongCell : UITableViewCell

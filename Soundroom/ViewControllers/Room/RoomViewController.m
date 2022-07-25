@@ -39,7 +39,7 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.rowHeight = 66.f;
-    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueSongCell"];
+    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueCell"];
 }
 
 - (void)configureObservers {
@@ -99,13 +99,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueSongCell"];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueCell"];
     Song *song = [[RoomManager shared] queue][indexPath.row];
     
     cell.objectId = song.requestId;
     cell.score = song.score;
     cell.voteState = song.voteState;
-    cell.cellType = QueueSongCell;
+    cell.cellType = QueueCell;
     
     // track data
     cell.title = song.track.title;

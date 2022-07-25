@@ -1,5 +1,5 @@
 //
-//  Song.m
+//  Track.m
 //  Soundroom
 //
 //  Created by Megan Miller on 7/5/22.
@@ -10,18 +10,18 @@
 @implementation Track
 
 + (NSMutableArray *)tracksWithJSONResponse:(NSDictionary *)response {
-    NSDictionary *songsJSONResponses = response[@"tracks"][@"items"];
-    NSMutableArray *songs = [NSMutableArray array];
-    for (NSDictionary *songJSONResponse in songsJSONResponses) {
-        Track *song = [[Track alloc] initWithJSONResponse:songJSONResponse];
-        [songs addObject:song];
+    NSDictionary *tracksJSONResponses = response[@"tracks"][@"items"];
+    NSMutableArray *tracks = [NSMutableArray array];
+    for (NSDictionary *trackJSONResponse in tracksJSONResponses) {
+        Track *track = [[Track alloc] initWithJSONResponse:trackJSONResponse];
+        [tracks addObject:track];
     }
-    return songs;
+    return tracks;
 }
 
 + (Track *)trackWithJSONResponse:(NSDictionary *)response {
-    Track *song = [[Track alloc] initWithJSONResponse:response];
-    return song;
+    Track *track = [[Track alloc] initWithJSONResponse:response];
+    return track;
 }
 
 - (instancetype)initWithJSONResponse:(NSDictionary *)response {

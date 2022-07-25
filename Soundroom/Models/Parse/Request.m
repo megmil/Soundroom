@@ -1,5 +1,5 @@
 //
-//  QueueSong.m
+//  Request.m
 //  Soundroom
 //
 //  Created by Megan Miller on 7/5/22.
@@ -20,8 +20,8 @@
 - (BOOL)isEqual:(id)object {
     
     if ([object isKindOfClass:[Request class]]) {
-        Request *song = (Request *)object;
-        return [self.objectId isEqualToString:song.objectId];
+        Request *request = (Request *)object;
+        return [self.objectId isEqualToString:request.objectId];
     }
     
     return NO;

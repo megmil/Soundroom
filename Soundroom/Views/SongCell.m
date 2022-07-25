@@ -88,7 +88,7 @@
 
 - (void)didTapAdd {
     
-    if (_cellType == AddSongCell) {
+    if (_cellType == TrackCell) {
         [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:_objectId];
         return;
     }
@@ -155,12 +155,12 @@
     
     _cellType = cellType;
     
-    BOOL isAddCell = !(cellType == QueueSongCell);
+    BOOL isAddCell = !(cellType == QueueCell);
     [self setIsAddCell:isAddCell];
     
-    if (cellType == AddSongCell) {
+    if (cellType == TrackCell) {
         [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal]; // TODO: check if already added
-    } else if (cellType == AddUserCell) {
+    } else if (cellType == UserCell) {
         [_addButton setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal]; // TODO: check if already added
     }
     
