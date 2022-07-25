@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId;
 + (void)createInvitationToCurrentRoomForUserWithId:(NSString *)userId;
 
-+ (void)updateCurrentRoomWithCurrentSongId:(NSString *)currentSongId;
++ (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId;
 + (void)acceptInvitationWithId:(NSString *)invitationId;
 + (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 

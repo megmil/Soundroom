@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)currentRoomId;
 - (NSString *)currentRoomName;
 - (NSString *)currentHostId;
-- (NSString *)currentSongId;
+- (NSString *)currentSongSpotifyId;
 - (NSMutableArray <Song *> *)queue;
 - (BOOL)isInRoom;
 - (BOOL)isCurrentUserHost;
@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 
 - (void)reloadTrackData;
-- (void)playTopSong;
+- (void)updateTopSong;
 
 @end
 

@@ -17,7 +17,7 @@
 #define userIdKey @"userId"
 #define roomIdKey @"roomId"
 #define requestIdKey @"requestId"
-#define currentSongIdKey @"currentSongId"
+#define currentSongSpotifyIdKey @"currentSongSpotifyId"
 #define isPendingKey @"isPending"
 #define usernameKey @"username"
 

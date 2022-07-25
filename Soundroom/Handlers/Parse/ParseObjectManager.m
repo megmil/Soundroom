@@ -32,11 +32,11 @@
     }];
 }
 
-+ (void)updateCurrentRoomWithCurrentSongId:(NSString *)currentSongId {
++ (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId {
     [ParseQueryManager getRoomWithId:[[RoomManager shared] currentRoomId] completion:^(PFObject *object, NSError *error) {
         if (object) {
             Room *room = (Room *)object;
-            [room setValue:currentSongId forKey:currentSongIdKey];
+            [room setValue:spotifyId forKey:currentSongSpotifyIdKey];
             [room saveInBackground];
         }
     }];

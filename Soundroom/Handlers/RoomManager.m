@@ -234,19 +234,19 @@
     
 }
 
-/*
-- (void)playTopSong {
+- (void)updateTopSong {
+    
     if (_queue.count) {
+        
         // get and remove first song from queue
-        Request *topSong = _queue.firstObject;
-        [self _removeQueueSong:topSong];
+        Song *topSong = _queue.firstObject;
+        [_queue removeObject:topSong];
         
         // save current song to room
-        [ParseObjectManager updateCurrentRoomWithCurrentSongId:topSong.objectId];
+        [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
         
     }
 }
- */
 
 # pragma mark - Room Data
 
@@ -262,8 +262,8 @@
     return _room.hostId;
 }
 
-- (NSString *)currentSongId {
-    return _room.currentSongId;
+- (NSString *)currentSongSpotifyId {
+    return _room.currentSongSpotifyId;
 }
 
 - (NSMutableArray<Song *> *)queue {

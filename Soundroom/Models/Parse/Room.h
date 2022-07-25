@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *hostId;
-@property (nonatomic, strong) NSString *currentSongId;
+@property (nonatomic, strong) NSString *currentSongSpotifyId;
 
 @end
 

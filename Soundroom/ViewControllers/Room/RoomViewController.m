@@ -54,27 +54,27 @@
 # pragma mark - Notification Selectors
 
 - (void)loadRoomViews {
-    dispatch_async(dispatch_get_main_queue(), ^(void){
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
         [self updateQueueViews];
     });
 }
 
 - (void)clearRoomViews {
-    dispatch_async(dispatch_get_main_queue(), ^(void){
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
         self->_roomNameLabel.text = @"";
     });
 }
 
 - (void)updateQueueViews {
     [self updateCurrentSongViews];
-    dispatch_async(dispatch_get_main_queue(), ^(void){
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
         [self->_tableView reloadDataWithAnimation];
     });
 }
 
 - (void)updateCurrentSongViews {
-    // TODO: get info
+    
 }
 
 - (void)updateTrackViews {

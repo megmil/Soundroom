@@ -12,7 +12,7 @@
 @dynamic roomId;
 @dynamic title;
 @dynamic hostId;
-@dynamic currentSongId;
+@dynamic currentSongSpotifyId;
 
 + (nonnull NSString *)parseClassName {
     return @"Room";
