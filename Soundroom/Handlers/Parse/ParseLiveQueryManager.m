@@ -167,13 +167,13 @@
     // upvote is created
     _upvoteSubscription = [_upvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Upvote *upvote = (Upvote *)object;
-        [[RoomManager shared] updateQueueWithCreatedUpvote:upvote];
+        [[RoomManager shared] incrementScoreForRequestWithId:upvote.requestId amount:@(1)];
     }];
     
     // upvote is deleted
     _upvoteSubscription = [_upvoteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Upvote *upvote = (Upvote *)object;
-        [[RoomManager shared] updateQueueWithDeletedUpvote:upvote];
+        [[RoomManager shared] incrementScoreForRequestWithId:upvote.requestId amount:@(-1)];
     }];
     
 }
@@ -196,13 +196,13 @@
     // downvote is created
     _downvoteSubscription = [_downvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Downvote *downvote = (Downvote *)object;
-        [[RoomManager shared] updateQueueWithCreatedDownvote:downvote];
+        [[RoomManager shared] incrementScoreForRequestWithId:downvote.requestId amount:@(-1)];
     }];
     
     // downvote is deleted
     _downvoteSubscription = [_downvoteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Downvote *downvote = (Downvote *)object;
-        [[RoomManager shared] updateQueueWithDeletedDownvote:downvote];
+        [[RoomManager shared] incrementScoreForRequestWithId:downvote.requestId amount:@(1)];
     }];
     
 }

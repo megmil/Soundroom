@@ -99,15 +99,15 @@
 
 # pragma mark - Vote
 
-+ (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId score:(NSNumber *)score {
++ (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
     
-    if (score.integerValue == 1) {
+    if (voteState == Upvoted) {
         [self createUpvoteByCurrentUserForRequestWithId:requestId];
         [self deleteDownvoteByCurrentUserForRequestWithId:requestId];
         return;
     }
     
-    if (score.integerValue == -1) {
+    if (voteState == Downvoted) {
         [self deleteUpvoteByCurrentUserForRequestWithId:requestId];
         [self createDownvoteByCurrentUserForRequestWithId:requestId];
         return;

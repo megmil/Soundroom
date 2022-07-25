@@ -188,75 +188,33 @@
     [_queue sortUsingDescriptors:@[sortDescriptor]];
 }
 
-# pragma mark - Score
+# pragma mark - Votes
 
-- (void)updateQueueWithCreatedUpvote:(Upvote *)upvote {
-    
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:upvote.requestId];
-    
+- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
+    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
     Song *song = [_queue objectAtIndex:index];
-    song.score = @(song.score.integerValue + 1);
-    if ([upvote.userId isEqualToString:[ParseUserManager currentUserId]]) {
-        song.voteState = Upvoted;
-    }
-    
+    song.score = @(song.score.integerValue + amount.integerValue);
     [_queue removeObjectAtIndex:index];
     [self insertSong:song];
     [self postUpdatedQueueNotification];
-    
 }
 
-- (void)updateQueueWithCreatedDownvote:(Downvote *)downvote {
+- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
     
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:downvote.requestId];
-    
+    // update vote state
+    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
     Song *song = [_queue objectAtIndex:index];
-    song.score = @(song.score.integerValue - 1);
-    if ([downvote.userId isEqualToString:[ParseUserManager currentUserId]]) {
-        song.voteState = Downvoted;
-    }
+    song.voteState = voteState;
+    [_queue replaceObjectAtIndex:index withObject:song];
     
-    [_queue removeObjectAtIndex:index];
-    [self insertSong:song];
-    [self postUpdatedQueueNotification];
-    
-}
-
-- (void)updateQueueWithDeletedUpvote:(Upvote *)upvote {
-    
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:upvote.requestId];
-    
-    Song *song = [_queue objectAtIndex:index];
-    song.score = @(song.score.integerValue - 1);
-    if ([upvote.userId isEqualToString:[ParseUserManager currentUserId]]) {
-        song.voteState = NotVoted;
-    }
-    
-    [_queue removeObjectAtIndex:index];
-    [self insertSong:song];
-    [self postUpdatedQueueNotification];
-    
-}
-
-- (void)updateQueueWithDeletedDownvote:(Downvote *)downvote {
-    
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:downvote.requestId];
-    
-    Song *song = [_queue objectAtIndex:index];
-    song.score = @(song.score.integerValue + 1);
-    if ([downvote.userId isEqualToString:[ParseUserManager currentUserId]]) {
-        song.voteState = NotVoted;
-    }
-    
-    [_queue removeObjectAtIndex:index];
-    [self insertSong:song];
-    [self postUpdatedQueueNotification];
+    // create/delete upvote/downvote
+    [ParseObjectManager updateCurrentUserVoteForRequestWithId:requestId voteState:voteState]; // will send updated queue notification
     
 }
 
 # pragma mark - Spotify
 
-- (void)updateTrackData {
+- (void)reloadTrackData {
     
     for (Song *song in _queue) {
         

@@ -78,7 +78,7 @@
 }
 
 - (void)updateTrackViews {
-    [[RoomManager shared] updateTrackData];
+    [[RoomManager shared] reloadTrackData];
 }
 
 # pragma mark - IBActions

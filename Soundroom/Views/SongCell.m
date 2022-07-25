@@ -105,7 +105,7 @@
         _voteState = sender.tag;
     }
     
-    [ParseObjectManager updateCurrentUserVoteForRequestWithId:_objectId score:@(_voteState)];
+    [[RoomManager shared] updateCurrentUserVoteForRequestWithId:_objectId voteState:_voteState];
 
 }
 

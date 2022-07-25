@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Request.h"
-#import "Song.h"
+#import "Song.h" // need for votestate
 #import "Upvote.h"
 #import "Downvote.h"
 
@@ -38,12 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)insertSongWithRequest:(Request *)request;
 - (void)removeSongWithRequestId:(NSString *)requestId;
 
-- (void)updateQueueWithCreatedUpvote:(Upvote *)upvote;
-- (void)updateQueueWithCreatedDownvote:(Downvote *)downvote;
-- (void)updateQueueWithDeletedUpvote:(Upvote *)upvote;
-- (void)updateQueueWithDeletedDownvote:(Downvote *)downvote;
+- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount;
+- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 
-- (void)updateTrackData;
+- (void)reloadTrackData;
 - (void)playTopSong;
 
 @end

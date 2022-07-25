@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Song.h" // need for VoteState
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)updateCurrentRoomWithCurrentSongId:(NSString *)currentSongId;
 + (void)acceptInvitationWithId:(NSString *)invitationId;
-+ (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId score:(NSNumber *)score;
++ (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 
 + (void)deleteCurrentRoomAndAttachedObjects;
 + (void)deleteRequestWithId:(NSString *)requestId;
