@@ -15,6 +15,10 @@
 #import "Room.h"
 #import "Invitation.h"
 
+NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotification";
+NSString *const RoomManagerLeftRoomNotification = @"RoomManagerLeftRoomNotification";
+NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueNotification";
+
 @implementation RoomManager {
     Room *_room;
     NSMutableArray <Song *> *_queue;

@@ -13,15 +13,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ParseObjectManager : NSObject
 
 + (void)createRoomWithTitle:(NSString *)title;
-+ (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId;
-+ (void)createInvitationToCurrentRoomForUserWithId:(NSString *)userId;
++ (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId; // TODO: rename
++ (void)deleteCurrentRoomAndAttachedObjects;
 
-+ (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId;
-+ (void)acceptInvitationWithId:(NSString *)invitationId;
++ (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId;
++ (void)deleteRequestWithId:(NSString *)requestId;
+
 + (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 
-+ (void)deleteCurrentRoomAndAttachedObjects;
-+ (void)deleteRequestWithId:(NSString *)requestId;
++ (void)createInvitationToCurrentRoomForUserWithId:(NSString *)userId;
++ (void)acceptInvitationWithId:(NSString *)invitationId;
 + (void)deleteInvitationsAcceptedByCurrentUser;
 + (void)deleteInvitationWithId:(NSString *)invitationId;
 

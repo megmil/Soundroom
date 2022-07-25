@@ -9,13 +9,15 @@
 #import "Track.h"
 #import "Request.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, VoteState) {
     Upvoted = 1,
     NotVoted = 0,
     Downvoted = -1
 };
 
-NS_ASSUME_NONNULL_BEGIN
+extern NSString *const songScoreKey;
 
 @interface Song : NSObject
 

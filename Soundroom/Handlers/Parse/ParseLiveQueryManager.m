@@ -14,6 +14,12 @@
 #import "Downvote.h"
 #import "Invitation.h"
 
+NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"ParseLiveQueryManagerUpdatedPendingInvitationsNotification";
+
+NSString *const credentialsKeyParseClientKey = @"parse-client-key";
+NSString *const credentialsKeyParseAppId = @"parse-app-id";
+NSString *const credentialsKeyParseLiveServer = @"parse-live-server";
+
 @implementation ParseLiveQueryManager {
     PFQuery *_invitationLiveQuery;
     PFQuery *_requestLiveQuery;
@@ -39,9 +45,11 @@
         
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
         NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-        NSString *server = [credentials objectForKey:@"parse-live-server"];
-        NSString *appId = [credentials objectForKey:@"parse-app-id"];
-        NSString *clientKey = [credentials objectForKey:@"parse-client-key"];
+        
+        NSString *server = [credentials objectForKey:credentialsKeyParseLiveServer];
+        NSString *appId = [credentials objectForKey:credentialsKeyParseAppId];
+        NSString *clientKey = [credentials objectForKey:credentialsKeyParseClientKey];
+        
         _client = [[PFLiveQueryClient alloc] initWithServer:server applicationId:appId clientKey:clientKey];
         
     }

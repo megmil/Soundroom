@@ -8,10 +8,13 @@
 #import "Song.h"
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
+#import "ParseQueryManager.h"
 #import "SpotifySessionManager.h"
 #import "SpotifyAPIManager.h"
 #import "Upvote.h"
 #import "Downvote.h"
+
+NSString *const songScoreKey = @"score";
 
 @implementation Song
 
@@ -69,10 +72,8 @@
     }
     
     [[SpotifyAPIManager shared] getTrackWithSpotifyId:request.spotifyId completion:^(Track *track, NSError *error) {
-        
         Song *song = [[Song alloc] initWithRequestId:request.objectId spotifyId:request.spotifyId track:track];
         completion(song);
-        
     }];
     
 }

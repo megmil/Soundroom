@@ -8,14 +8,14 @@
 #import "RoomCell.h"
 #import "ParseObjectManager.h"
 
+NSString *const acceptButtonImageName = @"checkmark.circle";
+NSString *const rejectButtonImageName = @"multiply.circle";
+
 @implementation RoomCell {
-    
     UILabel *_titleLabel;
     UIImageView *_imageView;
-    
     UIButton *_acceptButton;
     UIButton *_rejectButton;
-    
 }
 
 - (void)layoutSubviews {
@@ -70,14 +70,14 @@
         _acceptButton = [UIButton new];
         _acceptButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
         _acceptButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        [_acceptButton setImage:[UIImage systemImageNamed:@"checkmark.circle"] forState:UIControlStateNormal];
+        [_acceptButton setImage:[UIImage systemImageNamed:acceptButtonImageName] forState:UIControlStateNormal];
         [_acceptButton addTarget:self action:@selector(didTapAcceptInvitation) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_acceptButton];
         
         _rejectButton = [UIButton new];
         _rejectButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
         _rejectButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        [_rejectButton setImage:[UIImage systemImageNamed:@"multiply.circle"] forState:UIControlStateNormal];
+        [_rejectButton setImage:[UIImage systemImageNamed:rejectButtonImageName] forState:UIControlStateNormal];
         [_rejectButton addTarget:self action:@selector(didTapRejectInvitation) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_rejectButton];
         

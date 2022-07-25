@@ -8,21 +8,22 @@
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 
-#define RoomClass @"Room"
-#define RequestClass @"Request"
-#define UpvoteClass @"Upvote"
-#define DownvoteClass @"Downvote"
-#define InvitationClass @"Invitation"
-
-#define objectIdKey @"objectId"
-#define userIdKey @"userId"
-#define roomIdKey @"roomId"
-#define requestIdKey @"requestId"
-#define currentSongSpotifyIdKey @"currentSongSpotifyId"
-#define isPendingKey @"isPending"
-#define usernameKey @"username"
-
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const RoomClass;
+extern NSString *const RequestClass;
+extern NSString *const UpvoteClass;
+extern NSString *const DownvoteClass;
+extern NSString *const InvitationClass;
+
+extern NSString *const objectIdKey;
+extern NSString *const userIdKey;
+extern NSString *const roomIdKey;
+extern NSString *const currentSongSpotifyIdKey;
+extern NSString *const requestIdKey;
+extern NSString *const isPendingKey;
+extern NSString *const createdAtKey;
+extern NSString *const usernameKey;
 
 @interface ParseQueryManager : NSObject
 
@@ -55,7 +56,6 @@ NS_ASSUME_NONNULL_BEGIN
 // invitation
 + (void)getInvitationWithId:(NSString *)invitationId completion:(PFObjectResultBlock)completion;
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion;
-+ (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsPendingForCurrentUserWithCompletion:(PFArrayResultBlock)completion;
 

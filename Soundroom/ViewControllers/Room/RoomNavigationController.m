@@ -35,7 +35,7 @@
 - (void)goToLobby {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        LobbyViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:@"LobbyViewController"];
+        LobbyViewController *lobbyVC = [storyboard instantiateViewControllerWithIdentifier:LobbyViewControllerIdentifier];
         [lobbyVC setModalPresentationStyle:UIModalPresentationCurrentContext];
         
         RoomViewController *roomVC = [self.viewControllers firstObject];

@@ -6,7 +6,18 @@
 //
 
 #import "SpotifySessionManager.h"
-#import "RoomManager.h"
+
+NSString *const SpotifySessionManagerAuthorizedNotificaton = @"SpotifySessionManagerAuthorizedNotificaton";
+NSString *const SpotifySessionManagerDeauthorizedNotificaton = @"SpotifySessionManagerDeauthorizedNotificaton";
+NSString *const SpotifySessionManagerRemoteConnectedNotificaton = @"SpotifySessionManagerRemoteConnectedNotificaton";
+NSString *const SpotifySessionManagerRemoteDisconnectedNotificaton = @"SpotifySessionManagerRemoteDisconnectedNotificaton";
+
+NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
+NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
+NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-refresh-url";
+NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-swap-url";
+
+// TODO: remove logs
 
 @implementation SpotifySessionManager
 
@@ -27,16 +38,19 @@
         
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
         NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-        NSString *clientId = credentials[@"spotify-client-id"];
-        NSString *redirectURLString = credentials[@"spotify-redirect-url"];
-        NSURL *redirectURL = [NSURL URLWithString:redirectURLString];
         
-        NSString *tokenSwapURLString = credentials[@"spotify-token-swap-url"];
-        NSString *tokenRefreshURLString = credentials[@"spotify-token-refresh-url"];
+        NSString *clientId = credentials[credentialsKeySpotifyClientId];
+        NSString *redirectURLString = credentials[credentialsKeySpotifyRedirectURL];
+        NSString *tokenSwapURLString = credentials[credentialsKeySpotifyTokenSwapURL];
+        NSString *tokenRefreshURLString = credentials[credentialsKeySpotifyTokenRefreshURL];
+        
+        NSURL *redirectURL = [NSURL URLWithString:redirectURLString];
+        NSURL *tokenSwapURL = [NSURL URLWithString:tokenSwapURLString];
+        NSURL *tokenRefreshURL = [NSURL URLWithString:tokenRefreshURLString];
         
         _configuration = [[SPTConfiguration alloc] initWithClientID:clientId redirectURL:redirectURL];
-        _configuration.tokenSwapURL = [NSURL URLWithString:tokenSwapURLString];
-        _configuration.tokenRefreshURL = [NSURL URLWithString:tokenRefreshURLString];
+        _configuration.tokenSwapURL = tokenSwapURL;
+        _configuration.tokenRefreshURL = tokenRefreshURL;
         _configuration.playURI = nil; // continues playing the most recent track (must be playing track to connect)
         
         _sessionManager = [[SPTSessionManager alloc] initWithConfiguration:_configuration delegate:self];

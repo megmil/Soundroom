@@ -9,6 +9,13 @@
 #import "ParseObjectManager.h"
 #import "RoomManager.h"
 
+NSString *const addImageName = @"plus";
+NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
+NSString *const upvoteEmptyImageName = @"arrowtriangle.up";
+NSString *const downvoteFilledImageName = @"arrowtriangle.down.fill";
+NSString *const downvoteEmptyImageName = @"arrowtriangle.down";
+NSString *const scoreEmptyLabel = @"0";
+
 @implementation SongCell {
     
     UILabel *_titleLabel;
@@ -62,6 +69,7 @@
         
         _addButton = [UIButton new];
         _addButton.userInteractionEnabled = YES;
+        [_addButton setImage:[UIImage systemImageNamed:addImageName] forState:UIControlStateNormal];
         [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_addButton];
         
@@ -126,7 +134,7 @@
 - (void)setScore:(NSNumber *)score {
     
     if (!score) {
-        _scoreLabel.text = @"0";
+        _scoreLabel.text = scoreEmptyLabel;
         return;
     }
     
@@ -139,38 +147,25 @@
     _voteState = voteState;
     
     if (voteState == Upvoted) {
-        [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up.fill"] forState:UIControlStateNormal];
-        [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down"] forState:UIControlStateNormal];
+        [_upvoteButton setImage:[UIImage systemImageNamed:upvoteFilledImageName] forState:UIControlStateNormal];
+        [_downvoteButton setImage:[UIImage systemImageNamed:downvoteEmptyImageName] forState:UIControlStateNormal];
     } else if (voteState == Downvoted) {
-        [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];
-        [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down.fill"] forState:UIControlStateNormal];
+        [_upvoteButton setImage:[UIImage systemImageNamed:upvoteEmptyImageName] forState:UIControlStateNormal];
+        [_downvoteButton setImage:[UIImage systemImageNamed:downvoteFilledImageName] forState:UIControlStateNormal];
     } else {
-        [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];
-        [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down"] forState:UIControlStateNormal];
+        [_upvoteButton setImage:[UIImage systemImageNamed:upvoteEmptyImageName] forState:UIControlStateNormal];
+        [_downvoteButton setImage:[UIImage systemImageNamed:downvoteEmptyImageName] forState:UIControlStateNormal];
     }
     
 }
 
 - (void)setCellType:(SongCellType)cellType {
-    
     _cellType = cellType;
-    
-    BOOL isAddCell = !(cellType == QueueCell);
-    [self setIsAddCell:isAddCell];
-    
-    if (cellType == TrackCell) {
-        [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal]; // TODO: check if already added
-    } else if (cellType == UserCell) {
-        [_addButton setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal]; // TODO: check if already added
-    }
-    
-}
-
-- (void)setIsAddCell:(BOOL)isAddCell {
-    _addButton.hidden = !isAddCell;
-    _upvoteButton.hidden = isAddCell;
-    _downvoteButton.hidden = isAddCell;
-    _scoreLabel.hidden = isAddCell;
+    BOOL isQueueCell = cellType == QueueCell;
+    _addButton.hidden = isQueueCell;
+    _upvoteButton.hidden = !isQueueCell;
+    _downvoteButton.hidden = !isQueueCell;
+    _scoreLabel.hidden = !isQueueCell;
 }
 
 @end

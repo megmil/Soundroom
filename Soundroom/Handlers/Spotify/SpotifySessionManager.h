@@ -6,14 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SpotifyiOS/SpotifyiOS.h"
-
-#define SpotifySessionManagerAuthorizedNotificaton @"SpotifySessionManagerAuthorizedNotificaton"
-#define SpotifySessionManagerDeauthorizedNotificaton @"SpotifySessionManagerDeauthorizedNotificaton"
-#define SpotifySessionManagerRemoteConnectedNotificaton @"SpotifySessionManagerRemoteConnectedNotificaton"
-#define SpotifySessionManagerRemoteDisconnectedNotificaton @"SpotifySessionManagerRemoteDisconnectedNotificaton" // TODO: remove?
+#import <SpotifyiOS/SpotifyiOS.h>
 
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const SpotifySessionManagerAuthorizedNotificaton;
+extern NSString *const SpotifySessionManagerDeauthorizedNotificaton;
+extern NSString *const SpotifySessionManagerRemoteConnectedNotificaton;
+extern NSString *const SpotifySessionManagerRemoteDisconnectedNotificaton;
 
 @interface SpotifySessionManager : NSObject <SPTSessionManagerDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate>
 

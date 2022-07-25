@@ -12,6 +12,8 @@
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 
+NSString *const SearchCellReuseIdentifier = @"SearchCell";
+
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -42,7 +44,7 @@
         self.searchTypeControl.userInteractionEnabled = YES;
     }
     
-    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:@"SearchCell"];
+    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:SearchCellReuseIdentifier];
     
     self.searchBar.delegate = self;
 }
@@ -58,7 +60,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell"];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:SearchCellReuseIdentifier];
     
     if ([self isTrackSearch]) {
         Track *track = self.tracks[indexPath.row];
@@ -71,8 +73,8 @@
     }
     
     PFUser *user = self.users[indexPath.row];
-    cell.title = [user valueForKey:@"displayName"];
-    cell.subtitle = [user valueForKey:@"username"];
+    cell.title = [user valueForKey:@"displayName"]; // TODO: implement
+    cell.subtitle = user.username;
     cell.image = [UIImage imageNamed:@"check"]; // TODO: avatar images
     cell.objectId = user.objectId;
     cell.cellType = UserCell;

@@ -91,7 +91,7 @@
     }];
     
     // delete attached downvotes
-    [ParseQueryManager getUpvotesForRequestWithId:requestId completion:^(NSArray *objects, NSError *error) {
+    [ParseQueryManager getDownvotesForRequestWithId:requestId completion:^(NSArray *objects, NSError *error) {
         [self deleteObjects:objects];
     }];
     

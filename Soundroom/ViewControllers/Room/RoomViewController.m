@@ -13,6 +13,8 @@
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 
+NSString *const QueueCellReuseIdentifier = @"QueueCell";
+
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
@@ -42,14 +44,13 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.rowHeight = 66.f;
-    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueCell"];
+    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:QueueCellReuseIdentifier];
 }
 
 - (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomViews) name:RoomManagerLeftRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:RoomManagerUpdatedQueueNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentSongViews) name:RoomManagerUpdatedCurrentSongNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:SpotifyAPIManagerFailedAccessTokenNotification object:nil];
 }
@@ -70,18 +71,12 @@
 }
 
 - (void)updateQueueViews {
-    [self updateCurrentSongViews];
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView reloadDataWithAnimation];
-    });
-}
-
-- (void)updateCurrentSongViews {
     Track *track = [[RoomManager shared] currentTrack];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         self->_currentSongTitleLabel.text = track.title;
         self->_currentSongArtistLabel.text = track.artist;
         self->_currentSongAlbumImageView.image = track.albumImage;
+        [self->_tableView reloadDataWithAnimation];
     });
 }
 
@@ -107,7 +102,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueCell"];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:QueueCellReuseIdentifier];
     Song *song = [[RoomManager shared] queue][indexPath.row];
     
     cell.objectId = song.requestId;

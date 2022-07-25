@@ -13,7 +13,9 @@
 #import "Room.h"
 #import "Invitation.h"
 #import "UITableView+AnimationControl.h"
-#import <Parse/Parse.h>
+
+NSString *const LobbyViewControllerIdentifier = @"LobbyViewController";
+NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
 
 @interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -94,7 +96,7 @@
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.rowHeight = 76.f;
-    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:@"InvitationCell"];
+    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:InvitationCellReuseIdentifier];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -102,7 +104,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RoomCell *cell = [tableView dequeueReusableCellWithIdentifier:@"InvitationCell"];
+    RoomCell *cell = [tableView dequeueReusableCellWithIdentifier:InvitationCellReuseIdentifier];
     Invitation *invitation = _invitations[indexPath.row];
     Room *room = _rooms[indexPath.row];
     cell.title = room.title;

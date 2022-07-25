@@ -9,9 +9,9 @@
 #import <Parse/Parse.h>
 @import ParseLiveQuery;
 
-#define ParseLiveQueryManagerUpdatedPendingInvitationsNotification @"ParseLiveQueryManagerUpdatedPendingInvitationsNotification"
-
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification;
 
 @interface ParseLiveQueryManager : NSObject
 

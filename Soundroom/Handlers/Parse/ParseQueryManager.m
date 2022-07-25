@@ -10,7 +10,22 @@
 #import "RoomManager.h"
 #import "Room.h"
 #import "Invitation.h"
-#import "Request.h" // TODO: move logic that requires Request import?
+#import "Request.h"
+
+NSString *const RoomClass = @"Room";
+NSString *const RequestClass = @"Request";
+NSString *const UpvoteClass = @"Upvote";
+NSString *const DownvoteClass = @"Downvote";
+NSString *const InvitationClass = @"Invitation";
+
+NSString *const objectIdKey = @"objectId";
+NSString *const userIdKey = @"userId";
+NSString *const roomIdKey = @"roomId";
+NSString *const currentSongSpotifyIdKey = @"currentSongSpotifyId";
+NSString *const requestIdKey = @"requestId";
+NSString *const isPendingKey = @"isPending";
+NSString *const createdAtKey = @"createdAt";
+NSString *const usernameKey = @"username";
 
 @implementation ParseQueryManager
 
@@ -96,7 +111,7 @@
 
 + (void)getRequestsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
     PFQuery *query = [self queryForRequestsInCurrentRoom];
-    [query orderByAscending:@"createdAt"];
+    [query orderByAscending:createdAtKey];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 

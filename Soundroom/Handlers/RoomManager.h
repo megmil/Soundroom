@@ -11,12 +11,11 @@
 #import "Upvote.h"
 #import "Downvote.h"
 
-#define RoomManagerJoinedRoomNotification @"CurrentRoomManagerJoinedRoomNotification"
-#define RoomManagerLeftRoomNotification @"CurrentRoomManagerLeftRoomNotification"
-#define RoomManagerUpdatedQueueNotification @"RoomManagerUpdatedQueueNotification"
-#define RoomManagerUpdatedCurrentSongNotification @"RoomManagerUpdatedCurrentSongNotification"
-
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const RoomManagerJoinedRoomNotification;
+extern NSString *const RoomManagerLeftRoomNotification;
+extern NSString *const RoomManagerUpdatedQueueNotification;
 
 @interface RoomManager : NSObject
 
