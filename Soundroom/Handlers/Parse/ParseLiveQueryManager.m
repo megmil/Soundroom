@@ -84,11 +84,11 @@
         return;
     }
     
-    _roomLiveQuery = [ParseQueryManager queryForRequestsInCurrentRoom];
+    _roomLiveQuery = [ParseQueryManager queryForCurrentRoom];
     _roomSubscription = [_client subscribeToQuery:_roomLiveQuery];
     
     // room is updated: new current song
-    _roomSubscription = [_roomSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    _roomSubscription = [_roomSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Room *room = (Room *)object;
         [[RoomManager shared] setCurrentTrackWithSpotifyId:room.currentSongSpotifyId];
     }];

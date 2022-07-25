@@ -63,13 +63,19 @@
 }
 
 - (void)removeRequestWithId:(NSString *)requestId {
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
+    NSUInteger index = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
+    if (index == NSNotFound) {
+        return;
+    }
     [_queue removeObjectAtIndex:index];
     [self postUpdatedQueueNotification];
 }
 
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
+    NSUInteger index = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
+    if (index == NSNotFound) {
+        return;
+    }
     Song *song = [_queue objectAtIndex:index];
     song.score = @(song.score.integerValue + amount.integerValue);
     [_queue removeObjectAtIndex:index];
@@ -104,20 +110,9 @@
     
 }
 
-- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
-    
-    // update vote state
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
-    Song *song = [_queue objectAtIndex:index];
-    song.voteState = voteState;
-    [_queue replaceObjectAtIndex:index withObject:song];
-    
-    // create/delete upvote/downvote
-    [ParseObjectManager updateCurrentUserVoteForRequestWithId:requestId voteState:voteState]; // will send updated queue notification
-    
-}
-
 - (void)reloadTrackData {
+    
+    __block NSUInteger remainingTracks = _queue.count;
     
     for (Song *song in _queue) {
         
@@ -129,7 +124,7 @@
             
             song.track = track;
             
-            if (song == [self->_queue lastObject]) {
+            if (--remainingTracks == 0) {
                 [self postUpdatedQueueNotification];
             }
             
@@ -139,13 +134,25 @@
     
 }
 
+- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
+    
+    // update vote state
+    NSUInteger index = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
+    Song *song = [_queue objectAtIndex:index];
+    song.voteState = voteState;
+    
+    // create/delete upvote/downvote
+    [ParseObjectManager updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
+    
+}
+
 - (void)playTopSong {
     
     if (_queue.count) {
         
         // get and remove first song from queue
         Song *topSong = _queue.firstObject;
-        [_queue removeObject:topSong];
+        [ParseObjectManager deleteRequestWithId:topSong.requestId];
         
         // save current song to room
         [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
@@ -166,8 +173,7 @@
     [[ParseLiveQueryManager shared] configureRoomLiveSubscriptions];
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
     
-    // TODO: set current track info
-    
+    [self loadCurrentTrack];
     [self loadLocalQueueDataWithCompletion:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self postUpdatedQueueNotification];
@@ -221,6 +227,7 @@
             [Song loadVotesForQueue:songs completion:^(NSMutableArray<Song *> *result) {
                 
                 if (!result || !result.count) {
+                    self->_queue = result;
                     completion(YES, nil);
                     return;
                 }
@@ -259,6 +266,29 @@
     [_queue sortUsingDescriptors:@[sortDescriptor]];
 }
 
+- (void)postUpdatedQueueNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerUpdatedQueueNotification object:self];
+}
+
+# pragma mark - Playback Helpers
+
+- (void)loadCurrentTrack {
+    if (_room.currentSongSpotifyId) {
+        [[SpotifyAPIManager shared] getTrackWithSpotifyId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
+            self.currentTrack = track;
+        }];
+    }
+}
+
+- (void)setCurrentTrack:(Track *)currentTrack {
+    _currentTrack = currentTrack;
+    if ([self isCurrentUserHost]) {
+        [[SpotifySessionManager shared] playSongWithSpotifyURI:currentTrack.spotifyURI];
+    }
+    [self postUpdatedQueueNotification];
+}
+
+
 # pragma mark - Room Data
 
 - (NSString *)currentRoomId {
@@ -269,37 +299,16 @@
     return _room.title;
 }
 
-- (NSString *)currentHostId {
-    return _room.hostId;
-}
-
 - (NSMutableArray<Song *> *)queue {
     return _queue;
 }
 
 - (BOOL)isCurrentUserHost {
-    
     NSString *currentUserId = [ParseUserManager currentUserId];
-    
-    if (self.currentHostId && currentUserId) {
-        return [self.currentHostId isEqualToString:currentUserId];
+    if (_room.hostId && currentUserId) {
+        return [_room.hostId isEqualToString:currentUserId];
     }
-    
     return NO;
-    
-}
-
-- (void)setCurrentTrack:(Track *)currentTrack {
-    _currentTrack = currentTrack;
-    if ([self isCurrentUserHost]) {
-        [[SpotifySessionManager shared] playSongWithSpotifyURI:currentTrack.spotifyURI];
-    }
-}
-
-# pragma mark - Helpers
-
-- (void)postUpdatedQueueNotification {
-    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerUpdatedQueueNotification object:self];
 }
 
 @end

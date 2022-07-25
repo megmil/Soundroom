@@ -36,7 +36,7 @@
 + (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSMutableArray <Song *> *songs))completion {
     
     __block NSMutableArray <Song *> *result = [NSMutableArray arrayWithCapacity:requests.count];
-    __block NSUInteger counter = 0; // counter to completion (prevents loop from getting stuck if songWithRequest completion is nil)
+    __block NSUInteger remainingRequests = requests.count;
     
     if (!requests || !requests.count) {
         completion(result);
@@ -51,7 +51,7 @@
                 [result addObject:song];
             }
             
-            if (++counter == requests.count) {
+            if (--remainingRequests == 0) {
                 completion(result);
             }
             
@@ -94,16 +94,18 @@
             for (NSUInteger i = 0; i != upvotes.count; i++) {
                 
                 Upvote *upvote = upvotes[i];
-                
-                NSUInteger index = [[queue valueForKey:@"requestId"] indexOfObject:upvote.requestId];
-                Song *song = result[index];
-                result[index].score = @(song.score.integerValue + 1);
-                
-                if ([upvote.userId isEqualToString:[ParseUserManager currentUserId]]) {
-                    song.voteState = Upvoted;
+                NSUInteger index = [[queue valueForKey:requestIdKey] indexOfObject:upvote.requestId];
+
+                if (index != NSNotFound) {
+                    
+                    Song *song = result[index];
+                    result[index].score = @(song.score.integerValue + 1);
+                    if ([upvote.userId isEqualToString:[ParseUserManager currentUserId]]) {
+                        song.voteState = Upvoted;
+                    }
+                    // TODO: [result replaceObjectAtIndex:index withObject:song];
+                    
                 }
-                
-                [result replaceObjectAtIndex:index withObject:song];
                 
                 if (--remainingVotes == 0) {
                     completion(result);
@@ -114,16 +116,18 @@
             for (NSUInteger i = 0; i != downvotes.count; i++) {
                 
                 Downvote *downvote = downvotes[i];
+                NSUInteger index = [[queue valueForKey:requestIdKey] indexOfObject:downvote.requestId];
                 
-                NSUInteger index = [[queue valueForKey:@"requestId"] indexOfObject:downvote.requestId];
-                Song *song = result[index];
-                song.score = @(song.score.integerValue - 1);
-                
-                if ([downvote.userId isEqualToString:[ParseUserManager currentUserId]]) {
-                    song.voteState = Downvoted;
+                if (index != NSNotFound) {
+                    
+                    Song *song = result[index];
+                    song.score = @(song.score.integerValue - 1);
+                    if ([downvote.userId isEqualToString:[ParseUserManager currentUserId]]) {
+                        song.voteState = Downvoted;
+                    }
+                    // TODO: [result replaceObjectAtIndex:index withObject:song];
+                    
                 }
-                
-                [result replaceObjectAtIndex:index withObject:song];
                 
                 if (--remainingVotes == 0) {
                     completion(result);

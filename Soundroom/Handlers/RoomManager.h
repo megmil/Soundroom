@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic, readonly) NSString *currentRoomId;
 @property (strong, nonatomic, readonly) NSString *currentRoomName;
-@property (strong, nonatomic, readonly) NSString *currentHostId; // TODO: not called outside of .m
 @property (strong, nonatomic, readonly) NSMutableArray <Song *> *queue;
 @property (strong, nonatomic) Track *currentTrack;
 @property (nonatomic, readonly) BOOL isCurrentUserHost;

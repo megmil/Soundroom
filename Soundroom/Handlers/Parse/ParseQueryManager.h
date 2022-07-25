@@ -14,6 +14,7 @@
 #define DownvoteClass @"Downvote"
 #define InvitationClass @"Invitation"
 
+#define objectIdKey @"objectId"
 #define userIdKey @"userId"
 #define roomIdKey @"roomId"
 #define requestIdKey @"requestId"

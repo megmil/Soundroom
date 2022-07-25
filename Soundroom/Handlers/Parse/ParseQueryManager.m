@@ -42,7 +42,7 @@
 
 + (PFQuery *)queryForCurrentRoom {
     PFQuery *query = [PFQuery queryWithClassName:RoomClass];
-    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    [query whereKey:objectIdKey equalTo:[[RoomManager shared] currentRoomId]];
     return query;
 }
 
