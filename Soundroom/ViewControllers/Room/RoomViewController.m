@@ -141,8 +141,8 @@
 
 - (void)failedSpotifyAuthenticationAlert {
     
-    NSString *title = @"Failed to authorize";
-    NSString *message = @"Could not connect to Spotify in time to load queue data.";
+    NSString *title = @"Failed to authenticate";
+    NSString *message = @"Could not connect to Spotify in time to load queue data. Retry now or check status in your Profile.";
     
     UIAlertController *alert = [UIAlertController
                                 alertControllerWithTitle:title
