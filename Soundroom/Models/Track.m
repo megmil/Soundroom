@@ -9,7 +9,7 @@
 
 @implementation Track
 
-+ (NSMutableArray *)songsWithJSONResponse:(NSDictionary *)response {
++ (NSMutableArray *)tracksWithJSONResponse:(NSDictionary *)response {
     NSDictionary *songsJSONResponses = response[@"tracks"][@"items"];
     NSMutableArray *songs = [NSMutableArray array];
     for (NSDictionary *songJSONResponse in songsJSONResponses) {
@@ -19,7 +19,7 @@
     return songs;
 }
 
-+ (Track *)songWithJSONResponse:(NSDictionary *)response {
++ (Track *)trackWithJSONResponse:(NSDictionary *)response {
     Track *song = [[Track alloc] initWithJSONResponse:response];
     return song;
 }

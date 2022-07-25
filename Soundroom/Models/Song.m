@@ -68,7 +68,7 @@
         return;
     }
     
-    [[SpotifyAPIManager shared] getSongWithSpotifyId:request.spotifyId completion:^(Track *track, NSError *error) {
+    [[SpotifyAPIManager shared] getTrackWithSpotifyId:request.spotifyId completion:^(Track *track, NSError *error) {
         
         Song *song = [[Song alloc] initWithRequestId:request.objectId spotifyId:request.spotifyId track:track];
         completion(song);
@@ -139,14 +139,14 @@
 
 - (void)songWithRequestId:(NSString *)requestId completion:(void (^)(Song *song))completion {
     
-    [ParseQueryManager getSpotifyIdForSongWithId:requestId completion:^(NSString *spotifyId, NSError *error) {
+    [ParseQueryManager getSpotifyIdForRequestWithId:requestId completion:^(NSString *spotifyId, NSError *error) {
         
         if (!spotifyId) {
             completion(nil);
             return;
         }
         
-        [[SpotifyAPIManager shared] getSongWithSpotifyId:spotifyId completion:^(Track *track, NSError *error) {
+        [[SpotifyAPIManager shared] getTrackWithSpotifyId:spotifyId completion:^(Track *track, NSError *error) {
             
             if (!track) {
                 completion(nil);

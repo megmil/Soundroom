@@ -112,7 +112,7 @@
 }
 
 - (void)searchSongsWithQuery:(NSString *)query {
-    [[SpotifyAPIManager shared] getSongsWithQuery:query completion:^(NSArray *songs, NSError *error) {
+    [[SpotifyAPIManager shared] getTracksWithQuery:query completion:^(NSArray *songs, NSError *error) {
         if (songs) {
             self->_songs = (NSMutableArray<Track *> *)songs;
             [self->_tableView reloadDataWithAnimation];

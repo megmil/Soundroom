@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // live queries
 + (PFQuery *)queryForInvitationsForCurrentUser;
-+ (PFQuery *)queryForSongsInCurrentRoom;
++ (PFQuery *)queryForRequestsInCurrentRoom;
 + (PFQuery *)queryForUpvotesInCurrentRoom;
 + (PFQuery *)queryForDownvotesInCurrentRoom;
 
@@ -38,9 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
 + (void)getRoomsForInvitations:(NSArray *)invitations completion:(PFArrayResultBlock)completion;
 
-// song
-+ (void)getSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion;
-+ (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
+// request
++ (void)getRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
++ (void)getRequestsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 
 // upvote/downvote
 + (void)getUpvotesInCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getInvitationsForCurrentUserWithCompletion:(PFArrayResultBlock)completion;
 
 // key values
-+ (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion;
++ (void)getSpotifyIdForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion;
 + (void)didCurrentUserAcceptRoomInvitationWithCompletion:(PFBooleanResultBlock)completion;
 + (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;
 

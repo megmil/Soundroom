@@ -82,7 +82,7 @@
 
 - (void)loadLocalQueueDataWithCompletion:(PFBooleanResultBlock)completion {
     
-    [ParseQueryManager getSongsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
+    [ParseQueryManager getRequestsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         
         if (!objects || !objects.count) {
             completion(YES, error);
@@ -146,21 +146,21 @@
 }
 
 - (void)clearAllRoomData {
-    // delete room and attached songs, invitations, and votes
+    // delete room and attached requests, invitations, and votes
     [ParseObjectManager deleteCurrentRoomAndAttachedObjects]; // TODO: completion to make sure we don't load room that should be deleted?
     [self clearLocalRoomData];
 }
 
 # pragma mark - Request
 
-- (void)insertSongWithRequest:(Request *)request {
+- (void)insertRequest:(Request *)request {
     [Song songWithRequest:request completion:^(Song *song) {
         [self insertSong:song];
         [self postUpdatedQueueNotification];
     }];
 }
 
-- (void)removeSongWithRequestId:(NSString *)requestId {
+- (void)removeRequestWithId:(NSString *)requestId {
     NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
     [_queue removeObjectAtIndex:index];
     [self postUpdatedQueueNotification];
@@ -222,7 +222,7 @@
             return;
         }
         
-        [[SpotifyAPIManager shared] getSongWithSpotifyId:song.spotifyId completion:^(Track *track, NSError *error) {
+        [[SpotifyAPIManager shared] getTrackWithSpotifyId:song.spotifyId completion:^(Track *track, NSError *error) {
             
             song.track = track;
             

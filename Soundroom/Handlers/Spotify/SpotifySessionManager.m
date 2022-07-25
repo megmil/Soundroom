@@ -36,7 +36,7 @@
         _configuration = [[SPTConfiguration alloc] initWithClientID:clientId redirectURL:redirectURL];
         _configuration.tokenSwapURL = [NSURL URLWithString:tokenSwapURLString];
         _configuration.tokenRefreshURL = [NSURL URLWithString:tokenRefreshURLString];
-        _configuration.playURI = nil; // continues playing the most recent song (must be playing song to connect)
+        _configuration.playURI = nil; // continues playing the most recent track (must be playing track to connect)
         
         _sessionManager = [[SPTSessionManager alloc] initWithConfiguration:_configuration delegate:self];
         

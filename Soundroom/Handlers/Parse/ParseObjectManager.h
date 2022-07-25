@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ParseObjectManager : NSObject
 
 + (void)createRoomWithTitle:(NSString *)title;
-+ (void)createSongRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId;
++ (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId;
 + (void)createInvitationToCurrentRoomForUserWithId:(NSString *)userId;
 
 + (void)updateCurrentRoomWithCurrentSongId:(NSString *)currentSongId;

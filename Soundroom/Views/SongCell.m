@@ -89,7 +89,7 @@
 - (void)didTapAdd {
     
     if (_cellType == AddSongCell) {
-        [ParseObjectManager createSongRequestInCurrentRoomWithSpotifyId:_objectId];
+        [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:_objectId];
         return;
     }
     

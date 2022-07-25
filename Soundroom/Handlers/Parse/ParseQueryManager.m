@@ -10,7 +10,7 @@
 #import "RoomManager.h"
 #import "Room.h"
 #import "Invitation.h"
-#import "Request.h" // TODO: move logic that requires QueueSong import?
+#import "Request.h" // TODO: move logic that requires Request import?
 
 @implementation ParseQueryManager
 
@@ -22,7 +22,7 @@
     return query;
 }
 
-+ (PFQuery *)queryForSongsInCurrentRoom {
++ (PFQuery *)queryForRequestsInCurrentRoom {
     PFQuery *query = [PFQuery queryWithClassName:RequestClass];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
     return query;
@@ -84,22 +84,22 @@
 
 # pragma mark - Request
 
-+ (void)getSongWithId:(NSString *)songId completion:(PFObjectResultBlock)completion {
++ (void)getRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion {
     PFQuery *query = [PFQuery queryWithClassName:RequestClass];
-    [query getObjectInBackgroundWithId:songId block:completion];
+    [query getObjectInBackgroundWithId:requestId block:completion];
 }
 
-+ (void)getSongsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [self queryForSongsInCurrentRoom];
++ (void)getRequestsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
+    PFQuery *query = [self queryForRequestsInCurrentRoom];
     [query orderByAscending:@"createdAt"];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
-+ (void)getSpotifyIdForSongWithId:(NSString *)songId completion:(PFStringResultBlock)completion {
-    [self getSongWithId:songId completion:^(PFObject *object, NSError *error) {
++ (void)getSpotifyIdForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion {
+    [self getRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
         if (object) {
-            Request *song = (Request *)object;
-            completion(song.spotifyId, error);
+            Request *request = (Request *)object;
+            completion(request.spotifyId, error);
         } else {
             completion(nil, error);
         }

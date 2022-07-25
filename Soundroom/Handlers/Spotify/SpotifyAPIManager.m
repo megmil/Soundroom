@@ -30,23 +30,23 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 # pragma mark - Server
 
-- (void)getSongsWithParameters:(NSDictionary *)parameters
-                    completion:(void(^)(NSArray *songs, NSError *error))completion {
+- (void)getTracksWithParameters:(NSDictionary *)parameters
+                     completion:(void(^)(NSArray *tracks, NSError *error))completion {
     [self GET:@"v1/search?" parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSMutableArray *songs = [Track songsWithJSONResponse:responseObject];
-        completion(songs, nil);
+        NSMutableArray *tracks = [Track tracksWithJSONResponse:responseObject];
+        completion(tracks, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
     }];
 }
 
-- (void)getSongWithSpotifyId:(NSString *)spotifyId parameters:(NSDictionary *)parameters completion:(void(^)(Track *song, NSError *error))completion {
+- (void)getTrackWithSpotifyId:(NSString *)spotifyId parameters:(NSDictionary *)parameters completion:(void(^)(Track *track, NSError *error))completion {
     
     NSString *urlString = [NSString stringWithFormat:@"v1/tracks/%@", spotifyId];
     
     [self GET:urlString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        Track *song = [Track songWithJSONResponse:responseObject];
-        completion(song, nil);
+        Track *track = [Track trackWithJSONResponse:responseObject];
+        completion(track, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
     }];
@@ -54,22 +54,22 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 # pragma mark - Public
 
-- (void)getSongsWithQuery:(NSString *)query completion:(void(^)(NSArray *songs, NSError *error))completion {
+- (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion {
     NSString *accessToken = [[SpotifySessionManager shared] accessToken]; // nil if current session is nil
     if (accessToken) {
         NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
-        [self getSongsWithParameters:parameters completion:completion];
+        [self getTracksWithParameters:parameters completion:completion];
     }  else {
         [self postFailedAuthorizationNotification];
         completion(nil, nil);
     }
 }
 
-- (void)getSongWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Track *song, NSError *error))completion {
+- (void)getTrackWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Track *track, NSError *error))completion {
     NSString *accessToken = [[SpotifySessionManager shared] accessToken]; // nil if current session is nil
     if (accessToken) {
         NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
-        [self getSongWithSpotifyId:spotifyId parameters:parameters completion:completion];
+        [self getTrackWithSpotifyId:spotifyId parameters:parameters completion:completion];
     } else {
         [self postFailedAuthorizationNotification];
         completion(nil, nil);

@@ -65,15 +65,15 @@
 
 # pragma mark - Request
 
-+ (void)createSongRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId {
++ (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId {
     
     NSString *currentRoomId = [[RoomManager shared] currentRoomId];
     
     if (currentRoomId) {
-        Request *newSong = [Request new];
-        newSong.spotifyId = spotifyId;
-        newSong.roomId = currentRoomId;
-        [newSong saveInBackground];
+        Request *newRequest = [Request new];
+        newRequest.spotifyId = spotifyId;
+        newRequest.roomId = currentRoomId;
+        [newRequest saveInBackground];
     }
     
 }
@@ -81,7 +81,7 @@
 + (void)deleteRequestWithId:(NSString *)requestId {
     
     // delete request
-    [ParseQueryManager getSongWithId:requestId completion:^(PFObject *object, NSError *error) {
+    [ParseQueryManager getRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
         [object deleteInBackground];
     }];
     

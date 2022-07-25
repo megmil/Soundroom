@@ -15,7 +15,7 @@
 
 @implementation ParseLiveQueryManager {
     PFQuery *_invitationLiveQuery;
-    PFQuery *_songLiveQuery;
+    PFQuery *_requestLiveQuery;
     PFQuery *_upvoteLiveQuery;
     PFQuery *_downvoteLiveQuery;
 }
@@ -51,7 +51,7 @@
 # pragma mark - Public
 
 - (void)configureRoomLiveSubscriptions {
-    [self configureSongSubscription];
+    [self configureRequestSubscription];
     [self configureUpvoteSubscription];
     [self configureDownvoteSubscription];
 }
@@ -61,7 +61,7 @@
 }
 
 - (void)clearRoomLiveSubscriptions {
-    [_client unsubscribeFromQuery:_songLiveQuery];
+    [_client unsubscribeFromQuery:_requestLiveQuery];
     [_client unsubscribeFromQuery:_upvoteLiveQuery];
     [_client unsubscribeFromQuery:_downvoteLiveQuery];
 }
@@ -118,10 +118,10 @@
 
 # pragma mark - Requests
 
-- (void)configureSongSubscription {
+- (void)configureRequestSubscription {
     
-    if (_songLiveQuery) {
-        [_client unsubscribeFromQuery:_songLiveQuery];
+    if (_requestLiveQuery) {
+        [_client unsubscribeFromQuery:_requestLiveQuery];
     }
     
     // check for valid roomId
@@ -130,19 +130,19 @@
         return;
     }
     
-    _songLiveQuery = [ParseQueryManager queryForSongsInCurrentRoom];
-    _songSubscription = [_client subscribeToQuery:_songLiveQuery];
+    _requestLiveQuery = [ParseQueryManager queryForRequestsInCurrentRoom];
+    _requestSubscription = [_client subscribeToQuery:_requestLiveQuery];
     
-    // new song request is created
-    _songSubscription = [_songSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    // new request is created
+    _requestSubscription = [_requestSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Request *request = (Request *)object;
-        [[RoomManager shared] insertSongWithRequest:request];
+        [[RoomManager shared] insertRequest:request];
     }];
     
-    // song request is removed
-    _songSubscription = [_songSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+    // request is removed
+    _requestSubscription = [_requestSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Request *request = (Request *)object;
-        [[RoomManager shared] removeSongWithRequestId:request.objectId];
+        [[RoomManager shared] removeRequestWithId:request.objectId];
     }];
     
 }

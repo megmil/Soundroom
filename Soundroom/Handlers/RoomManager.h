@@ -35,8 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)joinRoomWithId:(NSString *)currentRoomId;
 - (void)clearRoomData;
 
-- (void)insertSongWithRequest:(Request *)request;
-- (void)removeSongWithRequestId:(NSString *)requestId;
+- (void)insertRequest:(Request *)request;
+- (void)removeRequestWithId:(NSString *)requestId;
 
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount;
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
