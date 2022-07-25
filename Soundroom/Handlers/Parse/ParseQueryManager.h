@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (PFQuery *)queryForRequestsInCurrentRoom;
 + (PFQuery *)queryForUpvotesInCurrentRoom;
 + (PFQuery *)queryForDownvotesInCurrentRoom;
++ (PFQuery *)queryForCurrentRoom;
 
 // user
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion;

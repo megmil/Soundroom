@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) PFLiveQuerySubscription *requestSubscription;
 @property (strong, nonatomic) PFLiveQuerySubscription *upvoteSubscription;
 @property (strong, nonatomic) PFLiveQuerySubscription *downvoteSubscription;
+@property (strong, nonatomic) PFLiveQuerySubscription *roomSubscription;
 
 - (void)configureUserLiveSubscriptions;
 - (void)configureRoomLiveSubscriptions;

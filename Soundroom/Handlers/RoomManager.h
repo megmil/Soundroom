@@ -20,11 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RoomManager : NSObject
 
+@property (strong, nonatomic) NSString *currentSongSpotifyId;
+
 // room data
 - (NSString *)currentRoomId;
 - (NSString *)currentRoomName;
 - (NSString *)currentHostId;
-- (NSString *)currentSongSpotifyId;
 - (NSMutableArray <Song *> *)queue;
 - (BOOL)isInRoom;
 - (BOOL)isCurrentUserHost;
@@ -42,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 
 - (void)reloadTrackData;
-- (void)updateTopSong;
+- (void)playTopSong;
 
 @end
 

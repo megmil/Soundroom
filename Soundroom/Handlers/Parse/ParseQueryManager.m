@@ -40,6 +40,12 @@
     return query;
 }
 
++ (PFQuery *)queryForCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:RoomClass];
+    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    return query;
+}
+
 # pragma mark - User
 
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion {

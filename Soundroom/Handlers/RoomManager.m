@@ -234,7 +234,7 @@
     
 }
 
-- (void)updateTopSong {
+- (void)playTopSong {
     
     if (_queue.count) {
         
@@ -246,6 +246,7 @@
         [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
         
     }
+    
 }
 
 # pragma mark - Room Data
@@ -283,6 +284,12 @@
     }
     
     return NO;
+    
+}
+
+- (void)setCurrentSongSpotifyId:(NSString *)currentSongSpotifyId {
+    
+    // TODO: set id
     
 }
 

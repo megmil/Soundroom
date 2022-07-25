@@ -8,6 +8,7 @@
 #import "ParseLiveQueryManager.h"
 #import "ParseQueryManager.h"
 #import "RoomManager.h"
+#import "Room.h"
 #import "Request.h"
 #import "Upvote.h"
 #import "Downvote.h"
@@ -18,6 +19,7 @@
     PFQuery *_requestLiveQuery;
     PFQuery *_upvoteLiveQuery;
     PFQuery *_downvoteLiveQuery;
+    PFQuery *_roomLiveQuery;
 }
 
 + (instancetype)shared {
@@ -54,6 +56,7 @@
     [self configureRequestSubscription];
     [self configureUpvoteSubscription];
     [self configureDownvoteSubscription];
+    [self configureRoomSubscription];
 }
 
 - (void)clearUserLiveSubscriptions {
@@ -64,6 +67,32 @@
     [_client unsubscribeFromQuery:_requestLiveQuery];
     [_client unsubscribeFromQuery:_upvoteLiveQuery];
     [_client unsubscribeFromQuery:_downvoteLiveQuery];
+    [_client unsubscribeFromQuery:_roomLiveQuery];
+}
+
+# pragma mark - Room
+
+- (void)configureRoomSubscription {
+    
+    if (_roomLiveQuery) {
+        [_client unsubscribeFromQuery:_roomLiveQuery];
+    }
+    
+    // check for valid roomId
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    if (!roomId) {
+        return;
+    }
+    
+    _roomLiveQuery = [ParseQueryManager queryForRequestsInCurrentRoom];
+    _roomSubscription = [_client subscribeToQuery:_roomLiveQuery];
+    
+    // room is updated: new current song
+    _roomSubscription = [_roomSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Room *room = (Room *)object;
+        [[RoomManager shared] setCurrentSongSpotifyId:room.currentSongSpotifyId];
+    }];
+
 }
 
 # pragma mark - Invitations
