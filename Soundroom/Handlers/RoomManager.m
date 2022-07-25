@@ -11,6 +11,7 @@
 #import "ParseQueryManager.h"
 #import "ParseLiveQueryManager.h"
 #import "SpotifyAPIManager.h"
+#import "SpotifySessionManager.h"
 #import "Room.h"
 #import "Invitation.h"
 
@@ -28,7 +29,63 @@
     return shared;
 }
 
-# pragma mark - Join
+# pragma mark - Public: Live Query
+
+- (void)joinRoomWithId:(NSString *)roomId {
+    
+    if (self.currentRoomId == roomId) {
+        return;
+    }
+    
+    [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
+        Room *room = (Room *)object;
+        [self joinRoom:room];
+    }];
+    
+}
+
+- (void)clearRoomData {
+    
+    if ([self isCurrentUserHost]) {
+        [self clearAllRoomData];
+        return;
+    }
+    
+    [self clearLocalRoomData];
+    
+}
+
+- (void)insertRequest:(Request *)request {
+    [Song songWithRequest:request completion:^(Song *song) {
+        [self insertSong:song];
+        [self postUpdatedQueueNotification];
+    }];
+}
+
+- (void)removeRequestWithId:(NSString *)requestId {
+    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
+    [_queue removeObjectAtIndex:index];
+    [self postUpdatedQueueNotification];
+}
+
+- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
+    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
+    Song *song = [_queue objectAtIndex:index];
+    song.score = @(song.score.integerValue + amount.integerValue);
+    [_queue removeObjectAtIndex:index];
+    [self insertSong:song];
+    [self postUpdatedQueueNotification];
+}
+
+- (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId {
+    [[SpotifyAPIManager shared] getTrackWithSpotifyId:spotifyId completion:^(Track *track, NSError *error) {
+        if (track) {
+            self.currentTrack = track;
+        }
+    }];
+}
+
+# pragma mark - Public: Room Tab
 
 - (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion {
     
@@ -47,156 +104,6 @@
     
 }
 
-- (void)joinRoomWithId:(NSString *)roomId {
-    
-    if (self.currentRoomId == roomId) {
-        return;
-    }
-    
-    [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
-        Room *room = (Room *)object;
-        [self joinRoom:room];
-    }];
-    
-}
-
-- (void)joinRoom:(Room *)room {
-    
-    if (_room == room || !room) {
-        return;
-    }
-    
-    _room = room;
-    [[ParseLiveQueryManager shared] configureRoomLiveSubscriptions];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
-    
-    [self loadLocalQueueDataWithCompletion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            [self postUpdatedQueueNotification];
-        }
-    }];
-    
-}
-
-- (void)loadLocalQueueDataWithCompletion:(PFBooleanResultBlock)completion {
-    
-    [ParseQueryManager getRequestsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
-        
-        if (!objects || !objects.count) {
-            completion(YES, error);
-            return;
-        }
-        
-        [Song songsWithRequests:objects completion:^(NSMutableArray<Song *> *songs) {
-            
-            if (!songs || !songs.count) {
-                self->_queue = [NSMutableArray<Song *> array];
-                completion(YES, nil);
-                return;
-            }
-            
-            [Song loadVotesForQueue:songs completion:^(NSMutableArray<Song *> *result) {
-                
-                if (!result || !result.count) {
-                    completion(YES, nil);
-                    return;
-                }
-                
-                self->_queue = result;
-                [self sortQueue];
-                completion(YES, nil);
-                
-            }];
-            
-        }];
-        
-    }];
-    
-}
-
-# pragma mark - Leave
-
-- (void)clearRoomData {
-    
-    if ([self isCurrentUserHost]) {
-        [self clearAllRoomData];
-        return;
-    }
-    
-    [self clearLocalRoomData];
-    
-}
-
-- (void)clearLocalRoomData {
-    
-    if (_room == nil) {
-        return;
-    }
-    
-    // clear local room data
-    _room = nil;
-    _queue = [NSMutableArray <Song *> array];
-    
-    [[ParseLiveQueryManager shared] clearRoomLiveSubscriptions];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
-    
-}
-
-- (void)clearAllRoomData {
-    // delete room and attached requests, invitations, and votes
-    [ParseObjectManager deleteCurrentRoomAndAttachedObjects]; // TODO: completion to make sure we don't load room that should be deleted?
-    [self clearLocalRoomData];
-}
-
-# pragma mark - Request
-
-- (void)insertRequest:(Request *)request {
-    [Song songWithRequest:request completion:^(Song *song) {
-        [self insertSong:song];
-        [self postUpdatedQueueNotification];
-    }];
-}
-
-- (void)removeRequestWithId:(NSString *)requestId {
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
-    [_queue removeObjectAtIndex:index];
-    [self postUpdatedQueueNotification];
-}
-
-- (void)insertSong:(Song *)song {
-    
-    // get index at the earliest obj in the queue where song.score > obj.score
-    NSUInteger index = [self->_queue indexOfObjectPassingTest:^BOOL(Song *obj, NSUInteger idx, BOOL *stop) {
-        return [obj.score compare:song.score] == NSOrderedAscending;
-    }];
-    
-    // edge cases: empty arrays or score is not greater than any item in scores array
-    if (index == NSNotFound) {
-        [self->_queue addObject:song];
-        return;
-    }
-    
-    [self->_queue insertObject:song atIndex:index];
-    
-}
-
-- (void)sortQueue {
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"score" ascending:NO];
-    [_queue sortUsingDescriptors:@[sortDescriptor]];
-}
-
-# pragma mark - Votes
-
-- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
-    NSUInteger index = [[_queue valueForKey:@"requestId"] indexOfObject:requestId];
-    Song *song = [_queue objectAtIndex:index];
-    song.score = @(song.score.integerValue + amount.integerValue);
-    [_queue removeObjectAtIndex:index];
-    [self insertSong:song];
-    [self postUpdatedQueueNotification];
-}
-
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
     
     // update vote state
@@ -209,8 +116,6 @@
     [ParseObjectManager updateCurrentUserVoteForRequestWithId:requestId voteState:voteState]; // will send updated queue notification
     
 }
-
-# pragma mark - Spotify
 
 - (void)reloadTrackData {
     
@@ -249,6 +154,111 @@
     
 }
 
+# pragma mark - Room Helpers
+
+- (void)joinRoom:(Room *)room {
+    
+    if (_room == room || !room) {
+        return;
+    }
+    
+    _room = room;
+    [[ParseLiveQueryManager shared] configureRoomLiveSubscriptions];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
+    
+    // TODO: set current track info
+    
+    [self loadLocalQueueDataWithCompletion:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self postUpdatedQueueNotification];
+        }
+    }];
+    
+}
+
+- (void)clearLocalRoomData {
+    
+    if (_room == nil) {
+        return;
+    }
+    
+    // clear local room data
+    _room = nil;
+    _queue = [NSMutableArray <Song *> array];
+    _currentTrack = nil;
+    
+    [[ParseLiveQueryManager shared] clearRoomLiveSubscriptions];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
+    
+}
+
+- (void)clearAllRoomData {
+    // delete room and attached requests, invitations, and votes
+    [ParseObjectManager deleteCurrentRoomAndAttachedObjects]; // TODO: completion to make sure we don't load room that should be deleted?
+    [self clearLocalRoomData];
+}
+
+# pragma mark - Queue Helpers
+
+- (void)loadLocalQueueDataWithCompletion:(PFBooleanResultBlock)completion {
+    
+    [ParseQueryManager getRequestsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
+        
+        if (!objects || !objects.count) {
+            completion(YES, error);
+            return;
+        }
+        
+        [Song songsWithRequests:objects completion:^(NSMutableArray<Song *> *songs) {
+            
+            if (!songs || !songs.count) {
+                self->_queue = [NSMutableArray<Song *> array];
+                completion(YES, nil);
+                return;
+            }
+            
+            [Song loadVotesForQueue:songs completion:^(NSMutableArray<Song *> *result) {
+                
+                if (!result || !result.count) {
+                    completion(YES, nil);
+                    return;
+                }
+                
+                self->_queue = result;
+                [self sortQueue];
+                completion(YES, nil);
+                
+            }];
+            
+        }];
+        
+    }];
+    
+}
+
+- (void)insertSong:(Song *)song {
+    
+    // get index at the earliest obj in the queue where song.score > obj.score
+    NSUInteger index = [self->_queue indexOfObjectPassingTest:^BOOL(Song *obj, NSUInteger idx, BOOL *stop) {
+        return [obj.score compare:song.score] == NSOrderedAscending;
+    }];
+    
+    // edge cases: empty arrays or score is not greater than any item in scores array
+    if (index == NSNotFound) {
+        [self->_queue addObject:song];
+        return;
+    }
+    
+    [self->_queue insertObject:song atIndex:index];
+    
+}
+
+- (void)sortQueue {
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"score" ascending:NO];
+    [_queue sortUsingDescriptors:@[sortDescriptor]];
+}
+
 # pragma mark - Room Data
 
 - (NSString *)currentRoomId {
@@ -263,16 +273,8 @@
     return _room.hostId;
 }
 
-- (NSString *)currentSongSpotifyId {
-    return _room.currentSongSpotifyId;
-}
-
 - (NSMutableArray<Song *> *)queue {
     return _queue;
-}
-
-- (BOOL)isInRoom {
-    return _room;
 }
 
 - (BOOL)isCurrentUserHost {
@@ -287,10 +289,11 @@
     
 }
 
-- (void)setCurrentSongSpotifyId:(NSString *)currentSongSpotifyId {
-    
-    // TODO: set id
-    
+- (void)setCurrentTrack:(Track *)currentTrack {
+    _currentTrack = currentTrack;
+    if ([self isCurrentUserHost]) {
+        [[SpotifySessionManager shared] playSongWithSpotifyURI:currentTrack.spotifyURI];
+    }
 }
 
 # pragma mark - Helpers

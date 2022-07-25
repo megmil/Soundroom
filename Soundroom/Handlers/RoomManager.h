@@ -20,30 +20,30 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RoomManager : NSObject
 
-@property (strong, nonatomic) NSString *currentSongSpotifyId;
-
-// room data
-- (NSString *)currentRoomId;
-- (NSString *)currentRoomName;
-- (NSString *)currentHostId;
-- (NSMutableArray <Song *> *)queue;
-- (BOOL)isInRoom;
-- (BOOL)isCurrentUserHost;
+@property (strong, nonatomic, readonly) NSString *currentRoomId;
+@property (strong, nonatomic, readonly) NSString *currentRoomName;
+@property (strong, nonatomic, readonly) NSString *currentHostId; // TODO: not called outside of .m
+@property (strong, nonatomic, readonly) NSMutableArray <Song *> *queue;
+@property (strong, nonatomic) Track *currentTrack;
+@property (nonatomic, readonly) BOOL isCurrentUserHost;
 
 + (instancetype)shared;
 
+# pragma mark - Room Tab Methods
+
 - (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
-- (void)joinRoomWithId:(NSString *)currentRoomId;
-- (void)clearRoomData;
-
-- (void)insertRequest:(Request *)request;
-- (void)removeRequestWithId:(NSString *)requestId;
-
-- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount;
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
-
 - (void)reloadTrackData;
 - (void)playTopSong;
+
+# pragma mark - Live Query Event Handlers
+
+- (void)joinRoomWithId:(NSString *)currentRoomId;
+- (void)clearRoomData;
+- (void)insertRequest:(Request *)request;
+- (void)removeRequestWithId:(NSString *)requestId;
+- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount;
+- (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId;
 
 @end
 

@@ -90,7 +90,7 @@
     // room is updated: new current song
     _roomSubscription = [_roomSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Room *room = (Room *)object;
-        [[RoomManager shared] setCurrentSongSpotifyId:room.currentSongSpotifyId];
+        [[RoomManager shared] setCurrentTrackWithSpotifyId:room.currentSongSpotifyId];
     }];
 
 }
