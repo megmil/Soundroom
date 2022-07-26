@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)currentUsername;
 + (NSString *)currentUserId;
 + (BOOL)isLoggedIn;
++ (BOOL)isInRoom;
 
 @end
 

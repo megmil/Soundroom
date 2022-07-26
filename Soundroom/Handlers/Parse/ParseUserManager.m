@@ -8,6 +8,7 @@
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
 #import "SpotifySessionManager.h"
+#import "RoomManager.h"
 
 @implementation ParseUserManager
 
@@ -65,6 +66,10 @@
 
 + (BOOL)isLoggedIn {
     return [PFUser currentUser];
+}
+
++ (BOOL)isInRoom {
+    return [[RoomManager shared] currentRoomId]; // nil (or NO) if there is no room / room id
 }
 
 @end

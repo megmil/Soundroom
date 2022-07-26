@@ -6,8 +6,6 @@
 //
 
 #import "SongCell.h"
-#import "ParseObjectManager.h"
-#import "RoomManager.h"
 
 NSString *const addImageName = @"plus";
 NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
@@ -84,6 +82,7 @@ NSString *const scoreEmptyLabel = @"0";
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
     if (self) {
+        
         _imageView = [UIImageView new];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:_imageView];
@@ -100,7 +99,7 @@ NSString *const scoreEmptyLabel = @"0";
         [self.contentView addSubview:_subtitleLabel];
         
         _addButton = [UIButton new];
-        _addButton.userInteractionEnabled = YES;
+        _addButton.transform = CGAffineTransformMakeScale(1.4f, 1.4f);
         [_addButton setImage:[UIImage systemImageNamed:addImageName] forState:UIControlStateNormal];
         [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_addButton];
@@ -119,6 +118,7 @@ NSString *const scoreEmptyLabel = @"0";
         _scoreLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
         _scoreLabel.numberOfLines = 1;
         [self.contentView addSubview:_scoreLabel];
+        
     }
     
     return self;
@@ -127,26 +127,26 @@ NSString *const scoreEmptyLabel = @"0";
 # pragma mark - Buttons
 
 - (void)didTapAdd {
-    
-    if (_cellType == TrackCell) {
-        [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:_objectId];
-        return;
-    }
-    
-    [ParseObjectManager createInvitationToCurrentRoomForUserWithId:_objectId];
-    
+    [self.addDelegate didAddObjectWithId:_objectId];
+    [UIView animateWithDuration:0.6
+                          delay:0.1
+         usingSpringWithDamping:0.8f
+          initialSpringVelocity:0.5f
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{ self->_addButton.transform = CGAffineTransformIdentity; }
+                     completion:nil];
 }
 
 - (void)didTapVote:(UIButton *)sender {
-    
+
     if (_voteState == sender.tag) {
         _voteState = NotVoted;
     } else {
         _voteState = sender.tag;
     }
     
-    [[RoomManager shared] updateCurrentUserVoteForRequestWithId:_objectId voteState:_voteState];
-
+    [self.queueDelegate didUpdateVoteStateForRequestWithId:_objectId voteState:_voteState];
+    
 }
 
 # pragma mark - Setters
@@ -192,12 +192,12 @@ NSString *const scoreEmptyLabel = @"0";
 }
 
 - (void)setCellType:(SongCellType)cellType {
-    _cellType = cellType;
     BOOL isQueueCell = cellType == QueueCell;
     _addButton.hidden = isQueueCell;
     _upvoteButton.hidden = !isQueueCell;
     _downvoteButton.hidden = !isQueueCell;
     _scoreLabel.hidden = !isQueueCell;
+    _cellType = cellType;
 }
 
 @end

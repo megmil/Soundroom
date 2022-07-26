@@ -8,13 +8,15 @@
 #import "SearchViewController.h"
 #import "SpotifyAPIManager.h"
 #import "ParseQueryManager.h"
+#import "ParseUserManager.h"
 #import "Song.h" // need for VoteStatus
+#import "ParseObjectManager.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 
 NSString *const SearchCellReuseIdentifier = @"SearchCell";
 
-@interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+@interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, AddCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
@@ -29,55 +31,79 @@ NSString *const SearchCellReuseIdentifier = @"SearchCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self configureTableView];
+    [self configureSearch];
+}
+
+- (void)configureTableView {
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.rowHeight = 66.f;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    // TODO: simplify
-    if (self.isUserSearch) {
-        self.searchTypeControl.selectedSegmentIndex = 1;
-        self.searchTypeControl.userInteractionEnabled = NO;
-    } else {
-        self.searchTypeControl.selectedSegmentIndex = 0;
-        self.searchTypeControl.userInteractionEnabled = YES;
-    }
-    
-    [self.tableView registerClass:[SongCell class] forCellReuseIdentifier:SearchCellReuseIdentifier];
-    
-    self.searchBar.delegate = self;
+    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:SearchCellReuseIdentifier];
 }
 
-#pragma mark - Table View
+- (void)configureSearch {
+    _searchBar.delegate = self;
+    _searchTypeControl.selectedSegmentIndex = (_searchType == UserSearch) ? 1 : 0;
+    _searchTypeControl.userInteractionEnabled = (_searchType == TrackAndUserSearch);
+    [_searchTypeControl addTarget:self action:@selector(clearSearchData) forControlEvents:UIControlEventValueChanged];
+}
+
+# pragma mark - Actions
+
+- (IBAction)didTapScreen:(id)sender {
+    [self.view endEditing:YES];
+}
+
+- (void)didAddObjectWithId:(NSString *)objectId {
+    
+    // warning if current user is not in a room
+    if (![ParseUserManager isInRoom]) {
+        [self missingRoomAlert];
+        return;
+    }
+    
+    // request song in queue
+    if (self.searchType == TrackSearch) {
+        [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:objectId];
+        return;
+    }
+    
+    // invite user to room
+    [ParseObjectManager createInvitationToCurrentRoomForUserWithId:objectId];
+    
+}
+
+# pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([self isTrackSearch]) {
-        return self.tracks.count;
+    if (self.searchType == TrackSearch) {
+        return _tracks.count;
     }
-    return self.users.count;
+    return _users.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:SearchCellReuseIdentifier];
+    cell.cellType = SearchCell;
+    cell.addDelegate = self;
     
-    if ([self isTrackSearch]) {
-        Track *track = self.tracks[indexPath.row];
+    if (self.searchType == TrackSearch) {
+        Track *track = _tracks[indexPath.row];
         cell.title = track.title;
         cell.subtitle = track.artist;
         cell.image = track.albumImage;
         cell.objectId = track.spotifyId;
-        cell.cellType = TrackCell;
         return cell;
     }
     
-    PFUser *user = self.users[indexPath.row];
+    PFUser *user = _users[indexPath.row];
     cell.title = [user valueForKey:@"displayName"]; // TODO: implement
     cell.subtitle = user.username;
-    cell.image = [UIImage imageNamed:@"check"]; // TODO: avatar images
+    cell.image = [UIImage systemImageNamed:@"check"]; // TODO: avatar images
     cell.objectId = user.objectId;
-    cell.cellType = UserCell;
     return cell;
     
 }
@@ -98,19 +124,13 @@ NSString *const SearchCellReuseIdentifier = @"SearchCell";
         return;
     }
     
-    if ([self isTrackSearch]) {
+    if (self.searchType == TrackSearch) {
         [self searchTracksWithQuery:searchText];
         return;
     }
     
     [self searchUsersWithQuery:searchText];
     
-}
-
-- (void)clearSearchData {
-    _tracks = nil;
-    _users = nil;
-    [_tableView reloadDataWithAnimation];
 }
 
 - (void)searchTracksWithQuery:(NSString *)query {
@@ -131,12 +151,31 @@ NSString *const SearchCellReuseIdentifier = @"SearchCell";
     }];
 }
 
-- (BOOL)isTrackSearch {
-    return self.searchTypeControl.selectedSegmentIndex == 0;
+- (void)clearSearchData {
+    _tracks = nil;
+    _users = nil;
+    [_tableView reloadData];
 }
 
-- (IBAction)didTapScreen:(id)sender {
-    [self.view endEditing:YES];
+# pragma mark - Helpers
+
+- (SearchType)searchType {
+    return _searchTypeControl.selectedSegmentIndex + 1;
+}
+
+- (void)missingRoomAlert {
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:@"Failed to add item"
+                                message:@"Please join or create a room before adding tracks or inviting users."
+                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction
+                             actionWithTitle:@"Ok"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction *action) { }];
+
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

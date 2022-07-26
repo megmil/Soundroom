@@ -15,7 +15,7 @@
 
 NSString *const QueueCellReuseIdentifier = @"QueueCell";
 
-@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, QueueCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
@@ -94,6 +94,10 @@ NSString *const QueueCellReuseIdentifier = @"QueueCell";
     [self leaveRoomAlert];
 }
 
+- (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
+    [[RoomManager shared] updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
+}
+
 # pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -109,6 +113,7 @@ NSString *const QueueCellReuseIdentifier = @"QueueCell";
     cell.score = song.score;
     cell.voteState = song.voteState;
     cell.cellType = QueueCell;
+    cell.queueDelegate = self;
     
     // track data
     cell.title = song.track.title;
