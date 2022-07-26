@@ -114,6 +114,11 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 
 - (void)appRemoteDidEstablishConnection:(nonnull SPTAppRemote *)appRemote {
     _appRemote.playerAPI.delegate = self;
+    /*
+    [_appRemote.playerAPI setRepeatMode:SPTAppRemotePlaybackOptionsRepeatModeOff callback:^(id result, NSError *error) {
+        //
+    }];
+     */
     [_appRemote.playerAPI subscribeToPlayerState:^(id result, NSError *error) {
         if (error) {
             NSLog(@"subscription error: %@", error.localizedDescription);

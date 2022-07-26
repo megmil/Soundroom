@@ -32,12 +32,6 @@
     [super viewDidLoad];
     [self configureTableView];
     [self configureObservers];
-    
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self updateQueueViews];
 }
 
 - (void)configureTableView {

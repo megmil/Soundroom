@@ -20,8 +20,8 @@ static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
 @interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSMutableArray <Room *> *rooms;
-@property (strong, nonatomic) NSMutableArray <Invitation *> *invitations;
+@property (strong, nonatomic) NSArray <Invitation *> *invitations;
+@property (strong, nonatomic) NSDictionary *invitationsWithRooms;
 
 @end
 
@@ -48,19 +48,11 @@ static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
 # pragma mark - Invitations
 
 - (void)loadRooms {
-    
     [self fetchPendingRoomsWithCompletion:^(BOOL succeeded, NSError *error) {
-        
-        if (!succeeded) {
-            self->_rooms = [NSMutableArray <Room *> array];
-            self->_invitations = [NSMutableArray <Invitation *> array];
-            [self->_tableView reloadData];
+        if (succeeded) {
+            [self->_tableView reloadDataWithAnimation];
         }
-        
-        [self->_tableView reloadDataWithAnimation];
-        
     }];
-    
 }
 
 - (void)fetchPendingRoomsWithCompletion:(PFBooleanResultBlock)completion {
@@ -72,17 +64,16 @@ static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
             return;
         }
         
-        [ParseQueryManager getRoomsForInvitations:invitations completion:^(NSArray *rooms, NSError *error) {
+        [ParseQueryManager getRoomsForInvitations:invitations completion:^(NSDictionary *invitationsWithRooms) {
             
-            if (!rooms || !rooms.count || invitations.count != rooms.count) {
+            if (!invitationsWithRooms || !invitationsWithRooms.count) {
                 completion(NO, error);
                 return;
             }
             
-            self->_invitations = (NSMutableArray <Invitation *> *)invitations;
-            self->_rooms = (NSMutableArray <Room *> *)rooms;
+            self->_invitations = invitations;
+            self->_invitationsWithRooms = invitationsWithRooms;
             completion(YES, nil);
-
             
         }];
         
@@ -100,18 +91,22 @@ static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _rooms.count;
+    return _invitationsWithRooms.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     RoomCell *cell = [tableView dequeueReusableCellWithIdentifier:InvitationCellReuseIdentifier];
+    
     Invitation *invitation = _invitations[indexPath.row];
-    Room *room = _rooms[indexPath.row];
+    Room *room = _invitationsWithRooms[invitation.objectId];
+    
+    cell.objectId = invitation.objectId;
     cell.title = room.title;
     // TODO: set image
-    cell.objectId = invitation.objectId;
     cell.cellType = InvitationCell;
     return cell;
+    
 }
 
 @end

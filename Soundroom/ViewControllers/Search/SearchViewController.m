@@ -135,8 +135,10 @@
 - (void)searchTracksWithQuery:(NSString *)query {
     [[SpotifyAPIManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
         if (tracks) {
-            self->_tracks = (NSMutableArray<Track *> *)tracks;
-            [self->_tableView reloadDataWithAnimation];
+            if ([query isEqualToString:self->_searchBar.text]) {
+                self->_tracks = (NSMutableArray<Track *> *)tracks;
+                [self->_tableView reloadDataWithAnimation];
+            }
         }
     }];
 }
@@ -144,8 +146,10 @@
 - (void)searchUsersWithQuery:(NSString *)query {
     [ParseQueryManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
         if (users) {
-            self->_users = (NSMutableArray<PFUser *> *)users;
-            [self->_tableView reloadDataWithAnimation];
+            if ([query isEqualToString:self->_searchBar.text]) {
+                self->_users = (NSMutableArray<PFUser *> *)users;
+                [self->_tableView reloadDataWithAnimation];
+            }
         }
     }];
 }

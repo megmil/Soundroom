@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class Invitation;
+
 @interface ParseQueryManager : NSObject
 
 // live queries
@@ -24,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // room
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
-+ (void)getRoomsForInvitations:(NSArray *)invitations completion:(PFArrayResultBlock)completion;
++ (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(void (^)(NSDictionary *invitationsWithRooms))completion;
 
 // request
 + (void)getRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
