@@ -99,7 +99,6 @@ NSString *const scoreEmptyLabel = @"0";
         [self.contentView addSubview:_subtitleLabel];
         
         _addButton = [UIButton new];
-        _addButton.transform = CGAffineTransformMakeScale(1.4f, 1.4f);
         [_addButton setImage:[UIImage systemImageNamed:addImageName] forState:UIControlStateNormal];
         [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_addButton];
@@ -128,6 +127,7 @@ NSString *const scoreEmptyLabel = @"0";
 
 - (void)didTapAdd {
     [self.addDelegate didAddObjectWithId:_objectId];
+    _addButton.transform = CGAffineTransformMakeScale(1.4f, 1.4f);
     [UIView animateWithDuration:0.6
                           delay:0.1
          usingSpringWithDamping:0.8f
