@@ -11,10 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ConfigureViewDelegate
-
 - (void)createRoom;
 - (void)inviteMembers;
-
 @end
 
 @interface ConfigureView : UIView

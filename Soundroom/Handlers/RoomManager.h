@@ -15,7 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const RoomManagerJoinedRoomNotification;
 extern NSString *const RoomManagerLeftRoomNotification;
-extern NSString *const RoomManagerUpdatedQueueNotification;
+
+@protocol RoomManagerDelegate
+- (void)insertCellAtIndex:(NSUInteger)index;
+- (void)removeCellAtIndex:(NSUInteger)index;
+- (void)moveCellAtIndex:(NSUInteger)pastIndex toIndex:(NSUInteger)newIndex;
+- (void)didRefreshQueue;
+- (void)didUpdateCurrentTrack;
+@end
 
 @interface RoomManager : NSObject
 
@@ -24,6 +31,7 @@ extern NSString *const RoomManagerUpdatedQueueNotification;
 @property (strong, nonatomic, readonly, getter=queue) NSMutableArray <Song *> *queue;
 @property (strong, nonatomic, readonly, getter=currentTrack) Track *currentTrack;
 @property (nonatomic, readonly, getter=isCurrentUserHost) BOOL isCurrentUserHost;
+@property (nonatomic, weak) id<RoomManagerDelegate> delegate;
 
 + (instancetype)shared;
 

@@ -33,4 +33,36 @@
     }
 }
 
+- (void)insertCellAtIndex:(NSUInteger)index {
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    
+    [self beginUpdates];
+    [self insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self endUpdates];
+}
+
+- (void)moveCellAtIndex:(NSUInteger)pastIndex toIndex:(NSUInteger)newIndex {
+    
+    NSIndexPath *pastIndexPath = [NSIndexPath indexPathForRow:pastIndex inSection:0];
+    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
+    
+    [self beginUpdates];
+    [self moveRowAtIndexPath:pastIndexPath toIndexPath:newIndexPath];
+    [self endUpdates];
+    
+    [self reloadRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
+}
+
+- (void)removeCellAtIndex:(NSUInteger)index {
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    
+    [self beginUpdates];
+    [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self endUpdates];
+    
+}
+
 @end

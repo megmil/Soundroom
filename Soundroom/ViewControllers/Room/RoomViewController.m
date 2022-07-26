@@ -15,7 +15,7 @@
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 
-@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, QueueCellDelegate>
+@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
@@ -32,6 +32,7 @@
     [super viewDidLoad];
     [self configureTableView];
     [self configureObservers];
+    [RoomManager shared].delegate = self;
 }
 
 - (void)configureTableView {
@@ -44,7 +45,6 @@
 - (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomViews) name:RoomManagerLeftRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:RoomManagerUpdatedQueueNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:SpotifyAPIManagerFailedAccessTokenNotification object:nil];
 }
@@ -94,6 +94,42 @@
 
 - (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
     [[RoomManager shared] updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
+}
+
+# pragma mark - RoomManagerDelegate
+
+- (void)insertCellAtIndex:(NSUInteger)index {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_tableView insertCellAtIndex:index];
+    });
+}
+
+- (void)moveCellAtIndex:(NSUInteger)pastIndex toIndex:(NSUInteger)newIndex {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_tableView moveCellAtIndex:pastIndex toIndex:newIndex];
+    });
+}
+
+- (void)removeCellAtIndex:(NSUInteger)index {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_tableView removeCellAtIndex:index];
+    });
+}
+
+- (void)didRefreshQueue {
+    [self didUpdateCurrentTrack];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_tableView reloadDataWithAnimation];
+    });
+}
+
+- (void)didUpdateCurrentTrack {
+    Track *track = [[RoomManager shared] currentTrack];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_currentSongTitleLabel.text = track.title;
+        self->_currentSongArtistLabel.text = track.artist;
+        self->_currentSongAlbumImageView.image = track.albumImage;
+    });
 }
 
 # pragma mark - TableView

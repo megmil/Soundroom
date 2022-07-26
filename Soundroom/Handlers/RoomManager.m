@@ -18,7 +18,6 @@
 
 NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotification";
 NSString *const RoomManagerLeftRoomNotification = @"RoomManagerLeftRoomNotification";
-NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueNotification";
 
 @implementation RoomManager {
     Room *_room;
@@ -64,8 +63,11 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
 
 - (void)insertRequest:(Request *)request {
     [Song songWithRequest:request completion:^(Song *song) {
-        [self insertSong:song];
-        [self postUpdatedQueueNotification];
+        [self insertSong:song completion:^(NSUInteger index) {
+            if (index != NSNotFound) {
+                [self.delegate insertCellAtIndex:index];
+            }
+        }];
     }];
 }
 
@@ -75,26 +77,33 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
         return;
     }
     [_queue removeObjectAtIndex:index];
-    [self postUpdatedQueueNotification];
+    [self.delegate removeCellAtIndex:index];
 }
 
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
-    NSUInteger index = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
-    if (index == NSNotFound) {
+    
+    NSUInteger pastIndex = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
+    if (pastIndex == NSNotFound) {
         return;
     }
-    Song *song = [_queue objectAtIndex:index];
+    
+    Song *song = [_queue objectAtIndex:pastIndex];
     song.score = @(song.score.integerValue + amount.integerValue);
-    [_queue removeObjectAtIndex:index];
-    [self insertSong:song];
-    [self postUpdatedQueueNotification];
+    
+    [_queue removeObjectAtIndex:pastIndex];
+    [self insertSong:song completion:^(NSUInteger newIndex) {
+        if (newIndex != NSNotFound) {
+            [self.delegate moveCellAtIndex:pastIndex toIndex:newIndex];
+        }
+    }];
+
 }
 
 - (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId {
     [[SpotifyAPIManager shared] getTrackWithSpotifyId:spotifyId completion:^(Track *track, NSError *error) {
         if (track) {
             self.currentTrack = track;
-            [self postUpdatedQueueNotification];
+            [self.delegate didUpdateCurrentTrack];
         }
     }];
 }
@@ -213,7 +222,7 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
     [self loadCurrentTrack];
     [self loadLocalQueueDataWithCompletion:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            [self postUpdatedQueueNotification];
+            [self.delegate didRefreshQueue];
         }
     }];
     
@@ -351,7 +360,7 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
     
 }
 
-- (void)insertSong:(Song *)song {
+- (void)insertSong:(Song *)song completion:(void (^)(NSUInteger index))completion {
     
     // get index at the earliest obj in the queue where song.score > obj.score
     NSUInteger index = [self->_queue indexOfObjectPassingTest:^BOOL(Song *obj, NSUInteger idx, BOOL *stop) {
@@ -361,20 +370,18 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
     // edge cases: empty arrays or score is not greater than any item in scores array
     if (index == NSNotFound) {
         [self->_queue addObject:song];
+        completion(self->_queue.count - 1);
         return;
     }
     
     [self->_queue insertObject:song atIndex:index];
+    completion(index);
     
 }
 
 - (void)sortQueue {
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"score" ascending:NO];
     [_queue sortUsingDescriptors:@[sortDescriptor]];
-}
-
-- (void)postUpdatedQueueNotification {
-    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerUpdatedQueueNotification object:self];
 }
 
 # pragma mark - Playback Helpers
