@@ -30,7 +30,6 @@ extern NSString *const songScoreKey;
 
 + (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSMutableArray <Song *> *songs))completion;
 + (void)songWithRequest:(Request *)request completion:(void (^)(Song *song))completion;
-+ (void)loadVotesForQueue:(NSMutableArray <Song *> *)queue completion:(void (^)(NSMutableArray <Song *> *result))completion;
 
 @end
 

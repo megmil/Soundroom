@@ -17,7 +17,6 @@ static NSString *const getTrackURLString = @"v1/tracks/";
 static NSString *const tokenParameterName = @"access_token";
 static NSString *const typeParameterName = @"type";
 static NSString *const queryParameterName = @"q";
-
 static NSString *const trackTypeName = @"track";
 
 @implementation SpotifyAPIManager

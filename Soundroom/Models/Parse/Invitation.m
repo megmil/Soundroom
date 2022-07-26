@@ -25,7 +25,7 @@
     if (self) {
         self.userId = userId;
         self.roomId = roomId;
-        self.isPending = @(isPending);
+        self.isPending = isPending;
     }
     
     return self;

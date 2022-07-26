@@ -9,6 +9,7 @@
 #import "ParseUserManager.h"
 #import "ParseObjectManager.h"
 #import "ParseQueryManager.h"
+#import "ParseConstants.h"
 #import "ParseLiveQueryManager.h"
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
@@ -207,6 +208,8 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
 
 - (void)loadLocalQueueDataWithCompletion:(PFBooleanResultBlock)completion {
     
+    _queue = [NSMutableArray<Song *> array];
+    
     [ParseQueryManager getRequestsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         
         if (!objects || !objects.count) {
@@ -217,24 +220,87 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
         [Song songsWithRequests:objects completion:^(NSMutableArray<Song *> *songs) {
             
             if (!songs || !songs.count) {
-                self->_queue = [NSMutableArray<Song *> array];
                 completion(YES, nil);
                 return;
             }
             
-            [Song loadVotesForQueue:songs completion:^(NSMutableArray<Song *> *result) {
+            self->_queue = songs;
+            [self loadLocalVoteDataWithCompletion:^(NSMutableArray<Song *> *result) {
                 
-                if (!result || !result.count) {
-                    self->_queue = result;
-                    completion(YES, nil);
+                if (!result || self->_queue.count != result.count) {
                     return;
                 }
                 
-                self->_queue = result;
+                self->_queue = songs;
                 [self sortQueue];
                 completion(YES, nil);
                 
             }];
+            
+        }];
+        
+    }];
+    
+}
+
+- (void)loadLocalVoteDataWithCompletion:(void (^)(NSMutableArray <Song *> *result))completion {
+    
+    __block NSMutableArray <Song *> *result = [NSMutableArray <Song *> array];
+    
+    if (!_queue || !_queue.count) {
+        completion(result);
+        return;
+    }
+    
+    result = _queue;
+    NSString *currentUserId = [ParseUserManager currentUserId];
+    
+    [ParseQueryManager getUpvotesInCurrentRoomWithCompletion:^(NSArray *upvotes, NSError *error) {
+        
+        [ParseQueryManager getDownvotesInCurrentRoomWithCompletion:^(NSArray *downvotes, NSError *error) {
+            
+            NSUInteger remainingVotes = upvotes.count + downvotes.count;
+            
+            if (remainingVotes == 0) {
+                completion(result);
+                return;
+            }
+            
+            for (Upvote *upvote in upvotes) {
+                
+                NSUInteger index = [[result valueForKey:requestIdKey] indexOfObject:upvote.requestId];
+                
+                if (index != NSNotFound) {
+                    Song *song = result[index];
+                    result[index].score = @(song.score.integerValue + 1);
+                    if ([upvote.userId isEqualToString:currentUserId]) {
+                        song.voteState = Upvoted;
+                    }
+                }
+                
+                if (--remainingVotes == 0) {
+                    completion(result);
+                }
+                
+            }
+            
+            for (Downvote *downvote in downvotes) {
+                
+                NSUInteger index = [[result valueForKey:requestIdKey] indexOfObject:downvote.requestId];
+                
+                if (index != NSNotFound) {
+                    Song *song = result[index];
+                    result[index].score = @(song.score.integerValue - 1);
+                    if ([downvote.userId isEqualToString:currentUserId]) {
+                        song.voteState = Upvoted;
+                    }
+                }
+                
+                if (--remainingVotes == 0) {
+                    completion(result);
+                }
+                
+            }
             
         }];
         
