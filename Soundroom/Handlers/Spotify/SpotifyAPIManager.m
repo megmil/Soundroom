@@ -10,15 +10,15 @@
 
 NSString *const SpotifyAPIManagerFailedAccessTokenNotification = @"SpotifyAPIManagerFailedAccessTokenNotification";
 
-NSString *const baseURLString = @"https://api.spotify.com";
-NSString *const searchURLString = @"v1/search?";
-NSString *const getTrackURLString = @"v1/tracks/";
+static NSString *const baseURLString = @"https://api.spotify.com";
+static NSString *const searchURLString = @"v1/search?";
+static NSString *const getTrackURLString = @"v1/tracks/";
 
-NSString *const tokenParameterName = @"access_token";
-NSString *const typeParameterName = @"type";
-NSString *const queryParameterName = @"q";
+static NSString *const tokenParameterName = @"access_token";
+static NSString *const typeParameterName = @"type";
+static NSString *const queryParameterName = @"q";
 
-NSString *const trackType = @"track";
+static NSString *const trackTypeName = @"track";
 
 @implementation SpotifyAPIManager
 
@@ -93,7 +93,7 @@ NSString *const trackType = @"track";
 
 - (NSDictionary *)searchRequestParametersWithToken:(NSString *)token query:(NSString *)query {
     NSDictionary *parameters = @{tokenParameterName:token,
-                                 typeParameterName:trackType,
+                                 typeParameterName:trackTypeName,
                                  queryParameterName:query};
     return parameters;
 }

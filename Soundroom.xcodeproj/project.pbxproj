@@ -34,6 +34,7 @@
 		042D627328876ACC005DE8E7 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D627228876ACC005DE8E7 /* Invitation.m */; };
 		04785C8028813094001AF277 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C7F28813094001AF277 /* AccountView.m */; };
 		04785C8C2886198F001AF277 /* SpotifySessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C8B2886198F001AF277 /* SpotifySessionManager.m */; };
+		04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04854387288F96BE005B4AD7 /* ParseConstants.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
@@ -116,6 +117,8 @@
 		04785C7F28813094001AF277 /* AccountView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		04785C8A2886198F001AF277 /* SpotifySessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifySessionManager.h; sourceTree = "<group>"; };
 		04785C8B2886198F001AF277 /* SpotifySessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifySessionManager.m; sourceTree = "<group>"; };
+		04854386288F96A7005B4AD7 /* ParseConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseConstants.h; sourceTree = "<group>"; };
+		04854387288F96BE005B4AD7 /* ParseConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseConstants.m; sourceTree = "<group>"; };
 		049304A428762A58006AA9A3 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		049304A928762B12006AA9A3 /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
 		049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
@@ -310,6 +313,7 @@
 		042299A7287E7E170086612E /* Parse */ = {
 			isa = PBXGroup;
 			children = (
+				04854389288F96C8005B4AD7 /* Constants */,
 				04229995287DDB5C0086612E /* ParseUserManager.h */,
 				04229996287DDB5C0086612E /* ParseUserManager.m */,
 				04DF2F49288A1A5900FD28E4 /* ParseQueryManager.h */,
@@ -346,6 +350,15 @@
 				042D627228876ACC005DE8E7 /* Invitation.m */,
 			);
 			path = Parse;
+			sourceTree = "<group>";
+		};
+		04854389288F96C8005B4AD7 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				04854386288F96A7005B4AD7 /* ParseConstants.h */,
+				04854387288F96BE005B4AD7 /* ParseConstants.m */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 		049304A628762AA9006AA9A3 /* Resources */ = {
@@ -668,6 +681,7 @@
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				042299BD288092C40086612E /* RoomNavigationController.m in Sources */,
+				04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,

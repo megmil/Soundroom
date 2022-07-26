@@ -12,12 +12,10 @@ NSString *const SpotifySessionManagerDeauthorizedNotificaton = @"SpotifySessionM
 NSString *const SpotifySessionManagerRemoteConnectedNotificaton = @"SpotifySessionManagerRemoteConnectedNotificaton";
 NSString *const SpotifySessionManagerRemoteDisconnectedNotificaton = @"SpotifySessionManagerRemoteDisconnectedNotificaton";
 
-NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
-NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
-NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-swap-url";
-NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-refresh-url";
-
-// TODO: remove logs
+static NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
+static NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
+static NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-swap-url";
+static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-refresh-url";
 
 @implementation SpotifySessionManager
 

@@ -7,25 +7,13 @@
 
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
+#import "ParseConstants.h"
 #import "RoomManager.h"
 #import "Room.h"
 #import "Invitation.h"
 #import "Request.h"
 
-NSString *const RoomClass = @"Room";
-NSString *const RequestClass = @"Request";
-NSString *const UpvoteClass = @"Upvote";
-NSString *const DownvoteClass = @"Downvote";
-NSString *const InvitationClass = @"Invitation";
-
-NSString *const objectIdKey = @"objectId";
-NSString *const userIdKey = @"userId";
-NSString *const roomIdKey = @"roomId";
-NSString *const currentSongSpotifyIdKey = @"currentSongSpotifyId";
-NSString *const requestIdKey = @"requestId";
-NSString *const isPendingKey = @"isPending";
-NSString *const createdAtKey = @"createdAt";
-NSString *const usernameKey = @"username";
+static const NSInteger searchLimit = 20;
 
 @implementation ParseQueryManager
 
@@ -67,7 +55,7 @@ NSString *const usernameKey = @"username";
     PFQuery *query = [PFUser query];
     [query whereKey:usernameKey matchesRegex:username modifiers:@"i"]; // ignore case
     [query whereKey:objectIdKey notEqualTo:ParseUserManager.currentUserId]; // exclude current user
-    query.limit = 20;
+    query.limit = searchLimit;
     [query findObjectsInBackgroundWithBlock:completion];
 }
 

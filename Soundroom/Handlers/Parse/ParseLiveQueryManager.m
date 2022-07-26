@@ -16,9 +16,9 @@
 
 NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"ParseLiveQueryManagerUpdatedPendingInvitationsNotification";
 
-NSString *const credentialsKeyParseClientKey = @"parse-client-key";
-NSString *const credentialsKeyParseAppId = @"parse-app-id";
-NSString *const credentialsKeyParseLiveServer = @"parse-live-server";
+static NSString *const credentialsKeyParseClientKey = @"parse-client-key";
+static NSString *const credentialsKeyParseAppId = @"parse-app-id";
+static NSString *const credentialsKeyParseLiveServer = @"parse-live-server";
 
 @implementation ParseLiveQueryManager {
     PFQuery *_invitationLiveQuery;

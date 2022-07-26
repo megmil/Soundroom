@@ -8,7 +8,7 @@
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
 #import "SpotifySessionManager.h"
-#import "RoomManager.h"
+#import "RoomManager.h" // TODO: move isInRoom?
 
 @implementation ParseUserManager
 
