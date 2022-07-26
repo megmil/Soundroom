@@ -14,15 +14,16 @@
     SkyFloatingLabelTextField *_titleField;
     
     UIImageView *_modeImageView;
+    UIImageView *_inviteImageView;
+    UIImageView *_cleanImageView;
+    
     UILabel *_modeTitleLabel;
     UILabel *_modeSubtitleLabel;
-    
-    UIImageView *_inviteImageView;
     UILabel *_inviteLabel;
-    UIButton *_inviteButton;
-    
-    UIImageView *_cleanImageView;
     UILabel *_cleanLabel;
+    
+    UISwitch *_modeSwitch;
+    UIButton *_inviteButton;
     UISwitch *_cleanSwitch;
     
     UIButton *_createButton;
@@ -44,6 +45,7 @@
     const CGFloat headerLabelWidth = _headerLabel.frame.size.width;
     const CGFloat headerLabelHeight = _headerLabel.frame.size.height;
     const CGFloat switchHeight = 31.f;
+    const CGFloat switchWidth = 51.f;
     const CGFloat standardSize = 50.f;
     
     const CGFloat labelHeight = 20.f;
@@ -67,30 +69,32 @@
     
     _modeImageView.frame = CGRectMake(heavyPadding, modeImageViewOriginY, standardSize, standardSize);
     
+    const CGFloat modeSwitchOriginY = CGRectGetMinY(_modeImageView.frame) + switchYOffsetFromImageView;
     const CGFloat labelsOriginX = CGRectGetMaxX(_modeImageView.frame) + standardPadding;
     const CGFloat inviteImageViewOriginY = CGRectGetMaxY(_modeImageView.frame) + heavyPadding;
     const CGFloat modeTitleLabelOriginY = CGRectGetMinY(_modeImageView.frame) + titleAndSubtitleYOffsetFromImageView;
     
+    _modeSwitch.frame = CGRectMake(imageViewRightAlignmentOriginX, modeSwitchOriginY, 0, 0);
     _inviteImageView.frame = CGRectMake(heavyPadding, inviteImageViewOriginY, standardSize, standardSize);
     _inviteButton.frame = CGRectMake(imageViewRightAlignmentOriginX, inviteImageViewOriginY, standardSize, standardSize);
     
+    const CGFloat labelWidth = CGRectGetMinX(_modeSwitch.frame) - standardPadding - labelsOriginX;
     const CGFloat cleanImageViewOriginY = CGRectGetMaxY(_inviteImageView.frame) + heavyPadding;
     const CGFloat inviteLabelOriginY = CGRectGetMinY(_inviteImageView.frame) + labelYOffsetFromImageView;
-    const CGFloat labelWidth = CGRectGetMinY(_inviteButton.frame) - standardPadding - labelsOriginX;
     
     _modeTitleLabel.frame = CGRectMake(labelsOriginX, modeTitleLabelOriginY, labelWidth, titleHeight);
-    _inviteLabel.frame = CGRectMake(labelsOriginX, inviteLabelOriginY, labelWidth, labelHeight);
     _cleanImageView.frame = CGRectMake(heavyPadding, cleanImageViewOriginY, standardSize, standardSize);
     
-    const CGFloat createButtonOriginY = CGRectGetMaxY(_cleanImageView.frame) + heavyPadding;
     const CGFloat modeSubtitleLabelOriginY = CGRectGetMaxY(_modeTitleLabel.frame) + labelsPadding;
+    const CGFloat createButtonOriginY = CGRectGetMaxY(_cleanImageView.frame) + heavyPadding;
     const CGFloat cleanLabelOriginY = CGRectGetMinY(_cleanImageView.frame) + labelYOffsetFromImageView;
     const CGFloat cleanSwitchOriginY = CGRectGetMinY(_cleanImageView.frame) + switchYOffsetFromImageView;
     
     _modeSubtitleLabel.frame = CGRectMake(labelsOriginX, modeSubtitleLabelOriginY, labelWidth, subtitleHeight);
-    _createButton.frame = CGRectMake(widePadding, createButtonOriginY, wideWidth, standardSize);
+    _inviteLabel.frame = CGRectMake(labelsOriginX, inviteLabelOriginY, labelWidth, labelHeight);
     _cleanLabel.frame = CGRectMake(labelsOriginX, cleanLabelOriginY, labelWidth, labelHeight);
-    _cleanSwitch.frame = CGRectMake(imageViewRightAlignmentOriginX, cleanSwitchOriginY, 0, 0); // height: 31, width: 51
+    _cleanSwitch.frame = CGRectMake(imageViewRightAlignmentOriginX, cleanSwitchOriginY, 0, 0);
+    _createButton.frame = CGRectMake(widePadding, createButtonOriginY, wideWidth, standardSize);
     
 }
 
@@ -108,8 +112,12 @@
         
         _titleField = [SkyFloatingLabelTextField new];
         _titleField.title = @"Room name";
+        _titleField.titleFont = [UIFont systemFontOfSize:14.f];
+        _titleField.titleColor = [UIColor systemGray2Color];
         _titleField.placeholder = @"Name your room";
-        _titleField.font = [UIFont systemFontOfSize:18.f];
+        _titleField.placeholderFont = [UIFont systemFontOfSize:18.f];
+        _titleField.placeholderColor = [UIColor systemGray2Color];
+        _titleField.lineColor = _headerLabel.textColor;
         [self addSubview:_titleField];
         
         _modeImageView = [UIImageView new];
@@ -129,6 +137,11 @@
         _modeSubtitleLabel.textColor = [UIColor systemGray2Color];
         _modeSubtitleLabel.numberOfLines = 1;
         [self addSubview:_modeSubtitleLabel];
+        
+        _modeSwitch = [UISwitch new];
+        _modeSwitch.on = NO;
+        _modeSwitch.userInteractionEnabled = NO;
+        [self addSubview:_modeSwitch];
         
         _inviteImageView = [UIImageView new];
         _inviteImageView.backgroundColor = [UIColor blueColor];
