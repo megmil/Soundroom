@@ -14,7 +14,7 @@
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 
-NSString *const SearchCellReuseIdentifier = @"SearchCell";
+static NSString *const SearchCellReuseIdentifier = @"SearchCell";
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, AddCellDelegate>
 

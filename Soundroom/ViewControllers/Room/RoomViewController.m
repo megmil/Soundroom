@@ -14,7 +14,7 @@
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 
-NSString *const QueueCellReuseIdentifier = @"QueueCell";
+static NSString *const QueueCellReuseIdentifier = @"QueueCell";
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, QueueCellDelegate>
 

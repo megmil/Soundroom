@@ -7,12 +7,12 @@
 
 #import "SongCell.h"
 
-NSString *const addImageName = @"plus";
-NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
-NSString *const upvoteEmptyImageName = @"arrowtriangle.up";
-NSString *const downvoteFilledImageName = @"arrowtriangle.down.fill";
-NSString *const downvoteEmptyImageName = @"arrowtriangle.down";
-NSString *const scoreEmptyLabel = @"0";
+static NSString *const addImageName = @"plus";
+static NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
+static NSString *const upvoteEmptyImageName = @"arrowtriangle.up";
+static NSString *const downvoteFilledImageName = @"arrowtriangle.down.fill";
+static NSString *const downvoteEmptyImageName = @"arrowtriangle.down";
+static NSString *const scoreEmptyLabel = @"0";
 
 @implementation SongCell {
     

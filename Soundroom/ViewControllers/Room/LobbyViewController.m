@@ -15,7 +15,7 @@
 #import "UITableView+AnimationControl.h"
 
 NSString *const LobbyViewControllerIdentifier = @"LobbyViewController";
-NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
+static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
 
 @interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource>
 

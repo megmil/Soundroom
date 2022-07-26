@@ -8,8 +8,8 @@
 #import "RoomCell.h"
 #import "ParseObjectManager.h"
 
-NSString *const acceptButtonImageName = @"checkmark.circle";
-NSString *const rejectButtonImageName = @"multiply.circle";
+static NSString *const acceptButtonImageName = @"checkmark.circle";
+static NSString *const rejectButtonImageName = @"multiply.circle";
 
 @implementation RoomCell {
     UILabel *_titleLabel;
