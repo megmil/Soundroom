@@ -48,11 +48,18 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
 }
 
 - (void)clearRoomData {
+    
+    if (!_room) {
+        return;
+    }
+    
     if ([self isCurrentUserHost]) {
         [self clearAllRoomData];
         return;
     }
-    [self clearLocalRoomData];
+    
+    [self clearUserRoomData];
+    
 }
 
 - (void)insertRequest:(Request *)request {
@@ -211,6 +218,17 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
     
 }
 
+- (void)clearUserRoomData {
+    [ParseObjectManager deleteInvitationsAcceptedByCurrentUser];
+    [self clearLocalRoomData];
+}
+
+- (void)clearAllRoomData {
+    // delete room and attached requests, invitations, and votes
+    [ParseObjectManager deleteCurrentRoomAndAttachedObjects]; // TODO: completion to make sure we don't load room that should be deleted?
+    [self clearLocalRoomData];
+}
+
 - (void)clearLocalRoomData {
     
     if (_room == nil) {
@@ -226,12 +244,6 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
     
-}
-
-- (void)clearAllRoomData {
-    // delete room and attached requests, invitations, and votes
-    [ParseObjectManager deleteCurrentRoomAndAttachedObjects]; // TODO: completion to make sure we don't load room that should be deleted?
-    [self clearLocalRoomData];
 }
 
 # pragma mark - Queue Helpers
@@ -408,7 +420,7 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
 
 - (BOOL)isCurrentUserHost {
     NSString *currentUserId = [ParseUserManager currentUserId];
-    if (_room.hostId && currentUserId) {
+    if (_room.hostId && currentUserId && currentUserId.length != 0) {
         return [_room.hostId isEqualToString:currentUserId];
     }
     return NO;

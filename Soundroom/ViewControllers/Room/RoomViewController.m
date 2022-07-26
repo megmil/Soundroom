@@ -207,6 +207,7 @@ static NSString *const QueueCellReuseIdentifier = @"QueueCell";
                                   style:UIAlertActionStyleDestructive
                                   handler:^(UIAlertAction *action) {
                                     [ParseObjectManager deleteInvitationsAcceptedByCurrentUser];
+                                    [[RoomManager shared] clearRoomData];
                                 }];
 
    [alert addAction:cancelButton];
