@@ -6,13 +6,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Room.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSUInteger, RoomListeningModeType) {
-    PartyMode = 0,
-    RemoteMode = 1
-};
 
 @protocol ConfigureViewDelegate
 
@@ -24,7 +20,7 @@ typedef NS_ENUM(NSUInteger, RoomListeningModeType) {
 @interface ConfigureView : UIView
 
 @property (strong, nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) RoomListeningModeType listeningModeType;
+@property (nonatomic, readonly) RoomListeningModeType listeningMode;
 @property (nonatomic, weak) id<ConfigureViewDelegate> delegate;
 
 @end

@@ -6,13 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Room.h" // need for RoomListeningModeType
 #import "Song.h" // need for VoteState
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ParseObjectManager : NSObject
 
-+ (void)createRoomWithTitle:(NSString *)title;
++ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningModeType)listeningMode;
 + (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId; // TODO: rename
 + (void)deleteCurrentRoomAndAttachedObjects;
 

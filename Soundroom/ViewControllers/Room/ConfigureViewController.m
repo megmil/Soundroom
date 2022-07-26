@@ -23,7 +23,7 @@
 }
 
 - (void)createRoom {
-    [ParseObjectManager createRoomWithTitle:_configureView.title];
+    [ParseObjectManager createRoomWithTitle:_configureView.title listeningMode:_configureView.listeningMode];
 }
 
 - (void)inviteMembers {

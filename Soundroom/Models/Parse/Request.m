@@ -6,6 +6,7 @@
 //
 
 #import "Request.h"
+#import "ParseConstants.h"
 
 @implementation Request
 
@@ -15,7 +16,7 @@
 @dynamic userId;
 
 + (nonnull NSString *)parseClassName {
-    return @"Request";
+    return RequestClass;
 }
 
 - (instancetype)initWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId userId:(NSString *)userId {

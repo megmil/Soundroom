@@ -6,25 +6,28 @@
 //
 
 #import "Room.h"
+#import "ParseConstants.h"
 
 @implementation Room
 
 @dynamic roomId;
-@dynamic title;
 @dynamic hostId;
 @dynamic currentSongSpotifyId;
+@dynamic title;
+@dynamic listeningMode;
 
 + (nonnull NSString *)parseClassName {
-    return @"Room";
+    return RoomClass;
 }
 
-- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId {
+- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId listeningMode:(RoomListeningModeType)listeningMode {
     
     self = [super init];
     
     if (self) {
-        self.title = title;
         self.hostId = hostId;
+        self.title = title;
+        self.listeningMode = listeningMode;
     }
     
     return self;

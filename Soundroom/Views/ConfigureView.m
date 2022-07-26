@@ -194,7 +194,7 @@ static NSString *const remoteModeSubtitle = @"All members play music";
 }
 
 - (void)didSwitchMode:(UISwitch *)sender {
-    _listeningModeType = sender.isOn ? RemoteMode : PartyMode;
+    _listeningMode = sender.isOn ? RemoteMode : PartyMode;
     _modeTitleLabel.text = sender.isOn ? remoteModeTitle : partyModeTitle;
     _modeSubtitleLabel.text = sender.isOn ? remoteModeSubtitle : partyModeSubtitle;
 }

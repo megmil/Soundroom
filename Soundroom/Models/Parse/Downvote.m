@@ -6,6 +6,7 @@
 //
 
 #import "Downvote.h"
+#import "ParseConstants.h"
 
 @implementation Downvote
 
@@ -15,7 +16,7 @@
 @dynamic userId;
 
 + (nonnull NSString *)parseClassName {
-    return @"Downvote";
+    return DownvoteClass;
 }
 
 - (instancetype)initWithRequestId:(NSString *)requestId userId:(NSString *)userId roomId:(NSString *)roomId {

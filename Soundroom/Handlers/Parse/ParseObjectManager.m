@@ -20,9 +20,15 @@
 
 # pragma mark - Room
 
-+ (void)createRoomWithTitle:(NSString *)title {
++ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningModeType)listeningMode {
+    
     NSString *userId = [ParseUserManager currentUserId];
-    Room *room = [[Room alloc] initWithTitle:title hostId:userId];
+    
+    if (!userId) {
+        return;
+    }
+    
+    Room *room = [[Room alloc] initWithTitle:title hostId:userId listeningMode:listeningMode];
     [room saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             // create accepted invitation for host
@@ -32,7 +38,14 @@
 }
 
 + (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId {
-    [ParseQueryManager getRoomWithId:[[RoomManager shared] currentRoomId] completion:^(PFObject *object, NSError *error) {
+    
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    
+    if (!roomId) {
+        return;
+    }
+    
+    [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Room *room = (Room *)object;
             [room setValue:spotifyId forKey:currentSongSpotifyIdKey];

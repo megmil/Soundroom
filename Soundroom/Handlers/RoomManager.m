@@ -395,7 +395,7 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
         return;
     }
     
-    if ([self isCurrentUserHost]) {
+    if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
         [[SpotifySessionManager shared] playSongWithSpotifyURI:currentTrack.spotifyURI];
     }
 }
