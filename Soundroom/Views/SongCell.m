@@ -30,21 +30,53 @@ NSString *const scoreEmptyLabel = @"0";
 }
 
 - (void)layoutSubviews {
+    
     [super layoutSubviews];
     
-    _imageView.frame = CGRectMake(20.f, 8.f, 50.f, 50.f);
-    _addButton.frame = CGRectMake(self.contentView.frame.size.width - 50.f - 20.f, 8.f, 50.f, 50.f);
-    
-    const CGFloat imageToLabels = _imageView.frame.origin.x + _imageView.frame.size.width + 8.f;
-    const CGFloat labelsToButton = _addButton.frame.origin.x + 8.f;
-    
-    _titleLabel.frame = CGRectMake(imageToLabels, _imageView.frame.origin.y + 6.f, labelsToButton - imageToLabels, 19.f);
-    _subtitleLabel.frame = CGRectMake(_titleLabel.frame.origin.x, _titleLabel.frame.origin.y + _titleLabel.frame.size.height + 3.f, _titleLabel.frame.size.width, 16.f);
-    
     [_scoreLabel sizeToFit];
-    _downvoteButton.frame = CGRectMake(self.contentView.frame.size.width - 25.f - 20.f, 20.5f, 25.f, 25.f);
-    _scoreLabel.frame = CGRectMake(_downvoteButton.frame.origin.x - _scoreLabel.frame.size.width - 5.f, (self.contentView.frame.size.height - _scoreLabel.frame.size.height) / 2.f, _scoreLabel.frame.size.width, _scoreLabel.frame.size.height);
-    _upvoteButton.frame = CGRectMake(_scoreLabel.frame.origin.x - 25.f - 5.f, 20.5f, 25.f, 25.f);
+    
+    const CGFloat viewWidth = self.contentView.frame.size.width;
+    const CGFloat viewHeight = self.contentView.frame.size.height;
+    
+    const CGFloat imageSize = 50.f;
+    const CGFloat addButtonSize = 50.f;
+    const CGFloat titleHeight = 19.f;
+    const CGFloat subtitleHeight = 16.f;
+    const CGFloat voteButtonSize = 25.f;
+    const CGFloat scoreLabelWidth = _scoreLabel.frame.size.width;
+    const CGFloat scoreLabelHeight = _scoreLabel.frame.size.height;
+    
+    const CGFloat leftPadding = 20.f;
+    const CGFloat rightPadding = viewWidth - leftPadding;
+    const CGFloat standardPadding = 8.f;
+    
+    const CGFloat voteButtonTopPadding = (viewHeight - voteButtonSize) / 2.f;
+    
+    _imageView.frame = CGRectMake(leftPadding, standardPadding, imageSize, imageSize);
+    _addButton.frame = CGRectMake(rightPadding - addButtonSize, standardPadding, addButtonSize, addButtonSize);
+    _downvoteButton.frame = CGRectMake(rightPadding - voteButtonSize, voteButtonTopPadding, voteButtonSize, voteButtonSize);
+    
+    const CGFloat smallPadding = 5.f;
+    const CGFloat scoreLabelOriginX = CGRectGetMinX(_downvoteButton.frame) - scoreLabelWidth - smallPadding;
+    const CGFloat scoreLabelOriginY = (viewHeight - scoreLabelHeight) / 2.f;
+    
+    _scoreLabel.frame = CGRectMake(scoreLabelOriginX, scoreLabelOriginY, scoreLabelWidth, scoreLabelHeight);
+    
+    const CGFloat upvoteButtonOriginX = CGRectGetMinX(_scoreLabel.frame) - voteButtonSize - smallPadding;
+    
+    _upvoteButton.frame = CGRectMake(upvoteButtonOriginX, voteButtonTopPadding, voteButtonSize, voteButtonSize);
+    
+    const CGFloat labelsPadding = 3.f;
+    const CGFloat labelsOriginX = CGRectGetMaxX(_imageView.frame) + standardPadding;
+    const CGFloat labelsWidth = CGRectGetMinX(_addButton.frame) - standardPadding - labelsOriginX;
+    const CGFloat titleOriginY = (viewHeight - titleHeight - subtitleHeight - labelsPadding) / 2.f;
+    
+    _titleLabel.frame = CGRectMake(labelsOriginX, titleOriginY, labelsWidth, titleHeight);
+    
+    const CGFloat subtitleOriginY = CGRectGetMinY(_titleLabel.frame) + labelsPadding;
+    
+    _subtitleLabel.frame = CGRectMake(labelsOriginX, subtitleOriginY, labelsWidth, subtitleHeight);
+    
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {

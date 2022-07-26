@@ -15,7 +15,6 @@ extern NSString *const SpotifyAPIManagerFailedAccessTokenNotification;
 @interface SpotifyAPIManager : AFHTTPSessionManager
 
 + (instancetype)shared;
-
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion;
 - (void)getTrackWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Track *track, NSError *error))completion;
 
