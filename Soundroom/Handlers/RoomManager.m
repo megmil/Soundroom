@@ -110,14 +110,24 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
     
 }
 
-- (void)reloadTrackData {
+- (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion {
+    
+    if (!_room) {
+        completion(NO, nil);
+        return;
+    }
     
     __block NSUInteger remainingTracks = _queue.count;
+    
+    if (remainingTracks == 0) {
+        [self reloadCurrentTrackDataWithCompletion:completion];
+        return;
+    }
     
     for (Song *song in _queue) {
         
         if (song.track) {
-            return;
+            continue;
         }
         
         [[SpotifyAPIManager shared] getTrackWithSpotifyId:song.spotifyId completion:^(Track *track, NSError *error) {
@@ -125,12 +135,31 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
             song.track = track;
             
             if (--remainingTracks == 0) {
-                [self postUpdatedQueueNotification];
+                [self reloadCurrentTrackDataWithCompletion:completion];
             }
             
         }];
         
     }
+    
+}
+
+- (void)reloadCurrentTrackDataWithCompletion:(PFBooleanResultBlock)completion {
+    
+    if (!_room) {
+        completion(NO, nil);
+        return;
+    }
+    
+    if (_currentTrack) {
+        completion(YES, nil);
+        return;
+    }
+    
+    [[SpotifyAPIManager shared] getTrackWithSpotifyId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
+        self.currentTrack = track;
+        completion(YES, nil);
+    }];
     
 }
 
@@ -346,11 +375,16 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
 }
 
 - (void)setCurrentTrack:(Track *)currentTrack {
+    
     _currentTrack = currentTrack;
+    
+    if (!currentTrack) {
+        return;
+    }
+    
     if ([self isCurrentUserHost]) {
         [[SpotifySessionManager shared] playSongWithSpotifyURI:currentTrack.spotifyURI];
     }
-    [self postUpdatedQueueNotification];
 }
 
 

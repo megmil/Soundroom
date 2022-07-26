@@ -31,7 +31,7 @@ extern NSString *const RoomManagerUpdatedQueueNotification;
 
 - (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
-- (void)reloadTrackData;
+- (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion;
 - (void)playTopSong;
 
 # pragma mark - Live Query Event Handlers

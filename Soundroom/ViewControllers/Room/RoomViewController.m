@@ -52,7 +52,7 @@ static NSString *const QueueCellReuseIdentifier = @"QueueCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomViews) name:RoomManagerLeftRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:RoomManagerUpdatedQueueNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:SpotifyAPIManagerFailedAccessTokenNotification object:nil];
 }
 
@@ -81,8 +81,12 @@ static NSString *const QueueCellReuseIdentifier = @"QueueCell";
     });
 }
 
-- (void)updateTrackViews {
-    [[RoomManager shared] reloadTrackData];
+- (void)reloadTrackViews {
+    [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self updateQueueViews];
+        }
+    }];
 }
 
 # pragma mark - IBActions
