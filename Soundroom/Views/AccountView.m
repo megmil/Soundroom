@@ -15,16 +15,35 @@
 }
 
 - (void)layoutSubviews {
+    
     [super layoutSubviews];
     
-    CGFloat halfWidth = self.frame.size.width / 2;
-    CGFloat halfHeight = self.frame.size.height / 2;
-    
     [_appLabel sizeToFit];
-    _appLabel.frame = CGRectMake(8.f, self.frame.size.height - _appLabel.frame.size.height - 8.f, _appLabel.frame.size.width, _appLabel.frame.size.height);
-    _appImageView.frame = CGRectMake(halfWidth - 25.f, halfHeight - 25.f, 50.f, 50.f);
-    _statusImageView.frame = CGRectMake(self.frame.size.width - 20.f - 8.f, 8.f, 20.f, 20.f);
-    _actionButton.frame = CGRectMake(self.frame.size.width - 25.f - 8.f, self.frame.size.height - 25.f - 8.f, 25.f, 25.f);
+    
+    const CGFloat viewWidth = self.frame.size.width;
+    const CGFloat viewHeight = self.frame.size.height;
+    const CGFloat padding = 8.f;
+    
+    const CGFloat appImageViewSize = 50.f;
+    const CGFloat actionButtonSize = 25.f;
+    const CGFloat statusImageViewSize = 20.f;
+    
+    const CGFloat centeredImageViewOriginX = (viewHeight - appImageViewSize) / 2.f;
+    const CGFloat centeredImageViewOriginY = (viewHeight - appImageViewSize) / 2.f;
+    
+    const CGFloat appLabelWidth = _appLabel.frame.size.width;
+    const CGFloat appLabelHeight = _appLabel.frame.size.height;
+    const CGFloat appLabelOriginY = viewHeight - appLabelHeight - padding;
+    
+    const CGFloat statusImageViewOriginX = viewWidth - statusImageViewSize - padding;
+    const CGFloat actionButtonOriginX = viewWidth - actionButtonSize - padding;
+    const CGFloat actionButtonOriginY = viewHeight - actionButtonSize - padding;
+    
+    _appImageView.frame = CGRectMake(centeredImageViewOriginX, centeredImageViewOriginY, appImageViewSize, appImageViewSize);
+    _appLabel.frame = CGRectMake(padding, appLabelOriginY, appLabelWidth, appLabelHeight);
+    _statusImageView.frame = CGRectMake(statusImageViewOriginX, padding, statusImageViewSize, statusImageViewSize);
+    _actionButton.frame = CGRectMake(actionButtonOriginX, actionButtonOriginY, actionButtonSize, actionButtonSize);
+    
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
