@@ -51,6 +51,10 @@
     const CGFloat subtitleHeight = 16.f;
     const CGFloat labelsPadding = 3.f;
     
+    const CGFloat titleAndSubtitleYOffsetFromImageView = (standardSize - (titleHeight + subtitleHeight + labelsPadding)) / 2.f;
+    const CGFloat labelYOffsetFromImageView = (standardSize - labelHeight) / 2.f;
+    const CGFloat switchYOffsetFromImageView = (standardSize - switchHeight) / 2.f;
+    
     _headerLabel.frame = CGRectMake(widePadding, topPadding, headerLabelWidth, headerLabelHeight);
     
     const CGFloat titleFieldOriginY = CGRectGetMaxY(_headerLabel.frame) + widePadding;
@@ -65,13 +69,13 @@
     
     const CGFloat labelsOriginX = CGRectGetMaxX(_modeImageView.frame) + standardPadding;
     const CGFloat inviteImageViewOriginY = CGRectGetMaxY(_modeImageView.frame) + heavyPadding;
-    const CGFloat modeTitleLabelOriginY = (CGRectGetMinY(_modeImageView.frame) - (titleHeight + subtitleHeight + labelsPadding)) / 2.f;
+    const CGFloat modeTitleLabelOriginY = CGRectGetMinY(_modeImageView.frame) + titleAndSubtitleYOffsetFromImageView;
     
     _inviteImageView.frame = CGRectMake(heavyPadding, inviteImageViewOriginY, standardSize, standardSize);
     _inviteButton.frame = CGRectMake(imageViewRightAlignmentOriginX, inviteImageViewOriginY, standardSize, standardSize);
     
     const CGFloat cleanImageViewOriginY = CGRectGetMaxY(_inviteImageView.frame) + heavyPadding;
-    const CGFloat inviteLabelOriginY = (CGRectGetMinY(_inviteImageView.frame) - labelHeight) / 2.f;
+    const CGFloat inviteLabelOriginY = CGRectGetMinY(_inviteImageView.frame) + labelYOffsetFromImageView;
     const CGFloat labelWidth = CGRectGetMinY(_inviteButton.frame) - standardPadding - labelsOriginX;
     
     _modeTitleLabel.frame = CGRectMake(labelsOriginX, modeTitleLabelOriginY, labelWidth, titleHeight);
@@ -80,8 +84,8 @@
     
     const CGFloat createButtonOriginY = CGRectGetMaxY(_cleanImageView.frame) + heavyPadding;
     const CGFloat modeSubtitleLabelOriginY = CGRectGetMaxY(_modeTitleLabel.frame) + labelsPadding;
-    const CGFloat cleanLabelOriginY = (CGRectGetMinY(_cleanImageView.frame) - labelHeight) / 2.f;
-    const CGFloat cleanSwitchOriginY = (CGRectGetMinY(_cleanImageView.frame) - switchHeight) / 2.f;
+    const CGFloat cleanLabelOriginY = CGRectGetMinY(_cleanImageView.frame) + labelYOffsetFromImageView;
+    const CGFloat cleanSwitchOriginY = CGRectGetMinY(_cleanImageView.frame) + switchYOffsetFromImageView;
     
     _modeSubtitleLabel.frame = CGRectMake(labelsOriginX, modeSubtitleLabelOriginY, labelWidth, subtitleHeight);
     _createButton.frame = CGRectMake(widePadding, createButtonOriginY, wideWidth, standardSize);

@@ -28,7 +28,7 @@
     const CGFloat actionButtonSize = 25.f;
     const CGFloat statusImageViewSize = 20.f;
     
-    const CGFloat centeredImageViewOriginX = (viewHeight - appImageViewSize) / 2.f;
+    const CGFloat centeredImageViewOriginX = (viewWidth - appImageViewSize) / 2.f;
     const CGFloat centeredImageViewOriginY = (viewHeight - appImageViewSize) / 2.f;
     
     const CGFloat appLabelWidth = _appLabel.frame.size.width;
