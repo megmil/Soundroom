@@ -44,8 +44,8 @@
 
 - (void)configureSearch {
     _searchBar.delegate = self;
-    _searchTypeControl.selectedSegmentIndex = (_searchType == UserSearch) ? 1 : 0;
-    _searchTypeControl.userInteractionEnabled = (_searchType == TrackAndUserSearch);
+    _searchTypeControl.selectedSegmentIndex = (_searchType == SearchTypeUser) ? 1 : 0;
+    _searchTypeControl.userInteractionEnabled = (_searchType == SearchTypeTrackAndUser);
     [_searchTypeControl addTarget:self action:@selector(clearSearchData) forControlEvents:UIControlEventValueChanged];
 }
 
@@ -64,7 +64,7 @@
     }
     
     // request song in queue
-    if (self.searchType == TrackSearch) {
+    if (self.searchType == SearchTypeTrack) {
         [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:objectId];
         return;
     }
@@ -77,7 +77,7 @@
 # pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.searchType == TrackSearch) {
+    if (self.searchType == SearchTypeTrack) {
         return _tracks.count;
     }
     return _users.count;
@@ -89,7 +89,7 @@
     cell.cellType = SearchCell;
     cell.addDelegate = self;
     
-    if (self.searchType == TrackSearch) {
+    if (self.searchType == SearchTypeTrack) {
         Track *track = _tracks[indexPath.row];
         cell.title = track.title;
         cell.subtitle = track.artist;
@@ -123,7 +123,7 @@
         return;
     }
     
-    if (self.searchType == TrackSearch) {
+    if (self.searchType == SearchTypeTrack) {
         [self searchTracksWithQuery:searchText];
         return;
     }

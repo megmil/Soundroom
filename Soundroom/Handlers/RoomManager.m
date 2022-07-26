@@ -94,6 +94,7 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
     [[SpotifyAPIManager shared] getTrackWithSpotifyId:spotifyId completion:^(Track *track, NSError *error) {
         if (track) {
             self.currentTrack = track;
+            [self postUpdatedQueueNotification];
         }
     }];
 }
