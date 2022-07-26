@@ -17,7 +17,11 @@ static NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url
 static NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-swap-url";
 static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-refresh-url";
 
-@implementation SpotifySessionManager
+@implementation SpotifySessionManager {
+    SPTConfiguration *_configuration;
+    SPTSessionManager *_sessionManager;
+    SPTAppRemote *_appRemote;
+}
 
 + (instancetype)shared {
     static dispatch_once_t once;

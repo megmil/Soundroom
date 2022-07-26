@@ -21,6 +21,15 @@ static NSString *const credentialsKeyParseAppId = @"parse-app-id";
 static NSString *const credentialsKeyParseLiveServer = @"parse-live-server";
 
 @implementation ParseLiveQueryManager {
+    
+    PFLiveQueryClient *_client;
+    
+    PFLiveQuerySubscription *_invitationSubscription;
+    PFLiveQuerySubscription *_requestSubscription;
+    PFLiveQuerySubscription *_upvoteSubscription;
+    PFLiveQuerySubscription *_downvoteSubscription;
+    PFLiveQuerySubscription *_roomSubscription;
+    
     PFQuery *_invitationLiveQuery;
     PFQuery *_requestLiveQuery;
     PFQuery *_upvoteLiveQuery;

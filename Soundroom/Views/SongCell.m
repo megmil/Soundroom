@@ -47,6 +47,7 @@ static NSString *const scoreEmptyLabel = @"0";
     const CGFloat leftPadding = 20.f;
     const CGFloat rightPadding = viewWidth - leftPadding;
     const CGFloat standardPadding = 8.f;
+    const CGFloat smallPadding = 5.f;
     
     const CGFloat voteButtonTopPadding = (viewHeight - voteButtonSize) / 2.f;
     
@@ -54,7 +55,6 @@ static NSString *const scoreEmptyLabel = @"0";
     _addButton.frame = CGRectMake(rightPadding - addButtonSize, standardPadding, addButtonSize, addButtonSize);
     _downvoteButton.frame = CGRectMake(rightPadding - voteButtonSize, voteButtonTopPadding, voteButtonSize, voteButtonSize);
     
-    const CGFloat smallPadding = 5.f;
     const CGFloat scoreLabelOriginX = CGRectGetMinX(_downvoteButton.frame) - scoreLabelWidth - smallPadding;
     const CGFloat scoreLabelOriginY = (viewHeight - scoreLabelHeight) / 2.f;
     
@@ -66,7 +66,8 @@ static NSString *const scoreEmptyLabel = @"0";
     
     const CGFloat labelsPadding = 3.f;
     const CGFloat labelsOriginX = CGRectGetMaxX(_imageView.frame) + standardPadding;
-    const CGFloat labelsWidth = CGRectGetMinX(_addButton.frame) - standardPadding - labelsOriginX;
+    const CGFloat rightViewsMinX = (_cellType == QueueCell) ? CGRectGetMinX(_upvoteButton.frame) : CGRectGetMinX(_addButton.frame);
+    const CGFloat labelsWidth = rightViewsMinX - smallPadding - labelsOriginX;
     const CGFloat titleOriginY = (viewHeight - titleHeight - subtitleHeight - labelsPadding) / 2.f;
     
     _titleLabel.frame = CGRectMake(labelsOriginX, titleOriginY, labelsWidth, titleHeight);

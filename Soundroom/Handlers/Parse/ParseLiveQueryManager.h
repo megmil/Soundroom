@@ -17,13 +17,6 @@ extern NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotificatio
 
 + (instancetype)shared;
 
-@property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *invitationSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *requestSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *upvoteSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *downvoteSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *roomSubscription;
-
 - (void)configureUserLiveSubscriptions;
 - (void)configureRoomLiveSubscriptions;
 - (void)clearUserLiveSubscriptions;

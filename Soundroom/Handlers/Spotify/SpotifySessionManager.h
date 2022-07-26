@@ -17,10 +17,7 @@ extern NSString *const SpotifySessionManagerRemoteDisconnectedNotificaton;
 
 @interface SpotifySessionManager : NSObject <SPTSessionManagerDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate>
 
-@property (strong, nonatomic) SPTConfiguration *configuration;
-@property (strong, nonatomic) SPTSessionManager *sessionManager;
-@property (strong, nonatomic) SPTAppRemote *appRemote;
-@property (strong, nonatomic) NSString *accessToken;
+@property (strong, nonatomic, readonly) NSString *accessToken;
 
 + (instancetype)shared;
 

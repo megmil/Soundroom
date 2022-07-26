@@ -19,11 +19,11 @@ extern NSString *const RoomManagerUpdatedQueueNotification;
 
 @interface RoomManager : NSObject
 
-@property (strong, nonatomic, readonly) NSString *currentRoomId;
-@property (strong, nonatomic, readonly) NSString *currentRoomName;
-@property (strong, nonatomic, readonly) NSMutableArray <Song *> *queue;
-@property (strong, nonatomic) Track *currentTrack;
-@property (nonatomic, readonly) BOOL isCurrentUserHost;
+@property (strong, nonatomic, readonly, getter=currentRoomId) NSString *currentRoomId;
+@property (strong, nonatomic, readonly, getter=currentRoomName) NSString *currentRoomName;
+@property (strong, nonatomic, readonly, getter=queue) NSMutableArray <Song *> *queue;
+@property (strong, nonatomic, readonly, getter=currentTrack) Track *currentTrack;
+@property (nonatomic, readonly, getter=isCurrentUserHost) BOOL isCurrentUserHost;
 
 + (instancetype)shared;
 

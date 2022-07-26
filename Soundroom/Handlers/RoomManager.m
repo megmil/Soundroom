@@ -23,6 +23,7 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
 @implementation RoomManager {
     Room *_room;
     NSMutableArray <Song *> *_queue;
+    Track *_currentTrack;
 }
 
 + (instancetype)shared {
@@ -365,6 +366,10 @@ NSString *const RoomManagerUpdatedQueueNotification = @"RoomManagerUpdatedQueueN
 
 - (NSMutableArray<Song *> *)queue {
     return _queue;
+}
+
+- (Track *)currentTrack {
+    return _currentTrack;
 }
 
 - (BOOL)isCurrentUserHost {
