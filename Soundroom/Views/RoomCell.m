@@ -43,11 +43,12 @@ NSString *const rejectButtonImageName = @"multiply.circle";
     
     [_titleLabel sizeToFit];
     
+    const CGFloat titleLabelHeight = _titleLabel.frame.size.height;
     const CGFloat titleLabelOriginX = CGRectGetMaxX(_imageView.frame) + padding;
-    const CGFloat titleLabelOriginY = CGRectGetMinY(_imageView.frame) + (( imageSize - CGRectGetHeight(_titleLabel.frame) ) / 2.f);
+    const CGFloat titleLabelOriginY = CGRectGetMinY(_imageView.frame) + ((imageSize - titleLabelHeight) / 2.f);
     const CGFloat titleLabelWidth = CGRectGetMinX(_acceptButton.frame) - padding - titleLabelOriginX;
 
-    _titleLabel.frame = CGRectMake(titleLabelOriginX, titleLabelOriginY, titleLabelWidth, _titleLabel.frame.size.height);
+    _titleLabel.frame = CGRectMake(titleLabelOriginX, titleLabelOriginY, titleLabelWidth, titleLabelHeight);
     
 }
 

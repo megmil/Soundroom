@@ -14,8 +14,8 @@ NSString *const SpotifySessionManagerRemoteDisconnectedNotificaton = @"SpotifySe
 
 NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
 NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
-NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-refresh-url";
-NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-swap-url";
+NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-swap-url";
+NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-refresh-url";
 
 // TODO: remove logs
 

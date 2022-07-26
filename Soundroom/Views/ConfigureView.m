@@ -14,8 +14,8 @@
     SkyFloatingLabelTextField *_titleField;
     
     UIImageView *_modeImageView;
-    UILabel *_modeLabel;
-    UILabel *_modeDescription;
+    UILabel *_modeTitleLabel;
+    UILabel *_modeSubtitleLabel;
     
     UIImageView *_inviteImageView;
     UILabel *_inviteLabel;
@@ -33,22 +33,61 @@
     [super layoutSubviews];
     
     [_headerLabel sizeToFit];
-    _headerLabel.frame = CGRectMake(20.f, 50.f, _headerLabel.frame.size.width, _headerLabel.frame.size.height);
-    _titleField.frame = CGRectMake(20.f, _headerLabel.frame.origin.y + _headerLabel.frame.size.height + 20.f, self.frame.size.width - 40.f, 50.f);
     
-    _modeImageView.frame = CGRectMake(35.f, _titleField.frame.origin.y + _titleField.frame.size.height + 35.f, 50.f, 50.f);
-    _modeLabel.frame = CGRectMake(_modeImageView.frame.origin.x + _modeImageView.frame.size.width + 14.f, _modeImageView.frame.origin.y + 6.f, 200.f, 19.f);
-    _modeDescription.frame = CGRectMake(_modeLabel.frame.origin.x, _modeLabel.frame.origin.y + _modeLabel.frame.size.height + 3.f, 200.f, 16.f);
+    const CGFloat viewWidth = self.frame.size.width;
     
-    _inviteImageView.frame = CGRectMake(35.f, _modeImageView.frame.origin.y + _modeImageView.frame.size.height + 35.f, 50.f, 50.f);
-    _inviteLabel.frame = CGRectMake(_inviteImageView.frame.origin.x + _inviteImageView.frame.size.width + 14.f, _inviteImageView.frame.origin.y + 15.f, 200.f, 20.f);
-    _inviteButton.frame = CGRectMake(self.frame.size.width - 50.f - 35.f, _inviteImageView.frame.origin.y, 50.f, 50.f);
+    const CGFloat widePadding = 20.f;
+    const CGFloat standardPadding = 15.f;
+    const CGFloat heavyPadding = widePadding + standardPadding;
+    const CGFloat topPadding = 50.f;
     
-    _cleanImageView.frame = CGRectMake(35.f, _inviteImageView.frame.origin.y + _inviteImageView.frame.size.height + 35.f, 50.f, 50.f);
-    _cleanLabel.frame = CGRectMake(_cleanImageView.frame.origin.x + _cleanImageView.frame.size.width + 14.f, _cleanImageView.frame.origin.y + 15.f, 200.f, 20.f);
-    _cleanSwitch.frame = CGRectMake(self.frame.size.width - 50.f - 35.f, _cleanImageView.frame.origin.y + 10.f, 0, 0); // height: 31, width: 51
+    const CGFloat headerLabelWidth = _headerLabel.frame.size.width;
+    const CGFloat headerLabelHeight = _headerLabel.frame.size.height;
+    const CGFloat switchHeight = 31.f;
+    const CGFloat standardSize = 50.f;
     
-    _createButton.frame = CGRectMake(_titleField.frame.origin.x, _cleanImageView.frame.origin.y + _cleanImageView.frame.size.height + 35.f, _titleField.frame.size.width, 50.f);
+    const CGFloat labelHeight = 20.f;
+    const CGFloat titleHeight = 19.f;
+    const CGFloat subtitleHeight = 16.f;
+    const CGFloat labelsPadding = 3.f;
+    
+    _headerLabel.frame = CGRectMake(widePadding, topPadding, headerLabelWidth, headerLabelHeight);
+    
+    const CGFloat titleFieldOriginY = CGRectGetMaxY(_headerLabel.frame) + widePadding;
+    const CGFloat wideWidth = viewWidth - (widePadding * 2.f);
+    
+    _titleField.frame = CGRectMake(widePadding, titleFieldOriginY, wideWidth, standardSize);
+    
+    const CGFloat imageViewRightAlignmentOriginX = viewWidth - standardSize - heavyPadding;
+    const CGFloat modeImageViewOriginY = CGRectGetMaxY(_titleField.frame) + heavyPadding;
+    
+    _modeImageView.frame = CGRectMake(heavyPadding, modeImageViewOriginY, standardSize, standardSize);
+    
+    const CGFloat labelsOriginX = CGRectGetMaxX(_modeImageView.frame) + standardPadding;
+    const CGFloat inviteImageViewOriginY = CGRectGetMaxY(_modeImageView.frame) + heavyPadding;
+    const CGFloat modeTitleLabelOriginY = (CGRectGetMinY(_modeImageView.frame) - (titleHeight + subtitleHeight + labelsPadding)) / 2.f;
+    
+    _inviteImageView.frame = CGRectMake(heavyPadding, inviteImageViewOriginY, standardSize, standardSize);
+    _inviteButton.frame = CGRectMake(imageViewRightAlignmentOriginX, inviteImageViewOriginY, standardSize, standardSize);
+    
+    const CGFloat cleanImageViewOriginY = CGRectGetMaxY(_inviteImageView.frame) + heavyPadding;
+    const CGFloat inviteLabelOriginY = (CGRectGetMinY(_inviteImageView.frame) - labelHeight) / 2.f;
+    const CGFloat labelWidth = CGRectGetMinY(_inviteButton.frame) - standardPadding - labelsOriginX;
+    
+    _modeTitleLabel.frame = CGRectMake(labelsOriginX, modeTitleLabelOriginY, labelWidth, titleHeight);
+    _inviteLabel.frame = CGRectMake(labelsOriginX, inviteLabelOriginY, labelWidth, labelHeight);
+    _cleanImageView.frame = CGRectMake(heavyPadding, cleanImageViewOriginY, standardSize, standardSize);
+    
+    const CGFloat createButtonOriginY = CGRectGetMaxY(_cleanImageView.frame) + heavyPadding;
+    const CGFloat modeSubtitleLabelOriginY = CGRectGetMaxY(_modeTitleLabel.frame) + labelsPadding;
+    const CGFloat cleanLabelOriginY = (CGRectGetMinY(_cleanImageView.frame) - labelHeight) / 2.f;
+    const CGFloat cleanSwitchOriginY = (CGRectGetMinY(_cleanImageView.frame) - switchHeight) / 2.f;
+    
+    _modeSubtitleLabel.frame = CGRectMake(labelsOriginX, modeSubtitleLabelOriginY, labelWidth, subtitleHeight);
+    _createButton.frame = CGRectMake(widePadding, createButtonOriginY, wideWidth, standardSize);
+    _cleanLabel.frame = CGRectMake(labelsOriginX, cleanLabelOriginY, labelWidth, labelHeight);
+    _cleanSwitch.frame = CGRectMake(imageViewRightAlignmentOriginX, cleanSwitchOriginY, 0, 0); // height: 31, width: 51
+    
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
@@ -56,6 +95,7 @@
     self = [super initWithCoder:coder];
     
     if (self) {
+        
         _headerLabel = [UILabel new];
         _headerLabel.text = @"Create room";
         _headerLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold];
@@ -73,18 +113,18 @@
         // TODO: get mode image
         [self addSubview:_modeImageView];
         
-        _modeLabel = [UILabel new];
-        _modeLabel.text = @"Party mode";
-        _modeLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        _modeLabel.numberOfLines = 1;
-        [self addSubview:_modeLabel];
+        _modeTitleLabel = [UILabel new];
+        _modeTitleLabel.text = @"Party mode";
+        _modeTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
+        _modeTitleLabel.numberOfLines = 1;
+        [self addSubview:_modeTitleLabel];
         
-        _modeDescription = [UILabel new];
-        _modeDescription.text = @"Everyone is in the same room";
-        _modeDescription.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightRegular];
-        _modeDescription.textColor = [UIColor systemGray2Color];
-        _modeDescription.numberOfLines = 1;
-        [self addSubview:_modeDescription];
+        _modeSubtitleLabel = [UILabel new];
+        _modeSubtitleLabel.text = @"Everyone is in the same room";
+        _modeSubtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightRegular];
+        _modeSubtitleLabel.textColor = [UIColor systemGray2Color];
+        _modeSubtitleLabel.numberOfLines = 1;
+        [self addSubview:_modeSubtitleLabel];
         
         _inviteImageView = [UIImageView new];
         _inviteImageView.backgroundColor = [UIColor blueColor];
@@ -124,6 +164,7 @@
         _createButton.backgroundColor = [UIColor purpleColor];
         [_createButton addTarget:self action:@selector(createRoom:) forControlEvents:UIControlEventTouchUpInside]; // TODO: remove colon?
         [self addSubview:_createButton];
+        
     }
     
     return self;

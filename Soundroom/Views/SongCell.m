@@ -73,7 +73,7 @@ NSString *const scoreEmptyLabel = @"0";
     
     _titleLabel.frame = CGRectMake(labelsOriginX, titleOriginY, labelsWidth, titleHeight);
     
-    const CGFloat subtitleOriginY = CGRectGetMinY(_titleLabel.frame) + labelsPadding;
+    const CGFloat subtitleOriginY = CGRectGetMaxY(_titleLabel.frame) + labelsPadding;
     
     _subtitleLabel.frame = CGRectMake(labelsOriginX, subtitleOriginY, labelsWidth, subtitleHeight);
     
