@@ -13,8 +13,7 @@
 #import "ParseObjectManager.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
-
-static NSString *const SearchCellReuseIdentifier = @"SearchCell";
+#import "UITableView+ReuseIdentifier.h"
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, AddCellDelegate>
 
@@ -40,7 +39,7 @@ static NSString *const SearchCellReuseIdentifier = @"SearchCell";
     _tableView.delegate = self;
     _tableView.rowHeight = 66.f;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:SearchCellReuseIdentifier];
+    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:[SongCell reuseIdentifier]];
 }
 
 - (void)configureSearch {
@@ -86,7 +85,7 @@ static NSString *const SearchCellReuseIdentifier = @"SearchCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:SearchCellReuseIdentifier];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:[SongCell reuseIdentifier]];
     cell.cellType = SearchCell;
     cell.addDelegate = self;
     

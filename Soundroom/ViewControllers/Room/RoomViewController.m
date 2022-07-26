@@ -13,8 +13,7 @@
 #import "RoomManager.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
-
-static NSString *const QueueCellReuseIdentifier = @"QueueCell";
+#import "UITableView+ReuseIdentifier.h"
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, QueueCellDelegate>
 
@@ -45,7 +44,7 @@ static NSString *const QueueCellReuseIdentifier = @"QueueCell";
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.rowHeight = 66.f;
-    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:QueueCellReuseIdentifier];
+    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:[SongCell reuseIdentifier]];
 }
 
 - (void)configureObservers {
@@ -111,7 +110,7 @@ static NSString *const QueueCellReuseIdentifier = @"QueueCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:QueueCellReuseIdentifier];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:[SongCell reuseIdentifier]];
     Song *song = [[RoomManager shared] queue][indexPath.row];
     
     cell.objectId = song.requestId;

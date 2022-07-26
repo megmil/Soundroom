@@ -38,7 +38,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     
     if (self) {
         
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"]; // TODO: file scope?
         NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
         
         NSString *clientId = credentials[credentialsKeySpotifyClientId];
