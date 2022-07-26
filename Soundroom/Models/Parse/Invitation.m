@@ -18,4 +18,18 @@
     return @"Invitation";
 }
 
+- (instancetype)initWithUserId:(NSString *)userId roomId:(NSString *)roomId isPending:(BOOL)isPending {
+    
+    self = [super init];
+    
+    if (self) {
+        self.userId = userId;
+        self.roomId = roomId;
+        self.isPending = @(isPending);
+    }
+    
+    return self;
+    
+}
+
 @end

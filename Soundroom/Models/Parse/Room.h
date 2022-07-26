@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *hostId;
 @property (nonatomic, strong) NSString *currentSongSpotifyId;
 
+- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -18,6 +18,20 @@
     return @"Request";
 }
 
+- (instancetype)initWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId userId:(NSString *)userId {
+    
+    self = [super init];
+    
+    if (self) {
+        self.spotifyId = spotifyId;
+        self.roomId = roomId;
+        self.userId = userId;
+    }
+    
+    return self;
+    
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[Request class]]) {
         Request *request = (Request *)object;

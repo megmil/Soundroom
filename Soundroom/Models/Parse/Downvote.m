@@ -18,4 +18,18 @@
     return @"Downvote";
 }
 
+- (instancetype)initWithRequestId:(NSString *)requestId userId:(NSString *)userId roomId:(NSString *)roomId {
+    
+    self = [super init];
+    
+    if (self) {
+        self.requestId = requestId;
+        self.userId = userId;
+        self.roomId = roomId;
+    }
+    
+    return self;
+    
+}
+
 @end

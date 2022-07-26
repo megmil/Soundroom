@@ -18,4 +18,17 @@
     return @"Room";
 }
 
+- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId {
+    
+    self = [super init];
+    
+    if (self) {
+        self.title = title;
+        self.hostId = hostId;
+    }
+    
+    return self;
+    
+}
+
 @end
