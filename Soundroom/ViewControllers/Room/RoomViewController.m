@@ -9,6 +9,7 @@
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
 #import "ParseObjectManager.h"
+#import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
@@ -121,6 +122,7 @@ NSString *const QueueCellReuseIdentifier = @"QueueCell";
     cell.image = song.track.albumImage;
     
     return cell;
+    
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -130,7 +132,11 @@ NSString *const QueueCellReuseIdentifier = @"QueueCell";
         return YES;
     }
     
-    // TODO: members can swipe to delete songs they requested
+    // members can swipe to delete songs they requested
+    Song *song = [[RoomManager shared] queue][indexPath.row];
+    if (song.userId && [song.userId isEqualToString:[ParseUserManager currentUserId]]) {
+        return YES;
+    }
     
     return NO;
     

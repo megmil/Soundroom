@@ -12,18 +12,17 @@
 @dynamic objectId;
 @dynamic roomId;
 @dynamic spotifyId;
+@dynamic userId;
 
 + (nonnull NSString *)parseClassName {
     return @"Request";
 }
 
 - (BOOL)isEqual:(id)object {
-    
     if ([object isKindOfClass:[Request class]]) {
         Request *request = (Request *)object;
         return [self.objectId isEqualToString:request.objectId];
     }
-    
     return NO;
 }
 

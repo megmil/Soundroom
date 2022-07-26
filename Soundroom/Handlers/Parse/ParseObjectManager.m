@@ -67,12 +67,14 @@
 
 + (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId {
     
-    NSString *currentRoomId = [[RoomManager shared] currentRoomId];
+    NSString *userId = [ParseUserManager currentUserId];
+    NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (currentRoomId) {
+    if (userId && roomId) {
         Request *newRequest = [Request new];
         newRequest.spotifyId = spotifyId;
-        newRequest.roomId = currentRoomId;
+        newRequest.roomId = roomId;
+        newRequest.userId = userId;
         [newRequest saveInBackground];
     }
     

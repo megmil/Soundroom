@@ -18,13 +18,14 @@ NSString *const songScoreKey = @"score";
 
 @implementation Song
 
-- (instancetype)initWithRequestId:(NSString *)requestId spotifyId:(NSString *)spotifyId track:(Track *)track  {
+- (instancetype)initWithRequestId:(NSString *)requestId userId:(NSString *)userId spotifyId:(NSString *)spotifyId track:(Track *)track  {
     
     self = [super init];
     
     if (self) {
         
         _requestId = requestId;
+        _userId = userId;
         _spotifyId = spotifyId;
         _track = track;
         _score = @(0);
@@ -72,7 +73,7 @@ NSString *const songScoreKey = @"score";
     }
     
     [[SpotifyAPIManager shared] getTrackWithSpotifyId:request.spotifyId completion:^(Track *track, NSError *error) {
-        Song *song = [[Song alloc] initWithRequestId:request.objectId spotifyId:request.spotifyId track:track];
+        Song *song = [[Song alloc] initWithRequestId:request.objectId userId:request.userId spotifyId:request.spotifyId track:track];
         completion(song);
     }];
     
