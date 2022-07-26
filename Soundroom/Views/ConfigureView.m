@@ -8,6 +8,11 @@
 #import "ConfigureView.h"
 @import SkyFloatingLabelTextField;
 
+static NSString *const partyModeTitle = @"Party mode";
+static NSString *const partyModeSubtitle = @"Only host plays music";
+static NSString *const remoteModeTitle = @"Remote mode";
+static NSString *const remoteModeSubtitle = @"All members play music";
+
 @implementation ConfigureView {
     
     UILabel *_headerLabel;
@@ -126,13 +131,13 @@
         [self addSubview:_modeImageView];
         
         _modeTitleLabel = [UILabel new];
-        _modeTitleLabel.text = @"Party mode";
+        _modeTitleLabel.text = partyModeTitle;
         _modeTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
         _modeTitleLabel.numberOfLines = 1;
         [self addSubview:_modeTitleLabel];
         
         _modeSubtitleLabel = [UILabel new];
-        _modeSubtitleLabel.text = @"Everyone is in the same room";
+        _modeSubtitleLabel.text = partyModeSubtitle;
         _modeSubtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightRegular];
         _modeSubtitleLabel.textColor = [UIColor systemGray2Color];
         _modeSubtitleLabel.numberOfLines = 1;
@@ -140,7 +145,8 @@
         
         _modeSwitch = [UISwitch new];
         _modeSwitch.on = NO;
-        _modeSwitch.userInteractionEnabled = NO;
+        _modeSwitch.userInteractionEnabled = YES;
+        [_modeSwitch addTarget:self action:@selector(didSwitchMode:) forControlEvents:UIControlEventValueChanged];
         [self addSubview:_modeSwitch];
         
         _inviteImageView = [UIImageView new];
@@ -185,6 +191,12 @@
     }
     
     return self;
+}
+
+- (void)didSwitchMode:(UISwitch *)sender {
+    _listeningModeType = sender.isOn ? RemoteMode : PartyMode;
+    _modeTitleLabel.text = sender.isOn ? remoteModeTitle : partyModeTitle;
+    _modeSubtitleLabel.text = sender.isOn ? remoteModeSubtitle : partyModeSubtitle;
 }
 
 - (NSString *)title {
