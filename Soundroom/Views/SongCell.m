@@ -150,6 +150,23 @@ static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
     }
     
     [self.queueDelegate didUpdateVoteStateForRequestWithId:_objectId voteState:_voteState];
+    [self animateVoteButton:sender voteState:_voteState];
+    
+}
+
+- (void)animateVoteButton:(UIButton *)sender voteState:(VoteState)voteState {
+
+    CGFloat direction = ((voteState == NotVoted) ? 1.f : -1.f) * sender.tag;
+    CGFloat multiplier = 10.f;
+    
+    CABasicAnimation *animation = [CABasicAnimation animation];
+    animation.keyPath = @"transform.translation.y";
+    animation.fromValue = @(1);
+    animation.toValue = @(multiplier * direction);
+    animation.duration = 0.2;
+    animation.autoreverses = YES;
+    animation.fillMode = kCAFillModeForwards;
+    [sender.layer addAnimation:animation forKey:@"basic"];
     
 }
 
