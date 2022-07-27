@@ -55,7 +55,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
         
         _sessionManager = [[SPTSessionManager alloc] initWithConfiguration:_configuration delegate:self];
         
-        _appRemote = [[SPTAppRemote alloc] initWithConfiguration:_configuration logLevel:SPTAppRemoteLogLevelDebug]; // TODO: change from debug
+        _appRemote = [[SPTAppRemote alloc] initWithConfiguration:_configuration logLevel:SPTAppRemoteLogLevelNone];
         _appRemote.delegate = self;
         
     }
@@ -105,37 +105,24 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 }
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didFailWithError:(nonnull NSError *)error {
-    NSLog(@"fail: %@", error.localizedDescription);
 }
 
 # pragma mark - SPTAppRemoteDelegate
 
 - (void)appRemoteDidEstablishConnection:(nonnull SPTAppRemote *)appRemote {
     _appRemote.playerAPI.delegate = self;
-    /*
-    [_appRemote.playerAPI setRepeatMode:SPTAppRemotePlaybackOptionsRepeatModeOff callback:^(id result, NSError *error) {
-        //
-    }];
-     */
-    [_appRemote.playerAPI subscribeToPlayerState:^(id result, NSError *error) {
-        if (error) {
-            NSLog(@"subscription error: %@", error.localizedDescription);
-        }
-    }];
+    [_appRemote.playerAPI subscribeToPlayerState:nil];
 }
 
 - (void)appRemote:(nonnull SPTAppRemote *)appRemote didDisconnectWithError:(nullable NSError *)error {
-    NSLog(@"disconnect: %@", error.localizedDescription);
 }
 
 - (void)appRemote:(nonnull SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error {
-    NSLog(@"failed connection: %@", error.localizedDescription);
 }
 
 # pragma mark - SPTAppRemotePlayerStateDelegate
 
 - (void)playerStateDidChange:(nonnull id<SPTAppRemotePlayerState>)playerState {
-    NSLog(@"%ld", playerState.playbackPosition);
 }
 
 # pragma mark - SceneDelegate

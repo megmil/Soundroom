@@ -25,7 +25,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // model configuration
-    [Room registerSubclass]; // TODO: remove?
+    [Room registerSubclass];
     [Request registerSubclass];
     [Upvote registerSubclass];
     [Downvote registerSubclass];

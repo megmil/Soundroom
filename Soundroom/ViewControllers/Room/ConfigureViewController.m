@@ -27,12 +27,7 @@
 }
 
 - (void)didTapInvite {
-    /*
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    SearchViewController *searchVC = [storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
-    searchVC.isUserSearch = YES;
-    [self presentViewController:searchVC animated:YES completion:nil];
-     */
+    // TODO: show searchVC, save invited users, then invite after room is created
 }
 
 @end

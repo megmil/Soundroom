@@ -22,7 +22,7 @@
     // if there is no current user, show the login view
     if (![ParseUserManager isLoggedIn]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        LoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        LoginViewController *userLoginVC = [storyboard instantiateViewControllerWithIdentifier:LoginViewControllerIdentifier];
         self.window.rootViewController = userLoginVC;
     } else {
         // else, configure live subscriptions for current user data

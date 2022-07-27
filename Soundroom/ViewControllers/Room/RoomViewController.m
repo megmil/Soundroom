@@ -39,7 +39,6 @@
     [self configureObservers];
     
     [RoomManager shared].delegate = self;
-    _playButton.enabled = [[RoomManager shared] isCurrentUserHost];
     
 }
 
@@ -71,6 +70,7 @@
 - (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
+        self->_playButton.enabled = [[RoomManager shared] isCurrentUserHost];
         [self updateQueueViews];
     });
 }
