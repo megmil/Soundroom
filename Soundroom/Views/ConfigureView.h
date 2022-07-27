@@ -6,13 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Room.h"
+#import "Room.h" // for RoomListeningModeType
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ConfigureViewDelegate
-- (void)createRoom;
-- (void)inviteMembers;
+- (void)didTapCreate;
+- (void)didTapInvite;
 @end
 
 @interface ConfigureView : UIView

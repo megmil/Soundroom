@@ -90,13 +90,11 @@ static NSString *const scoreEmptyLabel = @"0";
         
         _titleLabel = [UILabel new];
         _titleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        _titleLabel.numberOfLines = 1;
         [self.contentView addSubview:_titleLabel];
         
         _subtitleLabel = [UILabel new];
         _subtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightMedium];
         _subtitleLabel.textColor = [UIColor systemGray2Color];
-        _subtitleLabel.numberOfLines = 1;
         [self.contentView addSubview:_subtitleLabel];
         
         _addButton = [UIButton new];
@@ -116,7 +114,6 @@ static NSString *const scoreEmptyLabel = @"0";
         
         _scoreLabel = [UILabel new];
         _scoreLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
-        _scoreLabel.numberOfLines = 1;
         [self.contentView addSubview:_scoreLabel];
         
     }

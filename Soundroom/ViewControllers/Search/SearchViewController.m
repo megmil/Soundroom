@@ -21,8 +21,8 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchTypeControl;
 
-@property (nonatomic, strong) NSMutableArray<Track *> *tracks;
-@property (nonatomic, strong) NSMutableArray<PFUser *> *users;
+@property (nonatomic, strong) NSArray <Track *> *tracks;
+@property (nonatomic, strong) NSArray <PFUser *> *users;
 
 @end
 
@@ -45,7 +45,7 @@
 - (void)configureSearch {
     _searchBar.delegate = self;
     _searchTypeControl.selectedSegmentIndex = (_searchType == SearchTypeUser) ? 1 : 0;
-    _searchTypeControl.userInteractionEnabled = (_searchType == SearchTypeTrackAndUser);
+    _searchTypeControl.enabled = (_searchType == SearchTypeTrackAndUser);
     [_searchTypeControl addTarget:self action:@selector(clearSearchData) forControlEvents:UIControlEventValueChanged];
 }
 
@@ -136,7 +136,7 @@
     [[SpotifyAPIManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
         if (tracks) {
             if ([query isEqualToString:self->_searchBar.text]) {
-                self->_tracks = (NSMutableArray<Track *> *)tracks;
+                self->_tracks = (NSArray <Track *> *)tracks;
                 [self->_tableView reloadDataWithAnimation];
             }
         }
@@ -147,7 +147,7 @@
     [ParseQueryManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
         if (users) {
             if ([query isEqualToString:self->_searchBar.text]) {
-                self->_users = (NSMutableArray<PFUser *> *)users;
+                self->_users = (NSArray <PFUser *> *)users;
                 [self->_tableView reloadDataWithAnimation];
             }
         }

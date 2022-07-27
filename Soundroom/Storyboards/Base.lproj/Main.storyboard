@@ -31,7 +31,7 @@
         <!--Room-->
         <scene sceneID="j8Q-2U-MrQ">
             <objects>
-                <navigationController id="T6Q-vI-mNd" customClass="RoomNavigationController" sceneMemberID="viewController">
+                <navigationController id="T6Q-vI-mNd" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Room" image="hifispeaker.fill" catalog="system" id="rHY-wr-Ztw"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="uUL-wE-Kuv">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>

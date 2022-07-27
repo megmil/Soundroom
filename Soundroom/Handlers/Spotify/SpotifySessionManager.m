@@ -9,8 +9,6 @@
 
 NSString *const SpotifySessionManagerAuthorizedNotificaton = @"SpotifySessionManagerAuthorizedNotificaton";
 NSString *const SpotifySessionManagerDeauthorizedNotificaton = @"SpotifySessionManagerDeauthorizedNotificaton";
-NSString *const SpotifySessionManagerRemoteConnectedNotificaton = @"SpotifySessionManagerRemoteConnectedNotificaton";
-NSString *const SpotifySessionManagerRemoteDisconnectedNotificaton = @"SpotifySessionManagerRemoteDisconnectedNotificaton";
 
 static NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
 static NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
@@ -124,7 +122,6 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
             NSLog(@"subscription error: %@", error.localizedDescription);
         }
     }];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifySessionManagerRemoteConnectedNotificaton object:self];
 }
 
 - (void)appRemote:(nonnull SPTAppRemote *)appRemote didDisconnectWithError:(nullable NSError *)error {

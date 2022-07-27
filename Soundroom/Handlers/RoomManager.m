@@ -17,7 +17,6 @@
 #import "Invitation.h"
 
 NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotification";
-NSString *const RoomManagerLeftRoomNotification = @"RoomManagerLeftRoomNotification";
 
 @implementation RoomManager {
     Room *_room;
@@ -77,7 +76,7 @@ NSString *const RoomManagerLeftRoomNotification = @"RoomManagerLeftRoomNotificat
         return;
     }
     [_queue removeObjectAtIndex:index];
-    [self.delegate removeCellAtIndex:index];
+    [self.delegate deleteCellAtIndex:index];
 }
 
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
@@ -220,10 +219,8 @@ NSString *const RoomManagerLeftRoomNotification = @"RoomManagerLeftRoomNotificat
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
     
     [self loadCurrentTrack];
-    [self loadLocalQueueDataWithCompletion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            [self.delegate didRefreshQueue];
-        }
+    [self loadLocalQueueDataWithCompletion:^{
+        [self.delegate didRefreshQueue];
     }];
     
 }
@@ -252,40 +249,42 @@ NSString *const RoomManagerLeftRoomNotification = @"RoomManagerLeftRoomNotificat
     
     [[ParseLiveQueryManager shared] clearRoomLiveSubscriptions];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerLeftRoomNotification object:self];
+    [self.delegate didLeaveRoom];
     
 }
 
 # pragma mark - Queue Helpers
 
-- (void)loadLocalQueueDataWithCompletion:(PFBooleanResultBlock)completion {
+- (void)loadLocalQueueDataWithCompletion:(void (^)(void))completion {
     
     _queue = [NSMutableArray<Song *> array];
     
     [ParseQueryManager getRequestsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         
         if (!objects || !objects.count) {
-            completion(YES, error);
+            completion();
             return;
         }
         
-        [Song songsWithRequests:objects completion:^(NSMutableArray<Song *> *songs) {
+        [Song songsWithRequests:objects completion:^(NSArray <Song *> *songs) {
             
             if (!songs || !songs.count) {
-                completion(YES, nil);
+                completion();
                 return;
             }
             
-            self->_queue = songs;
-            [self loadLocalVoteDataWithCompletion:^(NSMutableArray<Song *> *result) {
+            self->_queue = (NSMutableArray <Song *> *)songs;
+            
+            [self loadLocalVoteDataWithCompletion:^(NSArray <Song *> *result) {
                 
                 if (!result || self->_queue.count != result.count) {
+                    completion();
                     return;
                 }
                 
-                self->_queue = songs;
+                self->_queue = (NSMutableArray <Song *> *)result;
                 [self sortQueue];
-                completion(YES, nil);
+                completion();
                 
             }];
             
@@ -295,7 +294,7 @@ NSString *const RoomManagerLeftRoomNotification = @"RoomManagerLeftRoomNotificat
     
 }
 
-- (void)loadLocalVoteDataWithCompletion:(void (^)(NSMutableArray <Song *> *result))completion {
+- (void)loadLocalVoteDataWithCompletion:(void (^)(NSArray <Song *> *result))completion {
     
     __block NSMutableArray <Song *> *result = [NSMutableArray <Song *> array];
     

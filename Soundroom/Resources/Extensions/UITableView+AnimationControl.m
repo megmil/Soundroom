@@ -55,7 +55,7 @@
     
 }
 
-- (void)removeCellAtIndex:(NSUInteger)index {
+- (void)deleteCellAtIndex:(NSUInteger)index {
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     

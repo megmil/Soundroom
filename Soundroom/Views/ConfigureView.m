@@ -50,7 +50,6 @@ static NSString *const remoteModeSubtitle = @"All members play music";
     const CGFloat headerLabelWidth = _headerLabel.frame.size.width;
     const CGFloat headerLabelHeight = _headerLabel.frame.size.height;
     const CGFloat switchHeight = 31.f;
-    const CGFloat switchWidth = 51.f;
     const CGFloat standardSize = 50.f;
     
     const CGFloat labelHeight = 20.f;
@@ -112,7 +111,6 @@ static NSString *const remoteModeSubtitle = @"All members play music";
         _headerLabel = [UILabel new];
         _headerLabel.text = @"Create room";
         _headerLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold];
-        _headerLabel.numberOfLines = 1;
         [self addSubview:_headerLabel];
         
         _titleField = [SkyFloatingLabelTextField new];
@@ -133,19 +131,16 @@ static NSString *const remoteModeSubtitle = @"All members play music";
         _modeTitleLabel = [UILabel new];
         _modeTitleLabel.text = partyModeTitle;
         _modeTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        _modeTitleLabel.numberOfLines = 1;
         [self addSubview:_modeTitleLabel];
         
         _modeSubtitleLabel = [UILabel new];
         _modeSubtitleLabel.text = partyModeSubtitle;
         _modeSubtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightRegular];
         _modeSubtitleLabel.textColor = [UIColor systemGray2Color];
-        _modeSubtitleLabel.numberOfLines = 1;
         [self addSubview:_modeSubtitleLabel];
         
         _modeSwitch = [UISwitch new];
         _modeSwitch.on = NO;
-        _modeSwitch.userInteractionEnabled = YES;
         [_modeSwitch addTarget:self action:@selector(didSwitchMode:) forControlEvents:UIControlEventValueChanged];
         [self addSubview:_modeSwitch];
         
@@ -157,13 +152,11 @@ static NSString *const remoteModeSubtitle = @"All members play music";
         _inviteLabel = [UILabel new];
         _inviteLabel.text = @"Invite members";
         _inviteLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        _inviteLabel.numberOfLines = 1;
         [self addSubview:_inviteLabel];
         
         _inviteButton = [UIButton new];
         [_inviteButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
-        _inviteButton.userInteractionEnabled = YES;
-        [_inviteButton addTarget:self action:@selector(inviteMembers:) forControlEvents:UIControlEventTouchUpInside];
+        [_inviteButton addTarget:self action:@selector(_inviteButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_inviteButton];
         
         _cleanImageView = [UIImageView new];
@@ -174,18 +167,17 @@ static NSString *const remoteModeSubtitle = @"All members play music";
         _cleanLabel = [UILabel new];
         _cleanLabel.text = @"Allow explicit songs";
         _cleanLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        _cleanLabel.numberOfLines = 1;
         [self addSubview:_cleanLabel];
         
         _cleanSwitch = [UISwitch new];
         _cleanSwitch.on = YES;
-        _cleanSwitch.userInteractionEnabled = NO;
+        _cleanSwitch.enabled = NO;
         [self addSubview:_cleanSwitch];
         
         _createButton = [UIButton new];
         _createButton.titleLabel.text = @"Create";
         _createButton.backgroundColor = [UIColor purpleColor];
-        [_createButton addTarget:self action:@selector(createRoom:) forControlEvents:UIControlEventTouchUpInside]; // TODO: remove colon?
+        [_createButton addTarget:self action:@selector(_createButtonTapped:) forControlEvents:UIControlEventTouchUpInside]; // TODO: remove colon?
         [self addSubview:_createButton];
         
     }
@@ -203,12 +195,12 @@ static NSString *const remoteModeSubtitle = @"All members play music";
     return _titleField.text;
 }
 
-- (void)createRoom:(UIButton *)button {
-    [self.delegate createRoom];
+- (void)_createButtonTapped:(UIButton *)button {
+    [self.delegate didTapCreate];
 }
 
-- (void)inviteMembers:(UIButton *)button {
-    [self.delegate inviteMembers];
+- (void)_inviteButtonTapped:(UIButton *)button {
+    [self.delegate didTapInvite];
 }
 
 @end

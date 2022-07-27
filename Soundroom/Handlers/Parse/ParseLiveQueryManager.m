@@ -7,6 +7,7 @@
 
 #import "ParseLiveQueryManager.h"
 #import "ParseQueryManager.h"
+#import "ParseConstants.h"
 #import "RoomManager.h"
 #import "Room.h"
 #import "Request.h"
@@ -15,10 +16,6 @@
 #import "Invitation.h"
 
 NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"ParseLiveQueryManagerUpdatedPendingInvitationsNotification";
-
-static NSString *const credentialsKeyParseClientKey = @"parse-client-key";
-static NSString *const credentialsKeyParseAppId = @"parse-app-id";
-static NSString *const credentialsKeyParseLiveServer = @"parse-live-server";
 
 @implementation ParseLiveQueryManager {
     

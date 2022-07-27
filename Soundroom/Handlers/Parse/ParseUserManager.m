@@ -16,10 +16,7 @@
 
 + (void)registerWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock)completion {
     
-    PFUser *newUser = [PFUser user];
-    newUser.username = username;
-    newUser.password = password;
-    
+    PFUser *newUser = [self userWithUsername:username password:password];
     [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self loginWithUsername:username password:password completion:completion];
@@ -50,6 +47,13 @@
             completion(error);
         }
     }];
+}
+
++ (PFUser *)userWithUsername:(NSString *)username password:(NSString *)password {
+    PFUser *newUser = [PFUser user];
+    newUser.username = username;
+    newUser.password = password;
+    return newUser;
 }
 
 # pragma mark - Current User Data

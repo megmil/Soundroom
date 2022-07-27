@@ -30,7 +30,6 @@
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
 		0422999A287DE1270086612E /* RoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229999287DE1270086612E /* RoomManager.m */; };
 		042299AB287E86630086612E /* ConfigureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299AA287E86630086612E /* ConfigureView.m */; };
-		042299BD288092C40086612E /* RoomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299BC288092C40086612E /* RoomNavigationController.m */; };
 		042D626D28876A81005DE8E7 /* Upvote.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D626C28876A81005DE8E7 /* Upvote.m */; };
 		042D627328876ACC005DE8E7 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D627228876ACC005DE8E7 /* Invitation.m */; };
 		04785C8028813094001AF277 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C7F28813094001AF277 /* AccountView.m */; };
@@ -110,8 +109,6 @@
 		04229999287DE1270086612E /* RoomManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomManager.m; sourceTree = "<group>"; };
 		042299A9287E86630086612E /* ConfigureView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureView.h; sourceTree = "<group>"; };
 		042299AA287E86630086612E /* ConfigureView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureView.m; sourceTree = "<group>"; };
-		042299BB288092C40086612E /* RoomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomNavigationController.h; sourceTree = "<group>"; };
-		042299BC288092C40086612E /* RoomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomNavigationController.m; sourceTree = "<group>"; };
 		042D626B28876A81005DE8E7 /* Upvote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Upvote.h; sourceTree = "<group>"; };
 		042D626C28876A81005DE8E7 /* Upvote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Upvote.m; sourceTree = "<group>"; };
 		042D627128876ACC005DE8E7 /* Invitation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
@@ -290,12 +287,10 @@
 		042299A5287E7DB50086612E /* Room */ = {
 			isa = PBXGroup;
 			children = (
-				042299BB288092C40086612E /* RoomNavigationController.h */,
-				042299BC288092C40086612E /* RoomNavigationController.m */,
-				0422998C287D2FA70086612E /* LobbyViewController.h */,
-				0422998D287D2FA70086612E /* LobbyViewController.m */,
 				0422998F287D2FAF0086612E /* ConfigureViewController.h */,
 				04229990287D2FAF0086612E /* ConfigureViewController.m */,
+				0422998C287D2FA70086612E /* LobbyViewController.h */,
+				0422998D287D2FA70086612E /* LobbyViewController.m */,
 				0417B5AF2874E0B6001D6B04 /* RoomViewController.h */,
 				0417B5B02874E0B6001D6B04 /* RoomViewController.m */,
 			);
@@ -686,7 +681,6 @@
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
-				042299BD288092C40086612E /* RoomNavigationController.m in Sources */,
 				04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,

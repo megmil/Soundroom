@@ -6,7 +6,6 @@
 //
 
 #import "RoomCell.h"
-#import "ParseObjectManager.h"
 
 static NSString *const acceptButtonImageName = @"checkmark.circle";
 static NSString *const rejectButtonImageName = @"multiply.circle";
@@ -65,7 +64,6 @@ static NSString *const rejectButtonImageName = @"multiply.circle";
         
         _titleLabel = [UILabel new];
         _titleLabel.font = [UIFont systemFontOfSize:17.f weight:UIFontWeightRegular];
-        _titleLabel.numberOfLines = 1;
         [self.contentView addSubview:_titleLabel];
         
         _acceptButton = [UIButton new];
@@ -88,11 +86,11 @@ static NSString *const rejectButtonImageName = @"multiply.circle";
 }
 
 - (void)didTapAcceptInvitation {
-    [ParseObjectManager acceptInvitationWithId:_objectId];
+    [self.delegate didTapAcceptInvitationWithId:_objectId];
 }
 
 - (void)didTapRejectInvitation {
-    [ParseObjectManager deleteInvitationWithId:_objectId];
+    [self.delegate didTapRejectInvitationWithId:_objectId];
 }
 
 # pragma mark - Setters
@@ -111,8 +109,8 @@ static NSString *const rejectButtonImageName = @"multiply.circle";
     
     BOOL isInvitationCell = cellType == InvitationCell;
     
-    [_acceptButton setHidden:!isInvitationCell];
-    [_rejectButton setHidden:!isInvitationCell];
+    _acceptButton.hidden = !isInvitationCell;
+    _rejectButton.hidden = !isInvitationCell;
     
 }
 

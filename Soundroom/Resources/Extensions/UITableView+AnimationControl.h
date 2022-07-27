@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)reloadDataWithAnimation;
 - (void)insertCellAtIndex:(NSUInteger)index;
-- (void)removeCellAtIndex:(NSUInteger)index;
+- (void)deleteCellAtIndex:(NSUInteger)index;
 - (void)moveCellAtIndex:(NSUInteger)pastIndex toIndex:(NSUInteger)newIndex;
 
 @end

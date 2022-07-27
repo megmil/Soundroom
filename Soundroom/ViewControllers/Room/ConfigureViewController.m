@@ -22,11 +22,11 @@
     self.configureView.delegate = self;
 }
 
-- (void)createRoom {
+- (void)didTapCreate {
     [ParseObjectManager createRoomWithTitle:_configureView.title listeningMode:_configureView.listeningMode];
 }
 
-- (void)inviteMembers {
+- (void)didTapInvite {
     /*
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SearchViewController *searchVC = [storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];

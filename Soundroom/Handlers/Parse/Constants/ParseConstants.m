@@ -21,3 +21,8 @@ NSString *const requestIdKey = @"requestId";
 NSString *const isPendingKey = @"isPending";
 NSString *const createdAtKey = @"createdAt";
 NSString *const usernameKey = @"username";
+
+NSString *const credentialsKeyParseClientKey = @"parse-client-key";
+NSString *const credentialsKeyParseAppId = @"parse-app-id";
+NSString *const credentialsKeyParseLiveServer = @"parse-live-server";
+NSString *const parseConfigurationServerURL = @"https://parseapi.back4app.com";

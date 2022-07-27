@@ -7,20 +7,22 @@
 
 #import "LobbyViewController.h"
 #import "RoomManager.h"
+#import "ParseConstants.h"
 #import "ParseQueryManager.h"
+#import "ParseObjectManager.h"
 #import "ParseLiveQueryManager.h"
 #import "RoomCell.h"
 #import "Room.h"
 #import "Invitation.h"
 #import "UITableView+AnimationControl.h"
+#import "UITableView+ReuseIdentifier.h"
 
 NSString *const LobbyViewControllerIdentifier = @"LobbyViewController";
-static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
 
-@interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource, RoomCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSArray <Invitation *> *invitations;
+@property (strong, nonatomic) NSArray <NSString *> *invitationIds;
 @property (strong, nonatomic) NSDictionary *invitationsWithRooms;
 
 @end
@@ -28,6 +30,7 @@ static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
 @implementation LobbyViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self configureTableView];
@@ -71,7 +74,7 @@ static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
                 return;
             }
             
-            self->_invitations = invitations;
+            self->_invitationIds = [invitations valueForKey:objectIdKey];
             self->_invitationsWithRooms = invitationsWithRooms;
             completion(YES, nil);
             
@@ -81,30 +84,41 @@ static NSString *const InvitationCellReuseIdentifier = @"InvitationCell";
     
 }
 
-# pragma mark - Table View
+# pragma mark - Room Cell Delegate
+
+- (void)didTapAcceptInvitationWithId:(NSString *)invitationId {
+    [ParseObjectManager acceptInvitationWithId:invitationId];
+}
+
+- (void)didTapRejectInvitationWithId:(NSString *)invitationId {
+    [ParseObjectManager deleteInvitationWithId:invitationId];
+}
+
+# pragma mark - Table View Delegate / Data Source
 
 - (void)configureTableView {
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.rowHeight = 76.f;
-    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:InvitationCellReuseIdentifier];
+    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:[RoomCell reuseIdentifier]];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _invitationsWithRooms.count;
+    return _invitationIds.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    RoomCell *cell = [tableView dequeueReusableCellWithIdentifier:InvitationCellReuseIdentifier];
+    RoomCell *cell = [tableView dequeueReusableCellWithIdentifier:[RoomCell reuseIdentifier]];
     
-    Invitation *invitation = _invitations[indexPath.row];
-    Room *room = _invitationsWithRooms[invitation.objectId];
+    NSString *invitationId = _invitationIds[indexPath.row];
+    Room *room = _invitationsWithRooms[invitationId];
     
-    cell.objectId = invitation.objectId;
+    cell.objectId = invitationId;
     cell.title = room.title;
     // TODO: set image
     cell.cellType = InvitationCell;
+    cell.delegate = self;
     return cell;
     
 }

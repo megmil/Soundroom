@@ -14,14 +14,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const RoomManagerJoinedRoomNotification;
-extern NSString *const RoomManagerLeftRoomNotification;
 
 @protocol RoomManagerDelegate
 - (void)insertCellAtIndex:(NSUInteger)index;
-- (void)removeCellAtIndex:(NSUInteger)index;
+- (void)deleteCellAtIndex:(NSUInteger)index;
 - (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex;
 - (void)didRefreshQueue;
 - (void)didUpdateCurrentTrack;
+- (void)didLeaveRoom;
 @end
 
 @interface RoomManager : NSObject

@@ -24,4 +24,9 @@ extern NSString *const isPendingKey;
 extern NSString *const createdAtKey;
 extern NSString *const usernameKey;
 
+extern NSString *const credentialsKeyParseClientKey;
+extern NSString *const credentialsKeyParseAppId;
+extern NSString *const credentialsKeyParseLiveServer;
+extern NSString *const parseConfigurationServerURL;
+
 NS_ASSUME_NONNULL_END

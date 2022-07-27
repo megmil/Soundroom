@@ -41,7 +41,7 @@ static NSString *const trackTypeName = @"track";
 - (void)getTracksWithParameters:(NSDictionary *)parameters
                      completion:(void(^)(NSArray *tracks, NSError *error))completion {
     [self GET:searchURLString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSMutableArray *tracks = [Track tracksWithJSONResponse:responseObject];
+        NSArray *tracks = [Track tracksWithJSONResponse:responseObject];
         completion(tracks, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
