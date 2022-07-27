@@ -6,10 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Track.h"
-#import "Request.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class Track;
+@class Request;
 
 typedef NS_ENUM(NSInteger, VoteState) {
     Upvoted = 1,
@@ -28,7 +29,7 @@ extern NSString *const songScoreKey;
 @property (nonatomic, strong) NSNumber *score;
 @property (nonatomic) VoteState voteState;
 
-+ (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSMutableArray <Song *> *songs))completion;
++ (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSArray <Song *> *songs))completion;
 + (void)songWithRequest:(Request *)request completion:(void (^)(Song *song))completion;
 
 @end

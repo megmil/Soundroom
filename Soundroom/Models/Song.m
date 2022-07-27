@@ -6,14 +6,9 @@
 //
 
 #import "Song.h"
-#import "ParseQueryManager.h"
-#import "ParseUserManager.h"
-#import "ParseQueryManager.h"
-#import "ParseConstants.h"
-#import "SpotifySessionManager.h"
 #import "SpotifyAPIManager.h"
-#import "Upvote.h"
-#import "Downvote.h"
+#import "Track.h"
+#import "Request.h"
 
 NSString *const songScoreKey = @"score";
 
@@ -38,7 +33,7 @@ NSString *const songScoreKey = @"score";
     
 }
 
-+ (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSMutableArray <Song *> *songs))completion {
++ (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSArray <Song *> *songs))completion {
     
     __block NSMutableArray <Song *> *result = [NSMutableArray arrayWithCapacity:requests.count];
     __block NSUInteger remainingRequests = requests.count;
@@ -81,12 +76,10 @@ NSString *const songScoreKey = @"score";
 }
 
 - (BOOL)isEqual:(id)object {
-    
     if ([object isKindOfClass:[Song class]]) {
         Song *song = (Song *)object;
         return [self.requestId isEqualToString:song.requestId];
     }
-    
     return NO;
 }
 
