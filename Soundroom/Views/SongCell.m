@@ -14,6 +14,12 @@ static NSString *const downvoteFilledImageName = @"arrowtriangle.down.fill";
 static NSString *const downvoteEmptyImageName = @"arrowtriangle.down";
 static NSString *const scoreEmptyLabel = @"0";
 
+static CGFloat const largeViewSize = 50.f;
+static CGFloat const titleFontSize = 16.f;
+static CGFloat const subtitleFontSize = 13.f;
+static CGFloat const scoreFontSize = 14.f;
+static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
+
 @implementation SongCell {
     
     UILabel *_titleLabel;
@@ -36,8 +42,6 @@ static NSString *const scoreEmptyLabel = @"0";
     const CGFloat viewWidth = self.contentView.frame.size.width;
     const CGFloat viewHeight = self.contentView.frame.size.height;
     
-    const CGFloat imageSize = 50.f;
-    const CGFloat addButtonSize = 50.f;
     const CGFloat titleHeight = 19.f;
     const CGFloat subtitleHeight = 16.f;
     const CGFloat voteButtonSize = 25.f;
@@ -51,8 +55,8 @@ static NSString *const scoreEmptyLabel = @"0";
     
     const CGFloat voteButtonTopPadding = (viewHeight - voteButtonSize) / 2.f;
     
-    _imageView.frame = CGRectMake(leftPadding, standardPadding, imageSize, imageSize);
-    _addButton.frame = CGRectMake(rightPadding - addButtonSize, standardPadding, addButtonSize, addButtonSize);
+    _imageView.frame = CGRectMake(leftPadding, standardPadding, largeViewSize, largeViewSize);
+    _addButton.frame = CGRectMake(rightPadding - largeViewSize, standardPadding, largeViewSize, largeViewSize);
     _downvoteButton.frame = CGRectMake(rightPadding - voteButtonSize, voteButtonTopPadding, voteButtonSize, voteButtonSize);
     
     const CGFloat scoreLabelOriginX = CGRectGetMinX(_downvoteButton.frame) - scoreLabelWidth - smallPadding;
@@ -85,15 +89,17 @@ static NSString *const scoreEmptyLabel = @"0";
     if (self) {
         
         _imageView = [UIImageView new];
+        _imageView.layer.cornerRadius = imageCornerRadius;
+        _imageView.clipsToBounds = YES;
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:_imageView];
         
         _titleLabel = [UILabel new];
-        _titleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
+        _titleLabel.font = [UIFont systemFontOfSize:titleFontSize weight:UIFontWeightMedium];
         [self.contentView addSubview:_titleLabel];
         
         _subtitleLabel = [UILabel new];
-        _subtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightMedium];
+        _subtitleLabel.font = [UIFont systemFontOfSize:subtitleFontSize weight:UIFontWeightMedium];
         _subtitleLabel.textColor = [UIColor systemGray2Color];
         [self.contentView addSubview:_subtitleLabel];
         
@@ -113,7 +119,7 @@ static NSString *const scoreEmptyLabel = @"0";
         [self.contentView addSubview:_downvoteButton];
         
         _scoreLabel = [UILabel new];
-        _scoreLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
+        _scoreLabel.font = [UIFont systemFontOfSize:scoreFontSize weight:UIFontWeightRegular];
         [self.contentView addSubview:_scoreLabel];
         
     }

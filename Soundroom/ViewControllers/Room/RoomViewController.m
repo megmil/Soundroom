@@ -16,6 +16,8 @@
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 
+static CGFloat const cornerRadiusRatio = 0.06f;
+
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
@@ -35,6 +37,7 @@
     
     [self fetchCurrentRoom];
     
+    [self configureHeaderViews];
     [self configureTableView];
     [self configureObservers];
     
@@ -50,6 +53,11 @@
             [self goToLobby];
         }
     }];
+}
+
+- (void)configureHeaderViews {
+    _currentSongAlbumImageView.layer.cornerRadius = _currentSongAlbumImageView.frame.size.width * cornerRadiusRatio;
+    _currentSongAlbumImageView.clipsToBounds = YES;
 }
 
 - (void)configureTableView {
