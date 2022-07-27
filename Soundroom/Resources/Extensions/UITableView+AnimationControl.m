@@ -38,11 +38,16 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     
     [self beginUpdates];
-    [self insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
     [self endUpdates];
+    
 }
 
 - (void)moveCellAtIndex:(NSUInteger)pastIndex toIndex:(NSUInteger)newIndex {
+    
+    if (pastIndex == newIndex) {
+        return;
+    }
     
     NSIndexPath *pastIndexPath = [NSIndexPath indexPathForRow:pastIndex inSection:0];
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
@@ -51,7 +56,7 @@
     [self moveRowAtIndexPath:pastIndexPath toIndexPath:newIndexPath];
     [self endUpdates];
     
-    [self reloadRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self reloadRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationMiddle];
     
 }
 
@@ -60,7 +65,7 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     
     [self beginUpdates];
-    [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     [self endUpdates];
     
 }

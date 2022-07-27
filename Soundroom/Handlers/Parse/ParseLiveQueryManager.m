@@ -53,7 +53,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
         NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
         
         NSString *server = [credentials objectForKey:credentialsKeyParseLiveServer];
-        NSString *appId = [credentials objectForKey:credentialsKeyParseAppId];
+        NSString *appId = [credentials objectForKey:credentialsKeyParseApplicationId];
         NSString *clientKey = [credentials objectForKey:credentialsKeyParseClientKey];
         
         _client = [[PFLiveQueryClient alloc] initWithServer:server applicationId:appId clientKey:clientKey];

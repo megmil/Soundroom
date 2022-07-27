@@ -47,7 +47,7 @@
     // attempt to fetch room
     [[RoomManager shared] fetchCurrentRoomWithCompletion:^(BOOL didFindRoom, NSError *error) {
         if (!didFindRoom) {
-            // if there is no room, go to lobby
+            // if there is no room, present lobbyVC
             [self goToLobby];
         }
     }];
@@ -66,13 +66,21 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:SpotifyAPIManagerFailedAccessTokenNotification object:nil];
 }
 
-# pragma mark - Notification Selectors
+# pragma mark - Selectors
 
 - (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
         [self updateQueueViews];
     });
+}
+
+- (void)reloadTrackViews {
+    [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self updateQueueViews];
+        }
+    }];
 }
 
 - (void)updateQueueViews {
@@ -85,12 +93,13 @@
     });
 }
 
-- (void)reloadTrackViews {
-    [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            [self updateQueueViews];
-        }
-    }];
+- (void)goToLobby {
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LobbyViewController *lobbyViewController = [storyboard instantiateViewControllerWithIdentifier:LobbyViewControllerIdentifier];
+        [lobbyViewController setModalPresentationStyle:UIModalPresentationCurrentContext];
+        [self presentViewController:lobbyViewController animated:YES completion:nil];
+    });
 }
 
 # pragma mark - IBActions
@@ -102,8 +111,6 @@
 - (IBAction)didTapLeaveRoom:(id)sender {
     [self leaveRoomAlert];
 }
-
-# pragma mark - SongCell Delegate
 
 - (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
     [[RoomManager shared] updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
@@ -156,15 +163,6 @@
         self->_currentSongTitleLabel.text = @"";
         self->_currentSongArtistLabel.text = @"";
         self->_currentSongAlbumImageView.image = nil;
-    });
-}
-
-- (void)goToLobby {
-    dispatch_async(dispatch_get_main_queue(), ^(void){
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        LobbyViewController *lobbyViewController = [storyboard instantiateViewControllerWithIdentifier:LobbyViewControllerIdentifier];
-        [lobbyViewController setModalPresentationStyle:UIModalPresentationCurrentContext];
-        [self presentViewController:lobbyViewController animated:YES completion:nil];
     });
 }
 

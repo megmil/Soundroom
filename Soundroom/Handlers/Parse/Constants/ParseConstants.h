@@ -25,7 +25,7 @@ extern NSString *const createdAtKey;
 extern NSString *const usernameKey;
 
 extern NSString *const credentialsKeyParseClientKey;
-extern NSString *const credentialsKeyParseAppId;
+extern NSString *const credentialsKeyParseApplicationId;
 extern NSString *const credentialsKeyParseLiveServer;
 extern NSString *const parseConfigurationServerURL;
 
