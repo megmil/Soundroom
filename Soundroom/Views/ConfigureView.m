@@ -196,7 +196,15 @@ static NSString *const remoteModeSubtitle = @"All members play music";
 }
 
 - (void)_createButtonTapped:(UIButton *)button {
+    
+    _titleField.userInteractionEnabled = NO;
+    _modeSwitch.userInteractionEnabled = NO;
+    _inviteButton.userInteractionEnabled = NO;
+    _cleanSwitch.userInteractionEnabled = NO;
+    _createButton.userInteractionEnabled = NO;
+    
     [self.delegate didTapCreate];
+    
 }
 
 - (void)_inviteButtonTapped:(UIButton *)button {

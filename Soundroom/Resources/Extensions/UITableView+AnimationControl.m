@@ -45,11 +45,13 @@
 
 - (void)moveCellAtIndex:(NSUInteger)pastIndex toIndex:(NSUInteger)newIndex {
     
+    NSIndexPath *pastIndexPath = [NSIndexPath indexPathForRow:pastIndex inSection:0];
+    
     if (pastIndex == newIndex) {
+        [self reloadRowsAtIndexPaths:@[pastIndexPath] withRowAnimation:UITableViewRowAnimationMiddle];
         return;
     }
     
-    NSIndexPath *pastIndexPath = [NSIndexPath indexPathForRow:pastIndex inSection:0];
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
     
     [self beginUpdates];
