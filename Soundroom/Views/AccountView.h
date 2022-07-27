@@ -10,11 +10,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol AccountViewDelegate
-
 - (void)didTapSpotifyLogin;
 - (void)didTapSpotifyLogout;
 - (void)didTapUserLogout;
-
 @end
 
 @interface AccountView : UIView

@@ -9,19 +9,13 @@
 #import <Parse/Parse.h>
 @import ParseLiveQuery;
 
-#define ParseLiveQueryManagerUpdatedPendingInvitationsNotification @"ParseLiveQueryManagerUpdatedPendingInvitationsNotification"
-
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification;
 
 @interface ParseLiveQueryManager : NSObject
 
 + (instancetype)shared;
-
-@property (strong, nonatomic) PFLiveQueryClient *client;
-@property (strong, nonatomic) PFLiveQuerySubscription *invitationSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *requestSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *upvoteSubscription;
-@property (strong, nonatomic) PFLiveQuerySubscription *downvoteSubscription;
 
 - (void)configureUserLiveSubscriptions;
 - (void)configureRoomLiveSubscriptions;

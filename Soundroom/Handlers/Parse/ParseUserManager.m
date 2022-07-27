@@ -8,6 +8,7 @@
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
 #import "SpotifySessionManager.h"
+#import "RoomManager.h" // TODO: move isInRoom?
 
 @implementation ParseUserManager
 
@@ -15,10 +16,7 @@
 
 + (void)registerWithUsername:(NSString *)username password:(NSString *)password completion:(PFUserResultBlock)completion {
     
-    PFUser *newUser = [PFUser user];
-    newUser.username = username;
-    newUser.password = password;
-    
+    PFUser *newUser = [self userWithUsername:username password:password];
     [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self loginWithUsername:username password:password completion:completion];
@@ -51,6 +49,13 @@
     }];
 }
 
++ (PFUser *)userWithUsername:(NSString *)username password:(NSString *)password {
+    PFUser *newUser = [PFUser user];
+    newUser.username = username;
+    newUser.password = password;
+    return newUser;
+}
+
 # pragma mark - Current User Data
 
 + (NSString *)currentUsername {
@@ -65,6 +70,10 @@
 
 + (BOOL)isLoggedIn {
     return [PFUser currentUser];
+}
+
++ (BOOL)isInRoom {
+    return [[RoomManager shared] currentRoomId]; // nil (or NO) if there is no room / room id
 }
 
 @end

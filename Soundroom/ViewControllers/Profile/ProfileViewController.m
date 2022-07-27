@@ -58,7 +58,7 @@
 - (void)goToLogin {
     SceneDelegate *sceneDelegate = (SceneDelegate * ) UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoginViewController *loginVC = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    LoginViewController *loginVC = [storyboard instantiateViewControllerWithIdentifier:LoginViewControllerIdentifier];
     sceneDelegate.window.rootViewController = loginVC;
 }
 

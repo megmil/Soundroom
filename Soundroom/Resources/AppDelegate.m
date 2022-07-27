@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "SpotifySessionManager.h"
+#import "ParseConstants.h"
 #import "Request.h"
 #import "Room.h"
 #import "Upvote.h"
@@ -34,9 +35,9 @@
     ParseClientConfiguration *configuration = [ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
         NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:path];
-        configuration.applicationId = [dictionary objectForKey:@"parse-app-id"];
-        configuration.clientKey = [dictionary objectForKey:@"parse-client-key"];
-        configuration.server = @"https://parseapi.back4app.com";
+        configuration.applicationId = [dictionary objectForKey:credentialsKeyParseApplicationId];
+        configuration.clientKey = [dictionary objectForKey:credentialsKeyParseClientKey];
+        configuration.server = parseConfigurationServerURL;
     }];
     [Parse initializeWithConfiguration:configuration];
     

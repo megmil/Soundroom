@@ -6,8 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Track.h"
-#import "Request.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@class Track;
+@class Request;
 
 typedef NS_ENUM(NSInteger, VoteState) {
     Upvoted = 1,
@@ -15,19 +18,19 @@ typedef NS_ENUM(NSInteger, VoteState) {
     Downvoted = -1
 };
 
-NS_ASSUME_NONNULL_BEGIN
+extern NSString *const songScoreKey;
 
 @interface Song : NSObject
 
 @property (nonatomic, strong) Track *track;
 @property (nonatomic, strong) NSString *requestId;
+@property (nonatomic, strong) NSString *userId;
 @property (nonatomic, strong) NSString *spotifyId;
 @property (nonatomic, strong) NSNumber *score;
 @property (nonatomic) VoteState voteState;
 
-+ (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSMutableArray <Song *> *songs))completion;
++ (void)songsWithRequests:(NSArray <Request *> *)requests completion:(void (^)(NSArray <Song *> *songs))completion;
 + (void)songWithRequest:(Request *)request completion:(void (^)(Song *song))completion;
-+ (void)loadVotesForQueue:(NSMutableArray <Song *> *)queue completion:(void (^)(NSMutableArray <Song *> *result))completion;
 
 @end
 

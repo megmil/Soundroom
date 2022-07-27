@@ -7,7 +7,19 @@
 
 #import "SpotifySessionManager.h"
 
-@implementation SpotifySessionManager
+NSString *const SpotifySessionManagerAuthorizedNotificaton = @"SpotifySessionManagerAuthorizedNotificaton";
+NSString *const SpotifySessionManagerDeauthorizedNotificaton = @"SpotifySessionManagerDeauthorizedNotificaton";
+
+static NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
+static NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
+static NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-swap-url";
+static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-refresh-url";
+
+@implementation SpotifySessionManager {
+    SPTConfiguration *_configuration;
+    SPTSessionManager *_sessionManager;
+    SPTAppRemote *_appRemote;
+}
 
 + (instancetype)shared {
     static dispatch_once_t once;
@@ -24,23 +36,26 @@
     
     if (self) {
         
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"]; // TODO: file scope?
         NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-        NSString *clientId = credentials[@"spotify-client-id"];
-        NSString *redirectURLString = credentials[@"spotify-redirect-url"];
-        NSURL *redirectURL = [NSURL URLWithString:redirectURLString];
         
-        NSString *tokenSwapURLString = credentials[@"spotify-token-swap-url"];
-        NSString *tokenRefreshURLString = credentials[@"spotify-token-refresh-url"];
+        NSString *clientId = credentials[credentialsKeySpotifyClientId];
+        NSString *redirectURLString = credentials[credentialsKeySpotifyRedirectURL];
+        NSString *tokenSwapURLString = credentials[credentialsKeySpotifyTokenSwapURL];
+        NSString *tokenRefreshURLString = credentials[credentialsKeySpotifyTokenRefreshURL];
+        
+        NSURL *redirectURL = [NSURL URLWithString:redirectURLString];
+        NSURL *tokenSwapURL = [NSURL URLWithString:tokenSwapURLString];
+        NSURL *tokenRefreshURL = [NSURL URLWithString:tokenRefreshURLString];
         
         _configuration = [[SPTConfiguration alloc] initWithClientID:clientId redirectURL:redirectURL];
-        _configuration.tokenSwapURL = [NSURL URLWithString:tokenSwapURLString];
-        _configuration.tokenRefreshURL = [NSURL URLWithString:tokenRefreshURLString];
+        _configuration.tokenSwapURL = tokenSwapURL;
+        _configuration.tokenRefreshURL = tokenRefreshURL;
         _configuration.playURI = nil; // continues playing the most recent track (must be playing track to connect)
         
         _sessionManager = [[SPTSessionManager alloc] initWithConfiguration:_configuration delegate:self];
         
-        _appRemote = [[SPTAppRemote alloc] initWithConfiguration:_configuration logLevel:SPTAppRemoteLogLevelDebug]; // TODO: change from debug
+        _appRemote = [[SPTAppRemote alloc] initWithConfiguration:_configuration logLevel:SPTAppRemoteLogLevelNone];
         _appRemote.delegate = self;
         
     }
@@ -90,33 +105,24 @@
 }
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didFailWithError:(nonnull NSError *)error {
-    NSLog(@"fail: %@", error.localizedDescription);
 }
 
 # pragma mark - SPTAppRemoteDelegate
 
 - (void)appRemoteDidEstablishConnection:(nonnull SPTAppRemote *)appRemote {
     _appRemote.playerAPI.delegate = self;
-    [_appRemote.playerAPI subscribeToPlayerState:^(id result, NSError *error) {
-        if (error) {
-            NSLog(@"subscription error: %@", error.localizedDescription);
-        }
-    }];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifySessionManagerRemoteConnectedNotificaton object:self];
+    [_appRemote.playerAPI subscribeToPlayerState:nil];
 }
 
 - (void)appRemote:(nonnull SPTAppRemote *)appRemote didDisconnectWithError:(nullable NSError *)error {
-    NSLog(@"disconnect: %@", error.localizedDescription);
 }
 
 - (void)appRemote:(nonnull SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error {
-    NSLog(@"failed connection: %@", error.localizedDescription);
 }
 
 # pragma mark - SPTAppRemotePlayerStateDelegate
 
 - (void)playerStateDidChange:(nonnull id<SPTAppRemotePlayerState>)playerState {
-    //
 }
 
 # pragma mark - SceneDelegate

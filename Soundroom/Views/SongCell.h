@@ -6,15 +6,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RoomManager.h" // TODO: need for VoteState, move?
+#import "RoomManager.h" // for VoteState?
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, SongCellType) {
-    TrackCell,
-    UserCell,
-    QueueCell
+    QueueCell,
+    SearchCell
 };
+
+@protocol QueueCellDelegate
+- (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
+@end
+
+@protocol AddCellDelegate
+- (void)didAddObjectWithId:(NSString *)objectId;
+@end
 
 @interface SongCell : UITableViewCell
 
@@ -26,6 +33,9 @@ typedef NS_ENUM(NSUInteger, SongCellType) {
 
 @property (nonatomic) VoteState voteState;
 @property (strong, nonatomic) NSNumber *score;
+
+@property (nonatomic, weak) id<QueueCellDelegate> queueDelegate;
+@property (nonatomic, weak) id<AddCellDelegate> addDelegate;
 
 @end
 

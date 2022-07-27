@@ -7,25 +7,30 @@
 
 #import "LobbyViewController.h"
 #import "RoomManager.h"
+#import "ParseConstants.h"
 #import "ParseQueryManager.h"
+#import "ParseObjectManager.h"
 #import "ParseLiveQueryManager.h"
 #import "RoomCell.h"
 #import "Room.h"
 #import "Invitation.h"
 #import "UITableView+AnimationControl.h"
-#import <Parse/Parse.h>
+#import "UITableView+ReuseIdentifier.h"
 
-@interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource>
+NSString *const LobbyViewControllerIdentifier = @"LobbyViewController";
+
+@interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource, RoomCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSMutableArray <Room *> *rooms;
-@property (strong, nonatomic) NSMutableArray <Invitation *> *invitations;
+@property (strong, nonatomic) NSArray <NSString *> *invitationIds;
+@property (strong, nonatomic) NSDictionary *invitationsWithRooms;
 
 @end
 
 @implementation LobbyViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self configureTableView];
@@ -46,19 +51,11 @@
 # pragma mark - Invitations
 
 - (void)loadRooms {
-    
     [self fetchPendingRoomsWithCompletion:^(BOOL succeeded, NSError *error) {
-        
-        if (!succeeded) {
-            self->_rooms = [NSMutableArray <Room *> array];
-            self->_invitations = [NSMutableArray <Invitation *> array];
-            [self->_tableView reloadData];
+        if (succeeded) {
+            [self->_tableView reloadDataWithAnimation];
         }
-        
-        [self->_tableView reloadDataWithAnimation];
-        
     }];
-    
 }
 
 - (void)fetchPendingRoomsWithCompletion:(PFBooleanResultBlock)completion {
@@ -70,17 +67,16 @@
             return;
         }
         
-        [ParseQueryManager getRoomsForInvitations:invitations completion:^(NSArray *rooms, NSError *error) {
+        [ParseQueryManager getRoomsForInvitations:invitations completion:^(NSDictionary *invitationsWithRooms) {
             
-            if (!rooms || !rooms.count || invitations.count != rooms.count) {
+            if (!invitationsWithRooms || !invitationsWithRooms.count) {
                 completion(NO, error);
                 return;
             }
             
-            self->_invitations = (NSMutableArray <Invitation *> *)invitations;
-            self->_rooms = (NSMutableArray <Room *> *)rooms;
+            self->_invitationIds = [invitations valueForKey:objectIdKey];
+            self->_invitationsWithRooms = invitationsWithRooms;
             completion(YES, nil);
-
             
         }];
         
@@ -88,28 +84,43 @@
     
 }
 
-# pragma mark - Table View
+# pragma mark - Room Cell Delegate
+
+- (void)didTapAcceptInvitationWithId:(NSString *)invitationId {
+    [ParseObjectManager acceptInvitationWithId:invitationId];
+}
+
+- (void)didTapRejectInvitationWithId:(NSString *)invitationId {
+    [ParseObjectManager deleteInvitationWithId:invitationId];
+}
+
+# pragma mark - Table View Delegate / Data Source
 
 - (void)configureTableView {
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.rowHeight = 76.f;
-    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:@"InvitationCell"];
+    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:[RoomCell reuseIdentifier]];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _rooms.count;
+    return _invitationIds.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RoomCell *cell = [tableView dequeueReusableCellWithIdentifier:@"InvitationCell"];
-    Invitation *invitation = _invitations[indexPath.row];
-    Room *room = _rooms[indexPath.row];
+    
+    RoomCell *cell = [tableView dequeueReusableCellWithIdentifier:[RoomCell reuseIdentifier]];
+    
+    NSString *invitationId = _invitationIds[indexPath.row];
+    Room *room = _invitationsWithRooms[invitationId];
+    
+    cell.objectId = invitationId;
     cell.title = room.title;
     // TODO: set image
-    cell.objectId = invitation.objectId;
     cell.cellType = InvitationCell;
+    cell.delegate = self;
     return cell;
+    
 }
 
 @end

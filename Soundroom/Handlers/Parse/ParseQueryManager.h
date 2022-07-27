@@ -8,20 +8,9 @@
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 
-#define RoomClass @"Room"
-#define RequestClass @"Request"
-#define UpvoteClass @"Upvote"
-#define DownvoteClass @"Downvote"
-#define InvitationClass @"Invitation"
-
-#define userIdKey @"userId"
-#define roomIdKey @"roomId"
-#define requestIdKey @"requestId"
-#define currentSongIdKey @"currentSongId"
-#define isPendingKey @"isPending"
-#define usernameKey @"username"
-
 NS_ASSUME_NONNULL_BEGIN
+
+@class Invitation;
 
 @interface ParseQueryManager : NSObject
 
@@ -30,13 +19,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (PFQuery *)queryForRequestsInCurrentRoom;
 + (PFQuery *)queryForUpvotesInCurrentRoom;
 + (PFQuery *)queryForDownvotesInCurrentRoom;
++ (PFQuery *)queryForCurrentRoom;
 
 // user
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion;
 
 // room
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
-+ (void)getRoomsForInvitations:(NSArray *)invitations completion:(PFArrayResultBlock)completion;
++ (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(void (^)(NSDictionary *invitationsWithRooms))completion;
 
 // request
 + (void)getRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
@@ -53,7 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 // invitation
 + (void)getInvitationWithId:(NSString *)invitationId completion:(PFObjectResultBlock)completion;
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion;
-+ (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsPendingForCurrentUserWithCompletion:(PFArrayResultBlock)completion;
 

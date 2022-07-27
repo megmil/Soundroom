@@ -11,38 +11,45 @@
 #import "Upvote.h"
 #import "Downvote.h"
 
-#define RoomManagerJoinedRoomNotification @"CurrentRoomManagerJoinedRoomNotification"
-#define RoomManagerLeftRoomNotification @"CurrentRoomManagerLeftRoomNotification"
-#define RoomManagerUpdatedQueueNotification @"RoomManagerUpdatedQueueNotification"
-#define RoomManagerUpdatedCurrentSongNotification @"RoomManagerUpdatedCurrentSongNotification"
-
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const RoomManagerJoinedRoomNotification;
+
+@protocol RoomManagerDelegate
+- (void)insertCellAtIndex:(NSUInteger)index;
+- (void)deleteCellAtIndex:(NSUInteger)index;
+- (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex;
+- (void)didRefreshQueue;
+- (void)didUpdateCurrentTrack;
+- (void)didLeaveRoom;
+@end
 
 @interface RoomManager : NSObject
 
-// room data
-- (NSString *)currentRoomId;
-- (NSString *)currentRoomName;
-- (NSString *)currentHostId;
-- (NSString *)currentSongId;
-- (NSMutableArray <Song *> *)queue;
-- (BOOL)isInRoom;
-- (BOOL)isCurrentUserHost;
+@property (strong, nonatomic, readonly, getter=currentRoomId) NSString *currentRoomId;
+@property (strong, nonatomic, readonly, getter=currentRoomName) NSString *currentRoomName;
+@property (strong, nonatomic, readonly, getter=queue) NSMutableArray <Song *> *queue;
+@property (strong, nonatomic, readonly, getter=currentTrack) Track *currentTrack;
+@property (nonatomic, readonly, getter=isCurrentUserHost) BOOL isCurrentUserHost;
+@property (nonatomic, weak) id<RoomManagerDelegate> delegate;
 
 + (instancetype)shared;
 
+# pragma mark - Room Tab Methods
+
 - (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
+- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
+- (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion;
+- (void)playTopSong;
+
+# pragma mark - Live Query Event Handlers
+
 - (void)joinRoomWithId:(NSString *)currentRoomId;
 - (void)clearRoomData;
-
 - (void)insertRequest:(Request *)request;
 - (void)removeRequestWithId:(NSString *)requestId;
-
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount;
-- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
-
-- (void)reloadTrackData;
-- (void)playTopSong;
+- (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId;
 
 @end
 

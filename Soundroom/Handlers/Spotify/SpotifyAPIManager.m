@@ -7,9 +7,17 @@
 
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
-#import "ParseQueryManager.h"
 
-static NSString * const baseURLString = @"https://api.spotify.com";
+NSString *const SpotifyAPIManagerFailedAccessTokenNotification = @"SpotifyAPIManagerFailedAccessTokenNotification";
+
+static NSString *const baseURLString = @"https://api.spotify.com";
+static NSString *const searchURLString = @"v1/search?";
+static NSString *const getTrackURLString = @"v1/tracks/";
+
+static NSString *const tokenParameterName = @"access_token";
+static NSString *const typeParameterName = @"type";
+static NSString *const queryParameterName = @"q";
+static NSString *const trackTypeName = @"track";
 
 @implementation SpotifyAPIManager
 
@@ -32,8 +40,8 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 - (void)getTracksWithParameters:(NSDictionary *)parameters
                      completion:(void(^)(NSArray *tracks, NSError *error))completion {
-    [self GET:@"v1/search?" parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSMutableArray *tracks = [Track tracksWithJSONResponse:responseObject];
+    [self GET:searchURLString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSArray *tracks = [Track tracksWithJSONResponse:responseObject];
         completion(tracks, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
@@ -42,7 +50,7 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 
 - (void)getTrackWithSpotifyId:(NSString *)spotifyId parameters:(NSDictionary *)parameters completion:(void(^)(Track *track, NSError *error))completion {
     
-    NSString *urlString = [NSString stringWithFormat:@"v1/tracks/%@", spotifyId];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@", getTrackURLString, spotifyId];
     
     [self GET:urlString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         Track *track = [Track trackWithJSONResponse:responseObject];
@@ -83,14 +91,14 @@ static NSString * const baseURLString = @"https://api.spotify.com";
 }
 
 - (NSDictionary *)searchRequestParametersWithToken:(NSString *)token query:(NSString *)query {
-    NSDictionary *parameters = @{@"access_token": token,
-                                 @"type": @"track",
-                                 @"q": query};
+    NSDictionary *parameters = @{tokenParameterName:token,
+                                 typeParameterName:trackTypeName,
+                                 queryParameterName:query};
     return parameters;
 }
 
 - (NSDictionary *)getRequestParametersWithToken:(NSString *)token {
-    NSDictionary *parameters = @{@"access_token": token};
+    NSDictionary *parameters = @{tokenParameterName:token};
     return parameters;
 }
 

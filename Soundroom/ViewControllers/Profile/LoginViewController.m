@@ -9,6 +9,8 @@
 #import "ParseUserManager.h"
 #import "SceneDelegate.h"
 
+NSString *const LoginViewControllerIdentifier = @"LoginViewController";
+
 @interface LoginViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;

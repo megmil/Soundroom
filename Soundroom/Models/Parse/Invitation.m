@@ -6,6 +6,7 @@
 //
 
 #import "Invitation.h"
+#import "ParseConstants.h"
 
 @implementation Invitation
 
@@ -15,7 +16,21 @@
 @dynamic isPending;
 
 + (nonnull NSString *)parseClassName {
-    return @"Invitation";
+    return InvitationClass;
+}
+
+- (instancetype)initWithUserId:(NSString *)userId roomId:(NSString *)roomId isPending:(BOOL)isPending {
+    
+    self = [super init];
+    
+    if (self) {
+        self.userId = userId;
+        self.roomId = roomId;
+        self.isPending = isPending;
+    }
+    
+    return self;
+    
 }
 
 @end

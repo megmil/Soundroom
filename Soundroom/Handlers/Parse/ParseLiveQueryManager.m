@@ -7,17 +7,31 @@
 
 #import "ParseLiveQueryManager.h"
 #import "ParseQueryManager.h"
+#import "ParseConstants.h"
 #import "RoomManager.h"
+#import "Room.h"
 #import "Request.h"
 #import "Upvote.h"
 #import "Downvote.h"
 #import "Invitation.h"
 
+NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"ParseLiveQueryManagerUpdatedPendingInvitationsNotification";
+
 @implementation ParseLiveQueryManager {
+    
+    PFLiveQueryClient *_client;
+    
+    PFLiveQuerySubscription *_invitationSubscription;
+    PFLiveQuerySubscription *_requestSubscription;
+    PFLiveQuerySubscription *_upvoteSubscription;
+    PFLiveQuerySubscription *_downvoteSubscription;
+    PFLiveQuerySubscription *_roomSubscription;
+    
     PFQuery *_invitationLiveQuery;
     PFQuery *_requestLiveQuery;
     PFQuery *_upvoteLiveQuery;
     PFQuery *_downvoteLiveQuery;
+    PFQuery *_roomLiveQuery;
 }
 
 + (instancetype)shared {
@@ -37,9 +51,11 @@
         
         NSString *path = [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
         NSMutableDictionary *credentials = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-        NSString *server = [credentials objectForKey:@"parse-live-server"];
-        NSString *appId = [credentials objectForKey:@"parse-app-id"];
-        NSString *clientKey = [credentials objectForKey:@"parse-client-key"];
+        
+        NSString *server = [credentials objectForKey:credentialsKeyParseLiveServer];
+        NSString *appId = [credentials objectForKey:credentialsKeyParseApplicationId];
+        NSString *clientKey = [credentials objectForKey:credentialsKeyParseClientKey];
+        
         _client = [[PFLiveQueryClient alloc] initWithServer:server applicationId:appId clientKey:clientKey];
         
     }
@@ -54,6 +70,7 @@
     [self configureRequestSubscription];
     [self configureUpvoteSubscription];
     [self configureDownvoteSubscription];
+    [self configureRoomSubscription];
 }
 
 - (void)clearUserLiveSubscriptions {
@@ -64,6 +81,32 @@
     [_client unsubscribeFromQuery:_requestLiveQuery];
     [_client unsubscribeFromQuery:_upvoteLiveQuery];
     [_client unsubscribeFromQuery:_downvoteLiveQuery];
+    [_client unsubscribeFromQuery:_roomLiveQuery];
+}
+
+# pragma mark - Room
+
+- (void)configureRoomSubscription {
+    
+    if (_roomLiveQuery) {
+        [_client unsubscribeFromQuery:_roomLiveQuery];
+    }
+    
+    // check for valid roomId
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    if (!roomId) {
+        return;
+    }
+    
+    _roomLiveQuery = [ParseQueryManager queryForCurrentRoom];
+    _roomSubscription = [_client subscribeToQuery:_roomLiveQuery];
+    
+    // room is updated: new current song
+    _roomSubscription = [_roomSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
+        Room *room = (Room *)object;
+        [[RoomManager shared] setCurrentTrackWithSpotifyId:room.currentSongSpotifyId];
+    }];
+
 }
 
 # pragma mark - Invitations

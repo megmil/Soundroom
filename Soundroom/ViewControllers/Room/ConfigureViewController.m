@@ -22,17 +22,12 @@
     self.configureView.delegate = self;
 }
 
-- (void)createRoom {
-    [ParseObjectManager createRoomWithTitle:_configureView.title];
+- (void)didTapCreate {
+    [ParseObjectManager createRoomWithTitle:_configureView.title listeningMode:_configureView.listeningMode];
 }
 
-- (void)inviteMembers {
-    /*
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    SearchViewController *searchVC = [storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
-    searchVC.isUserSearch = YES;
-    [self presentViewController:searchVC animated:YES completion:nil];
-     */
+- (void)didTapInvite {
+    // TODO: show searchVC, save invited users, then invite after room is created
 }
 
 @end

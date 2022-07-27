@@ -8,14 +8,13 @@
 #import "AFNetworking/AFNetworking.h"
 #import "Track.h"
 
-#define SpotifyAPIManagerFailedAccessTokenNotification @"SpotifyAPIManagerFailedAccessTokenNotification"
-
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const SpotifyAPIManagerFailedAccessTokenNotification;
 
 @interface SpotifyAPIManager : AFHTTPSessionManager
 
 + (instancetype)shared;
-
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion;
 - (void)getTrackWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Track *track, NSError *error))completion;
 

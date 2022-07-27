@@ -24,16 +24,17 @@
 		0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C52874F5D6001D6B04 /* SongCell.m */; };
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* Request.m */; };
+		041823E6289055BD003962B6 /* UITableView+ReuseIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */; };
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
 		0422999A287DE1270086612E /* RoomManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229999287DE1270086612E /* RoomManager.m */; };
 		042299AB287E86630086612E /* ConfigureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299AA287E86630086612E /* ConfigureView.m */; };
-		042299BD288092C40086612E /* RoomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 042299BC288092C40086612E /* RoomNavigationController.m */; };
 		042D626D28876A81005DE8E7 /* Upvote.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D626C28876A81005DE8E7 /* Upvote.m */; };
 		042D627328876ACC005DE8E7 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D627228876ACC005DE8E7 /* Invitation.m */; };
 		04785C8028813094001AF277 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C7F28813094001AF277 /* AccountView.m */; };
 		04785C8C2886198F001AF277 /* SpotifySessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C8B2886198F001AF277 /* SpotifySessionManager.m */; };
+		04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04854387288F96BE005B4AD7 /* ParseConstants.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
@@ -45,6 +46,8 @@
 		04DF2F4B288A1A5A00FD28E4 /* ParseQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4A288A1A5A00FD28E4 /* ParseQueryManager.m */; };
 		04DF2F4E288B064000FD28E4 /* ParseObjectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DF2F4D288B064000FD28E4 /* ParseObjectManager.m */; };
 		2A8C38DE55CFE15D8D15AD07 /* Pods_Soundroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D03DCE9A1C7558DDDF0ED670 /* Pods_Soundroom.framework */; };
+		743437E6388EFE5BB3DC7A9E /* Pods_SoundroomTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F527BCC1D5CD6C1B7E45B83 /* Pods_SoundroomTests.framework */; };
+		A07BB9AB35E38028774E9F66 /* Pods_Soundroom_SoundroomUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00EBDD6FDB9BE73C854FBA64 /* Pods_Soundroom_SoundroomUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00EBDD6FDB9BE73C854FBA64 /* Pods_Soundroom_SoundroomUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundroom_SoundroomUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0417B5652874B75F001D6B04 /* Soundroom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soundroom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0417B5682874B75F001D6B04 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0417B5692874B75F001D6B04 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -96,6 +100,8 @@
 		0417B5C82874F5F2001D6B04 /* RoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomCell.m; sourceTree = "<group>"; };
 		0417B5CA2874F6E6001D6B04 /* Request.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Request.h; sourceTree = "<group>"; };
 		0417B5CB2874F6E6001D6B04 /* Request.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
+		041823E4289055BD003962B6 /* UITableView+ReuseIdentifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+ReuseIdentifier.h"; sourceTree = "<group>"; };
+		041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ReuseIdentifier.m"; sourceTree = "<group>"; };
 		0422998C287D2FA70086612E /* LobbyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LobbyViewController.h; sourceTree = "<group>"; };
 		0422998D287D2FA70086612E /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
 		0422998F287D2FAF0086612E /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
@@ -106,8 +112,6 @@
 		04229999287DE1270086612E /* RoomManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomManager.m; sourceTree = "<group>"; };
 		042299A9287E86630086612E /* ConfigureView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureView.h; sourceTree = "<group>"; };
 		042299AA287E86630086612E /* ConfigureView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigureView.m; sourceTree = "<group>"; };
-		042299BB288092C40086612E /* RoomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomNavigationController.h; sourceTree = "<group>"; };
-		042299BC288092C40086612E /* RoomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomNavigationController.m; sourceTree = "<group>"; };
 		042D626B28876A81005DE8E7 /* Upvote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Upvote.h; sourceTree = "<group>"; };
 		042D626C28876A81005DE8E7 /* Upvote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Upvote.m; sourceTree = "<group>"; };
 		042D627128876ACC005DE8E7 /* Invitation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 		04785C7F28813094001AF277 /* AccountView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		04785C8A2886198F001AF277 /* SpotifySessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifySessionManager.h; sourceTree = "<group>"; };
 		04785C8B2886198F001AF277 /* SpotifySessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifySessionManager.m; sourceTree = "<group>"; };
+		04854386288F96A7005B4AD7 /* ParseConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseConstants.h; sourceTree = "<group>"; };
+		04854387288F96BE005B4AD7 /* ParseConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseConstants.m; sourceTree = "<group>"; };
 		049304A428762A58006AA9A3 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		049304A928762B12006AA9A3 /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
 		049304AA28762B12006AA9A3 /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
@@ -136,6 +142,7 @@
 		04DF2F4D288B064000FD28E4 /* ParseObjectManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseObjectManager.m; sourceTree = "<group>"; };
 		05BA8035371BF12C93686B44 /* Pods-SoundroomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundroomTests.debug.xcconfig"; path = "Target Support Files/Pods-SoundroomTests/Pods-SoundroomTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5AC9246B9074C30C2C8BD3E1 /* Pods-Soundroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.release.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.release.xcconfig"; sourceTree = "<group>"; };
+		5F527BCC1D5CD6C1B7E45B83 /* Pods_SoundroomTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundroomTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6746B66977F4F2E15378B150 /* Pods-Soundroom-SoundroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7F7B2491B84C18FC2505113B /* Pods-Soundroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom.debug.xcconfig"; path = "Target Support Files/Pods-Soundroom/Pods-Soundroom.debug.xcconfig"; sourceTree = "<group>"; };
 		CDAD3879A60A9B38F5CDC353 /* Pods-Soundroom-SoundroomUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundroom-SoundroomUITests.release.xcconfig"; path = "Target Support Files/Pods-Soundroom-SoundroomUITests/Pods-Soundroom-SoundroomUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				743437E6388EFE5BB3DC7A9E /* Pods_SoundroomTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A07BB9AB35E38028774E9F66 /* Pods_Soundroom_SoundroomUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,12 +293,10 @@
 		042299A5287E7DB50086612E /* Room */ = {
 			isa = PBXGroup;
 			children = (
-				042299BB288092C40086612E /* RoomNavigationController.h */,
-				042299BC288092C40086612E /* RoomNavigationController.m */,
-				0422998C287D2FA70086612E /* LobbyViewController.h */,
-				0422998D287D2FA70086612E /* LobbyViewController.m */,
 				0422998F287D2FAF0086612E /* ConfigureViewController.h */,
 				04229990287D2FAF0086612E /* ConfigureViewController.m */,
+				0422998C287D2FA70086612E /* LobbyViewController.h */,
+				0422998D287D2FA70086612E /* LobbyViewController.m */,
 				0417B5AF2874E0B6001D6B04 /* RoomViewController.h */,
 				0417B5B02874E0B6001D6B04 /* RoomViewController.m */,
 			);
@@ -310,6 +317,7 @@
 		042299A7287E7E170086612E /* Parse */ = {
 			isa = PBXGroup;
 			children = (
+				04854389288F96C8005B4AD7 /* Constants */,
 				04229995287DDB5C0086612E /* ParseUserManager.h */,
 				04229996287DDB5C0086612E /* ParseUserManager.m */,
 				04DF2F49288A1A5900FD28E4 /* ParseQueryManager.h */,
@@ -348,6 +356,15 @@
 			path = Parse;
 			sourceTree = "<group>";
 		};
+		04854389288F96C8005B4AD7 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				04854386288F96A7005B4AD7 /* ParseConstants.h */,
+				04854387288F96BE005B4AD7 /* ParseConstants.m */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 		049304A628762AA9006AA9A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -378,6 +395,8 @@
 			children = (
 				04CC546E288B401200FC5707 /* UITableView+AnimationControl.h */,
 				04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */,
+				041823E4289055BD003962B6 /* UITableView+ReuseIdentifier.h */,
+				041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -387,6 +406,8 @@
 			children = (
 				049304A428762A58006AA9A3 /* SpotifyiOS.framework */,
 				D03DCE9A1C7558DDDF0ED670 /* Pods_Soundroom.framework */,
+				00EBDD6FDB9BE73C854FBA64 /* Pods_Soundroom_SoundroomUITests.framework */,
+				5F527BCC1D5CD6C1B7E45B83 /* Pods_SoundroomTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -651,6 +672,7 @@
 				049304AB28762B12006AA9A3 /* SpotifyAPIManager.m in Sources */,
 				04785C8C2886198F001AF277 /* SpotifySessionManager.m in Sources */,
 				0417B57B2874B761001D6B04 /* main.m in Sources */,
+				041823E6289055BD003962B6 /* UITableView+ReuseIdentifier.m in Sources */,
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
 				049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */,
 				04CC5470288B401200FC5707 /* UITableView+AnimationControl.m in Sources */,
@@ -667,7 +689,7 @@
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
-				042299BD288092C40086612E /* RoomNavigationController.m in Sources */,
+				04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,

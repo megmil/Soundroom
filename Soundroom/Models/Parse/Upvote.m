@@ -6,6 +6,7 @@
 //
 
 #import "Upvote.h"
+#import "ParseConstants.h"
 
 @implementation Upvote
 
@@ -15,7 +16,21 @@
 @dynamic userId;
 
 + (nonnull NSString *)parseClassName {
-    return @"Upvote";
+    return UpvoteClass;
+}
+
+- (instancetype)initWithRequestId:(NSString *)requestId userId:(NSString *)userId roomId:(NSString *)roomId {
+    
+    self = [super init];
+    
+    if (self) {
+        self.requestId = requestId;
+        self.userId = userId;
+        self.roomId = roomId;
+    }
+    
+    return self;
+    
 }
 
 @end

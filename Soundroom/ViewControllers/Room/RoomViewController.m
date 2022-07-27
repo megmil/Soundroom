@@ -6,14 +6,17 @@
 //
 
 #import "RoomViewController.h"
+#import "LobbyViewController.h"
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
 #import "ParseObjectManager.h"
+#import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
+#import "UITableView+ReuseIdentifier.h"
 
-@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
@@ -29,56 +32,74 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-
+    
+    [self fetchCurrentRoom];
+    
     [self configureTableView];
     [self configureObservers];
     
+    [RoomManager shared].delegate = self;
+    
+}
+
+- (void)fetchCurrentRoom {
+    // attempt to fetch room
+    [[RoomManager shared] fetchCurrentRoomWithCompletion:^(BOOL didFindRoom, NSError *error) {
+        if (!didFindRoom) {
+            // if there is no room, present lobbyVC
+            [self goToLobby];
+        }
+    }];
 }
 
 - (void)configureTableView {
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.rowHeight = 66.f;
-    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:@"QueueCell"];
+    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:[SongCell reuseIdentifier]];
 }
 
 - (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearRoomViews) name:RoomManagerLeftRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateQueueViews) name:RoomManagerUpdatedQueueNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentSongViews) name:RoomManagerUpdatedCurrentSongNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:SpotifyAPIManagerFailedAccessTokenNotification object:nil];
 }
 
-# pragma mark - Notification Selectors
+# pragma mark - Selectors
 
 - (void)loadRoomViews {
-    dispatch_async(dispatch_get_main_queue(), ^(void){
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
         self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
+        self->_playButton.enabled = [[RoomManager shared] isCurrentUserHost];
         [self updateQueueViews];
     });
 }
 
-- (void)clearRoomViews {
-    dispatch_async(dispatch_get_main_queue(), ^(void){
-        self->_roomNameLabel.text = @"";
-    });
+- (void)reloadTrackViews {
+    [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self updateQueueViews];
+        }
+    }];
 }
 
 - (void)updateQueueViews {
-    [self updateCurrentSongViews];
-    dispatch_async(dispatch_get_main_queue(), ^(void){
+    Track *track = [[RoomManager shared] currentTrack];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_currentSongTitleLabel.text = track.title;
+        self->_currentSongArtistLabel.text = track.artist;
+        self->_currentSongAlbumImageView.image = track.albumImage;
         [self->_tableView reloadDataWithAnimation];
     });
 }
 
-- (void)updateCurrentSongViews {
-    // TODO: get info
-}
-
-- (void)updateTrackViews {
-    [[RoomManager shared] reloadTrackData];
+- (void)goToLobby {
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LobbyViewController *lobbyViewController = [storyboard instantiateViewControllerWithIdentifier:LobbyViewControllerIdentifier];
+        [lobbyViewController setModalPresentationStyle:UIModalPresentationCurrentContext];
+        [self presentViewController:lobbyViewController animated:YES completion:nil];
+    });
 }
 
 # pragma mark - IBActions
@@ -91,6 +112,60 @@
     [self leaveRoomAlert];
 }
 
+- (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
+    [[RoomManager shared] updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
+}
+
+# pragma mark - RoomManager Delegate
+
+- (void)insertCellAtIndex:(NSUInteger)index {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_tableView insertCellAtIndex:index];
+    });
+}
+
+- (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_tableView moveCellAtIndex:oldIndex toIndex:newIndex];
+    });
+}
+
+- (void)deleteCellAtIndex:(NSUInteger)index {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_tableView deleteCellAtIndex:index];
+    });
+}
+
+- (void)didRefreshQueue {
+    [self didUpdateCurrentTrack];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_tableView reloadDataWithAnimation];
+    });
+}
+
+- (void)didUpdateCurrentTrack {
+    Track *track = [[RoomManager shared] currentTrack];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_currentSongTitleLabel.text = track.title;
+        self->_currentSongArtistLabel.text = track.artist;
+        self->_currentSongAlbumImageView.image = track.albumImage;
+    });
+}
+
+- (void)didLeaveRoom {
+    [self clearRoomViews];
+    [self goToLobby];
+}
+
+- (void)clearRoomViews {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_roomNameLabel.text = @"";
+        self->_currentSongTitleLabel.text = @"";
+        self->_currentSongArtistLabel.text = @"";
+        self->_currentSongAlbumImageView.image = nil;
+    });
+}
+
 # pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -99,13 +174,14 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QueueCell"];
+    SongCell *cell = [tableView dequeueReusableCellWithIdentifier:[SongCell reuseIdentifier]];
     Song *song = [[RoomManager shared] queue][indexPath.row];
     
     cell.objectId = song.requestId;
     cell.score = song.score;
     cell.voteState = song.voteState;
     cell.cellType = QueueCell;
+    cell.queueDelegate = self;
     
     // track data
     cell.title = song.track.title;
@@ -113,6 +189,7 @@
     cell.image = song.track.albumImage;
     
     return cell;
+    
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -122,7 +199,11 @@
         return YES;
     }
     
-    // TODO: members can swipe to delete songs they requested
+    // members can swipe to delete songs they requested
+    Song *song = [[RoomManager shared] queue][indexPath.row];
+    if (song.userId && [song.userId isEqualToString:[ParseUserManager currentUserId]]) {
+        return YES;
+    }
     
     return NO;
     
@@ -157,17 +238,21 @@
                                 }];
 
    [alert addAction:retryButton];
-   [self presentViewController:alert animated:YES completion:nil];
     
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 - (void)leaveRoomAlert {
     
     NSString *title = @"Leave Room";
     NSString *message = @"Are you sure you want to leave this room?";
+    NSString *buttonMessage = @"Leave";
     if ([[RoomManager shared] isCurrentUserHost]) {
         title = @"End Session?";
         message = @"Are you sure you want to end this session?";
+        buttonMessage = @"End";
     }
     
     UIAlertController *alert = [UIAlertController
@@ -181,16 +266,19 @@
                                    handler:^(UIAlertAction *action) { return; }];
     
     UIAlertAction *leaveButton = [UIAlertAction
-                                  actionWithTitle:@"Leave"
+                                  actionWithTitle:buttonMessage
                                   style:UIAlertActionStyleDestructive
                                   handler:^(UIAlertAction *action) {
                                     [ParseObjectManager deleteInvitationsAcceptedByCurrentUser];
+                                    [[RoomManager shared] clearRoomData];
                                 }];
 
    [alert addAction:cancelButton];
    [alert addAction:leaveButton];
 
-   [self presentViewController:alert animated:YES completion:nil];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self presentViewController:alert animated:YES completion:nil];
+    });
     
 }
 

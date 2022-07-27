@@ -6,8 +6,13 @@
 //
 
 #import "SongCell.h"
-#import "ParseObjectManager.h"
-#import "RoomManager.h"
+
+static NSString *const addImageName = @"plus";
+static NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
+static NSString *const upvoteEmptyImageName = @"arrowtriangle.up";
+static NSString *const downvoteFilledImageName = @"arrowtriangle.down.fill";
+static NSString *const downvoteEmptyImageName = @"arrowtriangle.down";
+static NSString *const scoreEmptyLabel = @"0";
 
 @implementation SongCell {
     
@@ -23,21 +28,54 @@
 }
 
 - (void)layoutSubviews {
+    
     [super layoutSubviews];
     
-    _imageView.frame = CGRectMake(20.f, 8.f, 50.f, 50.f);
-    _addButton.frame = CGRectMake(self.contentView.frame.size.width - 50.f - 20.f, 8.f, 50.f, 50.f);
-    
-    const CGFloat imageToLabels = _imageView.frame.origin.x + _imageView.frame.size.width + 8.f;
-    const CGFloat labelsToButton = _addButton.frame.origin.x + 8.f;
-    
-    _titleLabel.frame = CGRectMake(imageToLabels, _imageView.frame.origin.y + 6.f, labelsToButton - imageToLabels, 19.f);
-    _subtitleLabel.frame = CGRectMake(_titleLabel.frame.origin.x, _titleLabel.frame.origin.y + _titleLabel.frame.size.height + 3.f, _titleLabel.frame.size.width, 16.f);
-    
     [_scoreLabel sizeToFit];
-    _downvoteButton.frame = CGRectMake(self.contentView.frame.size.width - 25.f - 20.f, 20.5f, 25.f, 25.f);
-    _scoreLabel.frame = CGRectMake(_downvoteButton.frame.origin.x - _scoreLabel.frame.size.width - 5.f, (self.contentView.frame.size.height - _scoreLabel.frame.size.height) / 2.f, _scoreLabel.frame.size.width, _scoreLabel.frame.size.height);
-    _upvoteButton.frame = CGRectMake(_scoreLabel.frame.origin.x - 25.f - 5.f, 20.5f, 25.f, 25.f);
+    
+    const CGFloat viewWidth = self.contentView.frame.size.width;
+    const CGFloat viewHeight = self.contentView.frame.size.height;
+    
+    const CGFloat imageSize = 50.f;
+    const CGFloat addButtonSize = 50.f;
+    const CGFloat titleHeight = 19.f;
+    const CGFloat subtitleHeight = 16.f;
+    const CGFloat voteButtonSize = 25.f;
+    const CGFloat scoreLabelWidth = _scoreLabel.frame.size.width;
+    const CGFloat scoreLabelHeight = _scoreLabel.frame.size.height;
+    
+    const CGFloat leftPadding = 20.f;
+    const CGFloat rightPadding = viewWidth - leftPadding;
+    const CGFloat standardPadding = 8.f;
+    const CGFloat smallPadding = 5.f;
+    
+    const CGFloat voteButtonTopPadding = (viewHeight - voteButtonSize) / 2.f;
+    
+    _imageView.frame = CGRectMake(leftPadding, standardPadding, imageSize, imageSize);
+    _addButton.frame = CGRectMake(rightPadding - addButtonSize, standardPadding, addButtonSize, addButtonSize);
+    _downvoteButton.frame = CGRectMake(rightPadding - voteButtonSize, voteButtonTopPadding, voteButtonSize, voteButtonSize);
+    
+    const CGFloat scoreLabelOriginX = CGRectGetMinX(_downvoteButton.frame) - scoreLabelWidth - smallPadding;
+    const CGFloat scoreLabelOriginY = (viewHeight - scoreLabelHeight) / 2.f;
+    
+    _scoreLabel.frame = CGRectMake(scoreLabelOriginX, scoreLabelOriginY, scoreLabelWidth, scoreLabelHeight);
+    
+    const CGFloat upvoteButtonOriginX = CGRectGetMinX(_scoreLabel.frame) - voteButtonSize - smallPadding;
+    
+    _upvoteButton.frame = CGRectMake(upvoteButtonOriginX, voteButtonTopPadding, voteButtonSize, voteButtonSize);
+    
+    const CGFloat labelsPadding = 3.f;
+    const CGFloat labelsOriginX = CGRectGetMaxX(_imageView.frame) + standardPadding;
+    const CGFloat rightViewsMinX = (_cellType == QueueCell) ? CGRectGetMinX(_upvoteButton.frame) : CGRectGetMinX(_addButton.frame);
+    const CGFloat labelsWidth = rightViewsMinX - smallPadding - labelsOriginX;
+    const CGFloat titleOriginY = (viewHeight - titleHeight - subtitleHeight - labelsPadding) / 2.f;
+    
+    _titleLabel.frame = CGRectMake(labelsOriginX, titleOriginY, labelsWidth, titleHeight);
+    
+    const CGFloat subtitleOriginY = CGRectGetMaxY(_titleLabel.frame) + labelsPadding;
+    
+    _subtitleLabel.frame = CGRectMake(labelsOriginX, subtitleOriginY, labelsWidth, subtitleHeight);
+    
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -45,23 +83,22 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
     if (self) {
+        
         _imageView = [UIImageView new];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:_imageView];
         
         _titleLabel = [UILabel new];
         _titleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        _titleLabel.numberOfLines = 1;
         [self.contentView addSubview:_titleLabel];
         
         _subtitleLabel = [UILabel new];
         _subtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightMedium];
         _subtitleLabel.textColor = [UIColor systemGray2Color];
-        _subtitleLabel.numberOfLines = 1;
         [self.contentView addSubview:_subtitleLabel];
         
         _addButton = [UIButton new];
-        _addButton.userInteractionEnabled = YES;
+        [_addButton setImage:[UIImage systemImageNamed:addImageName] forState:UIControlStateNormal];
         [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_addButton];
         
@@ -77,8 +114,8 @@
         
         _scoreLabel = [UILabel new];
         _scoreLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
-        _scoreLabel.numberOfLines = 1;
         [self.contentView addSubview:_scoreLabel];
+        
     }
     
     return self;
@@ -87,26 +124,27 @@
 # pragma mark - Buttons
 
 - (void)didTapAdd {
-    
-    if (_cellType == TrackCell) {
-        [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:_objectId];
-        return;
-    }
-    
-    [ParseObjectManager createInvitationToCurrentRoomForUserWithId:_objectId];
-    
+    [self.addDelegate didAddObjectWithId:_objectId];
+    _addButton.transform = CGAffineTransformMakeScale(1.4f, 1.4f);
+    [UIView animateWithDuration:0.6
+                          delay:0.1
+         usingSpringWithDamping:0.8f
+          initialSpringVelocity:0.5f
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{ self->_addButton.transform = CGAffineTransformIdentity; }
+                     completion:nil];
 }
 
 - (void)didTapVote:(UIButton *)sender {
-    
+
     if (_voteState == sender.tag) {
         _voteState = NotVoted;
     } else {
         _voteState = sender.tag;
     }
     
-    [[RoomManager shared] updateCurrentUserVoteForRequestWithId:_objectId voteState:_voteState];
-
+    [self.queueDelegate didUpdateVoteStateForRequestWithId:_objectId voteState:_voteState];
+    
 }
 
 # pragma mark - Setters
@@ -126,7 +164,7 @@
 - (void)setScore:(NSNumber *)score {
     
     if (!score) {
-        _scoreLabel.text = @"0";
+        _scoreLabel.text = scoreEmptyLabel;
         return;
     }
     
@@ -139,38 +177,25 @@
     _voteState = voteState;
     
     if (voteState == Upvoted) {
-        [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up.fill"] forState:UIControlStateNormal];
-        [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down"] forState:UIControlStateNormal];
+        [_upvoteButton setImage:[UIImage systemImageNamed:upvoteFilledImageName] forState:UIControlStateNormal];
+        [_downvoteButton setImage:[UIImage systemImageNamed:downvoteEmptyImageName] forState:UIControlStateNormal];
     } else if (voteState == Downvoted) {
-        [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];
-        [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down.fill"] forState:UIControlStateNormal];
+        [_upvoteButton setImage:[UIImage systemImageNamed:upvoteEmptyImageName] forState:UIControlStateNormal];
+        [_downvoteButton setImage:[UIImage systemImageNamed:downvoteFilledImageName] forState:UIControlStateNormal];
     } else {
-        [_upvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.up"] forState:UIControlStateNormal];
-        [_downvoteButton setImage:[UIImage systemImageNamed:@"arrowtriangle.down"] forState:UIControlStateNormal];
+        [_upvoteButton setImage:[UIImage systemImageNamed:upvoteEmptyImageName] forState:UIControlStateNormal];
+        [_downvoteButton setImage:[UIImage systemImageNamed:downvoteEmptyImageName] forState:UIControlStateNormal];
     }
     
 }
 
 - (void)setCellType:(SongCellType)cellType {
-    
+    BOOL isQueueCell = cellType == QueueCell;
+    _addButton.hidden = isQueueCell;
+    _upvoteButton.hidden = !isQueueCell;
+    _downvoteButton.hidden = !isQueueCell;
+    _scoreLabel.hidden = !isQueueCell;
     _cellType = cellType;
-    
-    BOOL isAddCell = !(cellType == QueueCell);
-    [self setIsAddCell:isAddCell];
-    
-    if (cellType == TrackCell) {
-        [_addButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal]; // TODO: check if already added
-    } else if (cellType == UserCell) {
-        [_addButton setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal]; // TODO: check if already added
-    }
-    
-}
-
-- (void)setIsAddCell:(BOOL)isAddCell {
-    _addButton.hidden = !isAddCell;
-    _upvoteButton.hidden = isAddCell;
-    _downvoteButton.hidden = isAddCell;
-    _scoreLabel.hidden = isAddCell;
 }
 
 @end

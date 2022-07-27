@@ -7,10 +7,13 @@
 
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
+#import "ParseConstants.h"
 #import "RoomManager.h"
 #import "Room.h"
 #import "Invitation.h"
-#import "Request.h" // TODO: move logic that requires Request import?
+#import "Request.h"
+
+static const NSInteger searchLimit = 20;
 
 @implementation ParseQueryManager
 
@@ -40,13 +43,19 @@
     return query;
 }
 
++ (PFQuery *)queryForCurrentRoom {
+    PFQuery *query = [PFQuery queryWithClassName:RoomClass];
+    [query whereKey:objectIdKey equalTo:[[RoomManager shared] currentRoomId]];
+    return query;
+}
+
 # pragma mark - User
 
 + (void)getUsersWithUsername:(NSString *)username completion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFUser query];
     [query whereKey:usernameKey matchesRegex:username modifiers:@"i"]; // ignore case
-    [query whereKey:usernameKey notEqualTo:ParseUserManager.currentUserId]; // exclude current user
-    query.limit = 20;
+    [query whereKey:objectIdKey notEqualTo:ParseUserManager.currentUserId]; // exclude current user
+    query.limit = searchLimit;
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
@@ -57,22 +66,22 @@
     [query getObjectInBackgroundWithId:roomId block:completion];
 }
 
-+ (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(PFArrayResultBlock)completion {
++ (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(void (^)(NSDictionary *invitationsWithRooms))completion {
+
+    __block NSMutableDictionary *invitationsWithRooms = [NSMutableDictionary new];
+    __block NSUInteger counter = invitations.count;
     
-    __block NSMutableArray <Room *> *rooms = [NSMutableArray <Room *> array];
-    __block NSUInteger counter = 0; // counter to completion
-    
-    for (NSUInteger i = 0; i != invitations.count; i++) {
+    for (Invitation *invitation in invitations) {
         
-        [self getRoomWithId:invitations[i].roomId completion:^(PFObject *object, NSError *error) {
+        [self getRoomWithId:invitation.roomId completion:^(PFObject *object, NSError *error) {
             
             if (object) {
                 Room *room = (Room *)object;
-                [rooms addObject:room];
+                invitationsWithRooms[invitation.objectId] = room;
             }
             
-            if (++counter == invitations.count) {
-                completion(rooms, error);
+            if (--counter == 0) {
+                completion(invitationsWithRooms);
             }
             
         }];
@@ -90,7 +99,7 @@
 
 + (void)getRequestsInCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
     PFQuery *query = [self queryForRequestsInCurrentRoom];
-    [query orderByAscending:@"createdAt"];
+    [query orderByAscending:createdAtKey];
     [query findObjectsInBackgroundWithBlock:completion];
 }
 

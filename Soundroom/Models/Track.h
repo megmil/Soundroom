@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIImage *albumImage;
 @property (nonatomic, strong) NSString *durationString;
 
-+ (NSMutableArray *)tracksWithJSONResponse:(NSDictionary *)response;
++ (NSArray *)tracksWithJSONResponse:(NSDictionary *)response;
 + (Track *)trackWithJSONResponse:(NSDictionary *)response;
 
 @end

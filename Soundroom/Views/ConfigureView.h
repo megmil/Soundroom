@@ -6,19 +6,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Room.h" // for RoomListeningModeType
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ConfigureViewDelegate
-
-- (void)createRoom;
-- (void)inviteMembers;
-
+- (void)didTapCreate;
+- (void)didTapInvite;
 @end
 
 @interface ConfigureView : UIView
 
-@property (strong, nonatomic) NSString *title;
+@property (strong, nonatomic, readonly) NSString *title;
+@property (nonatomic, readonly) RoomListeningModeType listeningMode;
 @property (nonatomic, weak) id<ConfigureViewDelegate> delegate;
 
 @end

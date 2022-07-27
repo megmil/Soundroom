@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic) BOOL isPending;
 
+- (instancetype)initWithUserId:(NSString *)userId roomId:(NSString *)roomId isPending:(BOOL)isPending;
+
 @end
 
 NS_ASSUME_NONNULL_END

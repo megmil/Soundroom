@@ -8,6 +8,7 @@
 #import "ParseObjectManager.h"
 #import "ParseUserManager.h"
 #import "ParseQueryManager.h"
+#import "ParseConstants.h"
 #import "RoomManager.h"
 #import "Room.h"
 #import "Request.h"
@@ -19,24 +20,35 @@
 
 # pragma mark - Room
 
-+ (void)createRoomWithTitle:(NSString *)title {
-    // create room
-    Room *newRoom = [Room new];
-    newRoom.title = title;
-    newRoom.hostId = [ParseUserManager currentUserId];
-    [newRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
++ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningModeType)listeningMode {
+    
+    NSString *userId = [ParseUserManager currentUserId];
+    
+    if (!userId) {
+        return;
+    }
+    
+    Room *room = [[Room alloc] initWithTitle:title hostId:userId listeningMode:listeningMode];
+    [room saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             // create accepted invitation for host
-            [self createAcceptedInvitationForCurrentUserToRoomWithId:newRoom.objectId];
+            [self createAcceptedInvitationForCurrentUserToRoomWithId:room.objectId];
         }
     }];
 }
 
-+ (void)updateCurrentRoomWithCurrentSongId:(NSString *)currentSongId {
-    [ParseQueryManager getRoomWithId:[[RoomManager shared] currentRoomId] completion:^(PFObject *object, NSError *error) {
++ (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId {
+    
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    
+    if (!roomId) {
+        return;
+    }
+    
+    [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Room *room = (Room *)object;
-            [room setValue:currentSongId forKey:currentSongIdKey];
+            [room setValue:spotifyId forKey:currentSongSpotifyIdKey];
             [room saveInBackground];
         }
     }];
@@ -67,14 +79,15 @@
 
 + (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId {
     
-    NSString *currentRoomId = [[RoomManager shared] currentRoomId];
+    NSString *userId = [ParseUserManager currentUserId];
+    NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (currentRoomId) {
-        Request *newRequest = [Request new];
-        newRequest.spotifyId = spotifyId;
-        newRequest.roomId = currentRoomId;
-        [newRequest saveInBackground];
+    if (!spotifyId || !userId || !roomId) {
+        return;
     }
+    
+    Request *newRequest = [[Request alloc] initWithSpotifyId:spotifyId roomId:roomId userId:userId];
+    [newRequest saveInBackground];
     
 }
 
@@ -91,7 +104,7 @@
     }];
     
     // delete attached downvotes
-    [ParseQueryManager getUpvotesForRequestWithId:requestId completion:^(NSArray *objects, NSError *error) {
+    [ParseQueryManager getDownvotesForRequestWithId:requestId completion:^(NSArray *objects, NSError *error) {
         [self deleteObjects:objects];
     }];
     
@@ -118,28 +131,38 @@
 }
 
 + (void)createUpvoteByCurrentUserForRequestWithId:(NSString *)requestId {
+    
+    NSString *userId = [ParseUserManager currentUserId];
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    
+    if (!requestId || !userId || !roomId) {
+        return;
+    }
+    
     // check for duplicate
     [ParseQueryManager getUpvoteByCurrentUserForRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
         if (!object && error.code == 101) {
             // no results matched the query
-            Upvote *upvote = [Upvote new];
-            upvote.requestId = requestId;
-            upvote.userId = [ParseUserManager currentUserId];
-            upvote.roomId = [[RoomManager shared] currentRoomId];
+            Upvote *upvote = [[Upvote alloc] initWithRequestId:requestId userId:userId roomId:roomId];
             [upvote saveInBackground];
         }
     }];
 }
 
 + (void)createDownvoteByCurrentUserForRequestWithId:(NSString *)requestId {
+    
+    NSString *userId = [ParseUserManager currentUserId];
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    
+    if (!requestId || !userId || !roomId) {
+        return;
+    }
+    
     // check for duplicate
     [ParseQueryManager getDownvoteByCurrentUserForRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
         if (!object && error.code == 101) {
             // no results matched the query
-            Downvote *downvote = [Downvote new];
-            downvote.requestId = requestId;
-            downvote.userId = [ParseUserManager currentUserId];
-            downvote.roomId = [[RoomManager shared] currentRoomId];
+            Downvote *downvote = [[Downvote alloc] initWithRequestId:requestId userId:userId roomId:roomId];
             [downvote saveInBackground];
         }
     }];
@@ -166,27 +189,36 @@
 # pragma mark - Invitation
 
 + (void)createInvitationToCurrentRoomForUserWithId:(NSString *)userId {
+    
+    NSString *roomId = [[RoomManager shared] currentRoomId];
+    
+    if (!userId || !roomId) {
+        return;
+    }
+    
     // check for duplicate invite
     [ParseQueryManager didSendCurrentRoomInvitationToUserWithId:userId completion:^(BOOL isDuplicate, NSError *error) {
         if (!isDuplicate) {
             // user has not yet been invited
-            Invitation *newInvitation = [Invitation new];
-            newInvitation.userId = userId;
-            newInvitation.roomId = [[RoomManager shared] currentRoomId];
-            newInvitation.isPending = YES;
+            Invitation *newInvitation = [[Invitation alloc] initWithUserId:userId roomId:roomId isPending:YES];
             [newInvitation saveInBackground];
         }
     }];
 }
 
 + (void)createAcceptedInvitationForCurrentUserToRoomWithId:(NSString *)roomId {
+    
+    NSString *userId = [ParseUserManager currentUserId];
+    
+    if (!userId || !roomId) {
+        return;
+    }
+    
+    // check for more than one accepted room invitation
     [ParseQueryManager didCurrentUserAcceptRoomInvitationWithCompletion:^(BOOL isInRoom, NSError * _Nullable error) {
         if (!isInRoom) {
             // user has not yet joined a room
-            Invitation *newInvitation = [Invitation new];
-            newInvitation.userId = [ParseUserManager currentUserId];
-            newInvitation.roomId = roomId;
-            newInvitation.isPending = NO;
+            Invitation *newInvitation = [[Invitation alloc] initWithUserId:userId roomId:roomId isPending:NO];
             [newInvitation saveInBackground];
         }
     }];
