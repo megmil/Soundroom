@@ -104,9 +104,9 @@
     });
 }
 
-- (void)moveCellAtIndex:(NSUInteger)pastIndex toIndex:(NSUInteger)newIndex {
+- (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView moveCellAtIndex:pastIndex toIndex:newIndex];
+        [self->_tableView moveCellAtIndex:oldIndex toIndex:newIndex];
     });
 }
 

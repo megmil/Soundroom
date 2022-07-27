@@ -82,18 +82,18 @@ NSString *const RoomManagerLeftRoomNotification = @"RoomManagerLeftRoomNotificat
 
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
     
-    NSUInteger pastIndex = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
-    if (pastIndex == NSNotFound) {
+    NSUInteger oldIndex = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
+    if (oldIndex == NSNotFound) {
         return;
     }
     
-    Song *song = [_queue objectAtIndex:pastIndex];
+    Song *song = [_queue objectAtIndex:oldIndex];
     song.score = @(song.score.integerValue + amount.integerValue);
     
-    [_queue removeObjectAtIndex:pastIndex];
+    [_queue removeObjectAtIndex:oldIndex];
     [self insertSong:song completion:^(NSUInteger newIndex) {
         if (newIndex != NSNotFound) {
-            [self.delegate moveCellAtIndex:pastIndex toIndex:newIndex];
+            [self.delegate moveCellAtIndex:oldIndex toIndex:newIndex];
         }
     }];
 

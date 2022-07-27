@@ -19,7 +19,7 @@ extern NSString *const RoomManagerLeftRoomNotification;
 @protocol RoomManagerDelegate
 - (void)insertCellAtIndex:(NSUInteger)index;
 - (void)removeCellAtIndex:(NSUInteger)index;
-- (void)moveCellAtIndex:(NSUInteger)pastIndex toIndex:(NSUInteger)newIndex;
+- (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex;
 - (void)didRefreshQueue;
 - (void)didUpdateCurrentTrack;
 @end
