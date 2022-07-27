@@ -25,6 +25,7 @@
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* Request.m */; };
 		041823E6289055BD003962B6 /* UITableView+ReuseIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */; };
+		041823ED2891B58E003962B6 /* ImageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823EC2891B58E003962B6 /* ImageConstants.m */; };
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
@@ -102,6 +103,8 @@
 		0417B5CB2874F6E6001D6B04 /* Request.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
 		041823E4289055BD003962B6 /* UITableView+ReuseIdentifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+ReuseIdentifier.h"; sourceTree = "<group>"; };
 		041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ReuseIdentifier.m"; sourceTree = "<group>"; };
+		041823EB2891B58E003962B6 /* ImageConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageConstants.h; sourceTree = "<group>"; };
+		041823EC2891B58E003962B6 /* ImageConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageConstants.m; sourceTree = "<group>"; };
 		0422998C287D2FA70086612E /* LobbyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LobbyViewController.h; sourceTree = "<group>"; };
 		0422998D287D2FA70086612E /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
 		0422998F287D2FAF0086612E /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
@@ -279,6 +282,15 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
+		041823EE2891B594003962B6 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				041823EB2891B58E003962B6 /* ImageConstants.h */,
+				041823EC2891B58E003962B6 /* ImageConstants.m */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 		042299A4287E7DA20086612E /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -368,6 +380,7 @@
 		049304A628762AA9006AA9A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				041823EE2891B594003962B6 /* Constants */,
 				04CC5471288B408F00FC5707 /* Extensions */,
 				0417B56B2874B75F001D6B04 /* SceneDelegate.h */,
 				0417B56C2874B75F001D6B04 /* SceneDelegate.m */,
@@ -690,6 +703,7 @@
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */,
+				041823ED2891B58E003962B6 /* ImageConstants.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,

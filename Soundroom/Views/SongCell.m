@@ -6,12 +6,8 @@
 //
 
 #import "SongCell.h"
+#import "ImageConstants.h"
 
-static NSString *const addImageName = @"plus";
-static NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
-static NSString *const upvoteEmptyImageName = @"arrowtriangle.up";
-static NSString *const downvoteFilledImageName = @"arrowtriangle.down.fill";
-static NSString *const downvoteEmptyImageName = @"arrowtriangle.down";
 static NSString *const scoreEmptyLabel = @"0";
 
 static CGFloat const largeViewSize = 50.f;
@@ -104,7 +100,7 @@ static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
         [self.contentView addSubview:_subtitleLabel];
         
         _addButton = [UIButton new];
-        [_addButton setImage:[UIImage systemImageNamed:addImageName] forState:UIControlStateNormal];
+        [_addButton setImage:[UIImage systemImageNamed:plusImageName] forState:UIControlStateNormal];
         [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_addButton];
         
@@ -157,13 +153,13 @@ static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
 - (void)animateVoteButton:(UIButton *)sender voteState:(VoteState)voteState {
 
     CGFloat direction = ((voteState == NotVoted) ? 1.f : -1.f) * sender.tag;
-    CGFloat multiplier = 10.f;
+    CGFloat multiplier = 5.f;
     
     CABasicAnimation *animation = [CABasicAnimation animation];
     animation.keyPath = @"transform.translation.y";
     animation.fromValue = @(1);
     animation.toValue = @(multiplier * direction);
-    animation.duration = 0.2;
+    animation.duration = 0.1;
     animation.autoreverses = YES;
     animation.fillMode = kCAFillModeForwards;
     [sender.layer addAnimation:animation forKey:@"basic"];
