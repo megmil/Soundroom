@@ -12,6 +12,7 @@
 static NSArray <NSNumber *> *const startLocations = @[@-1, @-0.5, @0];
 static NSArray <NSNumber *> *const endLocations = @[@1, @1.5, @2];
 
+static const CGFloat roundCornerSize = 5.f;
 static const CGFloat movingAnimationDuration = 1.8f;
 static const CGFloat delayBetweenAnimationLoops = 1.5f;
 
@@ -22,7 +23,7 @@ static const CGFloat delayBetweenAnimationLoops = 1.5f;
     // apply image view, title label, and subtitle label as a mask
     CGMutablePathRef mutablePath = CGPathCreateMutable();
     for (UIView *view in views) {
-        CGPathAddRoundedRect(mutablePath, nil, view.frame, 5.f, 5.f);
+        CGPathAddRoundedRect(mutablePath, nil, view.frame, roundCornerSize, roundCornerSize);
     }
     maskLayer.path = mutablePath;
     

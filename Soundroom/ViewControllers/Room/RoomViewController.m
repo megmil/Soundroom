@@ -17,7 +17,7 @@
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 
-@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate>
+@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
 
@@ -33,6 +33,7 @@
     [self configureTableView];
     [self configureObservers];
     
+    _roomView.delegate = self;
     [RoomManager shared].delegate = self;
     
 }
@@ -111,15 +112,17 @@
     });
 }
 
-# pragma mark - IBActions
+# pragma mark - RoomView Delegate
 
-- (IBAction)didTapPlay:(id)sender {
+- (void)didTapPlay {
     [[RoomManager shared] playTopSong];
 }
 
-- (IBAction)didTapLeaveRoom:(id)sender {
+- (void)didTapLeave {
     [self leaveRoomAlert];
 }
+
+# pragma mark - QueueCell Delegate
 
 - (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
     [[RoomManager shared] updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];

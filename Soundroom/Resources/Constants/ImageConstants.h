@@ -13,6 +13,7 @@ extern NSString *const musicNoteImageName;
 extern NSString *const defaultAlbumImageName;
 extern NSString *const plusImageName;
 extern NSString *const playImageName;
+extern NSString *const pauseImageName;
 extern NSString *const upvoteFilledImageName;
 extern NSString *const upvoteEmptyImageName;
 extern NSString *const downvoteFilledImageName;

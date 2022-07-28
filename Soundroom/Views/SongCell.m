@@ -185,11 +185,8 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
         return;
     }
     
-    const CGFloat originX = 0.f;
-    const CGFloat originY = 0.f;
     const CGFloat width = CGRectGetMaxX(_titleLabel.frame);
-    const CGFloat height = cellHeight;
-    const CGRect frame = CGRectMake(originX, originY, width, height);
+    const CGRect frame = CGRectMake(0.f, 0.f, width, cellHeight);
     
     [_shimmerLayer maskWithViews:@[_imageView, _titleLabel, _subtitleLabel] frame:frame];
     [self animateShimmer];

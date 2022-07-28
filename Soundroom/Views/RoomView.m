@@ -55,18 +55,14 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     const CGFloat songImageViewOriginY = CGRectGetMaxY(_roomNameLabel.frame) + leftSideEdge;
     _songImageView.frame = CGRectMake(leftSideEdge, songImageViewOriginY, imageSize, imageSize);
     
-    [_playButton sizeToFit];
-    const CGFloat playButtonWidth = CGRectGetWidth(_playButton.frame);
-    const CGFloat playButtonHeight = CGRectGetHeight(_playButton.frame);
-    const CGFloat playButtonOriginY = CGRectGetMinY(_songImageView.frame) + (playButtonHeight / 2.f);
-    _playButton.frame = CGRectMake(rightSideEdge - playButtonWidth, playButtonOriginY, playButtonWidth, playButtonHeight);
+    const CGFloat playButtonSize = 20.f;
+    const CGFloat playButtonOriginY = CGRectGetMinY(_songImageView.frame) + ((imageSize - playButtonSize) / 2.f);
+    _playButton.frame = CGRectMake(rightSideEdge - playButtonSize, playButtonOriginY, playButtonSize, playButtonSize);
     
-    [_songTitleLabel sizeToFit];
-    [_songArtistLabel sizeToFit];
-    const CGFloat songTitleLabelHeight = CGRectGetHeight(_songTitleLabel.frame);
-    const CGFloat songArtistLabelHeight = CGRectGetHeight(_songArtistLabel.frame);
+    const CGFloat songTitleLabelHeight = 22.f;
+    const CGFloat songArtistLabelHeight = 18.f;
     const CGFloat songLabelsHeight = songTitleLabelHeight + songArtistLabelHeight + smallPadding;
-    const CGFloat songTitleLabelOriginY = CGRectGetMinY(_songImageView.frame) + (songLabelsHeight / 2.f);
+    const CGFloat songTitleLabelOriginY = CGRectGetMinY(_songImageView.frame) + ((imageSize - songLabelsHeight) / 2.f);
     const CGFloat songArtistLabelOriginY = songTitleLabelOriginY + songTitleLabelHeight + smallPadding;
     const CGFloat songLabelsOriginX = CGRectGetMaxX(_songImageView.frame) + standardPadding;
     const CGFloat songLabelsWidth = CGRectGetMinX(_playButton.frame) - standardPadding - songLabelsOriginX;
@@ -80,6 +76,8 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     const CGFloat tableViewOriginY = CGRectGetMaxY(_nextUpLabel.frame) + standardPadding;
     const CGFloat tableViewHeight = viewHeight - tableViewOriginY;
     _tableView.frame = CGRectMake(0.f, tableViewOriginY, viewWidth, tableViewHeight);
+    
+    [self layoutShimmerLayer];
     
 }
 
@@ -114,7 +112,10 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         [self addSubview:_songImageView];
         
         _playButton = [UIButton new];
+        _playButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+        _playButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
         [_playButton setImage:[UIImage systemImageNamed:playImageName] forState:UIControlStateNormal];
+        [_playButton addTarget:self action:@selector(playButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_playButton];
         
         _nextUpLabel = [UILabel new];
@@ -135,6 +136,21 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     
 }
 
+# pragma mark - Playback
+
+- (void)playButtonTapped {
+    
+    // update property
+    _isPaused = !_isPaused;
+    
+    // update UI
+    _playButton.imageView.image = _isPaused ? [UIImage imageNamed:pauseImageName] : [UIImage imageNamed:playImageName];
+    
+    // update playback in delegate
+    [self.delegate didTapPlay];
+    
+}
+
 # pragma mark - Shimmer
 
 - (void)layoutShimmerLayer {
@@ -143,12 +159,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         return;
     }
     
-    const CGFloat originX = 0.f;
-    const CGFloat originY = 0.f;
-    const CGFloat width = CGRectGetMaxX(_titleLabel.frame);
-    const CGFloat height = cellHeight;
-    const CGRect frame = CGRectMake(originX, originY, width, height);
-    
+    const CGRect frame = self.layer.bounds;
     [_shimmerLayer maskWithViews:@[_songImageView, _songTitleLabel, _songArtistLabel] frame:frame];
     [self animateShimmer];
     

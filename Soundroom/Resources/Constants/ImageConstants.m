@@ -10,6 +10,7 @@
 NSString *const musicNoteImageName = @"music.note";
 
 NSString *const playImageName = @"play.fill";
+NSString *const pauseImageName = @"pause.fill";
 NSString *const plusImageName = @"plus";
 NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
 NSString *const upvoteEmptyImageName = @"arrowtriangle.up";

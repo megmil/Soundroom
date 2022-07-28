@@ -9,6 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol RoomViewDelegate
+- (void)didTapPlay;
+@end
+
 @interface RoomView : UIView
 
 @property (strong, nonatomic) UITableView *tableView;
@@ -17,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *currentSongArtist;
 @property (strong, nonatomic) UIImage *currentSongAlbumImage;
 @property (nonatomic) BOOL isHostView;
+@property (nonatomic) BOOL isPaused;
+
+@property (nonatomic, weak) id<RoomViewDelegate> delegate;
 
 @end
 
