@@ -40,7 +40,7 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 - (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion;
-- (void)playTopSong;
+- (void)togglePlayback;
 
 # pragma mark - Live Query Event Handlers
 

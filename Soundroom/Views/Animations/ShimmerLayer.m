@@ -39,6 +39,22 @@ static const CGFloat delayBetweenAnimationLoops = 1.5f;
     
 }
 
+- (void)setIsAnimating:(BOOL)isAnimating {
+    
+    if (_isAnimating == isAnimating) {
+        return;
+    }
+    
+    _isAnimating = isAnimating;
+    self.opacity = isAnimating ? 1 : 0;
+    
+    [self removeAllAnimations];
+    if (isAnimating) {
+        [self startAnimating];
+    }
+    
+}
+
 - (void)startAnimating {
     
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"locations"];
@@ -53,11 +69,6 @@ static const CGFloat delayBetweenAnimationLoops = 1.5f;
     animationGroup.repeatCount = INFINITY;
     [self addAnimation:animationGroup forKey:animation.keyPath];
 
-}
-
-- (void)stopAnimating {
-    [self removeAllAnimations];
-    [self removeFromSuperlayer];
 }
 
 @end

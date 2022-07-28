@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *currentSongArtist;
 @property (strong, nonatomic) UIImage *currentSongAlbumImage;
 @property (nonatomic) BOOL isHostView;
-@property (nonatomic) BOOL isPaused;
+@property (nonatomic) BOOL isPlaying;
 
 @property (nonatomic, weak) id<RoomViewDelegate> delegate;
 

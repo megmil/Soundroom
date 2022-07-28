@@ -17,7 +17,7 @@
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 
-@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
+@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate, SpotifySessionManagerDelegate>
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
 
@@ -35,6 +35,7 @@
     
     _roomView.delegate = self;
     [RoomManager shared].delegate = self;
+    [SpotifySessionManager shared].delegate = self;
     
 }
 
@@ -101,6 +102,7 @@
     _roomView.currentSongTitle = track.title;
     _roomView.currentSongArtist = track.artist;
     _roomView.currentSongAlbumImage = track.albumImage;
+    _roomView.isPlaying = (BOOL)track;
 }
 
 - (void)goToLobby {
@@ -112,23 +114,51 @@
     });
 }
 
-# pragma mark - RoomView Delegate
+# pragma mark - RoomView
 
 - (void)didTapPlay {
-    [[RoomManager shared] playTopSong];
+    [[RoomManager shared] togglePlayback];
 }
 
 - (void)didTapLeave {
     [self leaveRoomAlert];
 }
 
-# pragma mark - QueueCell Delegate
+# pragma mark - SpotifySessionManager
+
+- (void)didStopPlayback {
+    _roomView.isPlaying = NO;
+}
+
+- (void)didStartPlayback {
+    _roomView.isPlaying = YES;
+}
+
+# pragma mark - QueueCell
 
 - (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
     [[RoomManager shared] updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
 }
 
-# pragma mark - RoomManager Delegate
+# pragma mark - RoomManager
+
+- (void)didUpdateCurrentTrack {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self updateCurrentTrackViews];
+    });
+}
+
+- (void)didRefreshQueue {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self updateCurrentTrackViews];
+        [self->_roomView.tableView reloadDataWithAnimation];
+    });
+}
+
+- (void)didLeaveRoom {
+    self->_roomView.hidden = YES;
+    [self goToLobby];
+}
 
 - (void)insertCellAtIndex:(NSUInteger)index {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -146,24 +176,6 @@
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         [self->_roomView.tableView deleteCellAtIndex:index];
     });
-}
-
-- (void)didRefreshQueue {
-    [self didUpdateCurrentTrack];
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_roomView.tableView reloadDataWithAnimation];
-    });
-}
-
-- (void)didUpdateCurrentTrack {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self updateCurrentTrackViews];
-    });
-}
-
-- (void)didLeaveRoom {
-    self->_roomView.hidden = YES;
-    [self goToLobby];
 }
 
 # pragma mark - TableView
@@ -187,6 +199,7 @@
     cell.title = song.track.title;
     cell.subtitle = song.track.artist;
     cell.image = song.track.albumImage;
+    [cell setNeedsLayout];
     
     return cell;
     

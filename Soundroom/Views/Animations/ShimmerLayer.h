@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ShimmerLayer : CAGradientLayer
 
+@property (nonatomic) BOOL isAnimating;
+
 - (void)maskWithViews:(NSArray <UIView *> *)views frame:(CGRect)frame;
-- (void)startAnimating;
-- (void)stopAnimating;
 
 @end
 

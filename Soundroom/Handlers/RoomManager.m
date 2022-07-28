@@ -99,12 +99,20 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 }
 
 - (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId {
+    
+    if (!spotifyId) {
+        self.currentTrack = nil;
+        [self.delegate didUpdateCurrentTrack];
+        return;
+    }
+    
     [[SpotifyAPIManager shared] getTrackWithSpotifyId:spotifyId completion:^(Track *track, NSError *error) {
         if (track) {
             self.currentTrack = track;
             [self.delegate didUpdateCurrentTrack];
         }
     }];
+    
 }
 
 # pragma mark - Public: Room Tab
@@ -191,18 +199,15 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)playTopSong {
+- (void)togglePlayback {
     
-    if (_queue.count) {
-        
-        // get and remove first song from queue
-        Song *topSong = _queue.firstObject;
-        [ParseObjectManager deleteRequestWithId:topSong.requestId];
-        
-        // save current song to room
-        [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
-        
+    if (_currentTrack) {
+        // stop current song
+        [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:@""];
+        return;
     }
+    
+    [self playTopSong];
     
 }
 
@@ -384,6 +389,21 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 }
 
 # pragma mark - Playback Helpers
+
+- (void)playTopSong {
+    
+    if (_queue.count) {
+        
+        // get and remove first song from queue
+        Song *topSong = _queue.firstObject;
+        [ParseObjectManager deleteRequestWithId:topSong.requestId];
+        
+        // save current song to room
+        [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
+        
+    }
+    
+}
 
 - (void)loadCurrentTrack {
     if (_room.currentSongSpotifyId) {

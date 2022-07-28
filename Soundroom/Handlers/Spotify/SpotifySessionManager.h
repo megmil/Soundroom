@@ -13,9 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString *const SpotifySessionManagerAuthorizedNotificaton;
 extern NSString *const SpotifySessionManagerDeauthorizedNotificaton;
 
+@protocol SpotifySessionManagerDelegate
+- (void)didStopPlayback;
+- (void)didStartPlayback;
+@end
+
 @interface SpotifySessionManager : NSObject <SPTSessionManagerDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate>
 
 @property (strong, nonatomic, readonly) NSString *accessToken;
+@property (nonatomic, weak) id<SpotifySessionManagerDelegate> delegate;
 
 + (instancetype)shared;
 

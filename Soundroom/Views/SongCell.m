@@ -172,7 +172,6 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
     animation.toValue = @(direction * multiplier);
     animation.duration = 0.1;
     animation.autoreverses = YES;
-    animation.fillMode = kCAFillModeForwards;
     [sender.layer addAnimation:animation forKey:@"basic"];
     
 }
@@ -189,39 +188,24 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
     const CGRect frame = CGRectMake(0.f, 0.f, width, cellHeight);
     
     [_shimmerLayer maskWithViews:@[_imageView, _titleLabel, _subtitleLabel] frame:frame];
-    [self animateShimmer];
     
-}
-
-- (void)animateShimmer {
-    if (self.title.length != 0 && self.subtitle.length != 0 && self.image) {
-        [_shimmerLayer stopAnimating];
-        return;
-    }
-    [_shimmerLayer startAnimating];
+    BOOL didLoadMaskViews = self.title.length != 0 && self.subtitle.length != 0 && self.image;
+    _shimmerLayer.isAnimating = !didLoadMaskViews;
+    
 }
 
 # pragma mark - Setters
 
 - (void)setTitle:(NSString *)title {
     _titleLabel.text = title;
-    if (title) {
-        [_shimmerLayer stopAnimating];
-    }
 }
 
 - (void)setSubtitle:(NSString *)subtitle {
     _subtitleLabel.text = subtitle;
-    if (subtitle) {
-        [_shimmerLayer stopAnimating];
-    }
 }
 
 - (void)setImage:(UIImage *)image {
     _imageView.image = image;
-    if (image) {
-        [_shimmerLayer stopAnimating];
-    }
 }
 
 - (NSString *)title {

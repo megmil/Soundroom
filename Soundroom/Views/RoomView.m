@@ -108,7 +108,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         _songImageView = [UIImageView new];
         _songImageView.contentMode = UIViewContentModeScaleAspectFill;
         _songImageView.layer.cornerRadius = imageSize * cornerRadiusRatio;
-        _songImageView.clipsToBounds = YES;
+        _songImageView.layer.masksToBounds = YES;
         [self addSubview:_songImageView];
         
         _playButton = [UIButton new];
@@ -128,6 +128,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         [self addSubview:_tableView];
         
         _shimmerLayer = [ShimmerLayer new];
+        _shimmerLayer.bounds = self.layer.bounds;
         [self.layer addSublayer:_shimmerLayer];
         
     }
@@ -139,16 +140,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 # pragma mark - Playback
 
 - (void)playButtonTapped {
-    
-    // update property
-    _isPaused = !_isPaused;
-    
-    // update UI
-    _playButton.imageView.image = _isPaused ? [UIImage imageNamed:pauseImageName] : [UIImage imageNamed:playImageName];
-    
-    // update playback in delegate
     [self.delegate didTapPlay];
-    
 }
 
 # pragma mark - Shimmer
@@ -161,16 +153,10 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     
     const CGRect frame = self.layer.bounds;
     [_shimmerLayer maskWithViews:@[_songImageView, _songTitleLabel, _songArtistLabel] frame:frame];
-    [self animateShimmer];
     
-}
-
-- (void)animateShimmer {
-    if (self.currentSongTitle.length != 0 && self.currentSongArtist.length != 0 && self.currentSongAlbumImage) {
-        [_shimmerLayer stopAnimating];
-        return;
-    }
-    [_shimmerLayer startAnimating];
+    BOOL didLoadMaskViews = self.currentSongTitle.length != 0 && self.currentSongArtist.length != 0 && self.currentSongAlbumImage;
+    _shimmerLayer.isAnimating = !didLoadMaskViews;
+    
 }
 
 # pragma mark - Setters
@@ -180,6 +166,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 }
 
 - (void)setIsHostView:(BOOL)isHostView {
+    _isHostView = isHostView;
     _playButton.enabled = isHostView;
 }
 
@@ -193,6 +180,16 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (void)setCurrentSongAlbumImage:(UIImage *)currentSongAlbumImage {
     _songImageView.image = currentSongAlbumImage;
+}
+
+- (void)setIsPlaying:(BOOL)isPlaying {
+    _isPlaying = isPlaying;
+    _shimmerLayer.isAnimating = !isPlaying;
+    if (_isHostView) {
+        UIImage *playButtonImage = isPlaying ? [UIImage systemImageNamed:stopImageName] : [UIImage systemImageNamed:playImageName];
+        [_playButton setImage:playButtonImage forState:UIControlStateNormal];
+    }
+    [self setNeedsLayout];
 }
 
 # pragma mark - Getters
