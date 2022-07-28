@@ -100,7 +100,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId {
     
-    if (!spotifyId) {
+    if ([spotifyId isEqualToString:@""]) {
         self.currentTrack = nil;
         [self.delegate didUpdateCurrentTrack];
         return;
@@ -418,6 +418,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     _currentTrack = currentTrack;
     
     if (!currentTrack) {
+        // TODO: stop playback
         return;
     }
     

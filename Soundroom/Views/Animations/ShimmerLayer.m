@@ -41,12 +41,12 @@ static const CGFloat delayBetweenAnimationLoops = 1.5f;
 
 - (void)setIsAnimating:(BOOL)isAnimating {
     
+    self.opacity = isAnimating ? 1 : 0;
     if (_isAnimating == isAnimating) {
         return;
     }
     
     _isAnimating = isAnimating;
-    self.opacity = isAnimating ? 1 : 0;
     
     [self removeAllAnimations];
     if (isAnimating) {

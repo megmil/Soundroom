@@ -184,7 +184,6 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (void)setIsPlaying:(BOOL)isPlaying {
     _isPlaying = isPlaying;
-    _shimmerLayer.isAnimating = !isPlaying;
     if (_isHostView) {
         UIImage *playButtonImage = isPlaying ? [UIImage systemImageNamed:stopImageName] : [UIImage systemImageNamed:playImageName];
         [_playButton setImage:playButtonImage forState:UIControlStateNormal];
