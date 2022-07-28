@@ -83,11 +83,21 @@ static CGFloat const cornerRadiusRatio = 0.06f;
 }
 
 - (void)reloadTrackViews {
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        // dismiss failed authentication alert if necessary
+        if ([self presentedViewController]) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+    });
+    
+    // reload track data
     [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self updateQueueViews];
         }
     }];
+    
 }
 
 - (void)updateQueueViews {
@@ -233,6 +243,11 @@ static CGFloat const cornerRadiusRatio = 0.06f;
 
 - (void)failedSpotifyAuthenticationAlert {
     
+    // check that self is not already presenting an alert / view controller
+    if ([self presentingViewController]) {
+        return;
+    }
+    
     NSString *title = @"Failed to authenticate";
     NSString *message = @"Could not connect to Spotify in time to load queue data. Retry now or check status in your Profile.";
     
@@ -256,6 +271,11 @@ static CGFloat const cornerRadiusRatio = 0.06f;
 }
 
 - (void)leaveRoomAlert {
+    
+    // check that self is not already presenting an alert / view controller
+    if ([self presentingViewController]) {
+        return;
+    }
     
     NSString *title = @"Leave Room";
     NSString *message = @"Are you sure you want to leave this room?";
