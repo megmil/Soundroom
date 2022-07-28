@@ -48,7 +48,7 @@
     NSIndexPath *pastIndexPath = [NSIndexPath indexPathForRow:pastIndex inSection:0];
     
     if (pastIndex == newIndex) {
-        [self reloadRowsAtIndexPaths:@[pastIndexPath] withRowAnimation:UITableViewRowAnimationMiddle];
+        [self reloadRowsAtIndexPaths:@[pastIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         return;
     }
     

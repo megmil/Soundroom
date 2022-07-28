@@ -26,6 +26,7 @@
 		0417B5CC2874F6E6001D6B04 /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* Request.m */; };
 		041823E6289055BD003962B6 /* UITableView+ReuseIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */; };
 		041823ED2891B58E003962B6 /* ImageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823EC2891B58E003962B6 /* ImageConstants.m */; };
+		0418240C28922672003962B6 /* ShimmerLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0418240B28922672003962B6 /* ShimmerLayer.m */; };
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
@@ -105,6 +106,8 @@
 		041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ReuseIdentifier.m"; sourceTree = "<group>"; };
 		041823EB2891B58E003962B6 /* ImageConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageConstants.h; sourceTree = "<group>"; };
 		041823EC2891B58E003962B6 /* ImageConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageConstants.m; sourceTree = "<group>"; };
+		0418240A28922672003962B6 /* ShimmerLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShimmerLayer.h; sourceTree = "<group>"; };
+		0418240B28922672003962B6 /* ShimmerLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShimmerLayer.m; sourceTree = "<group>"; };
 		0422998C287D2FA70086612E /* LobbyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LobbyViewController.h; sourceTree = "<group>"; };
 		0422998D287D2FA70086612E /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
 		0422998F287D2FAF0086612E /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
@@ -268,6 +271,8 @@
 				042299AA287E86630086612E /* ConfigureView.m */,
 				04785C7E28813094001AF277 /* AccountView.h */,
 				04785C7F28813094001AF277 /* AccountView.m */,
+				0418240A28922672003962B6 /* ShimmerLayer.h */,
+				0418240B28922672003962B6 /* ShimmerLayer.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -692,6 +697,7 @@
 				04DF2F4B288A1A5A00FD28E4 /* ParseQueryManager.m in Sources */,
 				04785C8028813094001AF277 /* AccountView.m in Sources */,
 				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,
+				0418240C28922672003962B6 /* ShimmerLayer.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
 				04CEE292288C8FF900F821E8 /* Downvote.m in Sources */,

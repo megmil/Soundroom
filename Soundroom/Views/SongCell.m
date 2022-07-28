@@ -7,14 +7,17 @@
 
 #import "SongCell.h"
 #import "ImageConstants.h"
+#import "ShimmerLayer.h"
 
 static NSString *const scoreEmptyLabel = @"0";
 
-static CGFloat const largeViewSize = 50.f;
-static CGFloat const titleFontSize = 16.f;
-static CGFloat const subtitleFontSize = 13.f;
-static CGFloat const scoreFontSize = 14.f;
-static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
+static const CGFloat largeViewSize = 50.f;
+static const CGFloat standardPadding = 8.f;
+static const CGFloat titleFontSize = 16.f;
+static const CGFloat subtitleFontSize = 13.f;
+static const CGFloat scoreFontSize = 14.f;
+static const CGFloat imageCornerRadius = 0.06f * largeViewSize;
+static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
 
 @implementation SongCell {
     
@@ -27,6 +30,8 @@ static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
     UIButton *_downvoteButton;
     UILabel *_scoreLabel;
     
+    ShimmerLayer *_shimmerLayer;
+    
 }
 
 - (void)layoutSubviews {
@@ -36,46 +41,49 @@ static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
     [_scoreLabel sizeToFit];
     
     const CGFloat viewWidth = self.contentView.frame.size.width;
-    const CGFloat viewHeight = self.contentView.frame.size.height;
-    
-    const CGFloat titleHeight = 19.f;
-    const CGFloat subtitleHeight = 16.f;
-    const CGFloat voteButtonSize = 25.f;
-    const CGFloat scoreLabelWidth = _scoreLabel.frame.size.width;
-    const CGFloat scoreLabelHeight = _scoreLabel.frame.size.height;
+    const CGFloat viewHeight = cellHeight;
     
     const CGFloat leftPadding = 20.f;
     const CGFloat rightPadding = viewWidth - leftPadding;
-    const CGFloat standardPadding = 8.f;
     const CGFloat smallPadding = 5.f;
+    const CGFloat labelsPadding = 3.f;
     
-    const CGFloat voteButtonTopPadding = (viewHeight - voteButtonSize) / 2.f;
+    const CGFloat largeViewOriginY = (viewHeight - largeViewSize) / 2.f;
     
-    _imageView.frame = CGRectMake(leftPadding, standardPadding, largeViewSize, largeViewSize);
-    _addButton.frame = CGRectMake(rightPadding - largeViewSize, standardPadding, largeViewSize, largeViewSize);
-    _downvoteButton.frame = CGRectMake(rightPadding - voteButtonSize, voteButtonTopPadding, voteButtonSize, voteButtonSize);
+    const CGFloat voteButtonSize = 25.f;
+    const CGFloat voteButtonOriginY = (viewHeight - voteButtonSize) / 2.f;
     
+    const CGFloat titleLabelHeight = 19.f;
+    const CGFloat subtitleLabelHeight = 16.f;
+    
+    _imageView.frame = CGRectMake(leftPadding, largeViewOriginY, largeViewSize, largeViewSize);
+    _addButton.frame = CGRectMake(rightPadding - largeViewSize, largeViewOriginY, largeViewSize, largeViewSize);
+    _downvoteButton.frame = CGRectMake(rightPadding - voteButtonSize, voteButtonOriginY, voteButtonSize, voteButtonSize);
+    
+    const CGFloat scoreLabelWidth = _scoreLabel.frame.size.width;
+    const CGFloat scoreLabelHeight = _scoreLabel.frame.size.height;
     const CGFloat scoreLabelOriginX = CGRectGetMinX(_downvoteButton.frame) - scoreLabelWidth - smallPadding;
     const CGFloat scoreLabelOriginY = (viewHeight - scoreLabelHeight) / 2.f;
-    
     _scoreLabel.frame = CGRectMake(scoreLabelOriginX, scoreLabelOriginY, scoreLabelWidth, scoreLabelHeight);
     
     const CGFloat upvoteButtonOriginX = CGRectGetMinX(_scoreLabel.frame) - voteButtonSize - smallPadding;
+    _upvoteButton.frame = CGRectMake(upvoteButtonOriginX, voteButtonOriginY, voteButtonSize, voteButtonSize);
     
-    _upvoteButton.frame = CGRectMake(upvoteButtonOriginX, voteButtonTopPadding, voteButtonSize, voteButtonSize);
-    
-    const CGFloat labelsPadding = 3.f;
     const CGFloat labelsOriginX = CGRectGetMaxX(_imageView.frame) + standardPadding;
     const CGFloat rightViewsMinX = (_cellType == QueueCell) ? CGRectGetMinX(_upvoteButton.frame) : CGRectGetMinX(_addButton.frame);
     const CGFloat labelsWidth = rightViewsMinX - smallPadding - labelsOriginX;
-    const CGFloat titleOriginY = (viewHeight - titleHeight - subtitleHeight - labelsPadding) / 2.f;
-    
-    _titleLabel.frame = CGRectMake(labelsOriginX, titleOriginY, labelsWidth, titleHeight);
+    const CGFloat titleOriginY = (viewHeight - titleLabelHeight - subtitleLabelHeight - labelsPadding) / 2.f;
+    _titleLabel.frame = CGRectMake(labelsOriginX, titleOriginY, labelsWidth, titleLabelHeight);
     
     const CGFloat subtitleOriginY = CGRectGetMaxY(_titleLabel.frame) + labelsPadding;
+    _subtitleLabel.frame = CGRectMake(labelsOriginX, subtitleOriginY, labelsWidth, subtitleLabelHeight);
     
-    _subtitleLabel.frame = CGRectMake(labelsOriginX, subtitleOriginY, labelsWidth, subtitleHeight);
+    [self layoutShimmerLayer];
     
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    return CGSizeMake(size.width, cellHeight);
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -118,6 +126,9 @@ static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
         _scoreLabel.font = [UIFont systemFontOfSize:scoreFontSize weight:UIFontWeightRegular];
         [self.contentView addSubview:_scoreLabel];
         
+        _shimmerLayer = [ShimmerLayer new];
+        [self.layer addSublayer:_shimmerLayer];
+        
     }
     
     return self;
@@ -158,7 +169,7 @@ static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
     CABasicAnimation *animation = [CABasicAnimation animation];
     animation.keyPath = @"transform.translation.y";
     animation.fromValue = @(1);
-    animation.toValue = @(multiplier * direction);
+    animation.toValue = @(direction * multiplier);
     animation.duration = 0.1;
     animation.autoreverses = YES;
     animation.fillMode = kCAFillModeForwards;
@@ -166,18 +177,66 @@ static CGFloat const imageCornerRadius = 0.06f * largeViewSize;
     
 }
 
+# pragma mark - Shimmer
+
+- (void)layoutShimmerLayer {
+    
+    if (!_imageView || !_titleLabel || !_subtitleLabel) {
+        return;
+    }
+    
+    const CGFloat originX = 0.f;
+    const CGFloat originY = 0.f;
+    const CGFloat width = CGRectGetMaxX(_titleLabel.frame);
+    const CGFloat height = cellHeight;
+    const CGRect frame = CGRectMake(originX, originY, width, height);
+    
+    [_shimmerLayer maskWithViews:@[_imageView, _titleLabel, _subtitleLabel] frame:frame];
+    [self animateShimmer];
+    
+}
+
+- (void)animateShimmer {
+    if (self.title.length != 0 && self.subtitle.length != 0 && self.image) {
+        [_shimmerLayer stopAnimating];
+        return;
+    }
+    [_shimmerLayer startAnimating];
+}
+
 # pragma mark - Setters
 
 - (void)setTitle:(NSString *)title {
     _titleLabel.text = title;
+    if (title) {
+        [_shimmerLayer stopAnimating];
+    }
 }
 
 - (void)setSubtitle:(NSString *)subtitle {
     _subtitleLabel.text = subtitle;
+    if (subtitle) {
+        [_shimmerLayer stopAnimating];
+    }
 }
 
 - (void)setImage:(UIImage *)image {
     _imageView.image = image;
+    if (image) {
+        [_shimmerLayer stopAnimating];
+    }
+}
+
+- (NSString *)title {
+    return _titleLabel.text;
+}
+
+- (NSString *)subtitle {
+    return _subtitleLabel.text;
+}
+
+- (UIImage *)image {
+    return _imageView.image;
 }
 
 - (void)setScore:(NSNumber *)score {

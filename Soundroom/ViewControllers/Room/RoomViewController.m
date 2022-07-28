@@ -63,7 +63,6 @@ static CGFloat const cornerRadiusRatio = 0.06f;
 - (void)configureTableView {
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.rowHeight = 66.f;
     [_tableView registerClass:[SongCell class] forCellReuseIdentifier:[SongCell reuseIdentifier]];
 }
 
@@ -224,6 +223,10 @@ static CGFloat const cornerRadiusRatio = 0.06f;
         [ParseObjectManager deleteRequestWithId:song.requestId];
     }
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
 }
 
 # pragma mark - Alerts
