@@ -13,19 +13,13 @@
 #import "ParseUserManager.h"
 #import "RoomManager.h"
 #import "SongCell.h"
+#import "RoomView.h"
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 
-static CGFloat const cornerRadiusRatio = 0.06f;
-
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *currentSongArtistLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *currentSongAlbumImageView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (strong, nonatomic) IBOutlet RoomView *roomView;
 
 @end
 
@@ -36,8 +30,6 @@ static CGFloat const cornerRadiusRatio = 0.06f;
     [super viewDidLoad];
     
     [self fetchCurrentRoom];
-    
-    [self configureHeaderViews];
     [self configureTableView];
     [self configureObservers];
     
@@ -55,15 +47,10 @@ static CGFloat const cornerRadiusRatio = 0.06f;
     }];
 }
 
-- (void)configureHeaderViews {
-    _currentSongAlbumImageView.layer.cornerRadius = _currentSongAlbumImageView.frame.size.width * cornerRadiusRatio;
-    _currentSongAlbumImageView.clipsToBounds = YES;
-}
-
 - (void)configureTableView {
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:[SongCell reuseIdentifier]];
+    _roomView.tableView.delegate = self;
+    _roomView.tableView.dataSource = self;
+    [_roomView.tableView registerClass:[SongCell class] forCellReuseIdentifier:[SongCell reuseIdentifier]];
 }
 
 - (void)configureObservers {
@@ -76,8 +63,9 @@ static CGFloat const cornerRadiusRatio = 0.06f;
 
 - (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
-        self->_playButton.enabled = [[RoomManager shared] isCurrentUserHost];
+        self->_roomView.hidden = NO;
+        self->_roomView.roomName = [[RoomManager shared] currentRoomName];
+        self->_roomView.isHostView = [[RoomManager shared] isCurrentUserHost];
         [self updateQueueViews];
     });
 }
@@ -101,13 +89,17 @@ static CGFloat const cornerRadiusRatio = 0.06f;
 }
 
 - (void)updateQueueViews {
-    Track *track = [[RoomManager shared] currentTrack];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_currentSongTitleLabel.text = track.title;
-        self->_currentSongArtistLabel.text = track.artist;
-        self->_currentSongAlbumImageView.image = track.albumImage;
-        [self->_tableView reloadDataWithAnimation];
+        [self updateCurrentTrackViews];
+        [self->_roomView.tableView reloadDataWithAnimation];
     });
+}
+
+- (void)updateCurrentTrackViews {
+    Track *track = [[RoomManager shared] currentTrack];
+    _roomView.currentSongTitle = track.title;
+    _roomView.currentSongArtist = track.artist;
+    _roomView.currentSongAlbumImage = track.albumImage;
 }
 
 - (void)goToLobby {
@@ -137,50 +129,38 @@ static CGFloat const cornerRadiusRatio = 0.06f;
 
 - (void)insertCellAtIndex:(NSUInteger)index {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView insertCellAtIndex:index];
+        [self->_roomView.tableView insertCellAtIndex:index];
     });
 }
 
 - (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView moveCellAtIndex:oldIndex toIndex:newIndex];
+        [self->_roomView.tableView moveCellAtIndex:oldIndex toIndex:newIndex];
     });
 }
 
 - (void)deleteCellAtIndex:(NSUInteger)index {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView deleteCellAtIndex:index];
+        [self->_roomView.tableView deleteCellAtIndex:index];
     });
 }
 
 - (void)didRefreshQueue {
     [self didUpdateCurrentTrack];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView reloadDataWithAnimation];
+        [self->_roomView.tableView reloadDataWithAnimation];
     });
 }
 
 - (void)didUpdateCurrentTrack {
-    Track *track = [[RoomManager shared] currentTrack];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_currentSongTitleLabel.text = track.title;
-        self->_currentSongArtistLabel.text = track.artist;
-        self->_currentSongAlbumImageView.image = track.albumImage;
+        [self updateCurrentTrackViews];
     });
 }
 
 - (void)didLeaveRoom {
-    [self clearRoomViews];
+    self->_roomView.hidden = YES;
     [self goToLobby];
-}
-
-- (void)clearRoomViews {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_roomNameLabel.text = @"";
-        self->_currentSongTitleLabel.text = @"";
-        self->_currentSongArtistLabel.text = @"";
-        self->_currentSongAlbumImageView.image = nil;
-    });
 }
 
 # pragma mark - TableView

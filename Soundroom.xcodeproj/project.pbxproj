@@ -27,6 +27,7 @@
 		041823E6289055BD003962B6 /* UITableView+ReuseIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */; };
 		041823ED2891B58E003962B6 /* ImageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823EC2891B58E003962B6 /* ImageConstants.m */; };
 		0418240C28922672003962B6 /* ShimmerLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0418240B28922672003962B6 /* ShimmerLayer.m */; };
+		041824132892FAF5003962B6 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 041824122892FAF5003962B6 /* RoomView.m */; };
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
@@ -108,6 +109,8 @@
 		041823EC2891B58E003962B6 /* ImageConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageConstants.m; sourceTree = "<group>"; };
 		0418240A28922672003962B6 /* ShimmerLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShimmerLayer.h; sourceTree = "<group>"; };
 		0418240B28922672003962B6 /* ShimmerLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShimmerLayer.m; sourceTree = "<group>"; };
+		041824112892FAF5003962B6 /* RoomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomView.h; sourceTree = "<group>"; };
+		041824122892FAF5003962B6 /* RoomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomView.m; sourceTree = "<group>"; };
 		0422998C287D2FA70086612E /* LobbyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LobbyViewController.h; sourceTree = "<group>"; };
 		0422998D287D2FA70086612E /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
 		0422998F287D2FAF0086612E /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
@@ -263,6 +266,8 @@
 		0417B5A12874B942001D6B04 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				041824112892FAF5003962B6 /* RoomView.h */,
+				041824122892FAF5003962B6 /* RoomView.m */,
 				0417B5C42874F5D6001D6B04 /* SongCell.h */,
 				0417B5C52874F5D6001D6B04 /* SongCell.m */,
 				0417B5C72874F5F2001D6B04 /* RoomCell.h */,
@@ -271,8 +276,7 @@
 				042299AA287E86630086612E /* ConfigureView.m */,
 				04785C7E28813094001AF277 /* AccountView.h */,
 				04785C7F28813094001AF277 /* AccountView.m */,
-				0418240A28922672003962B6 /* ShimmerLayer.h */,
-				0418240B28922672003962B6 /* ShimmerLayer.m */,
+				0418240D2892F673003962B6 /* Animations */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -294,6 +298,15 @@
 				041823EC2891B58E003962B6 /* ImageConstants.m */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		0418240D2892F673003962B6 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				0418240A28922672003962B6 /* ShimmerLayer.h */,
+				0418240B28922672003962B6 /* ShimmerLayer.m */,
+			);
+			path = Animations;
 			sourceTree = "<group>";
 		};
 		042299A4287E7DA20086612E /* Profile */ = {
@@ -704,6 +717,7 @@
 				04DF2F4E288B064000FD28E4 /* ParseObjectManager.m in Sources */,
 				0422999A287DE1270086612E /* RoomManager.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
+				041824132892FAF5003962B6 /* RoomView.m in Sources */,
 				042299AB287E86630086612E /* ConfigureView.m in Sources */,
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
