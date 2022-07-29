@@ -9,6 +9,8 @@
 
 @implementation ShimmerLayer
 
+static NSString *const animationKeyPath = @"locations";
+
 static NSArray <NSNumber *> *const startLocations = @[@-1, @-0.5, @0];
 static NSArray <NSNumber *> *const endLocations = @[@1, @1.5, @2];
 
@@ -42,13 +44,12 @@ static const CGFloat delayBetweenAnimationLoops = 1.5f;
 - (void)setIsAnimating:(BOOL)isAnimating {
     
     self.opacity = isAnimating ? 1 : 0;
-    if (_isAnimating == isAnimating) {
+    
+    if (isAnimating && [self animationForKey:animationKeyPath]) {
         return;
     }
     
-    _isAnimating = isAnimating;
-    
-    [self removeAllAnimations];
+    [self removeAnimationForKey:animationKeyPath];
     if (isAnimating) {
         [self startAnimating];
     }
@@ -57,7 +58,7 @@ static const CGFloat delayBetweenAnimationLoops = 1.5f;
 
 - (void)startAnimating {
     
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"locations"];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:animationKeyPath];
     animation.fromValue = startLocations;
     animation.toValue = endLocations;
     animation.duration = movingAnimationDuration;
@@ -67,7 +68,7 @@ static const CGFloat delayBetweenAnimationLoops = 1.5f;
     animationGroup.duration = movingAnimationDuration + delayBetweenAnimationLoops;
     animationGroup.animations = @[animation];
     animationGroup.repeatCount = INFINITY;
-    [self addAnimation:animationGroup forKey:animation.keyPath];
+    [self addAnimation:animationGroup forKey:animationKeyPath];
 
 }
 

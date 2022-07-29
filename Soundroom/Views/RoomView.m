@@ -34,7 +34,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     [super layoutSubviews];
     
     const CGFloat viewWidth = CGRectGetWidth(self.frame);
-    const CGFloat viewHeight = CGRectGetHeight(self.frame);
+    const CGFloat viewHeight = CGRectGetHeight(self.frame) - self.layoutMargins.bottom;
     
     const CGFloat topEdge = self.safeAreaInsets.top;
     const CGFloat leftSideEdge = 20.f;
@@ -154,9 +154,13 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     const CGRect frame = self.layer.bounds;
     [_shimmerLayer maskWithViews:@[_songImageView, _songTitleLabel, _songArtistLabel] frame:frame];
     
+    [self refreshAnimations];
+    
+}
+
+- (void)refreshAnimations {
     BOOL didLoadMaskViews = self.currentSongTitle.length != 0 && self.currentSongArtist.length != 0 && self.currentSongAlbumImage;
     _shimmerLayer.isAnimating = !didLoadMaskViews;
-    
 }
 
 # pragma mark - Setters

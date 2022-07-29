@@ -96,6 +96,10 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     [_appRemote connect];
 }
 
+- (void)pausePlayback {
+    [_appRemote.playerAPI pause:nil];
+}
+
 # pragma mark - SPTSessionManagerDelegate
 
 - (void)sessionManager:(nonnull SPTSessionManager *)manager didInitiateSession:(nonnull SPTSession *)session {
@@ -123,11 +127,6 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 # pragma mark - SPTAppRemotePlayerStateDelegate
 
 - (void)playerStateDidChange:(nonnull id<SPTAppRemotePlayerState>)playerState {
-    if (playerState.paused) {
-        [self.delegate didStopPlayback];
-    } else {
-        [self.delegate didStartPlayback];
-    }
 }
 
 # pragma mark - SceneDelegate

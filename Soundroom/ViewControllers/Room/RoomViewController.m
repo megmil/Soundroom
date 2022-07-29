@@ -17,7 +17,7 @@
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 
-@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate, SpotifySessionManagerDelegate>
+@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
 
@@ -35,8 +35,11 @@
     
     _roomView.delegate = self;
     [RoomManager shared].delegate = self;
-    [SpotifySessionManager shared].delegate = self;
     
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [_roomView refreshAnimations];
 }
 
 - (void)fetchCurrentRoom {
@@ -122,16 +125,6 @@
 
 - (void)didTapLeave {
     [self leaveRoomAlert];
-}
-
-# pragma mark - SpotifySessionManager
-
-- (void)didStopPlayback {
-    _roomView.isPlaying = NO;
-}
-
-- (void)didStartPlayback {
-    _roomView.isPlaying = YES;
 }
 
 # pragma mark - QueueCell

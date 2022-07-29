@@ -36,13 +36,16 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 # pragma mark - Public: Live Query
 
 - (void)joinRoomWithId:(NSString *)roomId {
+    
     if (self.currentRoomId == roomId) {
         return;
     }
+    
     [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         Room *room = (Room *)object;
         [self joinRoom:room];
     }];
+    
 }
 
 - (void)clearRoomData {
@@ -348,7 +351,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
                     Song *song = result[index];
                     result[index].score = @(song.score.integerValue - 1);
                     if ([downvote.userId isEqualToString:currentUserId]) {
-                        song.voteState = Upvoted;
+                        song.voteState = Downvoted;
                     }
                 }
                 
@@ -418,7 +421,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     _currentTrack = currentTrack;
     
     if (!currentTrack) {
-        // TODO: stop playback
+        [[SpotifySessionManager shared] pausePlayback];
         return;
     }
     
