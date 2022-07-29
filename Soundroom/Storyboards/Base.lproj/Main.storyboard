@@ -55,7 +55,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="BWf-UY-Ln0">
                                 <rect key="frame" x="0.0" y="114" width="414" height="574"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start a new room as the host." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sHe-lq-vJr">
                                 <rect key="frame" x="20" y="796" width="374" height="16"/>
@@ -78,7 +78,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Create room">
                                     <backgroundConfiguration key="background" cornerRadius="16">
-                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                     </backgroundConfiguration>
                                     <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="18"/>
                                 </buttonConfiguration>
@@ -258,13 +258,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qOw-Oy-9ej">
-                                <rect key="frame" x="70" y="457" width="274" height="34"/>
+                                <rect key="frame" x="70" y="453" width="274" height="34"/>
                                 <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" spellCheckingType="no" textContentType="username"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pzg-uC-KDP">
-                                <rect key="frame" x="70" y="499" width="274" height="34"/>
+                                <rect key="frame" x="70" y="495" width="274" height="34"/>
                                 <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" spellCheckingType="no" secureTextEntry="YES" textContentType="password"/>
@@ -278,9 +278,9 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Login">
                                     <backgroundConfiguration key="background">
-                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                     </backgroundConfiguration>
-                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="18"/>
+                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="16"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="didTapUserLogin:" destination="06Y-Re-yMA" eventType="touchUpInside" id="Ku2-lg-zMd"/>
@@ -295,17 +295,20 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Sign Up">
                                     <backgroundConfiguration key="background">
-                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
                                     </backgroundConfiguration>
-                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="18"/>
+                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="16"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="didTapUserRegister:" destination="06Y-Re-yMA" eventType="touchUpInside" id="18K-d6-lTh"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error: Username is already taken." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DD8-SE-8vn">
-                                <rect key="frame" x="70" y="543" width="274" height="16"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <rect key="frame" x="20" y="539" width="374" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="0qA-E8-N82"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" systemColor="systemRedColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -324,19 +327,19 @@
                             <constraint firstItem="xC5-sJ-OfK" firstAttribute="top" secondItem="dRL-wb-noN" secondAttribute="bottom" constant="8" id="81l-hC-djn"/>
                             <constraint firstItem="2sZ-uS-lUH" firstAttribute="trailing" secondItem="xC5-sJ-OfK" secondAttribute="trailing" constant="70" id="8P6-hy-epz"/>
                             <constraint firstItem="DD8-SE-8vn" firstAttribute="top" secondItem="pzg-uC-KDP" secondAttribute="bottom" constant="10" id="8ez-wr-O3E"/>
+                            <constraint firstItem="DD8-SE-8vn" firstAttribute="leading" secondItem="2sZ-uS-lUH" secondAttribute="leading" constant="20" id="90h-xR-RwD"/>
                             <constraint firstItem="2sZ-uS-lUH" firstAttribute="trailing" secondItem="qOw-Oy-9ej" secondAttribute="trailing" constant="70" id="BRT-oA-1ub"/>
-                            <constraint firstItem="DD8-SE-8vn" firstAttribute="leading" secondItem="2sZ-uS-lUH" secondAttribute="leading" constant="70" id="CPe-7D-VWm"/>
                             <constraint firstItem="2sZ-uS-lUH" firstAttribute="trailing" secondItem="dRL-wb-noN" secondAttribute="trailing" constant="70" id="DIB-Me-2At"/>
                             <constraint firstItem="Xft-EG-xXj" firstAttribute="centerX" secondItem="2sZ-uS-lUH" secondAttribute="centerX" id="DVD-YI-Aae"/>
                             <constraint firstItem="Xft-EG-xXj" firstAttribute="top" secondItem="2sZ-uS-lUH" secondAttribute="top" constant="60" id="Jji-5G-xYe"/>
                             <constraint firstItem="dRL-wb-noN" firstAttribute="top" secondItem="DD8-SE-8vn" secondAttribute="bottom" constant="90" id="P7e-jj-9j2"/>
                             <constraint firstItem="pzg-uC-KDP" firstAttribute="leading" secondItem="2sZ-uS-lUH" secondAttribute="leading" constant="70" id="Von-29-SDq"/>
                             <constraint firstItem="xC5-sJ-OfK" firstAttribute="leading" secondItem="2sZ-uS-lUH" secondAttribute="leading" constant="70" id="bYp-nS-E8q"/>
-                            <constraint firstItem="2sZ-uS-lUH" firstAttribute="trailing" secondItem="DD8-SE-8vn" secondAttribute="trailing" constant="70" id="gb6-cf-NJx"/>
                             <constraint firstItem="pzg-uC-KDP" firstAttribute="top" secondItem="qOw-Oy-9ej" secondAttribute="bottom" constant="8" id="lJY-TM-JCn"/>
                             <constraint firstItem="2sZ-uS-lUH" firstAttribute="trailing" secondItem="pzg-uC-KDP" secondAttribute="trailing" constant="70" id="nJy-bM-LKf"/>
                             <constraint firstItem="2sZ-uS-lUH" firstAttribute="bottom" secondItem="xC5-sJ-OfK" secondAttribute="bottom" constant="125" id="qMi-Y5-UBA"/>
                             <constraint firstItem="qOw-Oy-9ej" firstAttribute="leading" secondItem="2sZ-uS-lUH" secondAttribute="leading" constant="70" id="sKm-gJ-DbR"/>
+                            <constraint firstItem="2sZ-uS-lUH" firstAttribute="trailing" secondItem="DD8-SE-8vn" secondAttribute="trailing" constant="20" id="uqv-Kt-xXF"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="dfU-ex-OFH" appends="YES" id="bQu-PP-mJc"/>
@@ -344,6 +347,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="tEW-J4-60g"/>
                     <connections>
+                        <outlet property="errorLabel" destination="DD8-SE-8vn" id="t4O-7k-6zt"/>
                         <outlet property="loginButton" destination="dRL-wb-noN" id="cxO-NV-3KR"/>
                         <outlet property="passwordField" destination="pzg-uC-KDP" id="hx8-yk-Ga3"/>
                         <outlet property="registerButton" destination="xC5-sJ-OfK" id="z2u-7h-MqW"/>

@@ -102,6 +102,8 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.rowHeight = 76.f;
+    _tableView.layer.borderWidth = 1.8f;
+    _tableView.layer.borderColor = [UIColor tertiarySystemBackgroundColor].CGColor;
     [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:[RoomCell reuseIdentifier]];
 }
 

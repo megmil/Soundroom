@@ -6,6 +6,10 @@
 //
 
 #import "AccountView.h"
+#import "ImageConstants.h"
+
+static NSString *const soundroomName = @"Soundroom";
+static NSString *const spotifyName = @"Spotify";
 
 @implementation AccountView {
     UILabel *_appLabel;
@@ -26,7 +30,7 @@
     
     const CGFloat appImageViewSize = 50.f;
     const CGFloat actionButtonSize = 25.f;
-    const CGFloat statusImageViewSize = 20.f;
+    const CGFloat statusImageViewSize = 17.f;
     
     const CGFloat centeredImageViewOriginX = (viewWidth - appImageViewSize) / 2.f;
     const CGFloat centeredImageViewOriginY = (viewHeight - appImageViewSize) / 2.f;
@@ -51,51 +55,55 @@
     self = [super initWithCoder:coder];
     
     if (self) {
+        
         self.layer.cornerRadius = 5;
         
         _appLabel = [UILabel new];
         _appLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightMedium];
-        _appLabel.numberOfLines = 1;
+        _appLabel.textColor = [UIColor blackColor];
         [self addSubview:_appLabel];
         
         _appImageView = [UIImageView new];
         _appImageView.tintColor = [UIColor blackColor];
+        _appImageView.contentMode = UIViewContentModeScaleAspectFit;
         [self addSubview:_appImageView];
         
         _statusImageView = [UIImageView new];
+        _statusImageView.contentMode = UIViewContentModeScaleAspectFit;
         _statusImageView.tintColor = [UIColor blackColor];
         [self addSubview:_statusImageView];
         
         _actionButton = [UIButton new];
+        _actionButton.contentMode = UIViewContentModeScaleAspectFit;
         [_actionButton addTarget:self action:@selector(didTapActionButton) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_actionButton];
+        
     }
     
     return self;
 }
 
 - (void)setIsUserAccountView:(BOOL)isUserAccountView {
-    _isUserAccountView = isUserAccountView;
-    if (isUserAccountView) {
-        _appLabel.text = @"Soundroom";
-        _appImageView.image = [UIImage systemImageNamed:@"music.note"];
-        return;
-    }
-    _appLabel.text = @"Spotify";
-    _appImageView.image = [UIImage systemImageNamed:@"music.mic.circle"];
+    
+    UIColor *const soundroomColor = [UIColor systemIndigoColor];
+    UIColor *const spotifyColor = [UIColor colorWithRed:29.f/225.f green:185.f/225.f blue:84.f/225.f alpha:1.f];
+    
+    _isUserAccountView = isUserAccountView; // TODO: remove?
+    
+    _appLabel.text = isUserAccountView ? soundroomName : spotifyName;
+    _appImageView.image = isUserAccountView ? [UIImage systemImageNamed:soundroomImageName] : [UIImage imageNamed:spotifyImageName];
+    self.backgroundColor = isUserAccountView ? soundroomColor : spotifyColor;
+    
 }
 
 - (void)setIsLoggedIn:(BOOL)isLoggedIn {
-    _isLoggedIn = isLoggedIn;
-    dispatch_async(dispatch_get_main_queue(), ^(void){
-        if (isLoggedIn) {
-            self->_statusImageView.image = [UIImage systemImageNamed:@"checkmark.circle"];
-            [self->_actionButton setImage:[UIImage systemImageNamed:@"rectangle.portrait.and.arrow.right"] forState:UIControlStateNormal];
-            return;
-        }
-        self->_statusImageView.image = [UIImage systemImageNamed:@"exclamationmark.triangle"];
-        [self->_actionButton setImage:[UIImage systemImageNamed:@"person.fill"] forState:UIControlStateNormal];
-    });
+    
+    _isLoggedIn = isLoggedIn; // TODO: remove?
+    
+    _statusImageView.image = isLoggedIn ? [UIImage systemImageNamed:verifiedImageName] : [UIImage systemImageNamed:warningImageName];
+    UIImage *actionButtonImage = isLoggedIn ? [UIImage systemImageNamed:logoutImageName] : [UIImage systemImageNamed:loginImageName];
+    [_actionButton setImage:actionButtonImage forState:UIControlStateNormal];
+
 }
 
 - (void)didTapActionButton {

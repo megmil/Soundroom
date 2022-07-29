@@ -126,7 +126,6 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         [self addSubview:_nextUpLabel];
         
         _tableView = [UITableView new];
-        _tableView.backgroundColor = [UIColor redColor];
         [self addSubview:_tableView];
         
         _shimmerLayer = [ShimmerLayer new];

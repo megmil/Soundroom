@@ -84,7 +84,9 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 }
 
 - (void)toggleSpotifyLoginStatus {
-    _spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        self->_spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
+    });
 }
 
 @end

@@ -11,6 +11,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSArray <NSString *> *const avatarImageNames;
 
+extern NSString *const soundroomImageName;
+extern NSString *const spotifyImageName;
+extern NSString *const verifiedImageName;
+extern NSString *const warningImageName;
+extern NSString *const logoutImageName;
+extern NSString *const loginImageName;
+
 extern NSString *const partyModeImageName;
 extern NSString *const remoteModeImageName;
 extern NSString *const inviteImageName;

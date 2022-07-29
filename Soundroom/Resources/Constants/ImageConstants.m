@@ -7,6 +7,13 @@
 
 #import "ImageConstants.h"
 
+NSString *const soundroomImageName = @"hifispeaker";
+NSString *const spotifyImageName = @"spotify_logo";
+NSString *const verifiedImageName = @"checkmark";
+NSString *const warningImageName = @"nosign";
+NSString *const loginImageName = @"key";
+NSString *const logoutImageName = @"rectangle.portrait.and.arrow.right";
+
 NSString *const partyModeImageName = @"person.2";
 NSString *const remoteModeImageName = @"person.icloud";
 NSString *const inviteImageName = @"paperplane";
