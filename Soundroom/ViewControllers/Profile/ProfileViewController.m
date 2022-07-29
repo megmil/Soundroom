@@ -10,31 +10,52 @@
 #import "SpotifySessionManager.h"
 #import "ParseUserManager.h"
 #import "SceneDelegate.h"
+#import "ImageConstants.h"
 #import "LoginViewController.h"
+
+static const CGFloat cornerRadiusRatio = 0.06f;
 
 @interface ProfileViewController () <AccountViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet AccountView *soundroomAccountView;
 @property (weak, nonatomic) IBOutlet AccountView *spotifyAccountView;
+@property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 
 @end
 
 @implementation ProfileViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
-    self.usernameLabel.text = [ParseUserManager currentUsername];
+    [self configureUserViews];
+    [self configureAccountViews];
+    [self configureObservers];
     
-    self.soundroomAccountView.isUserAccountView = YES;
-    self.soundroomAccountView.isLoggedIn = YES;
-    self.soundroomAccountView.delegate = self;
+}
+
+- (void)configureUserViews {
+    _usernameLabel.text = [ParseUserManager currentUsername];
+    _avatarImageView.image = [ParseUserManager avatarImageForCurrentUser];
+    _avatarImageView.layer.cornerRadius = CGRectGetWidth(_avatarImageView.frame) * cornerRadiusRatio;
+    _avatarImageView.layer.masksToBounds = YES;
+}
+
+- (void)configureAccountViews {
     
-    self.spotifyAccountView.isUserAccountView = NO;
-    self.spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
-    self.spotifyAccountView.delegate = self;
+    _soundroomAccountView.isUserAccountView = YES;
+    _soundroomAccountView.isLoggedIn = YES;
+    _soundroomAccountView.delegate = self;
     
+    _spotifyAccountView.isUserAccountView = NO;
+    _spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
+    _spotifyAccountView.delegate = self;
+    
+}
+
+- (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifySessionManagerDeauthorizedNotificaton object:nil];
 }

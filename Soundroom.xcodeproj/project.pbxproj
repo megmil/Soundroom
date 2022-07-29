@@ -28,6 +28,7 @@
 		041823ED2891B58E003962B6 /* ImageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823EC2891B58E003962B6 /* ImageConstants.m */; };
 		0418240C28922672003962B6 /* ShimmerLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0418240B28922672003962B6 /* ShimmerLayer.m */; };
 		041824132892FAF5003962B6 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 041824122892FAF5003962B6 /* RoomView.m */; };
+		041824162894423E003962B6 /* UITableView+EmptyMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 041824152894423E003962B6 /* UITableView+EmptyMessage.m */; };
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
@@ -111,6 +112,8 @@
 		0418240B28922672003962B6 /* ShimmerLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShimmerLayer.m; sourceTree = "<group>"; };
 		041824112892FAF5003962B6 /* RoomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomView.h; sourceTree = "<group>"; };
 		041824122892FAF5003962B6 /* RoomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomView.m; sourceTree = "<group>"; };
+		041824142894423E003962B6 /* UITableView+EmptyMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+EmptyMessage.h"; sourceTree = "<group>"; };
+		041824152894423E003962B6 /* UITableView+EmptyMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+EmptyMessage.m"; sourceTree = "<group>"; };
 		0422998C287D2FA70086612E /* LobbyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LobbyViewController.h; sourceTree = "<group>"; };
 		0422998D287D2FA70086612E /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
 		0422998F287D2FAF0086612E /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
@@ -428,6 +431,8 @@
 				04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */,
 				041823E4289055BD003962B6 /* UITableView+ReuseIdentifier.h */,
 				041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */,
+				041824142894423E003962B6 /* UITableView+EmptyMessage.h */,
+				041824152894423E003962B6 /* UITableView+EmptyMessage.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -696,6 +701,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04CEE28F288C7A4A00F821E8 /* Song.m in Sources */,
+				041824162894423E003962B6 /* UITableView+EmptyMessage.m in Sources */,
 				042D627328876ACC005DE8E7 /* Invitation.m in Sources */,
 				0417B5C32874E4D7001D6B04 /* Room.m in Sources */,
 				0417B5B72874E377001D6B04 /* Track.m in Sources */,

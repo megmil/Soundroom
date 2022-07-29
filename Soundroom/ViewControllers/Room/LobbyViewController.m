@@ -16,8 +16,10 @@
 #import "Invitation.h"
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
+#import "UITableView+EmptyMessage.h"
 
 NSString *const LobbyViewControllerIdentifier = @"LobbyViewController";
+static NSString *const emptyMessage = @"No pending invitations.";
 
 @interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource, RoomCellDelegate>
 
@@ -104,7 +106,15 @@ NSString *const LobbyViewControllerIdentifier = @"LobbyViewController";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    if (!_invitationIds.count) {
+        [_tableView showEmptyMessageWithText:emptyMessage];
+    } else {
+        [_tableView removeEmptyMessage];
+    }
+    
     return _invitationIds.count;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

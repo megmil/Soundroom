@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *const musicNoteImageName;
+extern NSArray <NSString *> *const avatarImageNames;
 extern NSString *const defaultAlbumImageName;
 extern NSString *const plusImageName;
 extern NSString *const playImageName;

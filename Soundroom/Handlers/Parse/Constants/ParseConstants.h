@@ -23,6 +23,7 @@ extern NSString *const requestIdKey;
 extern NSString *const isPendingKey;
 extern NSString *const createdAtKey;
 extern NSString *const usernameKey;
+extern NSString *const avatarImageTypeKey;
 
 extern NSString *const credentialsKeyParseClientKey;
 extern NSString *const credentialsKeyParseApplicationId;

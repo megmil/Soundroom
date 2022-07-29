@@ -92,8 +92,10 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         [self addSubview:_roomNameLabel];
         
         _leaveButton = [UIButton new];
-        _leaveButton.titleLabel.text = @"Leave";
-        _leaveButton.tintColor = [UIColor systemRedColor];
+        [_leaveButton setTitle:@"Leave" forState:UIControlStateNormal];
+        [_leaveButton setTitleColor:[UIColor systemRedColor] forState:UIControlStateNormal];
+        _leaveButton.titleLabel.font = [UIFont systemFontOfSize:15.f];
+        [_leaveButton addTarget:self action:@selector(leaveButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_leaveButton];
         
         _songTitleLabel = [UILabel new];
@@ -128,7 +130,6 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         [self addSubview:_tableView];
         
         _shimmerLayer = [ShimmerLayer new];
-        _shimmerLayer.bounds = self.layer.bounds;
         [self.layer addSublayer:_shimmerLayer];
         
     }
@@ -137,10 +138,14 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     
 }
 
-# pragma mark - Playback
+# pragma mark - Actions
 
 - (void)playButtonTapped {
     [self.delegate didTapPlay];
+}
+
+- (void)leaveButtonTapped {
+    [self.delegate didTapLeave];
 }
 
 # pragma mark - Shimmer

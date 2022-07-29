@@ -428,6 +428,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
         [[SpotifySessionManager shared] playSongWithSpotifyURI:currentTrack.spotifyURI];
     }
+    
 }
 
 

@@ -7,8 +7,11 @@
 
 #import "ImageConstants.h"
 
-NSString *const musicNoteImageName = @"music.note";
-
+NSArray <NSString *> *const avatarImageNames = @[@"user_image_blue",
+                                                 @"user_image_yellow",
+                                                 @"user_image_green",
+                                                 @"user_image_purple",
+                                                 @"user_image_red"];
 NSString *const playImageName = @"play.fill";
 NSString *const stopImageName = @"stop.fill";
 NSString *const plusImageName = @"plus";

@@ -9,6 +9,8 @@
 #import "SpotifyAPIManager.h"
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
+#import "ParseConstants.h"
+#import "ImageConstants.h"
 #import "Song.h" // need for VoteStatus
 #import "ParseObjectManager.h"
 #import "SongCell.h"
@@ -99,9 +101,9 @@
     }
     
     PFUser *user = _users[indexPath.row];
-    cell.title = [user valueForKey:@"displayName"]; // TODO: implement
+    cell.title = user.username; // TODO: add display name
     cell.subtitle = user.username;
-    cell.image = [UIImage systemImageNamed:@"check"]; // TODO: avatar images
+    cell.image = [ParseUserManager avatarImageForUser:user];
     cell.objectId = user.objectId;
     return cell;
     
@@ -168,7 +170,7 @@
 
 - (void)missingRoomAlert {
     UIAlertController *alert = [UIAlertController
-                                alertControllerWithTitle:@"Failed to add item"
+                                alertControllerWithTitle:@"Item could not be added"
                                 message:@"Please join or create a room before adding tracks or inviting users."
                                 preferredStyle:UIAlertControllerStyleAlert];
     

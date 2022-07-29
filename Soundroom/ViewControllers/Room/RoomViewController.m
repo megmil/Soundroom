@@ -16,6 +16,9 @@
 #import "RoomView.h"
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
+#import "UITableView+EmptyMessage.h"
+
+static NSString *const emptyMessage = @"No songs added yet.";
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
 
@@ -79,7 +82,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         // dismiss failed authentication alert if necessary
-        if ([self presentedViewController]) {
+        if ([[self presentedViewController] isKindOfClass:[UIAlertController class]]) {
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     });
@@ -174,7 +177,16 @@
 # pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[RoomManager shared] queue].count;
+    
+    NSInteger songCount = [[RoomManager shared] queue].count;
+    
+    if (!songCount) {
+        [_roomView.tableView showEmptyMessageWithText:emptyMessage];
+    } else {
+        [_roomView.tableView removeEmptyMessage];
+    }
+    
+    return songCount;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -187,6 +199,7 @@
     cell.voteState = song.voteState;
     cell.cellType = QueueCell;
     cell.queueDelegate = self;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // track data
     cell.title = song.track.title;

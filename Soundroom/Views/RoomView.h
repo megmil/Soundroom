@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol RoomViewDelegate
 - (void)didTapPlay;
+- (void)didTapLeave;
 @end
 
 @interface RoomView : UIView
