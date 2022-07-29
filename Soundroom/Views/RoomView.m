@@ -87,54 +87,82 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     
     if (self) {
         
-        _roomNameLabel = [UILabel new];
-        _roomNameLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold]; // TODO: define font sizes
-        [self addSubview:_roomNameLabel];
-        
-        _leaveButton = [UIButton new];
-        [_leaveButton setTitle:@"Leave" forState:UIControlStateNormal];
-        [_leaveButton setTitleColor:[UIColor systemRedColor] forState:UIControlStateNormal];
-        _leaveButton.titleLabel.font = [UIFont systemFontOfSize:15.f];
-        [_leaveButton addTarget:self action:@selector(leaveButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:_leaveButton];
-        
-        _songTitleLabel = [UILabel new];
-        _songTitleLabel.font = [UIFont systemFontOfSize:18.f weight:UIFontWeightMedium];
-        [self addSubview:_songTitleLabel];
-        
-        _songArtistLabel = [UILabel new];
-        _songArtistLabel.font = [UIFont systemFontOfSize:15.f weight:UIFontWeightMedium];
-        _songArtistLabel.textColor = [UIColor systemGray2Color];
-        [self addSubview:_songArtistLabel];
-        
-        _songImageView = [UIImageView new];
-        _songImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _songImageView.layer.cornerRadius = imageSize * cornerRadiusRatio;
-        _songImageView.layer.masksToBounds = YES;
-        [self addSubview:_songImageView];
-        
-        _playButton = [UIButton new];
-        _playButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-        _playButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        [_playButton setImage:[UIImage systemImageNamed:playImageName] forState:UIControlStateNormal];
-        [_playButton addTarget:self action:@selector(playButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:_playButton];
-        
-        _nextUpLabel = [UILabel new];
-        _nextUpLabel.text = @"Next up";
-        _nextUpLabel.font = [UIFont systemFontOfSize:20.f weight:UIFontWeightMedium];
-        [self addSubview:_nextUpLabel];
-        
-        _tableView = [UITableView new];
-        [self addSubview:_tableView];
-        
-        _shimmerLayer = [ShimmerLayer new];
-        [self.layer addSublayer:_shimmerLayer];
+        [self configureRoomLabel];
+        [self configureLeaveButton];
+        [self configureSongTitleLabel];
+        [self configureSongArtistLabel];
+        [self configureSongImageView];
+        [self configurePlayButton];
+        [self configureNextUpLabel];
+        [self configureTableView];
+        [self configureShimmerLayer];
         
     }
     
     return self;
     
+}
+
+- (void)configureRoomLabel {
+    _roomNameLabel = [UILabel new];
+    _roomNameLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold]; // TODO: define font sizes
+    [self addSubview:_roomNameLabel];
+}
+
+- (void)configureLeaveButton {
+    _leaveButton = [UIButton new];
+    [_leaveButton setTitle:@"Leave" forState:UIControlStateNormal];
+    [_leaveButton setTitleColor:[UIColor systemRedColor] forState:UIControlStateNormal];
+    _leaveButton.titleLabel.font = [UIFont systemFontOfSize:15.f];
+    [_leaveButton addTarget:self action:@selector(leaveButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_leaveButton];
+}
+
+- (void)configureSongTitleLabel {
+    _songTitleLabel = [UILabel new];
+    _songTitleLabel.font = [UIFont systemFontOfSize:18.f weight:UIFontWeightMedium];
+    [self addSubview:_songTitleLabel];
+}
+
+- (void)configureSongArtistLabel {
+    _songArtistLabel = [UILabel new];
+    _songArtistLabel.font = [UIFont systemFontOfSize:15.f weight:UIFontWeightMedium];
+    _songArtistLabel.textColor = [UIColor systemGray2Color];
+    [self addSubview:_songArtistLabel];
+}
+
+- (void)configureSongImageView {
+    _songImageView = [UIImageView new];
+    _songImageView.contentMode = UIViewContentModeScaleAspectFill;
+    _songImageView.layer.cornerRadius = imageSize * cornerRadiusRatio;
+    _songImageView.layer.masksToBounds = YES;
+    [self addSubview:_songImageView];
+}
+
+- (void)configurePlayButton {
+    _playButton = [UIButton new];
+    _playButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+    _playButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+    [_playButton setImage:[UIImage systemImageNamed:playImageName] forState:UIControlStateNormal];
+    [_playButton addTarget:self action:@selector(playButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_playButton];
+}
+
+- (void)configureNextUpLabel {
+    _nextUpLabel = [UILabel new];
+    _nextUpLabel.text = @"Next up";
+    _nextUpLabel.font = [UIFont systemFontOfSize:20.f weight:UIFontWeightMedium];
+    [self addSubview:_nextUpLabel];
+}
+
+- (void)configureTableView {
+    _tableView = [UITableView new];
+    [self addSubview:_tableView];
+}
+
+- (void)configureShimmerLayer {
+    _shimmerLayer = [ShimmerLayer new];
+    [self.layer addSublayer:_shimmerLayer];
 }
 
 # pragma mark - Actions

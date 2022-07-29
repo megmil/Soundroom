@@ -56,31 +56,43 @@ static NSString *const spotifyName = @"Spotify";
     
     if (self) {
         
-        self.layer.cornerRadius = 5;
-        
-        _appLabel = [UILabel new];
-        _appLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightMedium];
-        _appLabel.textColor = [UIColor blackColor];
-        [self addSubview:_appLabel];
-        
-        _appImageView = [UIImageView new];
-        _appImageView.tintColor = [UIColor blackColor];
-        _appImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self addSubview:_appImageView];
-        
-        _statusImageView = [UIImageView new];
-        _statusImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _statusImageView.tintColor = [UIColor blackColor];
-        [self addSubview:_statusImageView];
-        
-        _actionButton = [UIButton new];
-        _actionButton.contentMode = UIViewContentModeScaleAspectFit;
-        [_actionButton addTarget:self action:@selector(didTapActionButton) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:_actionButton];
+        self.layer.cornerRadius = 5;        
+        [self configureAppLabel];
+        [self configureAppImageView];
+        [self configureStatusImageView];
+        [self configureActionButton];
         
     }
     
     return self;
+}
+
+- (void)configureAppLabel {
+    _appLabel = [UILabel new];
+    _appLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightMedium];
+    _appLabel.textColor = [UIColor blackColor];
+    [self addSubview:_appLabel];
+}
+
+- (void)configureAppImageView {
+    _appImageView = [UIImageView new];
+    _appImageView.tintColor = [UIColor blackColor];
+    _appImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self addSubview:_appImageView];
+}
+
+- (void)configureStatusImageView {
+    _statusImageView = [UIImageView new];
+    _statusImageView.contentMode = UIViewContentModeScaleAspectFit;
+    _statusImageView.tintColor = [UIColor blackColor];
+    [self addSubview:_statusImageView];
+}
+
+- (void)configureActionButton {
+    _actionButton = [UIButton new];
+    _actionButton.contentMode = UIViewContentModeScaleAspectFit;
+    [_actionButton addTarget:self action:@selector(didTapActionButton) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_actionButton];
 }
 
 - (void)setIsUserAccountView:(BOOL)isUserAccountView {

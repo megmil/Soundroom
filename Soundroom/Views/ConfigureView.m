@@ -113,93 +113,135 @@ static const CGFloat cornerRadius = 16.f;
     
     if (self) {
         
-        _headerLabel = [UILabel new];
-        _headerLabel.text = @"Create room";
-        _headerLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold];
-        [self addSubview:_headerLabel];
+        [self configureHeaderLabel];
+        [self configureTitleField];
+        [self configureCreateButton];
         
-        _titleField = [SkyFloatingLabelTextField new];
-        _titleField.title = @"Room name";
-        _titleField.placeholder = @"Name your room";
-        _titleField.titleFont = [UIFont systemFontOfSize:14.f];
-        _titleField.placeholderFont = [UIFont systemFontOfSize:18.f];
-        _titleField.textColor = [UIColor labelColor];
-        _titleField.placeholderColor = [UIColor systemGray2Color];
-        _titleField.lineColor = [UIColor systemGray2Color];
-        _titleField.selectedTitleColor = [UIColor systemIndigoColor];
-        _titleField.selectedLineColor = [UIColor systemIndigoColor];
-        _titleField.lineHeight = 1.3f;
-        _titleField.selectedLineHeight = 2.2f;
-        [self addSubview:_titleField];
+        [self configureModeImageView];
+        [self configureModeTitleLabel];
+        [self configureModeSubtitleLabel];
+        [self configureModeSwitch];
         
-        _modeImageView = [UIImageView new];
-        _modeImageView.image = [UIImage systemImageNamed:partyModeImageName];
-        _modeImageView.tintColor = [UIColor labelColor];
-        _modeImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self addSubview:_modeImageView];
+        [self configureInviteImageView];
+        [self configureInviteLabel];
+        [self configureInviteButton];
         
-        _modeTitleLabel = [UILabel new];
-        _modeTitleLabel.text = partyModeTitle;
-        _modeTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        [self addSubview:_modeTitleLabel];
-        
-        _modeSubtitleLabel = [UILabel new];
-        _modeSubtitleLabel.text = partyModeSubtitle;
-        _modeSubtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightRegular];
-        _modeSubtitleLabel.textColor = [UIColor systemGray2Color];
-        [self addSubview:_modeSubtitleLabel];
-        
-        _modeSwitch = [UISwitch new];
-        _modeSwitch.on = NO;
-        [_modeSwitch addTarget:self action:@selector(didSwitchMode:) forControlEvents:UIControlEventValueChanged];
-        [self addSubview:_modeSwitch];
-        
-        _inviteImageView = [UIImageView new];
-        _inviteImageView.image = [UIImage systemImageNamed:inviteImageName];
-        _inviteImageView.tintColor = [UIColor labelColor];
-        _inviteImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self addSubview:_inviteImageView];
-        
-        _inviteLabel = [UILabel new];
-        _inviteLabel.text = @"Invite members";
-        _inviteLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        [self addSubview:_inviteLabel];
-        
-        _inviteButton = [UIButton new];
-        _inviteButton.enabled = NO;
-        [_inviteButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
-        [_inviteButton addTarget:self action:@selector(_inviteButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:_inviteButton];
-        
-        _cleanImageView = [UIImageView new];
-        _cleanImageView.image = [UIImage systemImageNamed:allowExplicitImageName];
-        _cleanImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _cleanImageView.tintColor = [UIColor labelColor];
-
-        [self addSubview:_cleanImageView];
-        
-        _cleanLabel = [UILabel new];
-        _cleanLabel.text = @"Allow explicit songs";
-        _cleanLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        [self addSubview:_cleanLabel];
-        
-        _cleanSwitch = [UISwitch new];
-        _cleanSwitch.on = YES;
-        _cleanSwitch.enabled = NO;
-        [self addSubview:_cleanSwitch];
-        
-        _createButton = [UIButton new];
-        _createButton.backgroundColor = [UIColor systemIndigoColor];
-        _createButton.layer.cornerRadius = cornerRadius;
-        _createButton.clipsToBounds = YES;
-        _createButton.titleLabel.font = [UIFont systemFontOfSize:18.f weight:UIFontWeightSemibold];
-        [_createButton setTitle:@"Continue" forState:UIControlStateNormal];
-        [_createButton addTarget:self action:@selector(_createButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:_createButton];
+        [self configureCleanImageView];
+        [self configureCleanLabel];
+        [self configureCleanSwitch];
         
     }
     
     return self;
+}
+
+- (void)configureHeaderLabel {
+    _headerLabel = [UILabel new];
+    _headerLabel.text = @"Create room";
+    _headerLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold];
+    [self addSubview:_headerLabel];
+}
+
+- (void)configureTitleField {
+    _titleField = [SkyFloatingLabelTextField new];
+    _titleField.title = @"Room name";
+    _titleField.placeholder = @"Name your room";
+    _titleField.titleFont = [UIFont systemFontOfSize:14.f];
+    _titleField.placeholderFont = [UIFont systemFontOfSize:18.f];
+    _titleField.textColor = [UIColor labelColor];
+    _titleField.placeholderColor = [UIColor systemGray2Color];
+    _titleField.lineColor = [UIColor systemGray2Color];
+    _titleField.selectedTitleColor = [UIColor systemIndigoColor];
+    _titleField.selectedLineColor = [UIColor systemIndigoColor];
+    _titleField.lineHeight = 1.3f;
+    _titleField.selectedLineHeight = 2.2f;
+    [self addSubview:_titleField];
+}
+
+- (void)configureModeImageView {
+    _modeImageView = [UIImageView new];
+    _modeImageView.image = [UIImage systemImageNamed:partyModeImageName];
+    _modeImageView.tintColor = [UIColor labelColor];
+    _modeImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self addSubview:_modeImageView];
+}
+
+- (void)configureModeTitleLabel {
+    _modeTitleLabel = [UILabel new];
+    _modeTitleLabel.text = partyModeTitle;
+    _modeTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
+    [self addSubview:_modeTitleLabel];
+}
+
+- (void)configureModeSubtitleLabel {
+    _modeSubtitleLabel = [UILabel new];
+    _modeSubtitleLabel.text = partyModeSubtitle;
+    _modeSubtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightRegular];
+    _modeSubtitleLabel.textColor = [UIColor systemGray2Color];
+    [self addSubview:_modeSubtitleLabel];
+}
+
+- (void)configureModeSwitch {
+    _modeSwitch = [UISwitch new];
+    _modeSwitch.on = NO;
+    [_modeSwitch addTarget:self action:@selector(didSwitchMode:) forControlEvents:UIControlEventValueChanged];
+    [self addSubview:_modeSwitch];
+}
+
+- (void)configureInviteImageView {
+    _inviteImageView = [UIImageView new];
+    _inviteImageView.image = [UIImage systemImageNamed:inviteImageName];
+    _inviteImageView.tintColor = [UIColor labelColor];
+    _inviteImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self addSubview:_inviteImageView];
+}
+
+- (void)configureInviteLabel {
+    _inviteLabel = [UILabel new];
+    _inviteLabel.text = @"Invite members";
+    _inviteLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
+    [self addSubview:_inviteLabel];
+}
+
+- (void)configureInviteButton {
+    _inviteButton = [UIButton new];
+    _inviteButton.enabled = NO;
+    [_inviteButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
+    [_inviteButton addTarget:self action:@selector(_inviteButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_inviteButton];
+}
+
+- (void)configureCleanImageView {
+    _cleanImageView = [UIImageView new];
+    _cleanImageView.image = [UIImage systemImageNamed:allowExplicitImageName];
+    _cleanImageView.contentMode = UIViewContentModeScaleAspectFit;
+    _cleanImageView.tintColor = [UIColor labelColor];
+    [self addSubview:_cleanImageView];
+}
+
+- (void)configureCleanLabel {
+    _cleanLabel = [UILabel new];
+    _cleanLabel.text = @"Allow explicit songs";
+    _cleanLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
+    [self addSubview:_cleanLabel];
+}
+
+- (void)configureCleanSwitch {
+    _cleanSwitch = [UISwitch new];
+    _cleanSwitch.on = YES;
+    _cleanSwitch.enabled = NO;
+    [self addSubview:_cleanSwitch];
+}
+
+- (void)configureCreateButton {
+    _createButton = [UIButton new];
+    _createButton.backgroundColor = [UIColor systemIndigoColor];
+    _createButton.layer.cornerRadius = cornerRadius;
+    _createButton.clipsToBounds = YES;
+    _createButton.titleLabel.font = [UIFont systemFontOfSize:18.f weight:UIFontWeightSemibold];
+    [_createButton setTitle:@"Continue" forState:UIControlStateNormal];
+    [_createButton addTarget:self action:@selector(_createButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_createButton];
 }
 
 - (void)didSwitchMode:(UISwitch *)sender {

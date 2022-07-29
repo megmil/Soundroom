@@ -92,46 +92,71 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
     
     if (self) {
         
-        _imageView = [UIImageView new];
-        _imageView.layer.cornerRadius = imageCornerRadius;
-        _imageView.clipsToBounds = YES;
-        _imageView.contentMode = UIViewContentModeScaleAspectFill;
-        [self.contentView addSubview:_imageView];
-        
-        _titleLabel = [UILabel new];
-        _titleLabel.font = [UIFont systemFontOfSize:titleFontSize weight:UIFontWeightMedium];
-        [self.contentView addSubview:_titleLabel];
-        
-        _subtitleLabel = [UILabel new];
-        _subtitleLabel.font = [UIFont systemFontOfSize:subtitleFontSize weight:UIFontWeightMedium];
-        _subtitleLabel.textColor = [UIColor systemGray2Color];
-        [self.contentView addSubview:_subtitleLabel];
-        
-        _addButton = [UIButton new];
-        [_addButton setImage:[UIImage systemImageNamed:plusImageName] forState:UIControlStateNormal];
-        [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_addButton];
-        
-        _upvoteButton = [UIButton new];
-        _upvoteButton.tag = Upvoted;
-        [_upvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_upvoteButton];
-        
-        _downvoteButton = [UIButton new];
-        _downvoteButton.tag = Downvoted;
-        [_downvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_downvoteButton];
-        
-        _scoreLabel = [UILabel new];
-        _scoreLabel.font = [UIFont systemFontOfSize:scoreFontSize weight:UIFontWeightRegular];
-        [self.contentView addSubview:_scoreLabel];
-        
-        _shimmerLayer = [ShimmerLayer new];
-        [self.layer addSublayer:_shimmerLayer];
+        [self configureImageView];
+        [self configureTitleLabel];
+        [self configureSubtitleLabel];
+        [self configureAddButton];
+        [self configureUpvoteButton];
+        [self configureDownvoteButton];
+        [self configureScoreLabel];
+        [self configureShimmerLayer];
         
     }
     
     return self;
+}
+
+- (void)configureImageView {
+    _imageView = [UIImageView new];
+    _imageView.layer.cornerRadius = imageCornerRadius;
+    _imageView.clipsToBounds = YES;
+    _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.contentView addSubview:_imageView];
+}
+
+- (void)configureTitleLabel {
+    _titleLabel = [UILabel new];
+    _titleLabel.font = [UIFont systemFontOfSize:titleFontSize weight:UIFontWeightMedium];
+    [self.contentView addSubview:_titleLabel];
+}
+
+- (void)configureSubtitleLabel {
+    _subtitleLabel = [UILabel new];
+    _subtitleLabel.font = [UIFont systemFontOfSize:subtitleFontSize weight:UIFontWeightMedium];
+    _subtitleLabel.textColor = [UIColor systemGray2Color];
+    [self.contentView addSubview:_subtitleLabel];
+}
+
+- (void)configureAddButton {
+    _addButton = [UIButton new];
+    [_addButton setImage:[UIImage systemImageNamed:plusImageName] forState:UIControlStateNormal];
+    [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_addButton];
+}
+
+- (void)configureUpvoteButton {
+    _upvoteButton = [UIButton new];
+    _upvoteButton.tag = Upvoted;
+    [_upvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_upvoteButton];
+}
+
+- (void)configureDownvoteButton {
+    _downvoteButton = [UIButton new];
+    _downvoteButton.tag = Downvoted;
+    [_downvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_downvoteButton];
+}
+
+- (void)configureScoreLabel {
+    _scoreLabel = [UILabel new];
+    _scoreLabel.font = [UIFont systemFontOfSize:scoreFontSize weight:UIFontWeightRegular];
+    [self.contentView addSubview:_scoreLabel];
+}
+
+- (void)configureShimmerLayer {
+    _shimmerLayer = [ShimmerLayer new];
+    [self.layer addSublayer:_shimmerLayer];
 }
 
 # pragma mark - Buttons
