@@ -6,12 +6,16 @@
 //
 
 #import "ConfigureView.h"
+#import "ImageConstants.h"
 @import SkyFloatingLabelTextField;
 
 static NSString *const partyModeTitle = @"Party mode";
-static NSString *const partyModeSubtitle = @"Only host plays music";
+static NSString *const partyModeSubtitle = @"Only the host plays the queue";
 static NSString *const remoteModeTitle = @"Remote mode";
-static NSString *const remoteModeSubtitle = @"All members play music";
+static NSString *const remoteModeSubtitle = @"All members play the queue";
+
+static const CGFloat standardSize = 50.f;
+static const CGFloat cornerRadiusRatio = 0.2f;
 
 @implementation ConfigureView {
     
@@ -50,7 +54,6 @@ static NSString *const remoteModeSubtitle = @"All members play music";
     const CGFloat headerLabelWidth = _headerLabel.frame.size.width;
     const CGFloat headerLabelHeight = _headerLabel.frame.size.height;
     const CGFloat switchHeight = 31.f;
-    const CGFloat standardSize = 50.f;
     
     const CGFloat labelHeight = 20.f;
     const CGFloat titleHeight = 19.f;
@@ -115,17 +118,22 @@ static NSString *const remoteModeSubtitle = @"All members play music";
         
         _titleField = [SkyFloatingLabelTextField new];
         _titleField.title = @"Room name";
-        _titleField.titleFont = [UIFont systemFontOfSize:14.f];
-        _titleField.titleColor = [UIColor systemGray2Color];
         _titleField.placeholder = @"Name your room";
+        _titleField.titleFont = [UIFont systemFontOfSize:14.f];
         _titleField.placeholderFont = [UIFont systemFontOfSize:18.f];
+        _titleField.textColor = [UIColor labelColor];
         _titleField.placeholderColor = [UIColor systemGray2Color];
-        _titleField.lineColor = _headerLabel.textColor;
+        _titleField.lineColor = [UIColor systemGray2Color];
+        _titleField.selectedTitleColor = [UIColor systemBlueColor];
+        _titleField.selectedLineColor = [UIColor systemBlueColor];
+        _titleField.lineHeight = 1.3f;
+        _titleField.selectedLineHeight = 2.2f;
         [self addSubview:_titleField];
         
         _modeImageView = [UIImageView new];
-        _modeImageView.backgroundColor = [UIColor redColor];
-        // TODO: get mode image
+        _modeImageView.image = [UIImage systemImageNamed:partyModeImageName];
+        _modeImageView.tintColor = [UIColor labelColor];
+        _modeImageView.contentMode = UIViewContentModeScaleAspectFit;
         [self addSubview:_modeImageView];
         
         _modeTitleLabel = [UILabel new];
@@ -145,8 +153,9 @@ static NSString *const remoteModeSubtitle = @"All members play music";
         [self addSubview:_modeSwitch];
         
         _inviteImageView = [UIImageView new];
-        _inviteImageView.backgroundColor = [UIColor blueColor];
-        // TODO: get invite image
+        _inviteImageView.image = [UIImage systemImageNamed:inviteImageName];
+        _inviteImageView.tintColor = [UIColor labelColor];
+        _inviteImageView.contentMode = UIViewContentModeScaleAspectFit;
         [self addSubview:_inviteImageView];
         
         _inviteLabel = [UILabel new];
@@ -160,8 +169,10 @@ static NSString *const remoteModeSubtitle = @"All members play music";
         [self addSubview:_inviteButton];
         
         _cleanImageView = [UIImageView new];
-        _cleanImageView.backgroundColor = [UIColor greenColor];
-        // TODO: get clean image
+        _cleanImageView.image = [UIImage systemImageNamed:allowExplicitImageName];
+        _cleanImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _cleanImageView.tintColor = [UIColor labelColor];
+
         [self addSubview:_cleanImageView];
         
         _cleanLabel = [UILabel new];
@@ -175,8 +186,10 @@ static NSString *const remoteModeSubtitle = @"All members play music";
         [self addSubview:_cleanSwitch];
         
         _createButton = [UIButton new];
-        _createButton.titleLabel.text = @"Create";
-        _createButton.backgroundColor = [UIColor purpleColor];
+        _createButton.backgroundColor = [UIColor systemBlueColor];
+        _createButton.layer.cornerRadius = standardSize * cornerRadiusRatio;
+        _createButton.clipsToBounds = YES;
+        [_createButton setTitle:@"Create" forState:UIControlStateNormal];
         [_createButton addTarget:self action:@selector(_createButtonTapped:) forControlEvents:UIControlEventTouchUpInside]; // TODO: remove colon?
         [self addSubview:_createButton];
         
@@ -189,6 +202,7 @@ static NSString *const remoteModeSubtitle = @"All members play music";
     _listeningMode = sender.isOn ? RemoteMode : PartyMode;
     _modeTitleLabel.text = sender.isOn ? remoteModeTitle : partyModeTitle;
     _modeSubtitleLabel.text = sender.isOn ? remoteModeSubtitle : partyModeSubtitle;
+    _modeImageView.image = sender.isOn ? [UIImage systemImageNamed:remoteModeImageName] : [UIImage systemImageNamed:partyModeImageName];
 }
 
 - (NSString *)title {

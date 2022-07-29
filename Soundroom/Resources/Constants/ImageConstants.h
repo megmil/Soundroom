@@ -10,6 +10,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSArray <NSString *> *const avatarImageNames;
+
+extern NSString *const partyModeImageName;
+extern NSString *const remoteModeImageName;
+extern NSString *const inviteImageName;
+extern NSString *const cleanModeImageName;
+extern NSString *const allowExplicitImageName;
+
 extern NSString *const defaultAlbumImageName;
 extern NSString *const plusImageName;
 extern NSString *const playImageName;

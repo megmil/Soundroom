@@ -7,6 +7,12 @@
 
 #import "ImageConstants.h"
 
+NSString *const partyModeImageName = @"person.2";
+NSString *const remoteModeImageName = @"person.icloud";
+NSString *const inviteImageName = @"paperplane";
+NSString *const cleanModeImageName = @"play.slash";
+NSString *const allowExplicitImageName = @"play";
+
 NSArray <NSString *> *const avatarImageNames = @[@"user_image_blue",
                                                  @"user_image_yellow",
                                                  @"user_image_green",
