@@ -90,22 +90,6 @@ static NSString *const missingFieldsErrorMessage = @"Please fill in both usernam
     return self.usernameField.text.length == 0 || self.passwordField.text.length == 0;
 }
 
-- (void)showAlertWithError:(NSError *)error {
-    
-    UIAlertController *alert = [UIAlertController
-                                alertControllerWithTitle:@"Could not perform action"
-                                message:error.localizedDescription
-                                preferredStyle:(UIAlertControllerStyleAlert)];
-    
-    UIAlertAction *action = [UIAlertAction
-                             actionWithTitle:@"Ok"
-                             style:UIAlertActionStyleCancel
-                             handler:^(UIAlertAction *action) { }];
-    
-    [alert addAction:action];
-    [self presentViewController:alert animated:YES completion:^{ return; }];
-}
-
 - (IBAction)didTapScreen:(id)sender {
     [self.view endEditing:YES];
 }

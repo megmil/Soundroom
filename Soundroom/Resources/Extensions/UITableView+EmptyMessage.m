@@ -22,6 +22,7 @@
     self.backgroundView = messageLabel;
     self.backgroundView.backgroundColor = [UIColor secondarySystemBackgroundColor];
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
 }
 
 - (void)removeEmptyMessage {

@@ -228,7 +228,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     [self loadCurrentTrack];
     [self loadLocalQueueDataWithCompletion:^{
-        [self.delegate didRefreshQueue];
+        [self.delegate didLoadQueue];
     }];
     
 }

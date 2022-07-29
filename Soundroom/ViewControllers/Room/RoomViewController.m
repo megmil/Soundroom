@@ -71,10 +71,15 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
+
+        [self updateCurrentTrackViews];
+        
         self->_roomView.hidden = NO;
         self->_roomView.roomName = [[RoomManager shared] currentRoomName];
         self->_roomView.isHostView = [[RoomManager shared] isCurrentUserHost];
-        [self updateQueueViews];
+        
+        [self->_roomView.tableView reloadDataWithAnimation];
+        
     });
 }
 
@@ -90,17 +95,11 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     // reload track data
     [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            [self updateQueueViews];
+            [self updateCurrentTrackViews];
+            [self->_roomView.tableView reloadData];
         }
     }];
     
-}
-
-- (void)updateQueueViews {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self updateCurrentTrackViews];
-        [self->_roomView.tableView reloadDataWithAnimation];
-    });
 }
 
 - (void)updateCurrentTrackViews {
@@ -144,16 +143,15 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     });
 }
 
-- (void)didRefreshQueue {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self updateCurrentTrackViews];
-        [self->_roomView.tableView reloadDataWithAnimation];
-    });
-}
-
 - (void)didLeaveRoom {
     self->_roomView.hidden = YES;
     [self goToLobby];
+}
+
+- (void)didLoadQueue {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [self->_roomView.tableView reloadDataWithAnimation];
+    });
 }
 
 - (void)insertCellAtIndex:(NSUInteger)index {
@@ -187,6 +185,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     }
     
     return songCount;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

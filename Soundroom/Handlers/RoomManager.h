@@ -19,8 +19,8 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)insertCellAtIndex:(NSUInteger)index;
 - (void)deleteCellAtIndex:(NSUInteger)index;
 - (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex;
-- (void)didRefreshQueue;
 - (void)didUpdateCurrentTrack;
+- (void)didLoadQueue;
 - (void)didLeaveRoom;
 @end
 
