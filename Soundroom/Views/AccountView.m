@@ -30,7 +30,7 @@ static NSString *const spotifyName = @"Spotify";
     
     const CGFloat appImageViewSize = 50.f;
     const CGFloat actionButtonSize = 25.f;
-    const CGFloat statusImageViewSize = 17.f;
+    const CGFloat statusImageViewSize = 15.f;
     
     const CGFloat centeredImageViewOriginX = (viewWidth - appImageViewSize) / 2.f;
     const CGFloat centeredImageViewOriginY = (viewHeight - appImageViewSize) / 2.f;

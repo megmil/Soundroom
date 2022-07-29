@@ -242,6 +242,7 @@
                         <outlet property="avatarImageView" destination="B7Y-yZ-G6e" id="bGJ-47-WxP"/>
                         <outlet property="soundroomAccountView" destination="Zwt-QH-Atx" id="Aea-IE-VH8"/>
                         <outlet property="spotifyAccountView" destination="U0V-ht-GaB" id="fCM-Sa-Gpz"/>
+                        <outlet property="tableView" destination="ydF-yK-vGF" id="ssC-dd-I2N"/>
                         <outlet property="usernameLabel" destination="c8B-zJ-xna" id="Cdd-Nx-LiM"/>
                     </connections>
                 </viewController>

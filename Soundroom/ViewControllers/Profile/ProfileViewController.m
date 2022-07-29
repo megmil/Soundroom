@@ -12,15 +12,20 @@
 #import "SceneDelegate.h"
 #import "ImageConstants.h"
 #import "LoginViewController.h"
+#import "RoomCell.h"
+#import "UITableView+ReuseIdentifier.h"
+#import "UITableView+EmptyMessage.h"
 
+static NSString *const emptyTableMessage = @"No recent sessions to show.";
 static const CGFloat cornerRadiusRatio = 0.06f;
 
-@interface ProfileViewController () <AccountViewDelegate>
+@interface ProfileViewController () <AccountViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet AccountView *soundroomAccountView;
 @property (weak, nonatomic) IBOutlet AccountView *spotifyAccountView;
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -37,10 +42,19 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 }
 
 - (void)configureUserViews {
+    
     _usernameLabel.text = [ParseUserManager currentUsername];
+    
     _avatarImageView.image = [ParseUserManager avatarImageForCurrentUser];
     _avatarImageView.layer.cornerRadius = CGRectGetWidth(_avatarImageView.frame) * cornerRadiusRatio;
     _avatarImageView.layer.masksToBounds = YES;
+    
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:[RoomCell reuseIdentifier]];
+    _tableView.layer.borderWidth = 1.8f;
+    _tableView.layer.borderColor = [UIColor tertiarySystemBackgroundColor].CGColor;
+    
 }
 
 - (void)configureAccountViews {
@@ -60,6 +74,8 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifySessionManagerDeauthorizedNotificaton object:nil];
 }
 
+# pragma mark - AccountView
+
 - (void)didTapSpotifyLogin {
     [[SpotifySessionManager shared] authorizeSession];
 }
@@ -75,6 +91,20 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         }
     }];
 }
+
+# pragma mark - TableView
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    [_tableView showEmptyMessageWithText:emptyTableMessage];
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:[RoomCell reuseIdentifier]];
+    return cell;
+}
+
+# pragma mark - Helpers
 
 - (void)goToLogin {
     SceneDelegate *sceneDelegate = (SceneDelegate * ) UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
