@@ -18,7 +18,7 @@
 #import "UITableView+ReuseIdentifier.h"
 #import "UITableView+EmptyMessage.h"
 
-static NSString *const emptyMessage = @"No songs added yet.";
+static NSString *const emptyTableMessage = @"No songs are currently in the queue.";
 
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
 
@@ -181,7 +181,7 @@ static NSString *const emptyMessage = @"No songs added yet.";
     NSInteger songCount = [[RoomManager shared] queue].count;
     
     if (!songCount) {
-        [_roomView.tableView showEmptyMessageWithText:emptyMessage];
+        [_roomView.tableView showEmptyMessageWithText:emptyTableMessage];
     } else {
         [_roomView.tableView removeEmptyMessage];
     }

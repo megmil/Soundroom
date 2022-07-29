@@ -8,6 +8,9 @@
 #import "RoomCell.h"
 #import "ImageConstants.h"
 
+static const CGFloat imageSize = 60.f;
+static const CGFloat imageCornerRadius = 0.06f * imageSize;
+
 @implementation RoomCell {
     UILabel *_titleLabel;
     UIImageView *_imageView;
@@ -19,8 +22,7 @@
     
     [super layoutSubviews];
     
-    const CGFloat imageSize = 60.f;
-    const CGFloat buttonSize = 32.f;
+    const CGFloat buttonSize = 30.f;
     
     const CGFloat viewHeight = self.contentView.frame.size.height;
     const CGFloat viewWidth = self.contentView.frame.size.width;
@@ -58,10 +60,13 @@
         _imageView = [UIImageView new];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.backgroundColor = [UIColor purpleColor];
+        _imageView.layer.cornerRadius = imageCornerRadius;
+        _imageView.clipsToBounds = YES;
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:_imageView];
         
         _titleLabel = [UILabel new];
-        _titleLabel.font = [UIFont systemFontOfSize:17.f weight:UIFontWeightRegular];
+        _titleLabel.font = [UIFont systemFontOfSize:18.f weight:UIFontWeightRegular];
         [self.contentView addSubview:_titleLabel];
         
         _acceptButton = [UIButton new];
