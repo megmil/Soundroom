@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ConfigureView : UIView
 
+@property (nonatomic) BOOL enabled;
 @property (strong, nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) RoomListeningModeType listeningMode;
 @property (nonatomic, weak) id<ConfigureViewDelegate> delegate;

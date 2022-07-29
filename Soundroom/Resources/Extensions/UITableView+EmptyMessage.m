@@ -16,7 +16,7 @@
     messageLabel.text = text;
     messageLabel.textColor = [UIColor labelColor];
     messageLabel.textAlignment = NSTextAlignmentCenter;
-    messageLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
+    messageLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightRegular];
     [messageLabel sizeToFit];
     
     self.backgroundView = messageLabel;

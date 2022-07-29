@@ -14,8 +14,7 @@ static NSString *const partyModeSubtitle = @"Only the host plays the queue";
 static NSString *const remoteModeTitle = @"Remote mode";
 static NSString *const remoteModeSubtitle = @"All members play the queue";
 
-static const CGFloat standardSize = 50.f;
-static const CGFloat cornerRadiusRatio = 0.2f;
+static const CGFloat cornerRadius = 16.f;
 
 @implementation ConfigureView {
     
@@ -54,6 +53,7 @@ static const CGFloat cornerRadiusRatio = 0.2f;
     const CGFloat headerLabelWidth = _headerLabel.frame.size.width;
     const CGFloat headerLabelHeight = _headerLabel.frame.size.height;
     const CGFloat switchHeight = 31.f;
+    const CGFloat standardSize = 50.f;
     
     const CGFloat labelHeight = 20.f;
     const CGFloat titleHeight = 19.f;
@@ -164,6 +164,7 @@ static const CGFloat cornerRadiusRatio = 0.2f;
         [self addSubview:_inviteLabel];
         
         _inviteButton = [UIButton new];
+        _inviteButton.enabled = NO;
         [_inviteButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
         [_inviteButton addTarget:self action:@selector(_inviteButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_inviteButton];
@@ -187,10 +188,11 @@ static const CGFloat cornerRadiusRatio = 0.2f;
         
         _createButton = [UIButton new];
         _createButton.backgroundColor = [UIColor systemBlueColor];
-        _createButton.layer.cornerRadius = standardSize * cornerRadiusRatio;
+        _createButton.layer.cornerRadius = cornerRadius;
         _createButton.clipsToBounds = YES;
-        [_createButton setTitle:@"Create" forState:UIControlStateNormal];
-        [_createButton addTarget:self action:@selector(_createButtonTapped:) forControlEvents:UIControlEventTouchUpInside]; // TODO: remove colon?
+        _createButton.titleLabel.font = [UIFont systemFontOfSize:18.f weight:UIFontWeightSemibold];
+        [_createButton setTitle:@"Continue" forState:UIControlStateNormal];
+        [_createButton addTarget:self action:@selector(_createButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_createButton];
         
     }
@@ -205,20 +207,20 @@ static const CGFloat cornerRadiusRatio = 0.2f;
     _modeImageView.image = sender.isOn ? [UIImage systemImageNamed:remoteModeImageName] : [UIImage systemImageNamed:partyModeImageName];
 }
 
+- (void)setEnabled:(BOOL)enabled {
+    _titleField.userInteractionEnabled = enabled;
+    _modeSwitch.userInteractionEnabled = enabled;
+    _inviteButton.userInteractionEnabled = enabled;
+    _cleanSwitch.userInteractionEnabled = enabled;
+    _createButton.userInteractionEnabled = enabled;
+}
+
 - (NSString *)title {
     return _titleField.text;
 }
 
-- (void)_createButtonTapped:(UIButton *)button {
-    
-    _titleField.userInteractionEnabled = NO;
-    _modeSwitch.userInteractionEnabled = NO;
-    _inviteButton.userInteractionEnabled = NO;
-    _cleanSwitch.userInteractionEnabled = NO;
-    _createButton.userInteractionEnabled = NO;
-    
+- (void)_createButtonTapped {
     [self.delegate didTapCreate];
-    
 }
 
 - (void)_inviteButtonTapped:(UIButton *)button {

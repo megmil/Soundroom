@@ -19,15 +19,41 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.configureView.delegate = self;
+    _configureView.enabled = YES;
+    _configureView.delegate = self;
 }
 
 - (void)didTapCreate {
+    if ([_configureView.title isEqualToString:@""]) {
+        [self missingFieldAlert];
+        return;
+    }
+    
+    _configureView.enabled = NO;
     [ParseObjectManager createRoomWithTitle:_configureView.title listeningMode:_configureView.listeningMode];
 }
 
 - (void)didTapInvite {
     // TODO: show searchVC, save invited users, then invite after room is created
+}
+
+- (IBAction)didTapScreen:(id)sender {
+    [self.view endEditing:YES];
+}
+
+- (void)missingFieldAlert {
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:@"Missing Field"
+                                message:@"Please input a room name."
+                                preferredStyle:(UIAlertControllerStyleAlert)];
+    
+    UIAlertAction *action = [UIAlertAction
+                             actionWithTitle:@"Ok"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction *action) { }];
+    
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:^{ return; }];
 }
 
 @end
