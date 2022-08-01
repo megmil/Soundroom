@@ -207,6 +207,8 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     _upvoteLiveQuery = [ParseQueryManager queryForUpvotesInCurrentRoom];
     _upvoteSubscription = [_client subscribeToQuery:_upvoteLiveQuery];
     
+    // TODO: double subscribe error
+    
     // upvote is created
     _upvoteSubscription = [_upvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Upvote *upvote = (Upvote *)object;

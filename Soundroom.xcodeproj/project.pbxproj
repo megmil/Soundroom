@@ -25,6 +25,10 @@
 		0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5C82874F5F2001D6B04 /* RoomCell.m */; };
 		0417B5CC2874F6E6001D6B04 /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 0417B5CB2874F6E6001D6B04 /* Request.m */; };
 		041823E6289055BD003962B6 /* UITableView+ReuseIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */; };
+		041823ED2891B58E003962B6 /* ImageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 041823EC2891B58E003962B6 /* ImageConstants.m */; };
+		0418240C28922672003962B6 /* ShimmerLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0418240B28922672003962B6 /* ShimmerLayer.m */; };
+		041824132892FAF5003962B6 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 041824122892FAF5003962B6 /* RoomView.m */; };
+		041824162894423E003962B6 /* UITableView+EmptyMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 041824152894423E003962B6 /* UITableView+EmptyMessage.m */; };
 		0422998E287D2FA70086612E /* LobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422998D287D2FA70086612E /* LobbyViewController.m */; };
 		04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229990287D2FAF0086612E /* ConfigureViewController.m */; };
 		04229997287DDB5C0086612E /* ParseUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04229996287DDB5C0086612E /* ParseUserManager.m */; };
@@ -102,6 +106,14 @@
 		0417B5CB2874F6E6001D6B04 /* Request.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
 		041823E4289055BD003962B6 /* UITableView+ReuseIdentifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+ReuseIdentifier.h"; sourceTree = "<group>"; };
 		041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ReuseIdentifier.m"; sourceTree = "<group>"; };
+		041823EB2891B58E003962B6 /* ImageConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageConstants.h; sourceTree = "<group>"; };
+		041823EC2891B58E003962B6 /* ImageConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageConstants.m; sourceTree = "<group>"; };
+		0418240A28922672003962B6 /* ShimmerLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShimmerLayer.h; sourceTree = "<group>"; };
+		0418240B28922672003962B6 /* ShimmerLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShimmerLayer.m; sourceTree = "<group>"; };
+		041824112892FAF5003962B6 /* RoomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomView.h; sourceTree = "<group>"; };
+		041824122892FAF5003962B6 /* RoomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomView.m; sourceTree = "<group>"; };
+		041824142894423E003962B6 /* UITableView+EmptyMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+EmptyMessage.h"; sourceTree = "<group>"; };
+		041824152894423E003962B6 /* UITableView+EmptyMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+EmptyMessage.m"; sourceTree = "<group>"; };
 		0422998C287D2FA70086612E /* LobbyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LobbyViewController.h; sourceTree = "<group>"; };
 		0422998D287D2FA70086612E /* LobbyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LobbyViewController.m; sourceTree = "<group>"; };
 		0422998F287D2FAF0086612E /* ConfigureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
@@ -128,6 +140,7 @@
 		049304B82877CB0B006AA9A3 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		049304C9287C8A04006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		049304CA287C8A04006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		04BB98F52894FE2500533471 /* EnumeratedTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnumeratedTypes.h; sourceTree = "<group>"; };
 		04CC546E288B401200FC5707 /* UITableView+AnimationControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+AnimationControl.h"; sourceTree = "<group>"; };
 		04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+AnimationControl.m"; sourceTree = "<group>"; };
 		04CC5472288B4F4D00FC5707 /* ParseLiveQueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseLiveQueryManager.h; sourceTree = "<group>"; };
@@ -257,6 +270,8 @@
 		0417B5A12874B942001D6B04 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				041824112892FAF5003962B6 /* RoomView.h */,
+				041824122892FAF5003962B6 /* RoomView.m */,
 				0417B5C42874F5D6001D6B04 /* SongCell.h */,
 				0417B5C52874F5D6001D6B04 /* SongCell.m */,
 				0417B5C72874F5F2001D6B04 /* RoomCell.h */,
@@ -265,6 +280,7 @@
 				042299AA287E86630086612E /* ConfigureView.m */,
 				04785C7E28813094001AF277 /* AccountView.h */,
 				04785C7F28813094001AF277 /* AccountView.m */,
+				0418240D2892F673003962B6 /* Animations */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -277,6 +293,25 @@
 				042299A4287E7DA20086612E /* Profile */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		041823EE2891B594003962B6 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				041823EB2891B58E003962B6 /* ImageConstants.h */,
+				041823EC2891B58E003962B6 /* ImageConstants.m */,
+				04BB98F52894FE2500533471 /* EnumeratedTypes.h */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		0418240D2892F673003962B6 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				0418240A28922672003962B6 /* ShimmerLayer.h */,
+				0418240B28922672003962B6 /* ShimmerLayer.m */,
+			);
+			path = Animations;
 			sourceTree = "<group>";
 		};
 		042299A4287E7DA20086612E /* Profile */ = {
@@ -368,6 +403,7 @@
 		049304A628762AA9006AA9A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				041823EE2891B594003962B6 /* Constants */,
 				04CC5471288B408F00FC5707 /* Extensions */,
 				0417B56B2874B75F001D6B04 /* SceneDelegate.h */,
 				0417B56C2874B75F001D6B04 /* SceneDelegate.m */,
@@ -397,6 +433,8 @@
 				04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */,
 				041823E4289055BD003962B6 /* UITableView+ReuseIdentifier.h */,
 				041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */,
+				041824142894423E003962B6 /* UITableView+EmptyMessage.h */,
+				041824152894423E003962B6 /* UITableView+EmptyMessage.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -665,6 +703,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04CEE28F288C7A4A00F821E8 /* Song.m in Sources */,
+				041824162894423E003962B6 /* UITableView+EmptyMessage.m in Sources */,
 				042D627328876ACC005DE8E7 /* Invitation.m in Sources */,
 				0417B5C32874E4D7001D6B04 /* Room.m in Sources */,
 				0417B5B72874E377001D6B04 /* Track.m in Sources */,
@@ -679,17 +718,20 @@
 				04DF2F4B288A1A5A00FD28E4 /* ParseQueryManager.m in Sources */,
 				04785C8028813094001AF277 /* AccountView.m in Sources */,
 				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,
+				0418240C28922672003962B6 /* ShimmerLayer.m in Sources */,
 				0417B5A52874CED2001D6B04 /* ProfileViewController.m in Sources */,
 				0417B5C62874F5D6001D6B04 /* SongCell.m in Sources */,
 				04CEE292288C8FF900F821E8 /* Downvote.m in Sources */,
 				04DF2F4E288B064000FD28E4 /* ParseObjectManager.m in Sources */,
 				0422999A287DE1270086612E /* RoomManager.m in Sources */,
 				0417B5AB2874D394001D6B04 /* SearchViewController.m in Sources */,
+				041824132892FAF5003962B6 /* RoomView.m in Sources */,
 				042299AB287E86630086612E /* ConfigureView.m in Sources */,
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */,
+				041823ED2891B58E003962B6 /* ImageConstants.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,

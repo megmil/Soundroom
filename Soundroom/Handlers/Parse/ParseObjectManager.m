@@ -59,12 +59,6 @@
     // store roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    // delete attached objects
-    [self deleteObjectsInRoomWithId:roomId className:RequestClass];
-    [self deleteObjectsInRoomWithId:roomId className:UpvoteClass];
-    [self deleteObjectsInRoomWithId:roomId className:DownvoteClass];
-    [self deleteObjectsInRoomWithId:roomId className:InvitationClass];
-    
     // delete room
     [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         if (object) {
@@ -72,6 +66,12 @@
             [room deleteInBackground];
         }
     }];
+    
+    // delete attached objects
+    [self deleteObjectsInRoomWithId:roomId className:RequestClass];
+    [self deleteObjectsInRoomWithId:roomId className:UpvoteClass];
+    [self deleteObjectsInRoomWithId:roomId className:DownvoteClass];
+    [self deleteObjectsInRoomWithId:roomId className:InvitationClass];
     
 }
 
@@ -95,17 +95,26 @@
     
     // delete request
     [ParseQueryManager getRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
-        [object deleteInBackground];
-    }];
-    
-    // delete attached upvotes
-    [ParseQueryManager getUpvotesForRequestWithId:requestId completion:^(NSArray *objects, NSError *error) {
-        [self deleteObjects:objects];
-    }];
-    
-    // delete attached downvotes
-    [ParseQueryManager getDownvotesForRequestWithId:requestId completion:^(NSArray *objects, NSError *error) {
-        [self deleteObjects:objects];
+        
+        [object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            
+            if (succeeded) {
+                
+                // delete attached upvotes
+                [ParseQueryManager getUpvotesForRequestWithId:requestId completion:^(NSArray *objects, NSError *error) {
+                    [self deleteObjects:objects];
+                }];
+                
+                // delete attached downvotes
+                [ParseQueryManager getDownvotesForRequestWithId:requestId completion:^(NSArray *objects, NSError *error) {
+                    [self deleteObjects:objects];
+                }];
+                
+                
+            }
+            
+        }];
+        
     }];
     
 }

@@ -6,14 +6,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RoomManager.h" // for VoteState?
+#import "EnumeratedTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSUInteger, SongCellType) {
-    QueueCell,
-    SearchCell
-};
 
 @protocol QueueCellDelegate
 - (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;

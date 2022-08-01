@@ -21,6 +21,7 @@ NSString *const requestIdKey = @"requestId";
 NSString *const isPendingKey = @"isPending";
 NSString *const createdAtKey = @"createdAt";
 NSString *const usernameKey = @"username";
+NSString *const avatarImageTypeKey = @"avatarImageType";
 
 NSString *const credentialsKeyParseClientKey = @"parse-client-key";
 NSString *const credentialsKeyParseApplicationId = @"parse-app-id";

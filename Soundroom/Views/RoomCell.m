@@ -6,9 +6,10 @@
 //
 
 #import "RoomCell.h"
+#import "ImageConstants.h"
 
-static NSString *const acceptButtonImageName = @"checkmark.circle";
-static NSString *const rejectButtonImageName = @"multiply.circle";
+static const CGFloat imageSize = 60.f;
+static const CGFloat imageCornerRadius = 0.06f * imageSize;
 
 @implementation RoomCell {
     UILabel *_titleLabel;
@@ -21,8 +22,7 @@ static NSString *const rejectButtonImageName = @"multiply.circle";
     
     [super layoutSubviews];
     
-    const CGFloat imageSize = 60.f;
-    const CGFloat buttonSize = 32.f;
+    const CGFloat buttonSize = 30.f;
     
     const CGFloat viewHeight = self.contentView.frame.size.height;
     const CGFloat viewWidth = self.contentView.frame.size.width;
@@ -57,32 +57,48 @@ static NSString *const rejectButtonImageName = @"multiply.circle";
     
     if (self) {
         
-        _imageView = [UIImageView new];
-        _imageView.contentMode = UIViewContentModeScaleAspectFill;
-        _imageView.backgroundColor = [UIColor purpleColor];
-        [self.contentView addSubview:_imageView];
-        
-        _titleLabel = [UILabel new];
-        _titleLabel.font = [UIFont systemFontOfSize:17.f weight:UIFontWeightRegular];
-        [self.contentView addSubview:_titleLabel];
-        
-        _acceptButton = [UIButton new];
-        _acceptButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-        _acceptButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        [_acceptButton setImage:[UIImage systemImageNamed:acceptButtonImageName] forState:UIControlStateNormal];
-        [_acceptButton addTarget:self action:@selector(didTapAcceptInvitation) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_acceptButton];
-        
-        _rejectButton = [UIButton new];
-        _rejectButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-        _rejectButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        [_rejectButton setImage:[UIImage systemImageNamed:rejectButtonImageName] forState:UIControlStateNormal];
-        [_rejectButton addTarget:self action:@selector(didTapRejectInvitation) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_rejectButton];
+        [self configureImageView];
+        [self configureTitleLabel];
+        [self configureAcceptButton];
+        [self configureRejectButton];
         
     }
     
     return self;
+}
+
+- (void)configureImageView {
+    _imageView = [UIImageView new];
+    _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    _imageView.backgroundColor = [UIColor purpleColor];
+    _imageView.layer.cornerRadius = imageCornerRadius;
+    _imageView.clipsToBounds = YES;
+    _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.contentView addSubview:_imageView];
+}
+
+- (void)configureTitleLabel {
+    _titleLabel = [UILabel new];
+    _titleLabel.font = [UIFont systemFontOfSize:18.f weight:UIFontWeightRegular];
+    [self.contentView addSubview:_titleLabel];
+}
+
+- (void)configureAcceptButton {
+    _acceptButton = [UIButton new];
+    _acceptButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+    _acceptButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+    [_acceptButton setImage:[UIImage systemImageNamed:acceptImageName] forState:UIControlStateNormal];
+    [_acceptButton addTarget:self action:@selector(didTapAcceptInvitation) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_acceptButton];
+}
+
+- (void)configureRejectButton {
+    _rejectButton = [UIButton new];
+    _rejectButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+    _rejectButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+    [_rejectButton setImage:[UIImage systemImageNamed:rejectImageName] forState:UIControlStateNormal];
+    [_rejectButton addTarget:self action:@selector(didTapRejectInvitation) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_rejectButton];
 }
 
 - (void)didTapAcceptInvitation {

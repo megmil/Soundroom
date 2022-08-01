@@ -12,18 +12,20 @@
 #import "ParseObjectManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
+#import "EnumeratedTypes.h"
 #import "SongCell.h"
+#import "RoomView.h"
+#import "Track.h"
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
+#import "UITableView+EmptyMessage.h"
 
-@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate>
+static NSString *const emptyTableMessage = @"No songs are currently in the queue.";
 
-@property (weak, nonatomic) IBOutlet UILabel *roomNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *currentSongTitleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *currentSongArtistLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *currentSongAlbumImageView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *playButton;
+@interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
+
+@property (strong, nonatomic) IBOutlet RoomView *roomView;
+@property (strong, nonatomic) NSArray <Song *> *queue;
 
 @end
 
@@ -34,12 +36,16 @@
     [super viewDidLoad];
     
     [self fetchCurrentRoom];
-    
     [self configureTableView];
     [self configureObservers];
     
+    _roomView.delegate = self;
     [RoomManager shared].delegate = self;
     
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [_roomView refreshAnimations];
 }
 
 - (void)fetchCurrentRoom {
@@ -53,10 +59,9 @@
 }
 
 - (void)configureTableView {
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.rowHeight = 66.f;
-    [_tableView registerClass:[SongCell class] forCellReuseIdentifier:[SongCell reuseIdentifier]];
+    _roomView.tableView.delegate = self;
+    _roomView.tableView.dataSource = self;
+    [_roomView.tableView registerClass:[SongCell class] forCellReuseIdentifier:[SongCell reuseIdentifier]];
 }
 
 - (void)configureObservers {
@@ -69,28 +74,55 @@
 
 - (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_roomNameLabel.text = [[RoomManager shared] currentRoomName];
-        self->_playButton.enabled = [[RoomManager shared] isCurrentUserHost];
-        [self updateQueueViews];
+        
+        self->_queue = [[RoomManager shared] queue];
+
+        [self updateCurrentTrackViews];
+        
+        self->_roomView.hidden = NO;
+        self->_roomView.roomName = [[RoomManager shared] currentRoomName];
+        if (![[RoomManager shared] isCurrentUserHost]) {
+            self->_roomView.playState = Disabled;
+        }
+        
+        [self->_roomView.tableView reloadDataWithAnimation];
+        
     });
 }
 
 - (void)reloadTrackViews {
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        // dismiss failed authentication alert if necessary
+        if ([[self presentedViewController] isKindOfClass:[UIAlertController class]]) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+    });
+    
+    // reload track data
     [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            [self updateQueueViews];
+            self->_queue = [[RoomManager shared] queue];
+            [self updateCurrentTrackViews];
+            [self->_roomView.tableView reloadData];
         }
     }];
+    
 }
 
-- (void)updateQueueViews {
+- (void)updateCurrentTrackViews {
     Track *track = [[RoomManager shared] currentTrack];
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_currentSongTitleLabel.text = track.title;
-        self->_currentSongArtistLabel.text = track.artist;
-        self->_currentSongAlbumImageView.image = track.albumImage;
-        [self->_tableView reloadDataWithAnimation];
-    });
+    _roomView.currentSongTitle = track.title;
+    _roomView.currentSongArtist = track.artist;
+    _roomView.currentSongAlbumImage = track.albumImage;
+    
+    if (![[RoomManager shared] isCurrentUserHost]) {
+        _roomView.playState = Disabled;
+        return;
+    }
+    
+    _roomView.playState = track ? Playing : Paused;
+
 }
 
 - (void)goToLobby {
@@ -102,91 +134,110 @@
     });
 }
 
-# pragma mark - IBActions
+# pragma mark - RoomView
 
-- (IBAction)didTapPlay:(id)sender {
+- (void)didTapPlay {
+    [[SpotifySessionManager shared] resumePlayback];
+}
+
+- (void)didTapPause {
+    [[SpotifySessionManager shared] pausePlayback];
+}
+
+- (void)didTapSkip {
     [[RoomManager shared] playTopSong];
 }
 
-- (IBAction)didTapLeaveRoom:(id)sender {
+- (void)didTapLeave {
     [self leaveRoomAlert];
 }
+
+# pragma mark - QueueCell
 
 - (void)didUpdateVoteStateForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
     [[RoomManager shared] updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
 }
 
-# pragma mark - RoomManager Delegate
-
-- (void)insertCellAtIndex:(NSUInteger)index {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView insertCellAtIndex:index];
-    });
-}
-
-- (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView moveCellAtIndex:oldIndex toIndex:newIndex];
-    });
-}
-
-- (void)deleteCellAtIndex:(NSUInteger)index {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView deleteCellAtIndex:index];
-    });
-}
-
-- (void)didRefreshQueue {
-    [self didUpdateCurrentTrack];
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self->_tableView reloadDataWithAnimation];
-    });
-}
+# pragma mark - RoomManager
 
 - (void)didUpdateCurrentTrack {
-    Track *track = [[RoomManager shared] currentTrack];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_currentSongTitleLabel.text = track.title;
-        self->_currentSongArtistLabel.text = track.artist;
-        self->_currentSongAlbumImageView.image = track.albumImage;
+        [self updateCurrentTrackViews];
     });
 }
 
 - (void)didLeaveRoom {
-    [self clearRoomViews];
+    self->_roomView.hidden = YES;
+    self->_queue = @[];
+    [SpotifySessionManager.shared pausePlayback];
     [self goToLobby];
 }
 
-- (void)clearRoomViews {
+- (void)didLoadQueue {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_roomNameLabel.text = @"";
-        self->_currentSongTitleLabel.text = @"";
-        self->_currentSongArtistLabel.text = @"";
-        self->_currentSongAlbumImageView.image = nil;
+        self->_queue = [[RoomManager shared] queue];
+        [self->_roomView.tableView reloadDataWithAnimation];
+    });
+}
+
+- (void)didInsertSongAtIndex:(NSUInteger)index {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
+        [self->_roomView.tableView insertCellAtIndex:index];
+    });
+}
+
+- (void)didMoveSongAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
+        [self->_roomView.tableView moveCellAtIndex:oldIndex toIndex:newIndex];
+    });
+}
+
+- (void)didDeleteSongAtIndex:(NSUInteger)index {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
+        [self->_roomView.tableView deleteCellAtIndex:index];
+    });
+}
+
+- (void)setPlayState:(PlayState)playState {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_roomView.playState = playState;
     });
 }
 
 # pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[RoomManager shared] queue].count;
+    
+    if (!_queue.count) {
+        [_roomView.tableView showEmptyMessageWithText:emptyTableMessage];
+    } else {
+        [_roomView.tableView removeEmptyMessage];
+    }
+    
+    return _queue.count;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:[SongCell reuseIdentifier]];
-    Song *song = [[RoomManager shared] queue][indexPath.row];
+    Song *song = _queue[indexPath.row];
     
     cell.objectId = song.requestId;
     cell.score = song.score;
     cell.voteState = song.voteState;
     cell.cellType = QueueCell;
     cell.queueDelegate = self;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // track data
     cell.title = song.track.title;
     cell.subtitle = song.track.artist;
     cell.image = song.track.albumImage;
+    [cell setNeedsLayout];
     
     return cell;
     
@@ -200,7 +251,7 @@
     }
     
     // members can swipe to delete songs they requested
-    Song *song = [[RoomManager shared] queue][indexPath.row];
+    Song *song = _queue[indexPath.row];
     if (song.userId && [song.userId isEqualToString:[ParseUserManager currentUserId]]) {
         return YES;
     }
@@ -212,10 +263,14 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        Song *song = [[RoomManager shared] queue][indexPath.row];
+        Song *song = _queue[indexPath.row];
         [ParseObjectManager deleteRequestWithId:song.requestId];
     }
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
 }
 
 # pragma mark - Alerts
@@ -240,7 +295,10 @@
    [alert addAction:retryButton];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self presentViewController:alert animated:YES completion:nil];
+        // check that self is not already presenting an alert / view controller
+        if (![self presentedViewController]) {
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     });
 }
 
@@ -277,7 +335,10 @@
    [alert addAction:leaveButton];
 
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self presentViewController:alert animated:YES completion:nil];
+        // check that self is not already presenting an alert / view controller
+        if (![self presentedViewController]) {
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     });
     
 }

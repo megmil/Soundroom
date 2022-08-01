@@ -7,6 +7,7 @@
 
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
+#import "Track.h"
 
 NSString *const SpotifyAPIManagerFailedAccessTokenNotification = @"SpotifyAPIManagerFailedAccessTokenNotification";
 
@@ -67,7 +68,7 @@ static NSString *const trackTypeName = @"track";
     if (accessToken) {
         NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
         [self getTracksWithParameters:parameters completion:completion];
-    }  else {
+    } else {
         [self postFailedAuthorizationNotification];
         completion(nil, nil);
     }

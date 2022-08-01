@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)isLoggedIn;
 + (BOOL)isInRoom;
 
++ (UIImage *)avatarImageForCurrentUser;
++ (UIImage *)avatarImageForUser:(PFUser *)user;
+
 @end
 
 NS_ASSUME_NONNULL_END

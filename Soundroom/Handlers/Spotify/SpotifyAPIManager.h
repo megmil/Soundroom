@@ -6,9 +6,10 @@
 //
 
 #import "AFNetworking/AFNetworking.h"
-#import "Track.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class Track;
 
 extern NSString *const SpotifyAPIManagerFailedAccessTokenNotification;
 

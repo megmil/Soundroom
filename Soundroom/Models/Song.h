@@ -6,17 +6,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EnumeratedTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class Track;
 @class Request;
-
-typedef NS_ENUM(NSInteger, VoteState) {
-    Upvoted = 1,
-    NotVoted = 0,
-    Downvoted = -1
-};
 
 extern NSString *const songScoreKey;
 

@@ -6,13 +6,18 @@
 //
 
 #import "SongCell.h"
+#import "ImageConstants.h"
+#import "ShimmerLayer.h"
 
-static NSString *const addImageName = @"plus";
-static NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
-static NSString *const upvoteEmptyImageName = @"arrowtriangle.up";
-static NSString *const downvoteFilledImageName = @"arrowtriangle.down.fill";
-static NSString *const downvoteEmptyImageName = @"arrowtriangle.down";
 static NSString *const scoreEmptyLabel = @"0";
+
+static const CGFloat largeViewSize = 50.f;
+static const CGFloat standardPadding = 8.f;
+static const CGFloat titleFontSize = 16.f;
+static const CGFloat subtitleFontSize = 13.f;
+static const CGFloat scoreFontSize = 14.f;
+static const CGFloat imageCornerRadius = 0.06f * largeViewSize;
+static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
 
 @implementation SongCell {
     
@@ -25,6 +30,8 @@ static NSString *const scoreEmptyLabel = @"0";
     UIButton *_downvoteButton;
     UILabel *_scoreLabel;
     
+    ShimmerLayer *_shimmerLayer;
+    
 }
 
 - (void)layoutSubviews {
@@ -34,48 +41,49 @@ static NSString *const scoreEmptyLabel = @"0";
     [_scoreLabel sizeToFit];
     
     const CGFloat viewWidth = self.contentView.frame.size.width;
-    const CGFloat viewHeight = self.contentView.frame.size.height;
-    
-    const CGFloat imageSize = 50.f;
-    const CGFloat addButtonSize = 50.f;
-    const CGFloat titleHeight = 19.f;
-    const CGFloat subtitleHeight = 16.f;
-    const CGFloat voteButtonSize = 25.f;
-    const CGFloat scoreLabelWidth = _scoreLabel.frame.size.width;
-    const CGFloat scoreLabelHeight = _scoreLabel.frame.size.height;
+    const CGFloat viewHeight = cellHeight;
     
     const CGFloat leftPadding = 20.f;
     const CGFloat rightPadding = viewWidth - leftPadding;
-    const CGFloat standardPadding = 8.f;
     const CGFloat smallPadding = 5.f;
+    const CGFloat labelsPadding = 3.f;
     
-    const CGFloat voteButtonTopPadding = (viewHeight - voteButtonSize) / 2.f;
+    const CGFloat largeViewOriginY = (viewHeight - largeViewSize) / 2.f;
     
-    _imageView.frame = CGRectMake(leftPadding, standardPadding, imageSize, imageSize);
-    _addButton.frame = CGRectMake(rightPadding - addButtonSize, standardPadding, addButtonSize, addButtonSize);
-    _downvoteButton.frame = CGRectMake(rightPadding - voteButtonSize, voteButtonTopPadding, voteButtonSize, voteButtonSize);
+    const CGFloat voteButtonSize = 25.f;
+    const CGFloat voteButtonOriginY = (viewHeight - voteButtonSize) / 2.f;
     
+    const CGFloat titleLabelHeight = 19.f;
+    const CGFloat subtitleLabelHeight = 16.f;
+    
+    _imageView.frame = CGRectMake(leftPadding, largeViewOriginY, largeViewSize, largeViewSize);
+    _addButton.frame = CGRectMake(rightPadding - largeViewSize, largeViewOriginY, largeViewSize, largeViewSize);
+    _downvoteButton.frame = CGRectMake(rightPadding - voteButtonSize, voteButtonOriginY, voteButtonSize, voteButtonSize);
+    
+    const CGFloat scoreLabelWidth = _scoreLabel.frame.size.width;
+    const CGFloat scoreLabelHeight = _scoreLabel.frame.size.height;
     const CGFloat scoreLabelOriginX = CGRectGetMinX(_downvoteButton.frame) - scoreLabelWidth - smallPadding;
     const CGFloat scoreLabelOriginY = (viewHeight - scoreLabelHeight) / 2.f;
-    
     _scoreLabel.frame = CGRectMake(scoreLabelOriginX, scoreLabelOriginY, scoreLabelWidth, scoreLabelHeight);
     
     const CGFloat upvoteButtonOriginX = CGRectGetMinX(_scoreLabel.frame) - voteButtonSize - smallPadding;
+    _upvoteButton.frame = CGRectMake(upvoteButtonOriginX, voteButtonOriginY, voteButtonSize, voteButtonSize);
     
-    _upvoteButton.frame = CGRectMake(upvoteButtonOriginX, voteButtonTopPadding, voteButtonSize, voteButtonSize);
-    
-    const CGFloat labelsPadding = 3.f;
     const CGFloat labelsOriginX = CGRectGetMaxX(_imageView.frame) + standardPadding;
     const CGFloat rightViewsMinX = (_cellType == QueueCell) ? CGRectGetMinX(_upvoteButton.frame) : CGRectGetMinX(_addButton.frame);
     const CGFloat labelsWidth = rightViewsMinX - smallPadding - labelsOriginX;
-    const CGFloat titleOriginY = (viewHeight - titleHeight - subtitleHeight - labelsPadding) / 2.f;
-    
-    _titleLabel.frame = CGRectMake(labelsOriginX, titleOriginY, labelsWidth, titleHeight);
+    const CGFloat titleOriginY = (viewHeight - titleLabelHeight - subtitleLabelHeight - labelsPadding) / 2.f;
+    _titleLabel.frame = CGRectMake(labelsOriginX, titleOriginY, labelsWidth, titleLabelHeight);
     
     const CGFloat subtitleOriginY = CGRectGetMaxY(_titleLabel.frame) + labelsPadding;
+    _subtitleLabel.frame = CGRectMake(labelsOriginX, subtitleOriginY, labelsWidth, subtitleLabelHeight);
     
-    _subtitleLabel.frame = CGRectMake(labelsOriginX, subtitleOriginY, labelsWidth, subtitleHeight);
+    [self layoutShimmerLayer];
     
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    return CGSizeMake(size.width, cellHeight);
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -84,41 +92,71 @@ static NSString *const scoreEmptyLabel = @"0";
     
     if (self) {
         
-        _imageView = [UIImageView new];
-        _imageView.contentMode = UIViewContentModeScaleAspectFill;
-        [self.contentView addSubview:_imageView];
-        
-        _titleLabel = [UILabel new];
-        _titleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
-        [self.contentView addSubview:_titleLabel];
-        
-        _subtitleLabel = [UILabel new];
-        _subtitleLabel.font = [UIFont systemFontOfSize:13.f weight:UIFontWeightMedium];
-        _subtitleLabel.textColor = [UIColor systemGray2Color];
-        [self.contentView addSubview:_subtitleLabel];
-        
-        _addButton = [UIButton new];
-        [_addButton setImage:[UIImage systemImageNamed:addImageName] forState:UIControlStateNormal];
-        [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_addButton];
-        
-        _upvoteButton = [UIButton new];
-        _upvoteButton.tag = Upvoted;
-        [_upvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_upvoteButton];
-        
-        _downvoteButton = [UIButton new];
-        _downvoteButton.tag = Downvoted;
-        [_downvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_downvoteButton];
-        
-        _scoreLabel = [UILabel new];
-        _scoreLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
-        [self.contentView addSubview:_scoreLabel];
+        [self configureImageView];
+        [self configureTitleLabel];
+        [self configureSubtitleLabel];
+        [self configureAddButton];
+        [self configureUpvoteButton];
+        [self configureDownvoteButton];
+        [self configureScoreLabel];
+        [self configureShimmerLayer];
         
     }
     
     return self;
+}
+
+- (void)configureImageView {
+    _imageView = [UIImageView new];
+    _imageView.layer.cornerRadius = imageCornerRadius;
+    _imageView.clipsToBounds = YES;
+    _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.contentView addSubview:_imageView];
+}
+
+- (void)configureTitleLabel {
+    _titleLabel = [UILabel new];
+    _titleLabel.font = [UIFont systemFontOfSize:titleFontSize weight:UIFontWeightMedium];
+    [self.contentView addSubview:_titleLabel];
+}
+
+- (void)configureSubtitleLabel {
+    _subtitleLabel = [UILabel new];
+    _subtitleLabel.font = [UIFont systemFontOfSize:subtitleFontSize weight:UIFontWeightMedium];
+    _subtitleLabel.textColor = [UIColor systemGray2Color];
+    [self.contentView addSubview:_subtitleLabel];
+}
+
+- (void)configureAddButton {
+    _addButton = [UIButton new];
+    [_addButton setImage:[UIImage systemImageNamed:plusImageName] forState:UIControlStateNormal];
+    [_addButton addTarget:self action:@selector(didTapAdd) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_addButton];
+}
+
+- (void)configureUpvoteButton {
+    _upvoteButton = [UIButton new];
+    _upvoteButton.tag = Upvoted;
+    [_upvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_upvoteButton];
+}
+
+- (void)configureDownvoteButton {
+    _downvoteButton = [UIButton new];
+    _downvoteButton.tag = Downvoted;
+    [_downvoteButton addTarget:self action:@selector(didTapVote:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_downvoteButton];
+}
+
+- (void)configureScoreLabel {
+    _scoreLabel = [UILabel new];
+    _scoreLabel.font = [UIFont systemFontOfSize:scoreFontSize weight:UIFontWeightRegular];
+    [self.contentView addSubview:_scoreLabel];
+}
+
+- (void)configureShimmerLayer {
+    _shimmerLayer = [ShimmerLayer new];
+    [self.layer addSublayer:_shimmerLayer];
 }
 
 # pragma mark - Buttons
@@ -144,6 +182,40 @@ static NSString *const scoreEmptyLabel = @"0";
     }
     
     [self.queueDelegate didUpdateVoteStateForRequestWithId:_objectId voteState:_voteState];
+    [self animateVoteButton:sender voteState:_voteState];
+    
+}
+
+- (void)animateVoteButton:(UIButton *)sender voteState:(VoteState)voteState {
+
+    CGFloat direction = ((voteState == NotVoted) ? 1.f : -1.f) * sender.tag;
+    CGFloat multiplier = 5.f;
+    
+    CABasicAnimation *animation = [CABasicAnimation animation];
+    animation.keyPath = @"transform.translation.y";
+    animation.fromValue = @(1);
+    animation.toValue = @(direction * multiplier);
+    animation.duration = 0.1;
+    animation.autoreverses = YES;
+    [sender.layer addAnimation:animation forKey:@"basic"];
+    
+}
+
+# pragma mark - Shimmer
+
+- (void)layoutShimmerLayer {
+    
+    if (!_imageView || !_titleLabel || !_subtitleLabel) {
+        return;
+    }
+    
+    const CGFloat width = CGRectGetMaxX(_titleLabel.frame);
+    const CGRect frame = CGRectMake(0.f, 0.f, width, cellHeight);
+    
+    [_shimmerLayer maskWithViews:@[_imageView, _titleLabel, _subtitleLabel] frame:frame];
+    
+    BOOL didLoadMaskViews = self.title.length != 0 && self.subtitle.length != 0 && self.image;
+    _shimmerLayer.isAnimating = !didLoadMaskViews;
     
 }
 
@@ -159,6 +231,18 @@ static NSString *const scoreEmptyLabel = @"0";
 
 - (void)setImage:(UIImage *)image {
     _imageView.image = image;
+}
+
+- (NSString *)title {
+    return _titleLabel.text;
+}
+
+- (NSString *)subtitle {
+    return _subtitleLabel.text;
+}
+
+- (UIImage *)image {
+    return _imageView.image;
 }
 
 - (void)setScore:(NSNumber *)score {

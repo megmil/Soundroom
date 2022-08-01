@@ -7,6 +7,8 @@
 
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
+#import "ParseConstants.h"
+#import "ImageConstants.h"
 #import "SpotifySessionManager.h"
 #import "RoomManager.h" // TODO: move isInRoom?
 
@@ -19,6 +21,7 @@
     PFUser *newUser = [self userWithUsername:username password:password];
     [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
+            [self setAvatarImageForUser:newUser];
             [self loginWithUsername:username password:password completion:completion];
         } else {
             completion(nil, error);
@@ -54,6 +57,26 @@
     newUser.username = username;
     newUser.password = password;
     return newUser;
+}
+
+# pragma mark - Avatar Images
+
++ (void)setAvatarImageForUser:(PFUser *)user {
+    NSUInteger avatarImageType = arc4random_uniform(5);
+    [user setValue:@(avatarImageType) forKey:avatarImageTypeKey];
+    [user saveInBackground];
+}
+
++ (UIImage *)avatarImageForCurrentUser {
+    PFUser *currentUser = [PFUser currentUser];
+    return [self avatarImageForUser:currentUser];
+}
+
++ (UIImage *)avatarImageForUser:(PFUser *)user {
+    NSUInteger avatarImageType = [[user valueForKey:avatarImageTypeKey] unsignedIntegerValue];
+    NSString *avatarImageName = avatarImageNames[avatarImageType];
+    UIImage *avatarImage = [UIImage imageNamed:avatarImageName];
+    return avatarImage;
 }
 
 # pragma mark - Current User Data
