@@ -51,11 +51,14 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 
 # pragma mark - Live Query Event Handlers
 
+- (void)addUpvote:(Upvote *)upvote;
+- (void)deleteUpvote:(Upvote *)upvote;
+- (void)addDownvote:(Downvote *)downvote;
+- (void)deleteDownvote:(Downvote *)downvote;
 - (void)joinRoomWithId:(NSString *)currentRoomId;
 - (void)clearRoomData;
 - (void)insertRequest:(Request *)request;
 - (void)removeRequestWithId:(NSString *)requestId;
-- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount;
 - (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId;
 
 @end

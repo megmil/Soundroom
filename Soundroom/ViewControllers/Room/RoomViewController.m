@@ -111,6 +111,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 }
 
 - (void)updateCurrentTrackViews {
+    
     Track *track = [[RoomManager shared] currentTrack];
     _roomView.currentSongTitle = track.title;
     _roomView.currentSongArtist = track.artist;

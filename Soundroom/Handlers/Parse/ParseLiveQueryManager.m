@@ -207,18 +207,16 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     _upvoteLiveQuery = [ParseQueryManager queryForUpvotesInCurrentRoom];
     _upvoteSubscription = [_client subscribeToQuery:_upvoteLiveQuery];
     
-    // TODO: double subscribe error
-    
     // upvote is created
     _upvoteSubscription = [_upvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Upvote *upvote = (Upvote *)object;
-        [[RoomManager shared] incrementScoreForRequestWithId:upvote.requestId amount:@(1)];
+        [[RoomManager shared] addUpvote:upvote];
     }];
     
     // upvote is deleted
     _upvoteSubscription = [_upvoteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Upvote *upvote = (Upvote *)object;
-        [[RoomManager shared] incrementScoreForRequestWithId:upvote.requestId amount:@(-1)];
+        [[RoomManager shared] deleteUpvote:upvote];
     }];
     
 }
@@ -241,13 +239,13 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     // downvote is created
     _downvoteSubscription = [_downvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Downvote *downvote = (Downvote *)object;
-        [[RoomManager shared] incrementScoreForRequestWithId:downvote.requestId amount:@(-1)];
+        [[RoomManager shared] addDownvote:downvote];
     }];
     
     // downvote is deleted
     _downvoteSubscription = [_downvoteSubscription addDeleteHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Downvote *downvote = (Downvote *)object;
-        [[RoomManager shared] incrementScoreForRequestWithId:downvote.requestId amount:@(1)];
+        [[RoomManager shared] deleteDownvote:downvote];
     }];
     
 }

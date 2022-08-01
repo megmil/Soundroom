@@ -21,8 +21,10 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 @implementation RoomManager {
     Room *_room;
-    NSMutableArray <Song *> *_queue;
     Track *_currentTrack;
+    NSMutableArray <Song *> *_queue;
+    NSMutableSet <NSString *> *_upvoteIds;
+    NSMutableSet <NSString *> *_downvoteIds;
 }
 
 + (instancetype)shared {
@@ -83,6 +85,52 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [self.delegate didDeleteSongAtIndex:index];
 }
 
+- (void)addUpvote:(Upvote *)upvote {
+    
+    BOOL isDuplicate = [_upvoteIds containsObject:upvote.objectId];
+    if (isDuplicate) {
+        return;
+    }
+    
+    [_upvoteIds addObject:upvote.objectId];
+    [self incrementScoreForRequestWithId:upvote.requestId amount:@(1)];
+    
+}
+
+- (void)deleteUpvote:(Upvote *)upvote {
+    
+    if (![_upvoteIds containsObject:upvote.objectId]) {
+        return;
+    }
+    
+    [_upvoteIds removeObject:upvote.objectId];
+    [self incrementScoreForRequestWithId:upvote.requestId amount:@(-1)];
+    
+}
+
+- (void)addDownvote:(Downvote *)downvote {
+    
+    BOOL isDuplicate = [_downvoteIds containsObject:downvote.objectId];
+    if (isDuplicate) {
+        return;
+    }
+    
+    [_downvoteIds addObject:downvote.objectId];
+    [self incrementScoreForRequestWithId:downvote.requestId amount:@(-1)];
+    
+}
+
+- (void)deleteDownvote:(Downvote *)downvote {
+    
+    if (![_downvoteIds containsObject:downvote.objectId]) {
+        return;
+    }
+    
+    [_downvoteIds removeObject:downvote.objectId];
+    [self incrementScoreForRequestWithId:downvote.requestId amount:@(1)];
+    
+}
+
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
     
     NSUInteger oldIndex = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
@@ -99,7 +147,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             [self.delegate didMoveSongAtIndex:oldIndex toIndex:newIndex];
         }
     }];
-
+    
 }
 
 - (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId {
@@ -323,7 +371,9 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)loadLocalVoteDataWithCompletion:(void (^)(NSArray <Song *> *result))completion {
     
-    __block NSMutableArray <Song *> *result = [NSMutableArray <Song *> array];
+    __block NSMutableArray <Song *> *result = [NSMutableArray <Song *> new];
+    _upvoteIds = [NSMutableSet <NSString *> new];
+    _downvoteIds = [NSMutableSet <NSString *> new];
     
     if (!_queue || !_queue.count) {
         completion(result);
@@ -346,14 +396,19 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             
             for (Upvote *upvote in upvotes) {
                 
+                BOOL isDuplicate = [self->_upvoteIds containsObject:upvote.objectId];
                 NSUInteger index = [[result valueForKey:requestIdKey] indexOfObject:upvote.requestId];
                 
-                if (index != NSNotFound) {
+                if (index != NSNotFound && !isDuplicate) {
+                    
+                    [self->_upvoteIds addObject:upvote.objectId];
+                    
                     Song *song = result[index];
                     result[index].score = @(song.score.integerValue + 1);
                     if ([upvote.userId isEqualToString:currentUserId]) {
                         song.voteState = Upvoted;
                     }
+                    
                 }
                 
                 if (--remainingVotes == 0) {
@@ -364,14 +419,19 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             
             for (Downvote *downvote in downvotes) {
                 
+                BOOL isDuplicate = [self->_downvoteIds containsObject:downvote.objectId];
                 NSUInteger index = [[result valueForKey:requestIdKey] indexOfObject:downvote.requestId];
                 
-                if (index != NSNotFound) {
+                if (index != NSNotFound && !isDuplicate) {
+                    
+                    [self->_downvoteIds addObject:downvote.objectId];
+                    
                     Song *song = result[index];
                     result[index].score = @(song.score.integerValue - 1);
                     if ([downvote.userId isEqualToString:currentUserId]) {
                         song.voteState = Downvoted;
                     }
+                    
                 }
                 
                 if (--remainingVotes == 0) {
