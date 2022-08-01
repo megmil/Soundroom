@@ -10,10 +10,10 @@
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
 #import "ParseConstants.h"
+#import "ParseObjectManager.h"
 #import "ImageConstants.h"
 #import "EnumeratedTypes.h"
 #import "Track.h"
-#import "ParseObjectManager.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
@@ -24,8 +24,8 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchTypeControl;
 
-@property (nonatomic, strong) NSMutableArray <Track *> *tracks;
-@property (nonatomic, strong) NSMutableArray <PFUser *> *users;
+@property (nonatomic, strong) NSArray <Track *> *tracks;
+@property (nonatomic, strong) NSArray <PFUser *> *users;
 
 @end
 
@@ -143,7 +143,8 @@
     [[SpotifyAPIManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
         if (tracks) {
             if ([query isEqualToString:self->_searchBar.text]) {
-                [self replaceUnloadedArray:self->_tracks loadedArray:tracks];
+                self->_tracks = (NSArray <Track *> *)tracks;
+                [self->_tableView reloadData];
             }
         }
     }];
@@ -153,7 +154,8 @@
     [ParseQueryManager getUsersWithUsername:query completion:^(NSArray *users, NSError *error) {
         if (users) {
             if ([query isEqualToString:self->_searchBar.text]) {
-                [self replaceUnloadedArray:self->_users loadedArray:users];
+                self->_users = (NSArray <PFUser *> *)users;
+                [self->_tableView reloadData];
             }
         }
     }];
@@ -165,8 +167,48 @@
     [_tableView reloadData];
 }
 
-# pragma mark - Fill Table
+# pragma mark - Helpers
 
+- (NSArray <Track *> *)emptyTracks {
+    NSMutableArray <Track *> *tracks = [NSMutableArray new];
+    for (int i = 0; i < 20; i++) {
+        Track *track = [[Track alloc] init];
+        [tracks addObject:track];
+    }
+    return tracks;
+}
+
+- (NSArray <PFUser *> *)emptyUsers {
+    NSMutableArray <PFUser *> *users = [NSMutableArray new];
+    for (int i = 0; i < 20; i++) {
+        PFUser *user = [[PFUser alloc] init];
+        [users addObject:user];
+    }
+    return users;
+}
+
+- (SearchType)searchType {
+    return _searchTypeControl.selectedSegmentIndex + 1;
+}
+
+- (void)missingRoomAlert {
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:@"Item could not be added"
+                                message:@"Please join or create a room before adding tracks or inviting users."
+                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction
+                             actionWithTitle:@"Ok"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction *action) { }];
+
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+# pragma mark - Reload Table
+
+// TODO: test if faster than reloadData
 - (void)replaceUnloadedArray:(NSMutableArray *)unloadedArray loadedArray:(NSArray *)loadedArray {
 
     NSMutableArray <NSIndexPath *> *indexPathsToReconfigure = [NSMutableArray new];
@@ -195,51 +237,13 @@
 
     }
 
+    // TODO: check query against searchBar.text again
     [_tableView beginUpdates];
     [_tableView reconfigureRowsAtIndexPaths:indexPathsToReconfigure];
     [_tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationNone];
     [_tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:UITableViewRowAnimationNone];
     [_tableView endUpdates];
 
-}
-
-# pragma mark - Helpers
-
-- (NSMutableArray <Track *> *)emptyTracks {
-    NSMutableArray <Track *> *tracks = [NSMutableArray new];
-    for (int i = 0; i < 20; i++) {
-        Track *track = [[Track alloc] init];
-        [tracks addObject:track];
-    }
-    return tracks;
-}
-
-- (NSMutableArray <PFUser *> *)emptyUsers {
-    NSMutableArray <PFUser *> *users = [NSMutableArray new];
-    for (int i = 0; i < 20; i++) {
-        PFUser *user = [[PFUser alloc] init];
-        [users addObject:user];
-    }
-    return users;
-}
-
-- (SearchType)searchType {
-    return _searchTypeControl.selectedSegmentIndex + 1;
-}
-
-- (void)missingRoomAlert {
-    UIAlertController *alert = [UIAlertController
-                                alertControllerWithTitle:@"Item could not be added"
-                                message:@"Please join or create a room before adding tracks or inviting users."
-                                preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *action = [UIAlertAction
-                             actionWithTitle:@"Ok"
-                             style:UIAlertActionStyleCancel
-                             handler:^(UIAlertAction *action) { }];
-
-    [alert addAction:action];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end
