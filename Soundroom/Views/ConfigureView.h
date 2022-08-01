@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Room.h" // for RoomListeningModeType
+#import "EnumeratedTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

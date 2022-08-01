@@ -12,8 +12,10 @@
 #import "ParseObjectManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
+#import "EnumeratedTypes.h"
 #import "SongCell.h"
 #import "RoomView.h"
+#import "Track.h"
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 #import "UITableView+EmptyMessage.h"
@@ -23,6 +25,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
+@property (strong, nonatomic) NSArray <Song *> *queue;
 
 @end
 
@@ -71,12 +74,16 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (void)loadRoomViews {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
+        
+        self->_queue = [[RoomManager shared] queue];
 
         [self updateCurrentTrackViews];
         
         self->_roomView.hidden = NO;
         self->_roomView.roomName = [[RoomManager shared] currentRoomName];
-        self->_roomView.isHostView = [[RoomManager shared] isCurrentUserHost];
+        if (![[RoomManager shared] isCurrentUserHost]) {
+            self->_roomView.playState = Disabled;
+        }
         
         [self->_roomView.tableView reloadDataWithAnimation];
         
@@ -95,6 +102,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     // reload track data
     [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
+            self->_queue = [[RoomManager shared] queue];
             [self updateCurrentTrackViews];
             [self->_roomView.tableView reloadData];
         }
@@ -107,7 +115,14 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     _roomView.currentSongTitle = track.title;
     _roomView.currentSongArtist = track.artist;
     _roomView.currentSongAlbumImage = track.albumImage;
-    _roomView.isPlaying = (BOOL)track;
+    
+    if (![[RoomManager shared] isCurrentUserHost]) {
+        _roomView.playState = Disabled;
+        return;
+    }
+    
+    _roomView.playState = track ? Playing : Paused;
+
 }
 
 - (void)goToLobby {
@@ -122,7 +137,15 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 # pragma mark - RoomView
 
 - (void)didTapPlay {
-    [[RoomManager shared] togglePlayback];
+    [[SpotifySessionManager shared] resumePlayback];
+}
+
+- (void)didTapPause {
+    [[SpotifySessionManager shared] pausePlayback];
+}
+
+- (void)didTapSkip {
+    [[RoomManager shared] playTopSong];
 }
 
 - (void)didTapLeave {
@@ -145,30 +168,42 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (void)didLeaveRoom {
     self->_roomView.hidden = YES;
+    self->_queue = @[];
+    [SpotifySessionManager.shared pausePlayback];
     [self goToLobby];
 }
 
 - (void)didLoadQueue {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
         [self->_roomView.tableView reloadDataWithAnimation];
     });
 }
 
-- (void)insertCellAtIndex:(NSUInteger)index {
+- (void)didInsertSongAtIndex:(NSUInteger)index {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
         [self->_roomView.tableView insertCellAtIndex:index];
     });
 }
 
-- (void)moveCellAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex {
+- (void)didMoveSongAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
         [self->_roomView.tableView moveCellAtIndex:oldIndex toIndex:newIndex];
     });
 }
 
-- (void)deleteCellAtIndex:(NSUInteger)index {
+- (void)didDeleteSongAtIndex:(NSUInteger)index {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
         [self->_roomView.tableView deleteCellAtIndex:index];
+    });
+}
+
+- (void)setPlayState:(PlayState)playState {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_roomView.playState = playState;
     });
 }
 
@@ -176,22 +211,20 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    NSInteger songCount = [[RoomManager shared] queue].count;
-    
-    if (!songCount) {
+    if (!_queue.count) {
         [_roomView.tableView showEmptyMessageWithText:emptyTableMessage];
     } else {
         [_roomView.tableView removeEmptyMessage];
     }
     
-    return songCount;
+    return _queue.count;
     
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SongCell *cell = [tableView dequeueReusableCellWithIdentifier:[SongCell reuseIdentifier]];
-    Song *song = [[RoomManager shared] queue][indexPath.row];
+    Song *song = _queue[indexPath.row];
     
     cell.objectId = song.requestId;
     cell.score = song.score;
@@ -218,7 +251,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     }
     
     // members can swipe to delete songs they requested
-    Song *song = [[RoomManager shared] queue][indexPath.row];
+    Song *song = _queue[indexPath.row];
     if (song.userId && [song.userId isEqualToString:[ParseUserManager currentUserId]]) {
         return YES;
     }
@@ -230,7 +263,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        Song *song = [[RoomManager shared] queue][indexPath.row];
+        Song *song = _queue[indexPath.row];
         [ParseObjectManager deleteRequestWithId:song.requestId];
     }
     
@@ -243,11 +276,6 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 # pragma mark - Alerts
 
 - (void)failedSpotifyAuthenticationAlert {
-    
-    // check that self is not already presenting an alert / view controller
-    if ([self presentingViewController]) {
-        return;
-    }
     
     NSString *title = @"Failed to authenticate";
     NSString *message = @"Could not connect to Spotify in time to load queue data. Retry now or check status in your Profile.";
@@ -267,16 +295,14 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
    [alert addAction:retryButton];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self presentViewController:alert animated:YES completion:nil];
+        // check that self is not already presenting an alert / view controller
+        if (![self presentedViewController]) {
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     });
 }
 
 - (void)leaveRoomAlert {
-    
-    // check that self is not already presenting an alert / view controller
-    if ([self presentingViewController]) {
-        return;
-    }
     
     NSString *title = @"Leave Room";
     NSString *message = @"Are you sure you want to leave this room?";
@@ -309,7 +335,10 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
    [alert addAction:leaveButton];
 
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self presentViewController:alert animated:YES completion:nil];
+        // check that self is not already presenting an alert / view controller
+        if (![self presentedViewController]) {
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     });
     
 }

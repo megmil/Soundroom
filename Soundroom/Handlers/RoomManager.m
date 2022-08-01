@@ -14,6 +14,7 @@
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
 #import "Room.h"
+#import "Track.h"
 #import "Invitation.h"
 
 NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotification";
@@ -67,7 +68,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [Song songWithRequest:request completion:^(Song *song) {
         [self insertSong:song completion:^(NSUInteger index) {
             if (index != NSNotFound) {
-                [self.delegate insertCellAtIndex:index];
+                [self.delegate didInsertSongAtIndex:index];
             }
         }];
     }];
@@ -79,7 +80,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     [_queue removeObjectAtIndex:index];
-    [self.delegate deleteCellAtIndex:index];
+    [self.delegate didDeleteSongAtIndex:index];
 }
 
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
@@ -95,7 +96,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [_queue removeObjectAtIndex:oldIndex];
     [self insertSong:song completion:^(NSUInteger newIndex) {
         if (newIndex != NSNotFound) {
-            [self.delegate moveCellAtIndex:oldIndex toIndex:newIndex];
+            [self.delegate didMoveSongAtIndex:oldIndex toIndex:newIndex];
         }
     }];
 
@@ -202,16 +203,34 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)togglePlayback {
+# pragma mark - Spotify App Remote
+
+- (void)playTopSong {
     
-    if (_currentTrack) {
-        // stop current song
-        [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:@""];
+    if (!_queue.count) {
+        [self stopPlayback];
         return;
     }
     
-    [self playTopSong];
+    // tell session manager that song is changing
+    [SpotifySessionManager shared].isSwitchingSong = YES;
     
+    // get and remove first song from queue
+    Song *topSong = _queue.firstObject;
+    [ParseObjectManager deleteRequestWithId:topSong.requestId];
+    
+    // save current song to room
+    [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
+    
+}
+
+- (void)stopPlayback {
+    [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:@""];
+    [self.delegate setPlayState:Paused];
+}
+
+- (void)updatePlayerWithPlayState:(PlayState)playState {
+    [self.delegate setPlayState:playState];
 }
 
 # pragma mark - Room Helpers
@@ -393,21 +412,6 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 # pragma mark - Playback Helpers
 
-- (void)playTopSong {
-    
-    if (_queue.count) {
-        
-        // get and remove first song from queue
-        Song *topSong = _queue.firstObject;
-        [ParseObjectManager deleteRequestWithId:topSong.requestId];
-        
-        // save current song to room
-        [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
-        
-    }
-    
-}
-
 - (void)loadCurrentTrack {
     if (_room.currentSongSpotifyId) {
         [[SpotifyAPIManager shared] getTrackWithSpotifyId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
@@ -426,7 +430,8 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
-        [[SpotifySessionManager shared] playSongWithSpotifyURI:currentTrack.spotifyURI];
+        [[SpotifySessionManager shared] playTrackWithSpotifyURI:currentTrack.spotifyURI];
+        [SpotifySessionManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
     }
     
 }
@@ -448,6 +453,10 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (Track *)currentTrack {
     return _currentTrack;
+}
+
+- (NSString *)currentTrackSpotifyURI {
+    return _currentTrack.spotifyURI;
 }
 
 - (BOOL)isCurrentUserHost {

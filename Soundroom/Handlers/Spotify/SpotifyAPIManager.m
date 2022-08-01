@@ -7,6 +7,7 @@
 
 #import "SpotifyAPIManager.h"
 #import "SpotifySessionManager.h"
+#import "Track.h"
 
 NSString *const SpotifyAPIManagerFailedAccessTokenNotification = @"SpotifyAPIManagerFailedAccessTokenNotification";
 

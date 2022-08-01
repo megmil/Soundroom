@@ -16,6 +16,9 @@ extern NSString *const SpotifySessionManagerDeauthorizedNotificaton;
 @interface SpotifySessionManager : NSObject <SPTSessionManagerDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate>
 
 @property (strong, nonatomic, readonly) NSString *accessToken;
+@property (nonatomic) BOOL isPlaying;
+@property (nonatomic) BOOL isSwitchingSong;
+@property (strong, nonatomic) NSString *appRemoteTrackURI;
 
 + (instancetype)shared;
 
@@ -23,12 +26,13 @@ extern NSString *const SpotifySessionManagerDeauthorizedNotificaton;
 - (void)signOut;
 - (BOOL)isSessionAuthorized;
 
-- (void)playSongWithSpotifyURI:(NSString *)spotifyURI;
+- (void)playTrackWithSpotifyURI:(NSString *)spotifyURI;
+- (void)resumePlayback;
 - (void)pausePlayback;
 
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
-- (void)applicationWillResignActive;
-- (void)applicationDidBecomeActive;
+- (void)sceneWillResignActive;
+- (void)sceneDidBecomeActive;
 
 @end
 

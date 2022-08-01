@@ -25,8 +25,11 @@ NSArray <NSString *> *const avatarImageNames = @[@"user_image_blue",
                                                  @"user_image_green",
                                                  @"user_image_purple",
                                                  @"user_image_red"];
+
 NSString *const playImageName = @"play.fill";
-NSString *const stopImageName = @"stop.fill";
+NSString *const pauseImageName = @"pause.fill";
+NSString *const skipImageName = @"forward.end.fill";
+
 NSString *const plusImageName = @"plus";
 NSString *const upvoteFilledImageName = @"arrowtriangle.up.fill";
 NSString *const upvoteEmptyImageName = @"arrowtriangle.up";

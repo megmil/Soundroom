@@ -140,6 +140,7 @@
 		049304B82877CB0B006AA9A3 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		049304C9287C8A04006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		049304CA287C8A04006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		04BB98F52894FE2500533471 /* EnumeratedTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnumeratedTypes.h; sourceTree = "<group>"; };
 		04CC546E288B401200FC5707 /* UITableView+AnimationControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+AnimationControl.h"; sourceTree = "<group>"; };
 		04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+AnimationControl.m"; sourceTree = "<group>"; };
 		04CC5472288B4F4D00FC5707 /* ParseLiveQueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseLiveQueryManager.h; sourceTree = "<group>"; };
@@ -299,6 +300,7 @@
 			children = (
 				041823EB2891B58E003962B6 /* ImageConstants.h */,
 				041823EC2891B58E003962B6 /* ImageConstants.m */,
+				04BB98F52894FE2500533471 /* EnumeratedTypes.h */,
 			);
 			path = Constants;
 			sourceTree = "<group>";

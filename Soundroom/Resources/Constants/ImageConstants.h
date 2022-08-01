@@ -24,10 +24,12 @@ extern NSString *const inviteImageName;
 extern NSString *const cleanModeImageName;
 extern NSString *const allowExplicitImageName;
 
+extern NSString *const playImageName;
+extern NSString *const pauseImageName;
+extern NSString *const skipImageName;
+
 extern NSString *const defaultAlbumImageName;
 extern NSString *const plusImageName;
-extern NSString *const playImageName;
-extern NSString *const stopImageName;
 extern NSString *const upvoteFilledImageName;
 extern NSString *const upvoteEmptyImageName;
 extern NSString *const downvoteFilledImageName;

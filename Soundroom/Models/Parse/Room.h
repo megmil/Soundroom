@@ -7,13 +7,9 @@
 
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
+#import "EnumeratedTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSUInteger, RoomListeningModeType) {
-    PartyMode = 0,
-    RemoteMode = 1
-};
 
 @interface Room : PFObject<PFSubclassing>
 

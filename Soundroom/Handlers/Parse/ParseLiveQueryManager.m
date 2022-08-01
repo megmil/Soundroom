@@ -207,6 +207,18 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     _upvoteLiveQuery = [ParseQueryManager queryForUpvotesInCurrentRoom];
     _upvoteSubscription = [_client subscribeToQuery:_upvoteLiveQuery];
     
+    // TODO: double subscribe error
+    __block int subscriptionCounter = 0;
+    _upvoteSubscription = [_upvoteSubscription addSubscribeHandler:^(PFQuery<PFObject *> *query) {
+        if (++subscriptionCounter > 1) {
+            NSLog(@"JKDFASDIKFGJADFIOGJDSAKLFJMSAOPDIGJKLDASJFIOASDJGEDFIADFGVREJDIOGLFDAJIOAGKLSDFGJIORTGFLHJDFAPOIGJADFOPIUHJFKLFGADOJIPLGKJDSFOIGKL");
+        }
+    }];
+    
+    _upvoteSubscription = [_upvoteSubscription addUnsubscribeHandler:^(PFQuery<PFObject *> *query) {
+        --subscriptionCounter;
+    }];
+    
     // upvote is created
     _upvoteSubscription = [_upvoteSubscription addCreateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Upvote *upvote = (Upvote *)object;

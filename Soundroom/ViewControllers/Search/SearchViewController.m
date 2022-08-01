@@ -11,7 +11,8 @@
 #import "ParseUserManager.h"
 #import "ParseConstants.h"
 #import "ImageConstants.h"
-#import "Song.h" // need for VoteStatus
+#import "EnumeratedTypes.h"
+#import "Track.h"
 #import "ParseObjectManager.h"
 #import "SongCell.h"
 #import "UITableView+AnimationControl.h"

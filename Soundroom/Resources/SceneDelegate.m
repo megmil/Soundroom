@@ -35,4 +35,12 @@
     [[SpotifySessionManager shared] openURLContexts:URLContexts];
 }
 
+- (void)sceneWillResignActive:(UIScene *)scene {
+    [[SpotifySessionManager shared] sceneWillResignActive];
+}
+
+- (void)sceneDidBecomeActive:(UIScene *)scene {
+    [[SpotifySessionManager shared] sceneDidBecomeActive];
+}
+
 @end

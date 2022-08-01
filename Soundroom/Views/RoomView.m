@@ -20,8 +20,10 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     UILabel *_songTitleLabel;
     UILabel *_songArtistLabel;
     UIImageView *_songImageView;
-    UIButton *_playButton;
     ShimmerLayer *_shimmerLayer;
+    
+    UIButton *_playButton;
+    UIButton *_pauseButton;
     
     UILabel *_nextUpLabel;
     
@@ -55,9 +57,12 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     const CGFloat songImageViewOriginY = CGRectGetMaxY(_roomNameLabel.frame) + leftSideEdge;
     _songImageView.frame = CGRectMake(leftSideEdge, songImageViewOriginY, imageSize, imageSize);
     
-    const CGFloat playButtonSize = 20.f;
-    const CGFloat playButtonOriginY = CGRectGetMinY(_songImageView.frame) + ((imageSize - playButtonSize) / 2.f);
-    _playButton.frame = CGRectMake(rightSideEdge - playButtonSize, playButtonOriginY, playButtonSize, playButtonSize);
+    const CGFloat playbackButtonsSize = 20.f;
+    const CGFloat playbackButtonsOriginY = CGRectGetMinY(_songImageView.frame) + ((imageSize - playbackButtonsSize) / 2.f);
+    _playButton.frame = CGRectMake(rightSideEdge - playbackButtonsSize, playbackButtonsOriginY, playbackButtonsSize, playbackButtonsSize);
+    
+    const CGFloat pauseButtonOriginX = CGRectGetMinX(_playButton.frame) - playbackButtonsSize - standardPadding;
+    _pauseButton.frame = CGRectMake(pauseButtonOriginX, playbackButtonsOriginY, playbackButtonsSize, playbackButtonsSize);
     
     const CGFloat songTitleLabelHeight = 22.f;
     const CGFloat songArtistLabelHeight = 18.f;
@@ -93,6 +98,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         [self configureSongArtistLabel];
         [self configureSongImageView];
         [self configurePlayButton];
+        [self configurePauseButton];
         [self configureNextUpLabel];
         [self configureTableView];
         [self configureShimmerLayer];
@@ -148,6 +154,16 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     [self addSubview:_playButton];
 }
 
+- (void)configurePauseButton {
+    _pauseButton = [UIButton new];
+    _pauseButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+    _pauseButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+    _pauseButton.hidden = YES;
+    [_pauseButton setImage:[UIImage systemImageNamed:pauseImageName] forState:UIControlStateNormal];
+    [_pauseButton addTarget:self action:@selector(pauseButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_pauseButton];
+}
+
 - (void)configureNextUpLabel {
     _nextUpLabel = [UILabel new];
     _nextUpLabel.text = @"Next up";
@@ -165,10 +181,18 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     [self.layer addSublayer:_shimmerLayer];
 }
 
-# pragma mark - Actions
+# pragma mark - RoomViewDelegate
 
 - (void)playButtonTapped {
-    [self.delegate didTapPlay];
+    if (_playState == Paused) {
+        [self.delegate didTapPlay];
+        return;
+    }
+    [self.delegate didTapSkip];
+}
+
+- (void)pauseButtonTapped {
+    [self.delegate didTapPause];
 }
 
 - (void)leaveButtonTapped {
@@ -201,11 +225,6 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     _roomNameLabel.text = roomName;
 }
 
-- (void)setIsHostView:(BOOL)isHostView {
-    _isHostView = isHostView;
-    _playButton.enabled = isHostView;
-}
-
 - (void)setCurrentSongTitle:(NSString *)currentSongTitle {
     _songTitleLabel.text = currentSongTitle;
 }
@@ -218,13 +237,18 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     _songImageView.image = currentSongAlbumImage;
 }
 
-- (void)setIsPlaying:(BOOL)isPlaying {
-    _isPlaying = isPlaying;
-    if (_isHostView) {
-        UIImage *playButtonImage = isPlaying ? [UIImage systemImageNamed:stopImageName] : [UIImage systemImageNamed:playImageName];
-        [_playButton setImage:playButtonImage forState:UIControlStateNormal];
-    }
+- (void)setPlayState:(PlayState)playState {
+    
+    _playState = playState;
+    
+    _pauseButton.hidden = !(playState == Playing);
+    _playButton.enabled = !(playState == Disabled);
+    
+    UIImage *playButtonImage = (playState == Playing) ? [UIImage systemImageNamed:skipImageName] : [UIImage systemImageNamed:playImageName];
+    [_playButton setImage:playButtonImage forState:UIControlStateNormal];
+    
     [self setNeedsLayout];
+    
 }
 
 # pragma mark - Getters
