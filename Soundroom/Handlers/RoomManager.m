@@ -319,7 +319,9 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     // clear local room data
     _room = nil;
-    _queue = [NSMutableArray <Song *> array];
+    _queue = [NSMutableArray <Song *> new];
+    _upvoteIds = [NSMutableSet <NSString *> new];
+    _downvoteIds = [NSMutableSet <NSString *> new];
     _currentTrack = nil;
     
     [[ParseLiveQueryManager shared] clearRoomLiveSubscriptions];
