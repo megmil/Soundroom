@@ -487,12 +487,12 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     _currentTrack = currentTrack;
     
     if (!currentTrack) {
-        [[[MusicPlayerManager shared] musicPlayer] pausePlayback];
+        [[MusicPlayerManager shared] pausePlayback];
         return;
     }
     
     if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
-        [[[MusicPlayerManager shared] musicPlayer] playTrackWithStreamingId:currentTrack.spotifyURI];
+        [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.spotifyURI];
         [MusicPlayerManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
     }
     

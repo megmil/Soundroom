@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AppleMusicSessionManager : NSObject <MusicPlayer>
 
-@property (strong, nonatomic, readonly) NSString *accessToken;
-
 @end
 
 NS_ASSUME_NONNULL_END

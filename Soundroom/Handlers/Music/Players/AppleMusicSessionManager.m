@@ -33,6 +33,7 @@ static NSString *const credentialsKeyAppleDeveloperToken = @"apple-developer-tok
     if (self) {
         
         [self loadToken];
+        [self configureObservers];
         _cloudServiceController = [[SKCloudServiceController alloc] init];
         _musicController = [MPMusicPlayerController systemMusicPlayer];
         [_musicController beginGeneratingPlaybackNotifications];
@@ -49,26 +50,22 @@ static NSString *const credentialsKeyAppleDeveloperToken = @"apple-developer-tok
     _developerToken = credentials[credentialsKeyAppleDeveloperToken];
 }
 
+- (void)configureObservers {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangePlayerState) name:MPMusicPlayerControllerPlaybackStateDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeNowPlayingItem) name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification object:nil];
+}
+
 # pragma mark - Authorization
 
 - (void)authorizeSession {
-    
-    if (!_accessToken) {
-        NSString *developerToken = nil;
-        [_cloudServiceController requestUserTokenForDeveloperToken:developerToken completionHandler:^(NSString *userToken, NSError *error) {
-            self->_accessToken = userToken;
-        }];
-    }
-    
+    [_cloudServiceController requestUserTokenForDeveloperToken:_developerToken completionHandler:^(NSString *userToken, NSError *error) {
+        [[MusicPlayerManager shared] setAccessToken:userToken];
+    }];
 }
 
 - (void)signOut {
-    // TODO: disconnect controller
     [_musicController stop];
-}
-
-- (BOOL)isSessionAuthorized {
-    return _accessToken;
+    [[MusicPlayerManager shared] setAccessToken:nil];
 }
 
 # pragma mark - Playback
@@ -86,7 +83,19 @@ static NSString *const credentialsKeyAppleDeveloperToken = @"apple-developer-tok
     [_musicController pause];
 }
 
+# pragma mark - PlayerState
 
+- (void)didChangePlayerState {
+    BOOL isPlaying = (_musicController.playbackState == MPMusicPlaybackStatePlaying);
+    NSString *playbackTrackId = _musicController.nowPlayingItem.playbackStoreID;
+    [[MusicPlayerManager shared] setIsPlaying:isPlaying];
+    [[MusicPlayerManager shared] setPlaybackTrackId:playbackTrackId];
+}
+
+- (void)didChangeNowPlayingItem {
+    [self didChangePlayerState];
+    [[MusicPlayerManager shared] didEndCurrentSong];
+}
 
 # pragma mark - Scene Delegate
 
@@ -94,10 +103,13 @@ static NSString *const credentialsKeyAppleDeveloperToken = @"apple-developer-tok
 }
 
 - (void)sceneDidBecomeActive {
+    // TODO: check new state
 }
 
 
 - (void)sceneWillResignActive {
+    // TODO: save state
 }
+
 
 @end

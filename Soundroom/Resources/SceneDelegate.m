@@ -32,15 +32,15 @@
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
-    [[[MusicPlayerManager shared] musicPlayer] openURLContexts:URLContexts];
+    [[MusicPlayerManager shared] openURLContexts:URLContexts];
 }
 
 - (void)sceneWillResignActive:(UIScene *)scene {
-    [[[MusicPlayerManager shared] musicPlayer] sceneWillResignActive];
+    [[MusicPlayerManager shared] sceneWillResignActive];
 }
 
 - (void)sceneDidBecomeActive:(UIScene *)scene {
-    [[[MusicPlayerManager shared] musicPlayer] sceneDidBecomeActive];
+    [[MusicPlayerManager shared] sceneDidBecomeActive];
 }
 
 @end

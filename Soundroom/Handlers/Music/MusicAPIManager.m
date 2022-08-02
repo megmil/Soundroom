@@ -61,7 +61,9 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
 # pragma mark - Public
 
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion {
+    
     NSString *accessToken = [_musicCatalog accessToken]; // nil if current session is nil
+    
     if (accessToken) {
         NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
         [self getTracksWithParameters:parameters completion:completion];
@@ -69,10 +71,13 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
         [self postFailedAuthorizationNotification];
         completion(nil, nil);
     }
+    
 }
 
 - (void)getTrackWithStreamingId:(NSString *)streamingId completion:(void(^)(Track *track, NSError *error))completion {
+    
     NSString *accessToken = [_musicCatalog accessToken]; // nil if current session is nil
+    
     if (accessToken) {
         NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
         [self getTrackWithStreamingId:streamingId parameters:parameters completion:completion];
@@ -80,6 +85,7 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
         [self postFailedAuthorizationNotification];
         completion(nil, nil);
     }
+    
 }
 
 # pragma mark - Helpers

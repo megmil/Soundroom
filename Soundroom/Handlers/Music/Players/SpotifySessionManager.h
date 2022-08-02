@@ -13,11 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SpotifySessionManager : NSObject <SPTSessionManagerDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate, MusicPlayer>
 
-@property (strong, nonatomic, readonly) NSString *accessToken;
-@property (nonatomic) BOOL isSwitchingSong;
-@property (nonatomic) BOOL isPlaying;
-@property (strong, nonatomic) NSString *appRemoteTrackURI;
-
 @end
 
 NS_ASSUME_NONNULL_END

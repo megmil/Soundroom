@@ -138,11 +138,11 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 # pragma mark - RoomView
 
 - (void)didTapPlay {
-    [[[MusicPlayerManager shared] musicPlayer] resumePlayback];
+    [[MusicPlayerManager shared] resumePlayback];
 }
 
 - (void)didTapPause {
-    [[[MusicPlayerManager shared] musicPlayer] pausePlayback];
+    [[MusicPlayerManager shared] pausePlayback];
 }
 
 - (void)didTapSkip {
@@ -170,7 +170,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 - (void)didLeaveRoom {
     self->_roomView.hidden = YES;
     self->_queue = @[];
-    [[[MusicPlayerManager shared] musicPlayer] pausePlayback];
+    [[MusicPlayerManager shared] pausePlayback]; // TODO: stop playback?
     [self goToLobby];
 }
 

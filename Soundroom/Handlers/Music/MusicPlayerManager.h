@@ -18,14 +18,12 @@ extern NSString *const MusicPlayerManagerDeauthorizedNotificaton;
 
 + (instancetype)shared;
 
-- (void)authorizeSessionWithCompletion:(void (^)(BOOL succeeded))completion;
-- (void)signOutWithCompletion:(void (^)(BOOL succeeded))completion;
-- (BOOL)isSessionAuthorized;
+- (void)authorizeSession;
+- (void)signOut;
 
 - (void)playTrackWithStreamingId:(NSString *)streamingId;
 - (void)resumePlayback;
 - (void)pausePlayback;
-- (NSString *)playbackTrackId;
 
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
 - (void)sceneWillResignActive;
@@ -36,12 +34,26 @@ extern NSString *const MusicPlayerManagerDeauthorizedNotificaton;
 @interface MusicPlayerManager : NSObject
 
 @property (nonatomic, weak) id<MusicPlayer> musicPlayer;
+@property (nonatomic, strong) NSString *playbackTrackId;
+@property (nonatomic, strong, nullable) NSString *accessToken;
 @property (nonatomic) BOOL isPlaying;
+@property (nonatomic) BOOL isSwitchingSong;
+@property (nonatomic) BOOL isSessionAuthorized;
 
 + (instancetype)shared;
+
 - (void)authorizeSession;
 - (void)signOut;
+
+- (void)playTrackWithStreamingId:(NSString *)streamingId;
 - (void)resumePlayback;
+- (void)pausePlayback;
+- (void)didEndCurrentSong;
+- (void)validateNewPlayerState;
+
+- (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
+- (void)sceneWillResignActive;
+- (void)sceneDidBecomeActive;
 
 @end
 

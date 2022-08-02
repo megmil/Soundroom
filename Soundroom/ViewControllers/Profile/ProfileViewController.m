@@ -64,7 +64,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     _soundroomAccountView.delegate = self;
     
     _spotifyAccountView.isUserAccountView = NO;
-    _spotifyAccountView.isLoggedIn = [[[MusicPlayerManager shared] musicPlayer] isSessionAuthorized];
+    _spotifyAccountView.isLoggedIn = [[MusicPlayerManager shared] isSessionAuthorized];
     _spotifyAccountView.delegate = self;
     
 }
@@ -115,7 +115,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (void)toggleSpotifyLoginStatus {
     dispatch_async(dispatch_get_main_queue(), ^(void){
-        self->_spotifyAccountView.isLoggedIn = [[[MusicPlayerManager shared] musicPlayer] isSessionAuthorized];
+        self->_spotifyAccountView.isLoggedIn = [[MusicPlayerManager shared] isSessionAuthorized];
     });
 }
 
