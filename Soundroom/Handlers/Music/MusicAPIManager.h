@@ -29,8 +29,6 @@ extern NSString *const MusicAPIManagerFailedAccessTokenNotification;
 
 @interface MusicAPIManager : AFHTTPSessionManager
 
-@property (nonatomic, weak) id<MusicCatalog> musicCatalog;
-
 + (instancetype)shared;
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion;
 - (void)getTrackWithUPC:(NSString *)upc completion:(void(^)(Track *track, NSError *error))completion;

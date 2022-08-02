@@ -42,8 +42,6 @@
 		04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04854387288F96BE005B4AD7 /* ParseConstants.m */; };
 		04874A362898CEB8001B9BF5 /* MusicPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04874A352898CEB8001B9BF5 /* MusicPlayerManager.m */; };
 		04874A3C2898D75A001B9BF5 /* MusicAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04874A3B2898D75A001B9BF5 /* MusicAPIManager.m */; };
-		04874A422898DAD7001B9BF5 /* SpotifyCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = 04874A412898DAD7001B9BF5 /* SpotifyCatalog.m */; };
-		04874A452898DB8D001B9BF5 /* AppleMusicCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = 04874A442898DB8D001B9BF5 /* AppleMusicCatalog.m */; };
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
 		049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* LoginViewController.m */; };
@@ -144,10 +142,6 @@
 		04874A352898CEB8001B9BF5 /* MusicPlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MusicPlayerManager.m; sourceTree = "<group>"; };
 		04874A3A2898D75A001B9BF5 /* MusicAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicAPIManager.h; sourceTree = "<group>"; };
 		04874A3B2898D75A001B9BF5 /* MusicAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MusicAPIManager.m; sourceTree = "<group>"; };
-		04874A402898DAD7001B9BF5 /* SpotifyCatalog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyCatalog.h; sourceTree = "<group>"; };
-		04874A412898DAD7001B9BF5 /* SpotifyCatalog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyCatalog.m; sourceTree = "<group>"; };
-		04874A432898DB8D001B9BF5 /* AppleMusicCatalog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleMusicCatalog.h; sourceTree = "<group>"; };
-		04874A442898DB8D001B9BF5 /* AppleMusicCatalog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppleMusicCatalog.m; sourceTree = "<group>"; };
 		049304A428762A58006AA9A3 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		049304B82877CB0B006AA9A3 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		049304C9287C8A04006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -409,20 +403,8 @@
 				04874A342898CEB8001B9BF5 /* MusicPlayerManager.h */,
 				04874A352898CEB8001B9BF5 /* MusicPlayerManager.m */,
 				04874A462898DC30001B9BF5 /* Players */,
-				04874A3F2898DA30001B9BF5 /* Catalogs */,
 			);
 			path = Music;
-			sourceTree = "<group>";
-		};
-		04874A3F2898DA30001B9BF5 /* Catalogs */ = {
-			isa = PBXGroup;
-			children = (
-				04874A402898DAD7001B9BF5 /* SpotifyCatalog.h */,
-				04874A412898DAD7001B9BF5 /* SpotifyCatalog.m */,
-				04874A432898DB8D001B9BF5 /* AppleMusicCatalog.h */,
-				04874A442898DB8D001B9BF5 /* AppleMusicCatalog.m */,
-			);
-			path = Catalogs;
 			sourceTree = "<group>";
 		};
 		04874A462898DC30001B9BF5 /* Players */ = {
@@ -740,7 +722,6 @@
 			files = (
 				04CEE28F288C7A4A00F821E8 /* Song.m in Sources */,
 				041824162894423E003962B6 /* UITableView+EmptyMessage.m in Sources */,
-				04874A452898DB8D001B9BF5 /* AppleMusicCatalog.m in Sources */,
 				042D627328876ACC005DE8E7 /* Invitation.m in Sources */,
 				0417B5C32874E4D7001D6B04 /* Room.m in Sources */,
 				0417B5B72874E377001D6B04 /* Track.m in Sources */,
@@ -775,7 +756,6 @@
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
 				04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */,
-				04874A422898DAD7001B9BF5 /* SpotifyCatalog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -89,7 +89,7 @@ static NSString *const credentialsKeyAppleDeveloperToken = @"apple-developer-tok
     BOOL isPlaying = (_musicController.playbackState == MPMusicPlaybackStatePlaying);
     NSString *playbackTrackId = _musicController.nowPlayingItem.playbackStoreID;
     [[MusicPlayerManager shared] setIsPlaying:isPlaying];
-    [[MusicPlayerManager shared] setPlaybackTrackId:playbackTrackId];
+    [[MusicPlayerManager shared] setPlayerTrackId:playbackTrackId];
 }
 
 - (void)didChangeNowPlayingItem {

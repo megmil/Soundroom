@@ -10,6 +10,24 @@
 #import "RoomManager.h"
 #import "Track.h"
 
+//NSString *const baseURLString = @"https://api.music.apple.com";
+//NSString *const searchURLString = @"v1/catalog/us/search?";
+//NSString *const getTrackURLString = @"v1/catalog/us/songs/%@";
+//
+//NSString *const tokenParameterName = @"access_token";
+//NSString *const typeParameterName = @"types";
+//NSString *const trackTypeName = @"songs";
+//NSString *const queryParameterName = @"term";
+
+//NSString *const baseURLString = @"https://api.music.apple.com";
+//NSString *const searchURLString = @"v1/catalog/us/search?";
+//NSString *const getTrackURLString = @"v1/catalog/us/songs/%@";
+//
+//NSString *const tokenParameterName = @"access_token";
+//NSString *const typeParameterName = @"types";
+//NSString *const trackTypeName = @"songs";
+//NSString *const queryParameterName = @"term";
+
 static NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
 static NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
 static NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-swap-url";
@@ -174,7 +192,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 }
 
 - (void)updateMusicPlayerManagerWithPlayerState:(id<SPTAppRemotePlayerState>)playerState {
-    [[MusicPlayerManager shared] setPlaybackTrackId:playerState.track.URI];
+    [[MusicPlayerManager shared] setPlayerTrackId:playerState.track.URI];
     [[MusicPlayerManager shared] setIsPlaying:!playerState.isPaused];
 }
 

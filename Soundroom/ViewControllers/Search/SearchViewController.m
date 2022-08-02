@@ -73,7 +73,7 @@ static const NSUInteger emptySearchCount = 20;
     }
     
     // request track in queue
-    [ParseObjectManager createRequestInCurrentRoomWithStreamingId:objectId];
+    [ParseObjectManager createRequestInCurrentRoomWithUPC:objectId];
     
 }
 

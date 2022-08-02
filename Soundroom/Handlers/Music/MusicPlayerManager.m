@@ -82,19 +82,16 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
         return;
     }
     
-    NSString *roomTrackSpotifyId = [[RoomManager shared] currentTrackSpotifyURI];
-    NSString *roomTrackAppleMusicId = [[RoomManager shared] currentTrackAppleMusicId];
-    NSString *playerTrackStreamingId = [_musicPlayer playbackTrackId];
-    BOOL isMatched = (roomTrackSpotifyId && [roomTrackSpotifyId isEqualToString:playerTrackStreamingId]) ||
-                     (roomTrackAppleMusicId && [roomTrackAppleMusicId isEqualToString:playerTrackStreamingId]);
-    
+    NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
+    BOOL isMatched = roomTrackId && [roomTrackId isEqualToString:_playerTrackId];
     if (isMatched) {
         [_musicPlayer resumePlayback];
         return;
     }
     
-    if (!playerTrackStreamingId) {
-        [_musicPlayer playTrackWithStreamingId:roomTrackStreamingId];
+    if (!_playerTrackId) {
+        [_musicPlayer playTrackWithStreamingId:roomTrackId];
+        return;
     }
     
     [[RoomManager shared] playTopSong];
@@ -103,10 +100,10 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)validateNewPlayerState {
     
-    NSString *roomTrackId = [[RoomManager shared] currentTrackSpotifyURI];
+    NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
     
     // check if music player is playing the wrong song
-    if (_isPlaying && ![roomTrackId isEqualToString:_playbackTrackId]) {
+    if (_isPlaying && ![roomTrackId isEqualToString:_playerTrackId]) {
         [[RoomManager shared] stopPlayback];
         [self pausePlayback];
         return;

@@ -67,7 +67,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 - (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:MusicAPIManagerFailedAccessTokenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedMusicPlayerTokenNotification) name:MusicAPIManagerFailedAccessTokenNotification object:nil];
 }
 
 # pragma mark - Selectors
@@ -276,7 +276,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 # pragma mark - Alerts
 
-- (void)failedSpotifyAuthenticationAlert {
+- (void)failedMusicPlayerTokenNotification {
     
     NSString *title = @"Failed to authenticate";
     NSString *message = @"Could not connect to Spotify in time to load queue data. Retry now or check status in your Profile.";
