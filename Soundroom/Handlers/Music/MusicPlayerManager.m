@@ -72,7 +72,9 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 # pragma mark - Playback
 
 - (void)playTrackWithStreamingId:(NSString *)streamingId {
-    // TODO: convert spotifyId to appleMusicId if necessary
+    if (_musicPlayer) {
+        [_musicPlayer playTrackWithStreamingId:streamingId];
+    }
 }
 
 - (void)pausePlayback {
@@ -84,7 +86,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 - (void)resumePlayback {
     
     if (!_musicPlayer || _isPlaying) {
-        [self postAuthorizedNotification];
+        // TODO: must connect
         return;
     }
     
@@ -95,7 +97,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
         return;
     }
     
-    if (!_playerTrackId) {
+    if (roomTrackId && !_playerTrackId) {
         [_musicPlayer playTrackWithStreamingId:roomTrackId];
         return;
     }

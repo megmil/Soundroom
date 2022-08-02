@@ -215,11 +215,12 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
     [_shimmerLayer maskWithViews:@[_imageView, _titleLabel, _subtitleLabel] frame:frame];
     
     BOOL didLoadMaskViews = self.title.length != 0 && self.subtitle.length != 0 && self.image;
+    _imageView.image = didLoadMaskViews ? self.image : nil;
     _shimmerLayer.isAnimating = !didLoadMaskViews;
     
 }
 
-# pragma mark - Setters
+# pragma mark - Properties
 
 - (void)setTitle:(NSString *)title {
     _titleLabel.text = title;

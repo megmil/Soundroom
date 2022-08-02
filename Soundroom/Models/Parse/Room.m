@@ -12,7 +12,7 @@
 
 @dynamic roomId;
 @dynamic hostId;
-@dynamic nowPlayingItemISRC;
+@dynamic currentISRC;
 @dynamic title;
 @dynamic listeningMode;
 

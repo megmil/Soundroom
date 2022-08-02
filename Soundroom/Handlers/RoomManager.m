@@ -77,12 +77,15 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 }
 
 - (void)removeRequestWithId:(NSString *)requestId {
+    
     NSUInteger index = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
     if (index == NSNotFound) {
         return;
     }
+    
     [_queue removeObjectAtIndex:index];
     [self.delegate didDeleteSongAtIndex:index];
+    
 }
 
 - (void)addUpvote:(Upvote *)upvote {
@@ -231,7 +234,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithISRC:_room.nowPlayingItemISRC completion:^(Track *track, NSError *error) {
+    [[MusicAPIManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
         self.currentTrack = track;
         completion(YES, nil);
     }];
@@ -474,8 +477,8 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 # pragma mark - Playback Helpers
 
 - (void)loadCurrentTrack {
-    if (_room.nowPlayingItemISRC) {
-        [[MusicAPIManager shared] getTrackWithISRC:_room.nowPlayingItemISRC completion:^(Track *track, NSError *error) {
+    if (_room.currentISRC) {
+        [[MusicAPIManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
             self.currentTrack = track;
         }];
     }

@@ -132,11 +132,11 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     
 }
 
-- (void)appRemote:(SPTAppRemote *)appRemote didDisconnectWithError:(nullable NSError *)error {
+- (void)appRemote:(SPTAppRemote *)appRemote didDisconnectWithError:(NSError *)error {
     //
 }
 
-- (void)appRemote:(SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error {
+- (void)appRemote:(SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(NSError *)error {
     //
 }
 
