@@ -26,6 +26,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
 @property (strong, nonatomic) NSArray <Song *> *queue;
+@property (nonatomic) BOOL didCancelAlerts;
 
 @end
 
@@ -39,6 +40,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     [self configureTableView];
     [self configureObservers];
     
+    _didCancelAlerts = NO;
     _roomView.delegate = self;
     [RoomManager shared].delegate = self;
     
@@ -278,6 +280,10 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (void)failedMusicPlayerTokenNotification {
     
+    if (_didCancelAlerts) {
+        return;
+    }
+    
     NSString *title = @"Failed to authenticate";
     NSString *message = @"Could not connect to Spotify in time to load queue data. Retry now or check status in your Profile.";
     
@@ -286,14 +292,22 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
                                 message:message
                                 preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *retryButton = [UIAlertAction
+    UIAlertAction *ignoreAction = [UIAlertAction
+                                  actionWithTitle:@"Don't show again"
+                                  style:UIAlertActionStyleDestructive
+                                  handler:^(UIAlertAction *action) {
+                                    self->_didCancelAlerts = YES;
+                                }];
+    
+    UIAlertAction *retryAction = [UIAlertAction
                                   actionWithTitle:@"Try Again"
                                   style:UIAlertActionStyleDefault
                                   handler:^(UIAlertAction *action) {
                                     [[MusicPlayerManager shared] authorizeSession];
                                 }];
 
-   [alert addAction:retryButton];
+    [alert addAction:retryAction];
+    [alert addAction:ignoreAction];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         // check that self is not already presenting an alert / view controller

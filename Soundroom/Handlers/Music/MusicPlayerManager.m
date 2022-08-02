@@ -24,10 +24,12 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     return sharedManager;
 }
 
-- (void)setStreamingService:(StreamingService)streamingService {
+- (void)setStreamingService:(AccountType)streamingService {
     if (streamingService == Spotify) {
+        _streamingService = Spotify;
         _musicPlayer = [SpotifySessionManager shared];
     } else if (streamingService == AppleMusic) {
+        _streamingService = AppleMusic;
         _musicPlayer = [AppleMusicSessionManager shared];
     }
 }
@@ -37,6 +39,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 - (void)authorizeSession {
     
     if (!_musicPlayer || _accessToken) {
+        [self postAuthorizedNotification];
         return;
     }
     
@@ -46,6 +49,8 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 - (void)signOut {
     if (_musicPlayer) {
         [_musicPlayer signOut];
+        _streamingService = LoggedOut;
+        [self postDeauthorizedNotification];
     }
 }
 
@@ -55,12 +60,12 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     
     if (accessToken) {
         _isSessionAuthorized = YES;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerAuthorizedNotificaton object:nil];
+        [self postAuthorizedNotification];
         return;
     }
     
     _isSessionAuthorized = NO;
-    [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerDeauthorizedNotificaton object:nil];
+    [self postDeauthorizedNotification];
     
 }
 
@@ -79,6 +84,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 - (void)resumePlayback {
     
     if (!_musicPlayer || _isPlaying) {
+        [self postAuthorizedNotification];
         return;
     }
     
@@ -150,6 +156,16 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     if (_musicPlayer) {
         [_musicPlayer sceneDidBecomeActive];
     }
+}
+
+# pragma mark - Helpers
+
+- (void)postAuthorizedNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerAuthorizedNotificaton object:nil];
+}
+
+- (void)postDeauthorizedNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerDeauthorizedNotificaton object:nil];
 }
 
 @end

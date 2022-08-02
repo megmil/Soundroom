@@ -71,6 +71,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 # pragma mark - Authorization
 
 - (void)authorizeSession {
+    [[MusicPlayerManager shared] setStreamingService:Spotify];
     SPTScope requestedScope = SPTAppRemoteControlScope;
     [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
 }

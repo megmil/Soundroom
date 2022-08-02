@@ -9,6 +9,8 @@
 
 NSString *const soundroomImageName = @"hifispeaker";
 NSString *const spotifyImageName = @"spotify_logo";
+NSString *const appleMusicImageName = @"hifispeaker";
+NSString *const loggedOutImageName = @"hifispeaker";
 NSString *const verifiedImageName = @"checkmark";
 NSString *const warningImageName = @"nosign";
 NSString *const loginImageName = @"key";

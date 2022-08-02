@@ -13,6 +13,8 @@ extern NSArray <NSString *> *const avatarImageNames;
 
 extern NSString *const soundroomImageName;
 extern NSString *const spotifyImageName;
+extern NSString *const appleMusicImageName;
+extern NSString *const loggedOutImageName;
 extern NSString *const verifiedImageName;
 extern NSString *const warningImageName;
 extern NSString *const logoutImageName;
