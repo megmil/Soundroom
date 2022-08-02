@@ -1,29 +1,19 @@
 //
-//  SpotifyAPIManager.m
+//  MusicAPIManager.m
 //  Soundroom
 //
-//  Created by Megan Miller on 7/6/22.
+//  Created by Megan Miller on 8/1/22.
 //
 
-#import "SpotifyAPIManager.h"
-#import "SpotifySessionManager.h"
+#import "MusicAPIManager.h"
 #import "Track.h"
 
-NSString *const SpotifyAPIManagerFailedAccessTokenNotification = @"SpotifyAPIManagerFailedAccessTokenNotification";
+NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManagerFailedAccessTokenNotification";
 
-static NSString *const baseURLString = @"https://api.spotify.com";
-static NSString *const searchURLString = @"v1/search?";
-static NSString *const getTrackURLString = @"v1/tracks/";
-
-static NSString *const tokenParameterName = @"access_token";
-static NSString *const typeParameterName = @"type";
-static NSString *const queryParameterName = @"q";
-static NSString *const trackTypeName = @"track";
-
-@implementation SpotifyAPIManager
+@implementation MusicAPIManager
 
 + (instancetype)shared {
-    static SpotifyAPIManager *sharedManager;
+    static MusicAPIManager *sharedManager;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedManager = [[self alloc] init];
@@ -32,6 +22,7 @@ static NSString *const trackTypeName = @"track";
 }
 
 - (instancetype)init {
+    NSString *baseURLString = [_musicCatalog baseURLString];
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
     self = [self initWithBaseURL:baseURL];
     return self;
@@ -41,17 +32,22 @@ static NSString *const trackTypeName = @"track";
 
 - (void)getTracksWithParameters:(NSDictionary *)parameters
                      completion:(void(^)(NSArray *tracks, NSError *error))completion {
+    
+    NSString *searchURLString = [_musicCatalog searchURLString];
+    
     [self GET:searchURLString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSArray *tracks = [Track tracksWithJSONResponse:responseObject];
         completion(tracks, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
     }];
+    
 }
 
-- (void)getTrackWithSpotifyId:(NSString *)spotifyId parameters:(NSDictionary *)parameters completion:(void(^)(Track *track, NSError *error))completion {
+- (void)getTrackWithStreamingId:(NSString *)streamingId parameters:(NSDictionary *)parameters completion:(void(^)(Track *track, NSError *error))completion {
     
-    NSString *urlString = [NSString stringWithFormat:@"%@%@", getTrackURLString, spotifyId];
+    NSString *getTrackURLString = [_musicCatalog getTrackURLString];
+    NSString *urlString = [NSString stringWithFormat:getTrackURLString, streamingId];
     
     [self GET:urlString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         Track *track = [Track trackWithJSONResponse:responseObject];
@@ -59,12 +55,13 @@ static NSString *const trackTypeName = @"track";
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
     }];
+    
 }
 
 # pragma mark - Public
 
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion {
-    NSString *accessToken = [[SpotifySessionManager shared] accessToken]; // nil if current session is nil
+    NSString *accessToken = [_musicCatalog accessToken]; // nil if current session is nil
     if (accessToken) {
         NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
         [self getTracksWithParameters:parameters completion:completion];
@@ -74,11 +71,11 @@ static NSString *const trackTypeName = @"track";
     }
 }
 
-- (void)getTrackWithSpotifyId:(NSString *)spotifyId completion:(void(^)(Track *track, NSError *error))completion {
-    NSString *accessToken = [[SpotifySessionManager shared] accessToken]; // nil if current session is nil
+- (void)getTrackWithStreamingId:(NSString *)streamingId completion:(void(^)(Track *track, NSError *error))completion {
+    NSString *accessToken = [_musicCatalog accessToken]; // nil if current session is nil
     if (accessToken) {
         NSDictionary *parameters = [self getRequestParametersWithToken:accessToken];
-        [self getTrackWithSpotifyId:spotifyId parameters:parameters completion:completion];
+        [self getTrackWithStreamingId:streamingId parameters:parameters completion:completion];
     } else {
         [self postFailedAuthorizationNotification];
         completion(nil, nil);
@@ -88,10 +85,16 @@ static NSString *const trackTypeName = @"track";
 # pragma mark - Helpers
 
 - (void)postFailedAuthorizationNotification {
-    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifyAPIManagerFailedAccessTokenNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MusicAPIManagerFailedAccessTokenNotification object:self];
 }
 
 - (NSDictionary *)searchRequestParametersWithToken:(NSString *)token query:(NSString *)query {
+    
+    NSString *tokenParameterName = [_musicCatalog tokenParameterName];
+    NSString *typeParameterName = [_musicCatalog typeParameterName];
+    NSString *trackTypeName = [_musicCatalog trackTypeName];
+    NSString *queryParameterName = [_musicCatalog queryParameterName];
+    
     NSDictionary *parameters = @{tokenParameterName:token,
                                  typeParameterName:trackTypeName,
                                  queryParameterName:query};
@@ -99,6 +102,7 @@ static NSString *const trackTypeName = @"track";
 }
 
 - (NSDictionary *)getRequestParametersWithToken:(NSString *)token {
+    NSString *tokenParameterName = [_musicCatalog tokenParameterName];
     NSDictionary *parameters = @{tokenParameterName:token};
     return parameters;
 }

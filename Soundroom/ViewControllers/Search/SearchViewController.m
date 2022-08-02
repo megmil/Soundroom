@@ -6,7 +6,7 @@
 //
 
 #import "SearchViewController.h"
-#import "SpotifyAPIManager.h"
+#import "MusicAPIManager.h"
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
 #import "ParseConstants.h"
@@ -140,7 +140,7 @@
 }
 
 - (void)searchTracksWithQuery:(NSString *)query {
-    [[SpotifyAPIManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
+    [[MusicAPIManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
         if (tracks) {
             if ([query isEqualToString:self->_searchBar.text]) {
                 self->_tracks = (NSArray <Track *> *)tracks;

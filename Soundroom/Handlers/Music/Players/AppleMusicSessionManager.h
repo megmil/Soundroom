@@ -6,10 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MusicPlayerManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppleMusicSessionManager : NSObject
+@interface AppleMusicSessionManager : NSObject <MusicPlayer>
 
 @property (strong, nonatomic, readonly) NSString *accessToken;
 

@@ -7,7 +7,7 @@
 
 #import "ProfileViewController.h"
 #import "AccountView.h"
-#import "SpotifySessionManager.h"
+#import "MusicPlayerManager.h"
 #import "ParseUserManager.h"
 #import "SceneDelegate.h"
 #import "ImageConstants.h"
@@ -64,24 +64,24 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     _soundroomAccountView.delegate = self;
     
     _spotifyAccountView.isUserAccountView = NO;
-    _spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
+    _spotifyAccountView.isLoggedIn = [[[MusicPlayerManager shared] musicPlayer] isSessionAuthorized];
     _spotifyAccountView.delegate = self;
     
 }
 
 - (void)configureObservers {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifySessionManagerDeauthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:MusicPlayerManagerDeauthorizedNotificaton object:nil];
 }
 
 # pragma mark - AccountView
 
 - (void)didTapSpotifyLogin {
-    [[SpotifySessionManager shared] authorizeSession];
+    [[MusicPlayerManager shared] authorizeSession];
 }
 
 - (void)didTapSpotifyLogout {
-    [[SpotifySessionManager shared] signOut];
+    [[MusicPlayerManager shared] signOut];
 }
 
 - (void)didTapUserLogout {
@@ -115,7 +115,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (void)toggleSpotifyLoginStatus {
     dispatch_async(dispatch_get_main_queue(), ^(void){
-        self->_spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
+        self->_spotifyAccountView.isLoggedIn = [[[MusicPlayerManager shared] musicPlayer] isSessionAuthorized];
     });
 }
 

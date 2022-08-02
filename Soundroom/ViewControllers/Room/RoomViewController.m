@@ -7,8 +7,8 @@
 
 #import "RoomViewController.h"
 #import "LobbyViewController.h"
-#import "SpotifyAPIManager.h"
-#import "SpotifySessionManager.h"
+#import "MusicAPIManager.h"
+#import "MusicPlayerManager.h"
 #import "ParseObjectManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
@@ -66,8 +66,8 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:SpotifyAPIManagerFailedAccessTokenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:MusicAPIManagerFailedAccessTokenNotification object:nil];
 }
 
 # pragma mark - Selectors
@@ -138,11 +138,11 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 # pragma mark - RoomView
 
 - (void)didTapPlay {
-    [[SpotifySessionManager shared] resumePlayback];
+    [[[MusicPlayerManager shared] musicPlayer] resumePlayback];
 }
 
 - (void)didTapPause {
-    [[SpotifySessionManager shared] pausePlayback];
+    [[[MusicPlayerManager shared] musicPlayer] pausePlayback];
 }
 
 - (void)didTapSkip {
@@ -170,7 +170,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 - (void)didLeaveRoom {
     self->_roomView.hidden = YES;
     self->_queue = @[];
-    [SpotifySessionManager.shared pausePlayback];
+    [[[MusicPlayerManager shared] musicPlayer] pausePlayback];
     [self goToLobby];
 }
 
@@ -290,7 +290,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
                                   actionWithTitle:@"Try Again"
                                   style:UIAlertActionStyleDefault
                                   handler:^(UIAlertAction *action) {
-                                    [[SpotifySessionManager shared] authorizeSession];
+                                    [[MusicPlayerManager shared] authorizeSession];
                                 }];
 
    [alert addAction:retryButton];

@@ -6,7 +6,7 @@
 //
 
 #import "SceneDelegate.h"
-#import "SpotifySessionManager.h"
+#import "MusicPlayerManager.h"
 #import "LoginViewController.h"
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
@@ -32,15 +32,15 @@
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
-    [[SpotifySessionManager shared] openURLContexts:URLContexts];
+    [[[MusicPlayerManager shared] musicPlayer] openURLContexts:URLContexts];
 }
 
 - (void)sceneWillResignActive:(UIScene *)scene {
-    [[SpotifySessionManager shared] sceneWillResignActive];
+    [[[MusicPlayerManager shared] musicPlayer] sceneWillResignActive];
 }
 
 - (void)sceneDidBecomeActive:(UIScene *)scene {
-    [[SpotifySessionManager shared] sceneDidBecomeActive];
+    [[[MusicPlayerManager shared] musicPlayer] sceneDidBecomeActive];
 }
 
 @end

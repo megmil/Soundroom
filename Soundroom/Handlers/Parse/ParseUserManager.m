@@ -9,7 +9,7 @@
 #import "ParseLiveQueryManager.h"
 #import "ParseConstants.h"
 #import "ImageConstants.h"
-#import "SpotifySessionManager.h"
+#import "MusicPlayerManager.h"
 #import "RoomManager.h" // TODO: move isInRoom?
 
 @implementation ParseUserManager
@@ -43,7 +43,7 @@
 + (void)logoutWithCompletion:(PFUserLogoutResultBlock)completion {
     [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
         if (!error) {
-            [[SpotifySessionManager shared] signOut];
+            [[MusicPlayerManager shared] signOut];
             [[ParseLiveQueryManager shared] clearUserLiveSubscriptions];
             completion(nil);
         } else {

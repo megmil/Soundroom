@@ -6,7 +6,6 @@
 //
 
 #import "AppDelegate.h"
-#import "SpotifySessionManager.h"
 #import "ParseConstants.h"
 #import "Request.h"
 #import "Room.h"
@@ -40,9 +39,6 @@
         configuration.server = parseConfigurationServerURL;
     }];
     [Parse initializeWithConfiguration:configuration];
-    
-    // spotify authorization
-    [[SpotifySessionManager shared] authorizeSession];
     
     return YES;
 }

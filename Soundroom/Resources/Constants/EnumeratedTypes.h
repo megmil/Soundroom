@@ -9,6 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, StreamingService) {
+    Spotify,
+    AppleMusic
+};
+
 typedef NS_ENUM(NSUInteger, PlayState) {
     Paused = 0,
     Playing = 1,

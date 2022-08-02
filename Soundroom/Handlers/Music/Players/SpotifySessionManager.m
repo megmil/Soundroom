@@ -6,12 +6,9 @@
 //
 
 #import "SpotifySessionManager.h"
+#import "MusicPlayerManager.h"
 #import "RoomManager.h"
 #import "Track.h"
-#import <Parse/Parse.h>
-
-NSString *const SpotifySessionManagerAuthorizedNotificaton = @"SpotifySessionManagerAuthorizedNotificaton";
-NSString *const SpotifySessionManagerDeauthorizedNotificaton = @"SpotifySessionManagerDeauthorizedNotificaton";
 
 static NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
 static NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
@@ -71,30 +68,33 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     
 }
 
-# pragma mark - Session Manager
+# pragma mark - Authorization
 
-- (void)authorizeSession {
+- (void)authorizeSessionWithCompletion:(void (^)(BOOL))completion {
+    
     if ([self isSessionAuthorized]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:SpotifySessionManagerAuthorizedNotificaton object:self];
+        completion(YES);
         return;
     }
+    
     SPTScope requestedScope = SPTAppRemoteControlScope;
     [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
+    
 }
 
-- (void)signOut {
+- (void)signOutWithCompletion:(void (^)(BOOL))completion {
     _sessionManager.session = nil;
     [_appRemote disconnect];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SpotifySessionManagerDeauthorizedNotificaton object:self];
+    completion(YES);
 }
 
 - (BOOL)isSessionAuthorized {
     return _sessionManager.session.accessToken;
 }
 
-# pragma mark - App Remote
+# pragma mark - Playback
 
-- (void)playTrackWithSpotifyURI:(NSString *)spotifyURI {
+- (void)playTrackWithStreamingId:(NSString *)spotifyURI {
     
     if (_appRemote.isConnected) {
         [_appRemote.playerAPI play:spotifyURI callback:nil];
@@ -107,30 +107,21 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 }
 
 - (void)resumePlayback {
-    
-    if (_isPlaying) {
-        return;
-    }
-    
-    NSString *roomTrackURI = [[RoomManager shared] currentTrackSpotifyURI];
-    if (roomTrackURI && [_appRemoteTrackURI isEqualToString:roomTrackURI]) {
-        [_appRemote.playerAPI resume:nil];
-        return;
-    }
-    
-    if (!_appRemoteTrackURI) {
-        [_appRemote.playerAPI play:roomTrackURI callback:nil];
-    }
-    
-    [[RoomManager shared] playTopSong];
-    
+    [_appRemote.playerAPI resume:nil];
 }
 
 - (void)pausePlayback {
-    if (_isPlaying) {
+    if (self.isPlaying) {
         [_appRemote.playerAPI pause:nil];
-        return;
     }
+}
+
+- (BOOL)isPlaying {
+    return [[MusicPlayerManager shared] isPlaying];
+}
+
+- (void)setIsPlaying:(BOOL)isPlaying {
+    [[MusicPlayerManager shared] setIsPlaying:isPlaying];
 }
 
 # pragma mark - SPTSessionManagerDelegate
@@ -179,7 +170,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     
     // check if current song ended
     NSUInteger remainingSeconds = playerState.playbackPosition / 1000;
-    if (!_isPlaying && remainingSeconds == 0 && !_isSwitchingSong) {
+    if (!self.isPlaying && remainingSeconds == 0 && !_isSwitchingSong) {
         [self pausePlayback]; // TODO: confirm app remote is not connected for non-playing members
         [[RoomManager shared] playTopSong];
         return;
@@ -209,17 +200,6 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 
 # pragma mark - Setters
 
-- (void)setIsPlaying:(BOOL)isPlaying {
-    
-    if (_isPlaying == isPlaying) {
-        return;
-    }
-    
-    _isPlaying = isPlaying;
-    [[RoomManager shared] updatePlayerWithPlayState:_isPlaying];
-    
-}
-
 - (void)validatePlayerState:(nonnull id<SPTAppRemotePlayerState>)playerState {
     
     _appRemoteTrackURI = playerState.track.URI;
@@ -227,13 +207,13 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     
     // check if app remote is playing the wrong song
     NSString *roomTrackURI = [[RoomManager shared] currentTrackSpotifyURI];
-    if (_isPlaying && ![_appRemoteTrackURI isEqualToString:roomTrackURI]) {
+    if (self.isPlaying && ![_appRemoteTrackURI isEqualToString:roomTrackURI]) {
         [[RoomManager shared] stopPlayback];
         [self pausePlayback];
         return;
     }
     
-    if (!_isPlaying && roomTrackURI) {
+    if (!self.isPlaying && roomTrackURI) {
         [self resumePlayback];
     }
     

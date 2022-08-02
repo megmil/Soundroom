@@ -6,9 +6,9 @@
 //
 
 #import "Song.h"
-#import "SpotifyAPIManager.h"
 #import "Track.h"
 #import "Request.h"
+#import "MusicAPIManager.h"
 
 NSString *const songScoreKey = @"score";
 
@@ -68,7 +68,7 @@ NSString *const songScoreKey = @"score";
         return;
     }
     
-    [[SpotifyAPIManager shared] getTrackWithSpotifyId:request.spotifyId completion:^(Track *track, NSError *error) {
+    [[MusicAPIManager shared] getTrackWithStreamingId:request.spotifyId completion:^(Track *track, NSError *error) {
         Song *song = [[Song alloc] initWithRequestId:request.objectId userId:request.userId spotifyId:request.spotifyId track:track];
         completion(song);
     }];

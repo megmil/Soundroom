@@ -11,8 +11,8 @@
 #import "ParseQueryManager.h"
 #import "ParseConstants.h"
 #import "ParseLiveQueryManager.h"
-#import "SpotifyAPIManager.h"
-#import "SpotifySessionManager.h"
+#import "MusicAPIManager.h"
+#import "MusicPlayerManager.h"
 #import "Room.h"
 #import "Track.h"
 #import "Invitation.h"
@@ -158,7 +158,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [[SpotifyAPIManager shared] getTrackWithSpotifyId:spotifyId completion:^(Track *track, NSError *error) {
+    [[MusicAPIManager shared] getTrackWithStreamingId:spotifyId completion:^(Track *track, NSError *error) {
         if (track) {
             self.currentTrack = track;
             [self.delegate didUpdateCurrentTrack];
@@ -206,7 +206,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             continue;
         }
         
-        [[SpotifyAPIManager shared] getTrackWithSpotifyId:song.spotifyId completion:^(Track *track, NSError *error) {
+        [[MusicAPIManager shared] getTrackWithStreamingId:song.spotifyId completion:^(Track *track, NSError *error) {
             
             song.track = track;
             
@@ -232,7 +232,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [[SpotifyAPIManager shared] getTrackWithSpotifyId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
+    [[MusicAPIManager shared] getTrackWithStreamingId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
         self.currentTrack = track;
         completion(YES, nil);
     }];
@@ -261,7 +261,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     // tell session manager that song is changing
-    [SpotifySessionManager shared].isSwitchingSong = YES;
+    [MusicPlayerManager shared].isSwitchingSong = YES;
     
     // get and remove first song from queue
     Song *topSong = _queue.firstObject;
@@ -476,7 +476,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)loadCurrentTrack {
     if (_room.currentSongSpotifyId) {
-        [[SpotifyAPIManager shared] getTrackWithSpotifyId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
+        [[MusicAPIManager shared] getTrackWithStreamingId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
             self.currentTrack = track;
         }];
     }
@@ -487,13 +487,13 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     _currentTrack = currentTrack;
     
     if (!currentTrack) {
-        [[SpotifySessionManager shared] pausePlayback];
+        [[[MusicPlayerManager shared] musicPlayer] pausePlayback];
         return;
     }
     
     if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
-        [[SpotifySessionManager shared] playTrackWithSpotifyURI:currentTrack.spotifyURI];
-        [SpotifySessionManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
+        [[[MusicPlayerManager shared] musicPlayer] playTrackWithStreamingId:currentTrack.spotifyURI];
+        [MusicPlayerManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
     }
     
 }
