@@ -45,6 +45,8 @@
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
 		049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* LoginViewController.m */; };
+		049F68802899C15B004CAD5D /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F687F2899C15B004CAD5D /* SpotifyAPIManager.m */; };
+		049F68862899C5CF004CAD5D /* iTunesAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F68852899C5CF004CAD5D /* iTunesAPIManager.m */; };
 		04CC5470288B401200FC5707 /* UITableView+AnimationControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */; };
 		04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC5473288B4F4D00FC5707 /* ParseLiveQueryManager.m */; };
 		04CEE28F288C7A4A00F821E8 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CEE28E288C7A4A00F821E8 /* Song.m */; };
@@ -146,6 +148,10 @@
 		049304B82877CB0B006AA9A3 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		049304C9287C8A04006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		049304CA287C8A04006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		049F687E2899C15B004CAD5D /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
+		049F687F2899C15B004CAD5D /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
+		049F68842899C5CF004CAD5D /* iTunesAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTunesAPIManager.h; sourceTree = "<group>"; };
+		049F68852899C5CF004CAD5D /* iTunesAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iTunesAPIManager.m; sourceTree = "<group>"; };
 		04BB98F52894FE2500533471 /* EnumeratedTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnumeratedTypes.h; sourceTree = "<group>"; };
 		04CC546E288B401200FC5707 /* UITableView+AnimationControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+AnimationControl.h"; sourceTree = "<group>"; };
 		04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+AnimationControl.m"; sourceTree = "<group>"; };
@@ -402,6 +408,7 @@
 				04874A3B2898D75A001B9BF5 /* MusicAPIManager.m */,
 				04874A342898CEB8001B9BF5 /* MusicPlayerManager.h */,
 				04874A352898CEB8001B9BF5 /* MusicPlayerManager.m */,
+				049F687D2899C14F004CAD5D /* API */,
 				04874A462898DC30001B9BF5 /* Players */,
 			);
 			path = Music;
@@ -442,6 +449,17 @@
 				04229999287DE1270086612E /* RoomManager.m */,
 			);
 			path = Handlers;
+			sourceTree = "<group>";
+		};
+		049F687D2899C14F004CAD5D /* API */ = {
+			isa = PBXGroup;
+			children = (
+				049F687E2899C15B004CAD5D /* SpotifyAPIManager.h */,
+				049F687F2899C15B004CAD5D /* SpotifyAPIManager.m */,
+				049F68842899C5CF004CAD5D /* iTunesAPIManager.h */,
+				049F68852899C5CF004CAD5D /* iTunesAPIManager.m */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 		04CC5471288B408F00FC5707 /* Extensions */ = {
@@ -749,12 +767,14 @@
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04874A362898CEB8001B9BF5 /* MusicPlayerManager.m in Sources */,
+				049F68802899C15B004CAD5D /* SpotifyAPIManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */,
 				041823ED2891B58E003962B6 /* ImageConstants.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
+				049F68862899C5CF004CAD5D /* iTunesAPIManager.m in Sources */,
 				04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

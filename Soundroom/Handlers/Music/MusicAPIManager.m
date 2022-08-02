@@ -7,8 +7,8 @@
 
 #import "MusicAPIManager.h"
 #import "MusicPlayerManager.h"
-#import "SpotifyCatalog.h"
-#import "AppleMusicCatalog.h"
+#import "SpotifyAPIManager.h"
+#import "iTunesAPIManager.h"
 #import "Track.h"
 #import "Request.h"
 
@@ -25,22 +25,13 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
     return sharedManager;
 }
 
-- (instancetype)init {
-    NSString *baseURLString = [_musicCatalog baseURLString];
-    NSURL *baseURL = [NSURL URLWithString:baseURLString];
-    self = [self initWithBaseURL:baseURL];
-    return self;
-}
-
 # pragma mark - Server
 
-- (void)getTracksWithParameters:(NSDictionary *)parameters
-                     completion:(void(^)(NSArray *tracks, NSError *error))completion {
+- (void)getTracksWithParameters:(NSDictionary *)parameters completion:(void(^)(NSArray *tracks, NSError *error))completion {
     
-    NSString *searchURLString = [_musicCatalog searchURLString];
+    NSString *searchURLString = [_streamingServiceAPIManager searchURLString];
     
-    [self GET:searchURLString parameters:parameters headers:nil progress:nil
-      success:^(NSURLSessionDataTask *task, id responseObject) {
+    [_streamingServiceAPIManager GET:searchURLString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSArray *tracks = [Track tracksWithJSONResponse:responseObject];
         completion(tracks, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -49,13 +40,11 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
     
 }
 
-- (void)getTrackWithUPC:(NSString *)upc parameters:(NSDictionary *)parameters
-             completion:(void(^)(Track *track, NSError *error))completion {
+- (void)getTrackWithParameters:(NSDictionary *)parameters completion:(void(^)(Track *track, NSError *error))completion {
     
-    NSString *lookupURLString = [_musicCatalog lookupTrackURLStringWithUPC:upc];
+    NSString *lookupURLString = [_streamingServiceAPIManager lookupURLString];
     
-    [self GET:lookupURLString parameters:parameters headers:nil progress:nil
-      success:^(NSURLSessionDataTask *task, id responseObject) {
+    [_streamingServiceAPIManager GET:lookupURLString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         Track *track = [Track trackWithJSONResponse:responseObject];
         completion(track, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -68,21 +57,7 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
 
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion {
     
-    NSString *accessToken = [[MusicPlayerManager shared] accessToken]; // nil if MusicPlayerManager has not authorized correctly
-    
-    if (accessToken) {
-        NSDictionary *parameters = [self searchRequestParametersWithToken:accessToken query:query];
-        [self getTracksWithParameters:parameters completion:completion];
-    } else {
-        [self postFailedAuthorizationNotification];
-        completion(nil, nil);
-    }
-    
-}
-
-- (void)getTrackWithUPC:(NSString *)upc completion:(void (^)(Track *track, NSError *error))completion {
-    
-    NSString *accessToken = [[MusicPlayerManager shared] accessToken]; // nil if MusicPlayerManager has not authorized correctly
+    NSString *accessToken = [self validateStreamingService]; // nil if MusicPlayerManager has not authorized correctly
     
     if (!accessToken) {
         [self postFailedAuthorizationNotification];
@@ -90,51 +65,44 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
         return;
     }
     
-    NSDictionary *parameters = [self lookupParametersWithToken:accessToken upc:upc];
-    [self getTrackWithUPC:upc parameters:parameters completion:completion];
+    NSDictionary *parameters = [_streamingServiceAPIManager searchParametersWithToken:accessToken query:query];
+    [self getTracksWithParameters:parameters completion:completion];
+    
+}
+
+- (void)getTrackWithUPC:(NSString *)upc completion:(void (^)(Track *track, NSError *error))completion {
+    
+    NSString *accessToken = [self validateStreamingService]; // nil if MusicPlayerManager has not authorized correctly
+    
+    if (!accessToken) {
+        [self postFailedAuthorizationNotification];
+        completion(nil, nil);
+        return;
+    }
+    
+    NSDictionary *parameters = [_streamingServiceAPIManager lookupParametersWithToken:accessToken upc:upc];
+    [self getTrackWithParameters:parameters completion:completion];
     
 }
 
 # pragma mark - Helpers
 
+- (NSString *)validateStreamingService {
+    
+    if ([[MusicPlayerManager shared] streamingService] == AppleMusic) {
+        _streamingServiceAPIManager = [iTunesAPIManager shared];
+    } else if ([[MusicPlayerManager shared] streamingService] == Spotify) {
+        _streamingServiceAPIManager = [SpotifyAPIManager shared];
+    } else {
+        return nil;
+    }
+    
+    return [[MusicPlayerManager shared] accessToken];
+    
+}
+
 - (void)postFailedAuthorizationNotification {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MusicAPIManagerFailedAccessTokenNotification object:self];
-}
-
-- (NSDictionary *)lookupParametersWithToken:(NSString *)token upc:(NSString *)upc {
-    
-    NSString *upcQuery = [NSString stringWithFormat:@"upc:%@", upc];
-    NSString *tokenParameterName = [_musicCatalog tokenParameterName];
-    NSString *typeParameterName = [_musicCatalog typeParameterName];
-    NSString *limitParameterName = [_musicCatalog limitParameterName];
-    NSString *queryParameterName = [_musicCatalog queryParameterName];
-    NSString *trackTypeName = [_musicCatalog trackTypeName];
-    
-    NSDictionary *parameters = @{tokenParameterName:token,
-                                 limitParameterName:@(1),
-                                 queryParameterName:upcQuery,
-                                 typeParameterName:trackTypeName};
-    return parameters;
-    
-}
-
-- (NSDictionary *)searchRequestParametersWithToken:(NSString *)token query:(NSString *)query {
-    
-    NSString *tokenParameterName = [_musicCatalog tokenParameterName];
-    NSString *typeParameterName = [_musicCatalog typeParameterName];
-    NSString *trackTypeName = [_musicCatalog trackTypeName];
-    NSString *queryParameterName = [_musicCatalog queryParameterName];
-    
-    NSDictionary *parameters = @{tokenParameterName:token,
-                                 typeParameterName:trackTypeName,
-                                 queryParameterName:query};
-    return parameters;
-}
-
-- (NSDictionary *)getRequestParametersWithToken:(NSString *)token {
-    NSString *tokenParameterName = [_musicCatalog tokenParameterName];
-    NSDictionary *parameters = @{tokenParameterName:token};
-    return parameters;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MusicAPIManagerFailedAccessTokenNotification object:nil];
 }
 
 @end
