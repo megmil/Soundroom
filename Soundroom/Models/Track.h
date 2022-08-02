@@ -12,13 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Track : NSObject
 
-@property (nonatomic, strong) NSString *spotifyId;
-@property (nonatomic, strong) NSString *spotifyURI;
+@property (nonatomic, strong) NSString *upc;
+@property (nonatomic, strong) NSString *streamingId;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
-@property (nonatomic, strong) NSString *albumTitle;
 @property (nonatomic, strong) UIImage *albumImage;
-@property (nonatomic, strong) NSString *durationString;
 
 + (NSArray *)tracksWithJSONResponse:(NSDictionary *)response;
 + (Track *)trackWithJSONResponse:(NSDictionary *)response;

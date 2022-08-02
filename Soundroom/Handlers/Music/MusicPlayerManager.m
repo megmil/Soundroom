@@ -7,6 +7,8 @@
 
 #import "MusicPlayerManager.h"
 #import "RoomManager.h"
+#import "SpotifySessionManager.h"
+#import "AppleMusicSessionManager.h"
 
 NSString *const MusicPlayerManagerAuthorizedNotificaton = @"MusicPlayerManagerAuthorizedNotificaton";
 NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManagerDeauthorizedNotificaton";
@@ -20,6 +22,14 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
         sharedManager = [[self alloc] init];
     });
     return sharedManager;
+}
+
+- (void)setStreamingService:(StreamingService)streamingService {
+    if (streamingService == Spotify) {
+        _musicPlayer = [SpotifySessionManager shared];
+    } else if (streamingService == AppleMusic) {
+        _musicPlayer = [AppleMusicSessionManager shared];
+    }
 }
 
 # pragma mark - Authentication

@@ -6,7 +6,6 @@
 //
 
 #import "AppleMusicCatalog.h"
-#import "AppleMusicSessionManager.h"
 
 @implementation AppleMusicCatalog
 
@@ -18,10 +17,6 @@ NSString *const tokenParameterName = @"access_token";
 NSString *const typeParameterName = @"types";
 NSString *const trackTypeName = @"songs";
 NSString *const queryParameterName = @"term";
-
-- (NSString *)accessToken {
-    return [[AppleMusicSessionManager shared] accessToken];
-}
 
 - (NSString *)baseURLString {
     return baseURLString;

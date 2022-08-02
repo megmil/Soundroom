@@ -12,14 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SpotifyCatalog : NSObject <MusicCatalog>
 
-- (NSString *)baseURLString;
-- (NSString *)accessToken;
-- (NSString *)searchURLString;
-- (NSString *)getTrackURLString;
-- (NSString *)tokenParameterName;
-- (NSString *)typeParameterName;
-- (NSString *)queryParameterName;
-- (NSString *)trackTypeName;
+@property (nonatomic, strong, readonly) NSString *baseURLString;
+@property (nonatomic, strong, readonly) NSString *searchURLString;
+@property (nonatomic, strong, readonly) NSString *getTrackURLString;
+@property (nonatomic, strong, readonly) NSString *tokenParameterName;
+@property (nonatomic, strong, readonly) NSString *typeParameterName;
+@property (nonatomic, strong, readonly) NSString *queryParameterName;
+@property (nonatomic, strong, readonly) NSString *trackTypeName;
 
 @end
 

@@ -10,8 +10,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, StreamingService) {
-    Spotify,
-    AppleMusic
+    Spotify = 0,
+    AppleMusic = 1
 };
 
 typedef NS_ENUM(NSUInteger, PlayState) {

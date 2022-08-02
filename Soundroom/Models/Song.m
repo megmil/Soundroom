@@ -14,7 +14,7 @@ NSString *const songScoreKey = @"score";
 
 @implementation Song
 
-- (instancetype)initWithRequestId:(NSString *)requestId userId:(NSString *)userId spotifyId:(NSString *)spotifyId track:(Track *)track  {
+- (instancetype)initWithRequestId:(NSString *)requestId userId:(NSString *)userId upc:(NSString *)upc track:(Track *)track  {
     
     self = [super init];
     
@@ -22,7 +22,7 @@ NSString *const songScoreKey = @"score";
         
         _requestId = requestId;
         _userId = userId;
-        _spotifyId = spotifyId;
+        _upc = upc;
         _track = track;
         _score = @(0);
         _voteState = NotVoted;
@@ -68,8 +68,11 @@ NSString *const songScoreKey = @"score";
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithStreamingId:request.spotifyId completion:^(Track *track, NSError *error) {
-        Song *song = [[Song alloc] initWithRequestId:request.objectId userId:request.userId spotifyId:request.spotifyId track:track];
+    [[MusicAPIManager shared] getTrackWithUPC:request.upc completion:^(Track *track, NSError *error) {
+        Song *song = [[Song alloc] initWithRequestId:request.objectId
+                                              userId:request.userId
+                                                 upc:request.upc
+                                               track:track];
         completion(song);
     }];
     

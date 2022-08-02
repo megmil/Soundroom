@@ -34,6 +34,7 @@ extern NSString *const MusicPlayerManagerDeauthorizedNotificaton;
 @interface MusicPlayerManager : NSObject
 
 @property (nonatomic, weak) id<MusicPlayer> musicPlayer;
+@property (nonatomic) StreamingService streamingService;
 @property (nonatomic, strong) NSString *playbackTrackId;
 @property (nonatomic, strong, nullable) NSString *accessToken;
 @property (nonatomic) BOOL isPlaying;

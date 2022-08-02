@@ -150,18 +150,16 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId {
+- (void)updateCurrentTrackWithUPC:(NSString *)upc {
     
-    if ([spotifyId isEqualToString:@""]) {
+    if (!upc || [upc isEqualToString:@""]) {
         self.currentTrack = nil;
-        [self.delegate didUpdateCurrentTrack];
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithStreamingId:spotifyId completion:^(Track *track, NSError *error) {
+    [[MusicAPIManager shared] getTrackWithUPC:upc completion:^(Track *track, NSError *error) {
         if (track) {
             self.currentTrack = track;
-            [self.delegate didUpdateCurrentTrack];
         }
     }];
     
@@ -206,12 +204,13 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             continue;
         }
         
-        [[MusicAPIManager shared] getTrackWithStreamingId:song.spotifyId completion:^(Track *track, NSError *error) {
+        [[MusicAPIManager shared] getTrackWithUPC:song.upc completion:^(Track *track, NSError *error) {
             
             song.track = track;
             
             if (--remainingTracks == 0) {
                 [self reloadCurrentTrackDataWithCompletion:completion];
+                return;
             }
             
         }];
@@ -232,7 +231,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithStreamingId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
+    [[MusicAPIManager shared] getTrackWithUPC:_room.nowPlayingItemUPC completion:^(Track *track, NSError *error) {
         self.currentTrack = track;
         completion(YES, nil);
     }];
@@ -251,7 +250,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-# pragma mark - Spotify App Remote
+# pragma mark - Music Player
 
 - (void)playTopSong {
     
@@ -268,12 +267,12 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [ParseObjectManager deleteRequestWithId:topSong.requestId];
     
     // save current song to room
-    [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
+    [ParseObjectManager updateCurrentRoomWithUPC:topSong.upc];
     
 }
 
 - (void)stopPlayback {
-    [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:@""];
+    [ParseObjectManager updateCurrentRoomWithUPC:@""];
     [self.delegate setPlayState:Paused];
 }
 
@@ -475,8 +474,8 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 # pragma mark - Playback Helpers
 
 - (void)loadCurrentTrack {
-    if (_room.currentSongSpotifyId) {
-        [[MusicAPIManager shared] getTrackWithStreamingId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
+    if (_room.nowPlayingItemUPC) {
+        [[MusicAPIManager shared] getTrackWithUPC:_room.nowPlayingItemUPC completion:^(Track *track, NSError *error) {
             self.currentTrack = track;
         }];
     }
@@ -492,9 +491,11 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
-        [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.spotifyURI];
+        [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId];
         [MusicPlayerManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
     }
+    
+    [self.delegate didUpdateCurrentTrack];
     
 }
 
@@ -513,12 +514,13 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     return _queue;
 }
 
+// TODO: remove?
 - (Track *)currentTrack {
     return _currentTrack;
 }
 
-- (NSString *)currentTrackSpotifyURI {
-    return _currentTrack.spotifyURI;
+- (NSString *)currentTrackStreamingId {
+    return _currentTrack.streamingId;
 }
 
 - (BOOL)isCurrentUserHost {

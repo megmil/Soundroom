@@ -103,11 +103,11 @@ static const NSInteger searchLimit = 20;
     [query findObjectsInBackgroundWithBlock:completion];
 }
 
-+ (void)getSpotifyIdForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion {
++ (void)getUPCForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion {
     [self getRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Request *request = (Request *)object;
-            completion(request.spotifyId, error);
+            completion(request.upc, error);
         } else {
             completion(nil, error);
         }

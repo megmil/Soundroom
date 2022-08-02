@@ -13,12 +13,11 @@ static NSString *const tracksJSONResponsePathName = @"tracks";
 static NSString *const itemsJSONResponsePathName = @"items";
 
 static NSString *const spotifyJSONResponseItemNameKey = @"name";
-static NSString *const spotifyJSONResponseTrackIdKey = @"id";
 static NSString *const spotifyJSONResponseTrackURIKey = @"uri";
+static NSString *const spotifyJSONResponseTrackUPCKey = @"upc";
 static NSString *const spotifyJSONResponseTrackArtistKey = @"artists";
-static NSString *const spotifyJSONResponseTrackAlbumKey = @"album";
-static NSString *const spotifyJSONResponseTrackDurationKey = @"duration_ms";
 static NSString *const spotifyJSONResponseArtistSeparatorString = @", ";
+static NSString *const spotifyJSONResponseTrackAlbumKey = @"album";
 static NSString *const spotifyJSONResponseAlbumImagesKey = @"images";
 static NSString *const spotifyJSONResponseAlbumImageURLKey = @"url";
 
@@ -43,31 +42,23 @@ static NSString *const spotifyJSONResponseAlbumImageURLKey = @"url";
     
     if (self) {
         
-        self.spotifyId = response[spotifyJSONResponseTrackIdKey];
-        self.spotifyURI = response[spotifyJSONResponseTrackURIKey];
-        self.title = response[spotifyJSONResponseItemNameKey];
+        _upc = response[spotifyJSONResponseTrackUPCKey];
+        _streamingId = response[spotifyJSONResponseTrackURIKey];
+        _title = response[spotifyJSONResponseItemNameKey];
         
         // format artists into one string
         NSMutableArray <NSString *> *artists = [NSMutableArray array];
         for (NSDictionary *artist in response[spotifyJSONResponseTrackArtistKey]) {
             [artists addObject:artist[spotifyJSONResponseItemNameKey]];
         }
-        self.artist = [artists componentsJoinedByString:spotifyJSONResponseArtistSeparatorString];
+        _artist = [artists componentsJoinedByString:spotifyJSONResponseArtistSeparatorString];
         
         // get album details
         NSDictionary *album = response[spotifyJSONResponseTrackAlbumKey];
-        self.albumTitle = album[spotifyJSONResponseItemNameKey];
         NSString *albumImageURLString = [album[spotifyJSONResponseAlbumImagesKey] firstObject][spotifyJSONResponseAlbumImageURLKey];
         NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
         NSData *albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
-        self.albumImage = [UIImage imageWithData:albumImageData];
-        
-        // format duration (ms) for display (mm:ss)
-        NSNumber *millisecondsNumber = [response valueForKey:spotifyJSONResponseTrackDurationKey];
-        int milliseconds = [millisecondsNumber intValue];
-        int minutes = milliseconds / 60000;
-        int seconds = (milliseconds % 60000) / 1000;
-        self.durationString = [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
+        _albumImage = [UIImage imageWithData:albumImageData];
         
     }
     

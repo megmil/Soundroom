@@ -37,7 +37,7 @@
     }];
 }
 
-+ (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId {
++ (void)updateCurrentRoomWithUPC:(NSString *)upc {
     
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
@@ -48,7 +48,7 @@
     [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Room *room = (Room *)object;
-            [room setValue:spotifyId forKey:currentSongSpotifyIdKey];
+            [room setValue:upc forKey:currentUPCKey];
             [room saveInBackground];
         }
     }];
@@ -77,16 +77,16 @@
 
 # pragma mark - Request
 
-+ (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId {
++ (void)createRequestInCurrentRoomWithUPC:(NSString *)upc {
     
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!spotifyId || !userId || !roomId) {
+    if (!upc || !userId || !roomId) {
         return;
     }
     
-    Request *newRequest = [[Request alloc] initWithSpotifyId:spotifyId roomId:roomId userId:userId];
+    Request *newRequest = [[Request alloc] initWithUPC:upc roomId:roomId userId:userId];
     [newRequest saveInBackground];
     
 }

@@ -9,14 +9,14 @@
 #import "MusicAPIManager.h"
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
-#import "ParseConstants.h"
+#import "ParseConstants.h" // TODO: remove?
 #import "ParseObjectManager.h"
-#import "ImageConstants.h"
-#import "EnumeratedTypes.h"
-#import "Track.h"
+#import "EnumeratedTypes.h" // TODO: remove?
 #import "SongCell.h"
-#import "UITableView+AnimationControl.h"
+#import "Track.h"
 #import "UITableView+ReuseIdentifier.h"
+
+static const NSUInteger emptySearchCount = 20;
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, AddCellDelegate>
 
@@ -66,14 +66,14 @@
         return;
     }
     
-    // request song in queue
-    if (self.searchType == SearchTypeTrack) {
-        [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:objectId];
+    // invite user to room
+    if ([self searchType] == SearchTypeUser) {
+        [ParseObjectManager createInvitationToCurrentRoomForUserWithId:objectId];
         return;
     }
     
-    // invite user to room
-    [ParseObjectManager createInvitationToCurrentRoomForUserWithId:objectId];
+    // request track in queue
+    [ParseObjectManager createRequestInCurrentRoomWithStreamingId:objectId];
     
 }
 
@@ -97,7 +97,7 @@
         cell.title = track.title;
         cell.subtitle = track.artist;
         cell.image = track.albumImage;
-        cell.objectId = track.spotifyId;
+        cell.objectId = track.upc;
         return cell;
     }
     
@@ -171,7 +171,7 @@
 
 - (NSArray <Track *> *)emptyTracks {
     NSMutableArray <Track *> *tracks = [NSMutableArray new];
-    for (int i = 0; i < 20; i++) {
+    for (NSUInteger i = 0; i < emptySearchCount; i++) {
         Track *track = [[Track alloc] init];
         [tracks addObject:track];
     }
@@ -180,7 +180,7 @@
 
 - (NSArray <PFUser *> *)emptyUsers {
     NSMutableArray <PFUser *> *users = [NSMutableArray new];
-    for (int i = 0; i < 20; i++) {
+    for (NSUInteger i = 0; i < emptySearchCount; i++) {
         PFUser *user = [[PFUser alloc] init];
         [users addObject:user];
     }

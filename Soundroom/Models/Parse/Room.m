@@ -12,7 +12,7 @@
 
 @dynamic roomId;
 @dynamic hostId;
-@dynamic currentSongSpotifyId;
+@dynamic nowPlayingItemUPC;
 @dynamic title;
 @dynamic listeningMode;
 

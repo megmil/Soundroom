@@ -12,21 +12,21 @@
 
 @dynamic objectId;
 @dynamic roomId;
-@dynamic spotifyId;
 @dynamic userId;
+@dynamic upc;
 
 + (nonnull NSString *)parseClassName {
     return RequestClass;
 }
 
-- (instancetype)initWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId userId:(NSString *)userId {
+- (instancetype)initWithUPC:(NSString *)upc roomId:(NSString *)roomId userId:(NSString *)userId {
     
     self = [super init];
     
     if (self) {
-        self.spotifyId = spotifyId;
         self.roomId = roomId;
         self.userId = userId;
+        self.upc = upc;
     }
     
     return self;

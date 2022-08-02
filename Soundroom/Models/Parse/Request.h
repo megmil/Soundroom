@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *objectId;
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSString *userId;
-@property (nonatomic, strong) NSString *spotifyId;
+@property (nonatomic, strong) NSString *upc;
 
-- (instancetype)initWithSpotifyId:(NSString *)spotifyId roomId:(NSString *)roomId userId:(NSString *)userId;
+- (instancetype)initWithUPC:(NSString *)upc roomId:(NSString *)roomId userId:(NSString *)userId;
 
 @end
 

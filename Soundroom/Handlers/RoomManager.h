@@ -31,20 +31,20 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 @property (strong, nonatomic, readonly, getter=currentRoomName) NSString *currentRoomName;
 @property (strong, nonatomic, readonly, getter=queue) NSMutableArray <Song *> *queue;
 @property (strong, nonatomic, readonly, getter=currentTrack) Track *currentTrack;
-@property (strong, nonatomic, readonly, getter=currentTrackSpotifyURI) NSString *currentTrackSpotifyURI;
+@property (strong, nonatomic, readonly, getter=currentTrackStreamingId) NSString *currentTrackStreamingId;
 @property (nonatomic, readonly, getter=isCurrentUserHost) BOOL isCurrentUserHost;
 @property (nonatomic, weak) id<RoomManagerDelegate> delegate;
 
 + (instancetype)shared;
 
-# pragma mark - Room Tab Methods
+# pragma mark - Room VCs
 
 - (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 - (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion;
 - (void)playTopSong;
 
-# pragma mark - Spotify Session Manager Methods
+# pragma mark - Music Player
 
 - (void)updatePlayerWithPlayState:(PlayState)playState;
 - (void)stopPlayback;
@@ -59,7 +59,7 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)clearRoomData;
 - (void)insertRequest:(Request *)request;
 - (void)removeRequestWithId:(NSString *)requestId;
-- (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId;
+- (void)updateCurrentTrackWithUPC:(NSString *)upc;
 
 @end
 
