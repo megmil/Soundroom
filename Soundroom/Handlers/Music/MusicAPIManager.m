@@ -45,7 +45,7 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
     NSString *lookupURLString = [_streamingServiceAPIManager lookupURLString];
     
     [_streamingServiceAPIManager GET:lookupURLString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        Track *track = [Track trackWithJSONResponse:responseObject];
+        Track *track = [Track tracksWithJSONResponse:responseObject].firstObject;
         completion(track, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);
