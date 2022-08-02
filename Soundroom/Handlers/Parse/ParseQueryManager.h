@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getInvitationsPendingForCurrentUserWithCompletion:(PFArrayResultBlock)completion;
 
 // key values
-+ (void)getUPCForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion; // TODO: remove?
++ (void)getISRCForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion; // TODO: remove?
 + (void)didCurrentUserAcceptRoomInvitationWithCompletion:(PFBooleanResultBlock)completion;
 + (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;
 

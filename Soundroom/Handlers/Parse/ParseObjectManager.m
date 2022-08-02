@@ -37,7 +37,7 @@
     }];
 }
 
-+ (void)updateCurrentRoomWithUPC:(NSString *)upc {
++ (void)updateCurrentRoomWithISRC:(NSString *)isrc {
     
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
@@ -48,7 +48,7 @@
     [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Room *room = (Room *)object;
-            [room setValue:upc forKey:currentUPCKey];
+            [room setValue:isrc forKey:currentISRCKey];
             [room saveInBackground];
         }
     }];
@@ -77,16 +77,16 @@
 
 # pragma mark - Request
 
-+ (void)createRequestInCurrentRoomWithUPC:(NSString *)upc {
++ (void)createRequestInCurrentRoomWithISRC:(NSString *)isrc {
     
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!upc || !userId || !roomId) {
+    if (!isrc || !userId || !roomId) {
         return;
     }
     
-    Request *newRequest = [[Request alloc] initWithUPC:upc roomId:roomId userId:userId];
+    Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
     [newRequest saveInBackground];
     
 }

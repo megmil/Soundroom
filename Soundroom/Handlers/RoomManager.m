@@ -150,14 +150,14 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)updateCurrentTrackWithUPC:(NSString *)upc {
+- (void)updateCurrentTrackWithISRC:(NSString *)isrc {
     
-    if (!upc || [upc isEqualToString:@""]) {
+    if (!isrc || [isrc isEqualToString:@""]) {
         self.currentTrack = nil;
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithUPC:upc completion:^(Track *track, NSError *error) {
+    [[MusicAPIManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
         if (track) {
             self.currentTrack = track;
         }
@@ -204,7 +204,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             continue;
         }
         
-        [[MusicAPIManager shared] getTrackWithUPC:song.upc completion:^(Track *track, NSError *error) {
+        [[MusicAPIManager shared] getTrackWithISRC:song.isrc completion:^(Track *track, NSError *error) {
             
             song.track = track;
             
@@ -231,7 +231,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithUPC:_room.nowPlayingItemUPC completion:^(Track *track, NSError *error) {
+    [[MusicAPIManager shared] getTrackWithISRC:_room.nowPlayingItemISRC completion:^(Track *track, NSError *error) {
         self.currentTrack = track;
         completion(YES, nil);
     }];
@@ -267,12 +267,12 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [ParseObjectManager deleteRequestWithId:topSong.requestId];
     
     // save current song to room
-    [ParseObjectManager updateCurrentRoomWithUPC:topSong.upc];
+    [ParseObjectManager updateCurrentRoomWithISRC:topSong.isrc];
     
 }
 
 - (void)stopPlayback {
-    [ParseObjectManager updateCurrentRoomWithUPC:@""];
+    [ParseObjectManager updateCurrentRoomWithISRC:@""];
     [self.delegate setPlayState:Paused];
 }
 
@@ -474,8 +474,8 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 # pragma mark - Playback Helpers
 
 - (void)loadCurrentTrack {
-    if (_room.nowPlayingItemUPC) {
-        [[MusicAPIManager shared] getTrackWithUPC:_room.nowPlayingItemUPC completion:^(Track *track, NSError *error) {
+    if (_room.nowPlayingItemISRC) {
+        [[MusicAPIManager shared] getTrackWithISRC:_room.nowPlayingItemISRC completion:^(Track *track, NSError *error) {
             self.currentTrack = track;
         }];
     }

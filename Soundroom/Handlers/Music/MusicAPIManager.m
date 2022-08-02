@@ -70,7 +70,7 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
     
 }
 
-- (void)getTrackWithUPC:(NSString *)upc completion:(void (^)(Track *track, NSError *error))completion {
+- (void)getTrackWithISRC:(NSString *)isrc completion:(void (^)(Track *track, NSError *error))completion {
     
     NSString *accessToken = [self validateStreamingService]; // nil if MusicPlayerManager has not authorized correctly
     
@@ -80,7 +80,7 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
         return;
     }
     
-    NSDictionary *parameters = [_streamingServiceAPIManager lookupParametersWithToken:accessToken upc:upc];
+    NSDictionary *parameters = [_streamingServiceAPIManager lookupParametersWithToken:accessToken isrc:isrc];
     [self getTrackWithParameters:parameters completion:completion];
     
 }

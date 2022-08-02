@@ -13,8 +13,9 @@ static NSString *const tracksJSONResponsePathName = @"tracks";
 static NSString *const itemsJSONResponsePathName = @"items";
 
 static NSString *const spotifyJSONResponseItemNameKey = @"name";
+static NSString *const spotifyJSONResponseISRCKey = @"isrc";
+static NSString *const spotifyJSONResponseExternalIdKey = @"external_ids";
 static NSString *const spotifyJSONResponseTrackURIKey = @"uri";
-static NSString *const spotifyJSONResponseTrackUPCKey = @"upc";
 static NSString *const spotifyJSONResponseTrackArtistKey = @"artists";
 static NSString *const spotifyJSONResponseArtistSeparatorString = @", ";
 static NSString *const spotifyJSONResponseTrackAlbumKey = @"album";
@@ -42,7 +43,7 @@ static NSString *const spotifyJSONResponseAlbumImageURLKey = @"url";
     
     if (self) {
         
-        _upc = response[spotifyJSONResponseTrackUPCKey];
+        _isrc = response[spotifyJSONResponseExternalIdKey][spotifyJSONResponseISRCKey];
         _streamingId = response[spotifyJSONResponseTrackURIKey];
         _title = response[spotifyJSONResponseItemNameKey];
         

@@ -13,20 +13,20 @@
 @dynamic objectId;
 @dynamic roomId;
 @dynamic userId;
-@dynamic upc;
+@dynamic isrc;
 
 + (nonnull NSString *)parseClassName {
     return RequestClass;
 }
 
-- (instancetype)initWithUPC:(NSString *)upc roomId:(NSString *)roomId userId:(NSString *)userId {
+- (instancetype)initWithISRC:(NSString *)isrc roomId:(NSString *)roomId userId:(NSString *)userId {
     
     self = [super init];
     
     if (self) {
         self.roomId = roomId;
         self.userId = userId;
-        self.upc = upc;
+        self.isrc = isrc;
     }
     
     return self;

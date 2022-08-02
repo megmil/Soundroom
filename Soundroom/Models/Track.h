@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Track : NSObject
 
-@property (nonatomic, strong) NSString *upc;
+@property (nonatomic, strong) NSString *isrc;
 @property (nonatomic, strong) NSString *streamingId;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;

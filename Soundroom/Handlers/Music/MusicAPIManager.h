@@ -21,7 +21,7 @@ extern NSString *const MusicAPIManagerFailedAccessTokenNotification;
 - (NSString *)searchURLString;
 - (NSString *)lookupURLString;
 - (NSDictionary *)searchParametersWithToken:(NSString *)token query:(NSString *)query;
-- (NSDictionary *)lookupParametersWithToken:(NSString *)token upc:(NSString *)upc;
+- (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc;
 
 @end
 
@@ -31,7 +31,7 @@ extern NSString *const MusicAPIManagerFailedAccessTokenNotification;
 
 + (instancetype)shared;
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion;
-- (void)getTrackWithUPC:(NSString *)upc completion:(void(^)(Track *track, NSError *error))completion;
+- (void)getTrackWithISRC:(NSString *)isrc completion:(void(^)(Track *track, NSError *error))completion;
 
 @end
 

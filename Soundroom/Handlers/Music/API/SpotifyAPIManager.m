@@ -15,7 +15,7 @@ static NSString *const limitParameterName = @"limit";
 static NSString *const typeParameterName = @"type";
 static NSString *const queryParameterName = @"q";
 static NSString *const trackTypeName = @"track";
-static NSString *const upcParameterFormat = @"upc:%@";
+static NSString *const isrcParameterFormat = @"isrc:%@";
 
 static const NSNumber *lookupLimit = @(1);
 
@@ -57,9 +57,9 @@ static const NSNumber *lookupLimit = @(1);
     return searchURLString;
 }
 
-- (NSDictionary *)lookupParametersWithToken:(NSString *)token upc:(NSString *)upc {
+- (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc {
     
-    NSString *query = [NSString stringWithFormat:upcParameterFormat, upc];
+    NSString *query = [NSString stringWithFormat:isrcParameterFormat, isrc];
     
     NSDictionary *parameters = @{tokenParameterName:token,
                                  limitParameterName:lookupLimit,

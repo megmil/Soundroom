@@ -15,7 +15,7 @@ static NSString *const tokenParameterName = @"access_token";
 static NSString *const queryParameterName = @"term";
 static NSString *const typeParameterName = @"entity";
 static NSString *const trackTypeName = @"song";
-static NSString *const upcParameterName = @"upc";
+static NSString *const isrcParameterName = @"isrc";
 
 @implementation iTunesAPIManager
 
@@ -55,10 +55,10 @@ static NSString *const upcParameterName = @"upc";
     return lookupURLString;
 }
 
-- (NSDictionary *)lookupParametersWithToken:(NSString *)token upc:(NSString *)upc {
+- (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc {
     
     NSDictionary *parameters = @{tokenParameterName:token,
-                                 upcParameterName:upc};
+                                 isrcParameterName:isrc};
     return parameters;
     
 }

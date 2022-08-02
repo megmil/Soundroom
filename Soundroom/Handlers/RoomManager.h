@@ -59,7 +59,7 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)clearRoomData;
 - (void)insertRequest:(Request *)request;
 - (void)removeRequestWithId:(NSString *)requestId;
-- (void)updateCurrentTrackWithUPC:(NSString *)upc;
+- (void)updateCurrentTrackWithISRC:(NSString *)isrc;
 
 @end
 

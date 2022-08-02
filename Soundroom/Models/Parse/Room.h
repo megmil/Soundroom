@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSString *hostId;
-@property (nonatomic, strong) NSString *nowPlayingItemUPC;
+@property (nonatomic, strong) NSString *nowPlayingItemISRC;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic) NSUInteger listeningMode;
 

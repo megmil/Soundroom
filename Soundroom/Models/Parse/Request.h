@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *objectId;
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSString *userId;
-@property (nonatomic, strong) NSString *upc;
+@property (nonatomic, strong) NSString *isrc;
 
-- (instancetype)initWithUPC:(NSString *)upc roomId:(NSString *)roomId userId:(NSString *)userId;
+- (instancetype)initWithISRC:(NSString *)isrc roomId:(NSString *)roomId userId:(NSString *)userId;
 
 @end
 

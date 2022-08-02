@@ -13,10 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ParseObjectManager : NSObject
 
 + (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningModeType)listeningMode;
-+ (void)updateCurrentRoomWithUPC:(NSString *)upc;
++ (void)updateCurrentRoomWithISRC:(NSString *)isrc;
 + (void)deleteCurrentRoomAndAttachedObjects;
 
-+ (void)createRequestInCurrentRoomWithUPC:(NSString *)upc;
++ (void)createRequestInCurrentRoomWithISRC:(NSString *)isrc;
 + (void)deleteRequestWithId:(NSString *)requestId;
 
 + (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;

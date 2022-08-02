@@ -73,7 +73,7 @@ static const NSUInteger emptySearchCount = 20;
     }
     
     // request track in queue
-    [ParseObjectManager createRequestInCurrentRoomWithUPC:objectId];
+    [ParseObjectManager createRequestInCurrentRoomWithISRC:objectId];
     
 }
 
@@ -97,7 +97,7 @@ static const NSUInteger emptySearchCount = 20;
         cell.title = track.title;
         cell.subtitle = track.artist;
         cell.image = track.albumImage;
-        cell.objectId = track.upc;
+        cell.objectId = track.isrc;
         return cell;
     }
     
