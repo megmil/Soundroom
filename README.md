@@ -13,13 +13,30 @@ A collaborative music queue where users can create/join virtual music rooms to r
 
 ### Requirements
 From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tRvQZDizWwBSQVCfRiS4sqMZY6Y/edit#heading=h.8l153mzbgh5r).
-- [x] Interacts with a database (Parse/Back4App)
-- [x] Integrates at least one SDK or API (Spotify iOS SDK, Spotify Web API, Deezer API, MusicKit)
-- [x] Ability to log in / logout as a user
-- [x] Ability to sign up with a new user profile
-- [x] Uses at least one gesture (tap to dismiss keyboards, swipe to remove song from queue)
-- [x] Incorporates at least one external library to add visual polish (SkyFloatingLabelTextField)
-- [x] Uses at least one animation (vote button animations, loading cell shimmer, add button animation, reload table with animation, insert/delete/move cell with animation)
+- Interacts with a database
+  - Parse/Back4App
+- Integrates at least one SDK or API
+  - Spotify iOS SDK
+  - Spotify Web API
+  - Deezer API
+  - MusicKit
+- Ability to log in / logout as a user
+- Ability to sign up with a new user profile
+- Uses at least one gesture
+  - Tap to dismiss keyboards
+  - Swipe to remove song from queue
+- Incorporates at least one external library to add visual polish
+  - SkyFloatingLabelTextField
+- Uses at least one animation
+  - Vote button animations
+  - Loading cell shimmer
+  - Add button animation
+  - Reload table with animation
+  - Insert/delete/move cell with animation
+- Technical challenges
+  - Live implementation: Parse LiveQuery subscribes to 5 queries (invitations for current user, current room, song requests in current room, upvotes in current room, downvotes in current room) to respond to real-time updates from multiple users
+  - Search bar: throttle search requests to reduce the number of API calls and allow typeahead
+  - Allow multiple music players / catalogs: swap out Spotify for Apple Music (for search/get API calls and playback) or use Deezer to search/get tracks without connecting to a music streaming service
 
 
 ## 2. Product Spec
@@ -38,13 +55,13 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 - Hosts can swipe to remove a song from the queue
 
 #### Stretch goals
+- Search bar throttles search requests to reduce the number of API calls
 - Users can participate in a room without connecting to Spotify or Apple Music
 - Users can swap out Spotify, MusicKit, and Deezer to search tracks and load track data
 - Users can swap out Spotify and Apple Music to play the queue
 - Hosts can create rooms in party mode (i.e. only the host plays music) or remote mode (i.e. all members play music)
-- Search bar throttles search requests to reduce the number of API calls
 - Animate queue for individual changes (e.g. song moves up/down, song is deleted, song is inserted)
-- Show animated shimmer layer over empty track/user views while data is loading
+- Used Core Animation to create a shimmer layer that masks over empty track/user views while data is loading
 
 ### Screen Archetypes
 * Login
