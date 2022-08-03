@@ -16,18 +16,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const MusicAPIManagerFailedAccessTokenNotification;
 
-@protocol StreamingServiceAPIManager <NSObject>
+@protocol MusicCatalogManager <NSObject>
 
 - (NSString *)searchURLString;
-- (NSString *)lookupURLString;
+- (NSString *)lookupURLStringWithISRC:(NSString *)isrc;
 - (NSDictionary *)searchParametersWithToken:(NSString *)token query:(NSString *)query;
 - (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc;
+- (NSArray <Track *> *)tracksWithJSONResponse:(NSDictionary *)response;
+- (Track *)trackWithJSONResponse:(NSDictionary *)response;
 
 @end
 
 @interface MusicAPIManager : NSObject
 
-@property (weak, nonatomic) AFHTTPSessionManager<StreamingServiceAPIManager> *streamingServiceAPIManager;
+@property (weak, nonatomic) AFHTTPSessionManager<MusicCatalogManager> *musicCatalog;
 
 + (instancetype)shared;
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion;

@@ -1,5 +1,5 @@
 //
-//  iTunesAPIManager.h
+//  AppleMusicAPIManager.h
 //  Soundroom
 //
 //  Created by Megan Miller on 8/2/22.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface iTunesAPIManager : AFHTTPSessionManager <StreamingServiceAPIManager>
+@interface AppleMusicAPIManager : AFHTTPSessionManager <MusicCatalogManager>
 
 + (instancetype)shared;
 

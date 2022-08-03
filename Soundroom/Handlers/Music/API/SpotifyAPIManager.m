@@ -6,6 +6,7 @@
 //
 
 #import "SpotifyAPIManager.h"
+#import "Track.h"
 
 static NSString *const baseURLString = @"https://api.spotify.com";
 static NSString *const searchURLString = @"v1/search?";
@@ -16,6 +17,18 @@ static NSString *const typeParameterName = @"type";
 static NSString *const queryParameterName = @"q";
 static NSString *const trackTypeName = @"track";
 static NSString *const isrcParameterFormat = @"isrc:%@";
+
+static NSString *const spotifyJSONResponseTracksPathName = @"tracks";
+static NSString *const spotifyJSONResponseItemsPathName = @"items";
+static NSString *const spotifyJSONResponseIdKey = @"uri";
+static NSString *const spotifyJSONResponseNameKey = @"name";
+static NSString *const spotifyJSONResponseArtistKey = @"artists";
+static NSString *const spotifyJSONResponseAlbumKey = @"album";
+static NSString *const spotifyJSONResponseImagesKey = @"images";
+static NSString *const spotifyJSONResponseURLKey = @"url";
+static NSString *const spotifyJSONResponseExternalIdsKey = @"external_ids";
+static NSString *const spotifyJSONResponseISRCKey = @"isrc";
+static NSString *const spotifyJSONResponseSeparator = @", ";
 
 static const NSNumber *lookupLimit = @(1);
 
@@ -43,30 +56,67 @@ static const NSNumber *lookupLimit = @(1);
 }
 
 - (NSDictionary *)searchParametersWithToken:(NSString *)token query:(NSString *)query  {
-    
     NSDictionary *parameters = @{tokenParameterName:token,
                                  typeParameterName:trackTypeName,
                                  queryParameterName:query};
     return parameters;
-    
 }
 
 # pragma mark - Lookup
 
-- (NSString *)lookupURLString {
+- (NSString *)lookupURLStringWithISRC:(NSString *)isrc {
     return searchURLString;
 }
 
 - (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc {
-    
     NSString *query = [NSString stringWithFormat:isrcParameterFormat, isrc];
-    
     NSDictionary *parameters = @{tokenParameterName:token,
                                  limitParameterName:lookupLimit,
                                  queryParameterName:query,
                                  typeParameterName:trackTypeName};
     return parameters;
+}
+
+# pragma mark - Decoding
+
+- (NSArray<Track *> *)tracksWithJSONResponse:(NSDictionary *)response {
+    NSArray *tracksJSONResponses = response[spotifyJSONResponseTracksPathName][spotifyJSONResponseItemsPathName];
+    NSMutableArray *tracks = [NSMutableArray array];
+    for (NSDictionary *trackJSONResponse in tracksJSONResponses) {
+        Track *track = [self trackWithJSONResponse:trackJSONResponse];
+        [tracks addObject:track];
+    }
+    return tracks;
+}
+
+- (Track *)trackWithJSONResponse:(NSDictionary *)response {
     
+    NSString *isrc = response[spotifyJSONResponseExternalIdsKey][spotifyJSONResponseISRCKey];
+    NSString *streamingId = response[spotifyJSONResponseIdKey];
+    NSString *title = response[spotifyJSONResponseNameKey];
+    NSString *artist = [self artistNamesWithJSONResponse:response];
+    UIImage *albumImage = [self albumImageWithJSONResponse:response];
+    
+    Track *track = [[Track alloc] initWithISRC:isrc streamingId:streamingId title:title artist:artist albumImage:albumImage];
+    
+    return track;
+    
+}
+
+- (UIImage *)albumImageWithJSONResponse:(NSDictionary *)response {
+    NSString *albumImageURLString = [response[spotifyJSONResponseAlbumKey][spotifyJSONResponseImagesKey] firstObject][spotifyJSONResponseURLKey];
+    NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
+    NSData *albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
+    UIImage *albumImage = [UIImage imageWithData:albumImageData];
+    return albumImage;
+}
+
+- (NSString *)artistNamesWithJSONResponse:(NSDictionary *)response {
+    NSMutableArray <NSString *> *artists = [NSMutableArray <NSString *> new];
+    for (NSDictionary *artist in response[spotifyJSONResponseArtistKey]) {
+        [artists addObject:artist[spotifyJSONResponseNameKey]];
+    }
+    return [artists componentsJoinedByString:spotifyJSONResponseSeparator];
 }
 
 @end

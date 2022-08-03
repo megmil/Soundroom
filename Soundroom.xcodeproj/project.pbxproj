@@ -45,8 +45,9 @@
 		049304A528762A58006AA9A3 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049304A428762A58006AA9A3 /* SpotifyiOS.framework */; };
 		049304B92877CB0B006AA9A3 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049304B82877CB0B006AA9A3 /* Keys.plist */; };
 		049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049304CA287C8A04006AA9A3 /* LoginViewController.m */; };
-		049F68802899C15B004CAD5D /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F687F2899C15B004CAD5D /* SpotifyAPIManager.m */; };
-		049F68862899C5CF004CAD5D /* iTunesAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F68852899C5CF004CAD5D /* iTunesAPIManager.m */; };
+		049F6889289A0322004CAD5D /* DeezerAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F6888289A0322004CAD5D /* DeezerAPIManager.m */; };
+		049F688C289A0F4F004CAD5D /* SpotifyAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F688B289A0F4F004CAD5D /* SpotifyAPIManager.m */; };
+		049F688F289A0FE3004CAD5D /* AppleMusicAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F688E289A0FE3004CAD5D /* AppleMusicAPIManager.m */; };
 		04CC5470288B401200FC5707 /* UITableView+AnimationControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */; };
 		04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CC5473288B4F4D00FC5707 /* ParseLiveQueryManager.m */; };
 		04CEE28F288C7A4A00F821E8 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CEE28E288C7A4A00F821E8 /* Song.m */; };
@@ -148,10 +149,12 @@
 		049304B82877CB0B006AA9A3 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		049304C9287C8A04006AA9A3 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		049304CA287C8A04006AA9A3 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		049F687E2899C15B004CAD5D /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
-		049F687F2899C15B004CAD5D /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
-		049F68842899C5CF004CAD5D /* iTunesAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTunesAPIManager.h; sourceTree = "<group>"; };
-		049F68852899C5CF004CAD5D /* iTunesAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iTunesAPIManager.m; sourceTree = "<group>"; };
+		049F6887289A0322004CAD5D /* DeezerAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeezerAPIManager.h; sourceTree = "<group>"; };
+		049F6888289A0322004CAD5D /* DeezerAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeezerAPIManager.m; sourceTree = "<group>"; };
+		049F688A289A0F4F004CAD5D /* SpotifyAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifyAPIManager.h; sourceTree = "<group>"; };
+		049F688B289A0F4F004CAD5D /* SpotifyAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotifyAPIManager.m; sourceTree = "<group>"; };
+		049F688D289A0FE3004CAD5D /* AppleMusicAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleMusicAPIManager.h; sourceTree = "<group>"; };
+		049F688E289A0FE3004CAD5D /* AppleMusicAPIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppleMusicAPIManager.m; sourceTree = "<group>"; };
 		04BB98F52894FE2500533471 /* EnumeratedTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnumeratedTypes.h; sourceTree = "<group>"; };
 		04CC546E288B401200FC5707 /* UITableView+AnimationControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+AnimationControl.h"; sourceTree = "<group>"; };
 		04CC546F288B401200FC5707 /* UITableView+AnimationControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+AnimationControl.m"; sourceTree = "<group>"; };
@@ -454,10 +457,12 @@
 		049F687D2899C14F004CAD5D /* API */ = {
 			isa = PBXGroup;
 			children = (
-				049F687E2899C15B004CAD5D /* SpotifyAPIManager.h */,
-				049F687F2899C15B004CAD5D /* SpotifyAPIManager.m */,
-				049F68842899C5CF004CAD5D /* iTunesAPIManager.h */,
-				049F68852899C5CF004CAD5D /* iTunesAPIManager.m */,
+				049F6887289A0322004CAD5D /* DeezerAPIManager.h */,
+				049F6888289A0322004CAD5D /* DeezerAPIManager.m */,
+				049F688A289A0F4F004CAD5D /* SpotifyAPIManager.h */,
+				049F688B289A0F4F004CAD5D /* SpotifyAPIManager.m */,
+				049F688D289A0FE3004CAD5D /* AppleMusicAPIManager.h */,
+				049F688E289A0FE3004CAD5D /* AppleMusicAPIManager.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -738,6 +743,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049F6889289A0322004CAD5D /* DeezerAPIManager.m in Sources */,
 				04CEE28F288C7A4A00F821E8 /* Song.m in Sources */,
 				041824162894423E003962B6 /* UITableView+EmptyMessage.m in Sources */,
 				042D627328876ACC005DE8E7 /* Invitation.m in Sources */,
@@ -750,6 +756,7 @@
 				0417B5B12874E0B6001D6B04 /* RoomViewController.m in Sources */,
 				049304CB287C8A04006AA9A3 /* LoginViewController.m in Sources */,
 				04CC5470288B401200FC5707 /* UITableView+AnimationControl.m in Sources */,
+				049F688C289A0F4F004CAD5D /* SpotifyAPIManager.m in Sources */,
 				04DF2F4B288A1A5A00FD28E4 /* ParseQueryManager.m in Sources */,
 				04785C8028813094001AF277 /* AccountView.m in Sources */,
 				0422998E287D2FA70086612E /* LobbyViewController.m in Sources */,
@@ -767,15 +774,14 @@
 				0417B5C92874F5F2001D6B04 /* RoomCell.m in Sources */,
 				04CC5474288B4F4D00FC5707 /* ParseLiveQueryManager.m in Sources */,
 				04874A362898CEB8001B9BF5 /* MusicPlayerManager.m in Sources */,
-				049F68802899C15B004CAD5D /* SpotifyAPIManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */,
 				041823ED2891B58E003962B6 /* ImageConstants.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,
 				0417B56D2874B75F001D6B04 /* SceneDelegate.m in Sources */,
-				049F68862899C5CF004CAD5D /* iTunesAPIManager.m in Sources */,
 				04229991287D2FAF0086612E /* ConfigureViewController.m in Sources */,
+				049F688F289A0FE3004CAD5D /* AppleMusicAPIManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

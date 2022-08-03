@@ -9,58 +9,30 @@
 
 @implementation Track
 
-static NSString *const tracksJSONResponsePathName = @"tracks";
-static NSString *const itemsJSONResponsePathName = @"items";
-
-static NSString *const spotifyJSONResponseItemNameKey = @"name";
-static NSString *const spotifyJSONResponseISRCKey = @"isrc";
-static NSString *const spotifyJSONResponseExternalIdKey = @"external_ids";
-static NSString *const spotifyJSONResponseTrackURIKey = @"uri";
-static NSString *const spotifyJSONResponseTrackArtistKey = @"artists";
-static NSString *const spotifyJSONResponseArtistSeparatorString = @", ";
-static NSString *const spotifyJSONResponseTrackAlbumKey = @"album";
-static NSString *const spotifyJSONResponseAlbumImagesKey = @"images";
-static NSString *const spotifyJSONResponseAlbumImageURLKey = @"url";
-
-+ (NSArray *)tracksWithJSONResponse:(NSDictionary *)response {
-    NSDictionary *tracksJSONResponses = response[@"tracks"][@"items"];
-    NSMutableArray *tracks = [NSMutableArray array];
-    for (NSDictionary *trackJSONResponse in tracksJSONResponses) {
-        Track *track = [[Track alloc] initWithJSONResponse:trackJSONResponse];
-        [tracks addObject:track];
-    }
-    return tracks;
-}
-
-+ (Track *)trackWithJSONResponse:(NSDictionary *)response {
-    Track *track = [[Track alloc] initWithJSONResponse:response];
-    return track;
-}
-
-- (instancetype)initWithJSONResponse:(NSDictionary *)response {
+- (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImage:(UIImage *)albumImage {
     
     self = [super init];
     
     if (self) {
-        
-        _isrc = response[spotifyJSONResponseExternalIdKey][spotifyJSONResponseISRCKey];
-        _streamingId = response[spotifyJSONResponseTrackURIKey];
-        _title = response[spotifyJSONResponseItemNameKey];
-        
-        // format artists into one string
-        NSMutableArray <NSString *> *artists = [NSMutableArray array];
-        for (NSDictionary *artist in response[spotifyJSONResponseTrackArtistKey]) {
-            [artists addObject:artist[spotifyJSONResponseItemNameKey]];
-        }
-        _artist = [artists componentsJoinedByString:spotifyJSONResponseArtistSeparatorString];
-        
-        // get album details
-        NSDictionary *album = response[spotifyJSONResponseTrackAlbumKey];
-        NSString *albumImageURLString = [album[spotifyJSONResponseAlbumImagesKey] firstObject][spotifyJSONResponseAlbumImageURLKey];
-        NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
-        NSData *albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
-        _albumImage = [UIImage imageWithData:albumImageData];
-        
+        _isrc = isrc;
+        _streamingId = streamingId;
+        _title = title;
+        _artist = artist;
+        _albumImage = albumImage;
+    }
+    
+    return self;
+    
+}
+
+- (instancetype)initWithTitle:(NSString *)title artist:(NSString *)artist albumImage:(UIImage *)albumImage {
+    
+    self = [super init];
+    
+    if (self) {
+        _title = title;
+        _artist = artist;
+        _albumImage = albumImage;
     }
     
     return self;

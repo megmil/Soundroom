@@ -1,5 +1,5 @@
 //
-//  SpotifyAPIManager.h
+//  DeezerAPIManager.h
 //  Soundroom
 //
 //  Created by Megan Miller on 8/2/22.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SpotifyAPIManager : AFHTTPSessionManager <MusicCatalogManager>
+@interface DeezerAPIManager : AFHTTPSessionManager <MusicCatalogManager>
 
 + (instancetype)shared;
 
