@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ParseObjectManager : NSObject
 
-+ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningModeType)listeningMode;
++ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningMode)listeningMode;
 + (void)updateCurrentRoomWithISRC:(NSString *)isrc;
 + (void)deleteCurrentRoomAndAttachedObjects;
 

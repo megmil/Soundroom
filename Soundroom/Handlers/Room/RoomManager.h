@@ -35,7 +35,9 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 @property (strong, nonatomic, readonly, getter=queue) NSMutableArray <Song *> *queue;
 @property (strong, nonatomic, readonly, getter=currentTrack) Track *currentTrack;
 @property (strong, nonatomic, readonly, getter=currentTrackStreamingId) NSString *currentTrackStreamingId;
+@property (strong, nonatomic, readonly, getter=hostId) NSString *hostId;
 @property (nonatomic, readonly, getter=isCurrentUserHost) BOOL isCurrentUserHost;
+@property (nonatomic, readonly, getter=listeningMode) RoomListeningMode listeningMode;
 @property (nonatomic, weak) id<RoomManagerDelegate> delegate;
 
 + (instancetype)shared;

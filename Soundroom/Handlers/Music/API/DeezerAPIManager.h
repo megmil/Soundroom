@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DeezerAPIManager : AFHTTPSessionManager <MusicCatalogManager>
+@interface DeezerAPIManager : AFHTTPSessionManager <MusicAPIManager>
 
 + (instancetype)shared;
 - (void)getISRCWithDeezerId:(NSString *)deezerId completion:(void (^)(NSString *))completion;

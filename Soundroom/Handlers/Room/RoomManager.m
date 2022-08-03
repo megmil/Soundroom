@@ -500,6 +500,11 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 - (void)setCurrentTrack:(Track *)currentTrack {
     
     _currentTrack = currentTrack;
+    [self.delegate didUpdateCurrentTrack];
+    
+    if (![self isCurrentUserHost] && _room.listeningMode != RemoteMode) {
+        return;
+    }
     
     if (!currentTrack) {
         [[MusicPlayerManager shared] pausePlayback];
@@ -510,8 +515,6 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId]; // TODO: fix nil
         [MusicPlayerManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
     }
-    
-    [self.delegate didUpdateCurrentTrack];
     
 }
 
@@ -539,12 +542,8 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     return _currentTrack.streamingId;
 }
 
-- (BOOL)isCurrentUserHost {
-    NSString *currentUserId = [ParseUserManager currentUserId];
-    if (_room.hostId && currentUserId && currentUserId.length != 0) {
-        return [_room.hostId isEqualToString:currentUserId];
-    }
-    return NO;
+- (NSString *)hostId {
+    return _room.hostId;
 }
 
 @end

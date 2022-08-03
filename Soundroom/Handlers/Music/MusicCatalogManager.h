@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class Track;
 @class Request;
 
-@protocol MusicCatalogManager <NSObject>
+@protocol MusicAPIManager <NSObject>
 
 - (NSString *)searchURLString;
 - (NSString *)lookupURLStringWithISRC:(NSString *)isrc;
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MusicCatalogManager : NSObject
 
-@property (weak, nonatomic) AFHTTPSessionManager<MusicCatalogManager> *musicCatalog;
+@property (weak, nonatomic) AFHTTPSessionManager<MusicAPIManager> *musicCatalog;
 
 + (instancetype)shared;
 - (void)getTracksWithQuery:(NSString *)query completion:(void(^)(NSArray *tracks, NSError *error))completion;

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppleMusicAPIManager : AFHTTPSessionManager <MusicCatalogManager>
+@interface AppleMusicAPIManager : AFHTTPSessionManager <MusicAPIManager>
 
 + (instancetype)shared;
 

@@ -21,7 +21,7 @@
 
 # pragma mark - Room
 
-+ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningModeType)listeningMode {
++ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningMode)listeningMode {
     
     NSString *userId = [ParseUserManager currentUserId];
     

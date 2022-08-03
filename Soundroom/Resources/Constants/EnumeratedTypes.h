@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, RoomCellType) {
     HistoryCell
 };
 
-typedef NS_ENUM(NSUInteger, RoomListeningModeType) {
+typedef NS_ENUM(NSUInteger, RoomListeningMode) {
     PartyMode = 0,
     RemoteMode = 1
 };

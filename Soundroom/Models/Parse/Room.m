@@ -20,7 +20,7 @@
     return RoomClass;
 }
 
-- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId listeningMode:(RoomListeningModeType)listeningMode {
+- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId listeningMode:(RoomListeningMode)listeningMode {
     
     self = [super init];
     
