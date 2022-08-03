@@ -8,6 +8,7 @@
 #import "SpotifySessionManager.h"
 #import "MusicPlayerManager.h"
 #import "RoomManager.h"
+#import "ParseUserManager.h"
 #import "Track.h"
 
 static NSString *const silentTrackURI = @"spotify:track:7p5bQJB4XsZJEEn6Tb7EaL";
@@ -20,7 +21,6 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     SPTConfiguration *_configuration;
     SPTSessionManager *_sessionManager;
     SPTAppRemote *_appRemote;
-    NSInteger _crossfadeMilliseconds;
 }
 
 + (instancetype)shared {
@@ -122,11 +122,16 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 - (void)appRemoteDidEstablishConnection:(SPTAppRemote *)appRemote {
     
     _appRemote.playerAPI.delegate = self;
+    
+    SPTAppRemotePlaybackOptionsRepeatMode repeatMode = [ParseUserManager isCurrentUserHost] ? SPTAppRemotePlaybackOptionsRepeatModeOff : SPTAppRemotePlaybackOptionsRepeatModeTrack;
+    [_appRemote.playerAPI setRepeatMode:repeatMode callback:nil];
+    
     [_appRemote.playerAPI subscribeToPlayerState:^(id succeeded, NSError *error) {
         if (succeeded) {
             [self->_appRemote.playerAPI getPlayerState:^(id playerState, NSError *error) {
                 if (playerState) {
-                    [self handleNewPlayerState:playerState];
+                    [self updateMusicPlayerManagerWithPlayerState:playerState];
+                    [self validateCurrentTrackWithPlayerState:playerState];
                 }
             }];
         }
@@ -170,11 +175,6 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 
 # pragma mark - Helpers
 
-- (void)handleNewPlayerState:(id<SPTAppRemotePlayerState>)playerState {
-    [self updateMusicPlayerManagerWithPlayerState:playerState];
-    [[MusicPlayerManager shared] validateNewPlayerState];
-}
-
 - (void)updateMusicPlayerManagerWithPlayerState:(id<SPTAppRemotePlayerState>)playerState {
     NSString *streamingId = playerState.track.URI;
     BOOL isPlaying = !playerState.isPaused;
@@ -185,11 +185,30 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 - (void)checkIfCurrentSongEndedWithPlayerState:(id<SPTAppRemotePlayerState>)playerState {
     
     BOOL isPlaying = !playerState.isPaused;
-    NSInteger playbackPosition = playerState.playbackPosition / 1000; // position of playback in ms
+    NSInteger playbackPosition = playerState.playbackPosition; // position of playback in ms
     
     // check if current song ended
     if (playbackPosition == 0 && !isPlaying) {
         [[MusicPlayerManager shared] didEndCurrentSong];
+    }
+    
+}
+
+- (void)validateCurrentTrackWithPlayerState:(id<SPTAppRemotePlayerState>)playerState {
+    
+    NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
+    NSString *playerTrackId = playerState.track.URI;
+    BOOL isPlaying = !playerState.isPaused;
+    
+    // check if music player is playing the wrong song
+    if (isPlaying && ![roomTrackId isEqualToString:playerTrackId]) {
+        [self pausePlayback];
+        return;
+    }
+    
+    // if music player is playing the right song, resume
+    if (!isPlaying && roomTrackId != nil) {
+        [[MusicPlayerManager shared] resumePlayback];
     }
     
 }

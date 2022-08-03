@@ -50,7 +50,6 @@ extern NSString *const MusicPlayerManagerDeauthorizedNotificaton;
 - (void)resumePlayback;
 - (void)pausePlayback;
 - (void)didEndCurrentSong;
-- (void)validateNewPlayerState;
 
 - (void)didDisconnectRemote;
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;

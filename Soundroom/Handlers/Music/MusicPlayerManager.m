@@ -101,7 +101,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)resumePlayback {
     
-    if (![ParseUserManager shouldPlayMusic]  || _musicPlayer == NO) {
+    if (![ParseUserManager shouldPlayMusic]) {
         return;
     }
     
@@ -119,24 +119,6 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     }
     
     [self playTrackWithStreamingId:roomTrackId];
-    
-}
-
-- (void)validateNewPlayerState {
-    
-    NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
-    
-    // check if music player is playing the wrong song
-    if (_isPlaying && ![roomTrackId isEqualToString:_playerTrackId]) {
-        [[RoomManager shared] stopPlayback];
-        [self pausePlayback];
-        return;
-    }
-    
-    // if music player is playing the right song, resume
-    if (!_isPlaying && roomTrackId != nil) {
-        [self resumePlayback];
-    }
     
 }
 

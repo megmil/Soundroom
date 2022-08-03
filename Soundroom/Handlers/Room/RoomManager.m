@@ -501,7 +501,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 # pragma mark - Playback Helpers
 
 - (void)loadCurrentTrack {
-    if (_room.currentISRC) {
+    if (![_room.currentISRC isEqualToString:@""]) {
         [[MusicCatalogManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
             self.currentTrack = track;
         }];
