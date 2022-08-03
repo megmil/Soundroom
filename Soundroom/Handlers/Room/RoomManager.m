@@ -74,7 +74,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [Song songWithRequest:request completion:^(Song *song) {
         [self insertSong:song completion:^(NSUInteger index) {
             if (index != NSNotFound) {
-                [self.delegate didInsertSongAtIndex:index];
+                [self->_delegate didInsertSongAtIndex:index];
             }
         }];
     }];
@@ -88,7 +88,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     [_queue removeObjectAtIndex:index];
-    [self.delegate didDeleteSongAtIndex:index];
+    [_delegate didDeleteSongAtIndex:index];
     
 }
 
@@ -161,7 +161,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [_queue removeObjectAtIndex:oldIndex];
     [self insertSong:song completion:^(NSUInteger newIndex) {
         if (newIndex != NSNotFound) {
-            [self.delegate didMoveSongAtIndex:oldIndex toIndex:newIndex];
+            [_delegate didMoveSongAtIndex:oldIndex toIndex:newIndex];
         }
     }];
     
@@ -289,11 +289,11 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)stopPlayback {
     [ParseObjectManager updateCurrentRoomWithISRC:@""];
-    [self.delegate setPlayState:Paused];
+    [_delegate setPlayState:Paused];
 }
 
 - (void)updatePlayerWithPlayState:(PlayState)playState {
-    [self.delegate setPlayState:playState];
+    [_delegate setPlayState:playState];
 }
 
 # pragma mark - Room Helpers
@@ -310,7 +310,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     [self loadCurrentTrack];
     [self loadLocalQueueDataWithCompletion:^{
-        [self.delegate didLoadQueue];
+        [_delegate didLoadQueue];
     }];
     
 }
@@ -341,7 +341,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     [[ParseLiveQueryManager shared] clearRoomLiveSubscriptions];
     
-    [self.delegate didLeaveRoom];
+    [_delegate didLeaveRoom];
     
 }
 
@@ -500,21 +500,25 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 - (void)setCurrentTrack:(Track *)currentTrack {
     
     _currentTrack = currentTrack;
-    [self.delegate didUpdateCurrentTrack];
+    [_delegate didUpdateCurrentTrack];
     
-    if (![self isCurrentUserHost] && _room.listeningMode != RemoteMode) {
+    if (![ParseUserManager shouldPlayMusic]) {
         return;
     }
     
-    if (!currentTrack) {
+    if (currentTrack == nil) {
+        // pause playback if possible
         [[MusicPlayerManager shared] pausePlayback];
         return;
     }
     
-    if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
-        [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId]; // TODO: fix nil
-        [MusicPlayerManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
+    if (currentTrack.streamingId == nil) {
+        [_delegate showMissingPlayerAlert];
+        return;
     }
+    
+    [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId]; // TODO: fix nil
+    [MusicPlayerManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails?
     
 }
 

@@ -72,7 +72,6 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 - (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedMusicPlayerTokenNotification) name:MusicAPIManagerFailedAccessTokenNotification object:nil];
 }
 
 # pragma mark - Selectors
@@ -288,19 +287,35 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 # pragma mark - Alerts
 
-- (void)failedMusicPlayerTokenNotification {
+- (void)showMissingPlayerAlert {
     
     if (_didCancelAlerts) {
         return;
     }
     
-    NSString *title = @"Failed to authenticate";
-    NSString *message = @"Could not connect to Spotify in time to load queue data. Retry now or check status in your Profile.";
+    NSString *title = @"Music Player Not Found";
+    NSString *message = @"Could not resume playback. Please choose a streaming service or connect on the profile page.";
     
     UIAlertController *alert = [UIAlertController
                                 alertControllerWithTitle:title
                                 message:message
                                 preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *spotifyAction = [UIAlertAction
+                                    actionWithTitle:@"Spotify"
+                                    style:UIAlertActionStyleDefault
+                                    handler:^(UIAlertAction *action) {
+                                        [[MusicPlayerManager shared] setStreamingService:Spotify];
+                                        [[MusicPlayerManager shared] authorizeSession];
+                                    }];
+    
+    UIAlertAction *appleMusicAction = [UIAlertAction
+                                       actionWithTitle:@"Apple Music"
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action) {
+                                        [[MusicPlayerManager shared] setStreamingService:AppleMusic];
+                                        [[MusicPlayerManager shared] authorizeSession];
+                                    }];
     
     UIAlertAction *ignoreAction = [UIAlertAction
                                   actionWithTitle:@"Don't show again"
@@ -308,15 +323,9 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
                                   handler:^(UIAlertAction *action) {
                                     self->_didCancelAlerts = YES;
                                 }];
-    
-    UIAlertAction *retryAction = [UIAlertAction
-                                  actionWithTitle:@"Try Again"
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction *action) {
-                                    [[MusicPlayerManager shared] authorizeSession];
-                                }];
 
-    [alert addAction:retryAction];
+    [alert addAction:spotifyAction];
+    [alert addAction:appleMusicAction];
     [alert addAction:ignoreAction];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {

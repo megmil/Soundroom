@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString *const RoomManagerJoinedRoomNotification;
 
 @protocol RoomManagerDelegate
+
 - (void)didInsertSongAtIndex:(NSUInteger)index;
 - (void)didDeleteSongAtIndex:(NSUInteger)index;
 - (void)didMoveSongAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex;
@@ -26,6 +27,8 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)didLoadQueue;
 - (void)didLeaveRoom;
 - (void)setPlayState:(PlayState)playState;
+- (void)showMissingPlayerAlert;
+
 @end
 
 @interface RoomManager : NSObject

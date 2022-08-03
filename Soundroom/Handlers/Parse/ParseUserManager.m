@@ -99,7 +99,7 @@
     return [[RoomManager shared] currentRoomId]; // nil (or NO) if there is no room / room id
 }
 
-+ (BOOL)isHost {
++ (BOOL)isCurrentUserHost {
     
     NSString *userId = [self currentUserId];
     NSString *hostId = [[RoomManager shared] hostId];
@@ -114,7 +114,7 @@
 
 + (BOOL)shouldPlayMusic {
     RoomListeningMode listeningMode = [[RoomManager shared] listeningMode];
-    return [self isHost] || listeningMode == RemoteMode;
+    return [self isCurrentUserHost] || listeningMode == RemoteMode;
 }
 
 @end
