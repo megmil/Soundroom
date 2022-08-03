@@ -206,7 +206,6 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
         return;
     }
     
-    // if music player is playing the right song, resume
     if (!isPlaying && roomTrackId != nil) {
         [[MusicPlayerManager shared] resumePlayback];
     }
