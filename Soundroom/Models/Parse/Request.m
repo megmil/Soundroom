@@ -24,9 +24,9 @@
     self = [super init];
     
     if (self) {
+        self.isrc = isrc;
         self.roomId = roomId;
         self.userId = userId;
-        self.isrc = isrc;
     }
     
     return self;

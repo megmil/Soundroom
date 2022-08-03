@@ -13,7 +13,9 @@
 NSString *const MusicPlayerManagerAuthorizedNotificaton = @"MusicPlayerManagerAuthorizedNotificaton";
 NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManagerDeauthorizedNotificaton";
 
-@implementation MusicPlayerManager
+@implementation MusicPlayerManager {
+    NSString *_accessToken;
+}
 
 + (instancetype)shared {
     static MusicPlayerManager *sharedManager;
@@ -25,13 +27,14 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 }
 
 - (void)setStreamingService:(AccountType)streamingService {
-    if (streamingService == Spotify) {
-        _streamingService = Spotify;
-        _musicPlayer = [SpotifySessionManager shared];
-    } else if (streamingService == AppleMusic) {
-        _streamingService = AppleMusic;
-        _musicPlayer = [AppleMusicSessionManager shared];
+    
+    if (streamingService != Spotify && streamingService != AppleMusic) {
+        return;
     }
+    
+    _streamingService = streamingService;
+    _musicPlayer = (streamingService == Spotify) ? [SpotifySessionManager shared] : [AppleMusicSessionManager shared];
+
 }
 
 # pragma mark - Authentication
@@ -85,22 +88,18 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     
     // if there is no song to resume, play the top song
     NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
-    if (!roomTrackId) {
+    if (roomTrackId == nil) {
         [[RoomManager shared] playTopSong];
         return;
     }
     
-    // if the room and player songs match and the player is paused, resume
-    if ([roomTrackId isEqualToString:_playerTrackId] && !_isPlaying && _musicPlayer) {
+    // if the song is paused, resume playback
+    if ([roomTrackId isEqualToString:_playerTrackId]) {
         [_musicPlayer resumePlayback];
         return;
     }
     
-    // if there is a song to resume and it is not in the player, start playing it
-    if (!_playerTrackId) {
-        [_musicPlayer playTrackWithStreamingId:roomTrackId];
-        return;
-    }
+    [_musicPlayer playTrackWithStreamingId:roomTrackId];
     
 }
 
@@ -116,7 +115,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     }
     
     // if music player is playing the right song, resume
-    if (!_isPlaying && roomTrackId) {
+    if (!_isPlaying && roomTrackId != nil) {
         [self resumePlayback];
     }
     
@@ -138,6 +137,12 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     
 }
 
+- (void)didDisconnectRemote {
+    [self pausePlayback];
+    _playerTrackId = nil;
+    self.isPlaying = NO;
+}
+
 # pragma mark - Session Manager
 
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
@@ -146,7 +151,6 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     }
 }
 
-// TODO: does not resume when u come back
 - (void)sceneWillResignActive {
     if (_musicPlayer) {
         [_musicPlayer sceneWillResignActive];
@@ -163,6 +167,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)postAuthorizedNotification {
     _isSessionAuthorized = YES;
+    [[RoomManager shared] reloadCurrentTrackData];
     [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerAuthorizedNotificaton object:nil];
 }
 

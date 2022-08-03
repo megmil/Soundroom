@@ -9,6 +9,23 @@
 
 @implementation Track
 
+- (instancetype)initWithISRC:(NSString *)isrc title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL {
+    
+    self = [super init];
+    
+    if (self) {
+        
+        _isrc = isrc;
+        _title = title;
+        _artist = artist;
+        _albumImageURL = albumImageURL;
+        
+    }
+    
+    return self;
+    
+}
+
 - (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL {
     
     self = [super init];

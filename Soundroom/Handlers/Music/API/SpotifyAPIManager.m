@@ -69,12 +69,19 @@ static const NSNumber *lookupLimit = @(1);
 }
 
 - (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc {
+    
     NSString *query = [NSString stringWithFormat:isrcParameterFormat, isrc];
+    
+    if (token == nil) {
+        token = @"";
+    }
+    
     NSDictionary *parameters = @{tokenParameterName:token,
                                  limitParameterName:lookupLimit,
                                  queryParameterName:query,
                                  typeParameterName:trackTypeName};
     return parameters;
+    
 }
 
 # pragma mark - Decoding
@@ -87,6 +94,10 @@ static const NSNumber *lookupLimit = @(1);
         [tracks addObject:track];
     }
     return tracks;
+}
+
+- (Track *)trackWithJSONResponse:(NSDictionary *)response isrc:(NSString *)isrc {
+    return [self tracksWithJSONResponse:response].firstObject;
 }
 
 - (Track *)trackWithJSONResponse:(NSDictionary *)response {

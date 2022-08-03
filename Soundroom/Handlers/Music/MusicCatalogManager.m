@@ -44,7 +44,7 @@
     NSString *lookupURLString = [_musicCatalog lookupURLStringWithISRC:isrc];
     
     [_musicCatalog GET:lookupURLString parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask *task, id response) {
-        Track *track = [self->_musicCatalog trackWithJSONResponse:response];
+        Track *track = [self->_musicCatalog trackWithJSONResponse:response isrc:isrc];
         completion(track, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);

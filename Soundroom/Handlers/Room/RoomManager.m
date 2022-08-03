@@ -61,7 +61,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    if ([self isCurrentUserHost]) {
+    if ([ParseUserManager isCurrentUserHost]) {
         [self clearAllRoomData];
         return;
     }
@@ -161,7 +161,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [_queue removeObjectAtIndex:oldIndex];
     [self insertSong:song completion:^(NSUInteger newIndex) {
         if (newIndex != NSNotFound) {
-            [_delegate didMoveSongAtIndex:oldIndex toIndex:newIndex];
+            [self->_delegate didMoveSongAtIndex:oldIndex toIndex:newIndex];
         }
     }];
     
@@ -268,6 +268,12 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 # pragma mark - Music Player
 
+- (void)reloadCurrentTrackData {
+    [[MusicCatalogManager shared] getTrackWithISRC:_currentTrack.isrc completion:^(Track *track, NSError *error) {
+        self.currentTrack = track;
+    }];
+}
+
 - (void)playTopSong {
     
     if (_queue.count == 0) {
@@ -310,7 +316,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     [self loadCurrentTrack];
     [self loadLocalQueueDataWithCompletion:^{
-        [_delegate didLoadQueue];
+        [self->_delegate didLoadQueue];
     }];
     
 }
@@ -506,8 +512,9 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    if (currentTrack == nil) {
-        // pause playback if possible
+    if (currentTrack.title == nil) {
+        // track data was not loaded: pause playback if possible
+        _currentTrack = nil;
         [[MusicPlayerManager shared] pausePlayback];
         return;
     }

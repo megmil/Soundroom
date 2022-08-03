@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *artist;
 @property (nonatomic, strong) NSURL *albumImageURL;
 
+- (instancetype)initWithISRC:(NSString *)isrc title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL;
 - (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL;
 - (instancetype)initWithDeezerId:(NSString *)deezerId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL;
 

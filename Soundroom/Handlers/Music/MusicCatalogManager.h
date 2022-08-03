@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSDictionary *)searchParametersWithToken:(NSString *)token query:(NSString *)query;
 - (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc;
 - (NSArray <Track *> *)tracksWithJSONResponse:(NSDictionary *)response;
-- (Track *)trackWithJSONResponse:(NSDictionary *)response;
+- (Track *)trackWithJSONResponse:(NSDictionary *)response isrc:(NSString *)isrc;
 
 @end
 

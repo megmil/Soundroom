@@ -85,7 +85,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
         
         self->_roomView.hidden = NO;
         self->_roomView.roomName = [[RoomManager shared] currentRoomName];
-        if (![[RoomManager shared] isCurrentUserHost]) {
+        if (![ParseUserManager isCurrentUserHost]) {
             self->_roomView.playState = Disabled;
         }
         
@@ -124,12 +124,12 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
         self->_roomView.currentSongArtist = track.artist;
         self->_roomView.currentSongAlbumImageURL = track.albumImageURL;
         
-        if (![[RoomManager shared] isCurrentUserHost]) {
+        if (![ParseUserManager isCurrentUserHost]) {
             self->_roomView.playState = Disabled;
             return;
         }
         
-        self->_roomView.playState = track ? Playing : Paused;
+        self->_roomView.playState = (track.streamingId != nil) ? Playing : Paused; // TODO: issue
         
     });
 
@@ -258,7 +258,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // hosts can swipe to delete any cell
-    if ([[RoomManager shared] isCurrentUserHost]) {
+    if ([ParseUserManager isCurrentUserHost]) {
         return YES;
     }
     
@@ -341,7 +341,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     NSString *title = @"Leave Room";
     NSString *message = @"Are you sure you want to leave this room?";
     NSString *buttonMessage = @"Leave";
-    if ([[RoomManager shared] isCurrentUserHost]) {
+    if ([ParseUserManager isCurrentUserHost]) {
         title = @"End Session?";
         message = @"Are you sure you want to end this session?";
         buttonMessage = @"End";

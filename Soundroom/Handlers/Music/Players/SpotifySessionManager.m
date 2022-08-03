@@ -10,6 +10,7 @@
 #import "RoomManager.h"
 #import "Track.h"
 
+static NSString *const silentTrackURI = @"spotify:track:7p5bQJB4XsZJEEn6Tb7EaL";
 static NSString *const credentialsKeySpotifyClientId = @"spotify-client-id";
 static NSString *const credentialsKeySpotifyRedirectURL = @"spotify-redirect-url";
 static NSString *const credentialsKeySpotifyTokenSwapURL = @"spotify-token-swap-url";
@@ -19,6 +20,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     SPTConfiguration *_configuration;
     SPTSessionManager *_sessionManager;
     SPTAppRemote *_appRemote;
+    NSInteger _crossfadeMilliseconds;
 }
 
 + (instancetype)shared {
@@ -64,7 +66,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     _configuration = [[SPTConfiguration alloc] initWithClientID:clientId redirectURL:redirectURL];
     _configuration.tokenSwapURL = tokenSwapURL;
     _configuration.tokenRefreshURL = tokenRefreshURL;
-    _configuration.playURI = nil; // continues playing the most recent track (must be playing track to connect)
+    _configuration.playURI = silentTrackURI; // must be playing a track to connect
     
 }
 
@@ -111,6 +113,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 }
 
 - (void)sessionManager:(SPTSessionManager *)manager didFailWithError:(NSError *)error {
+    _appRemote.connectionParameters.accessToken = nil;
     [[MusicPlayerManager shared] setAccessToken:nil];
 }
 
@@ -119,7 +122,6 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 - (void)appRemoteDidEstablishConnection:(SPTAppRemote *)appRemote {
     
     _appRemote.playerAPI.delegate = self;
-    [_appRemote.playerAPI setRepeatMode:SPTAppRemotePlaybackOptionsRepeatModeOff callback:nil];
     [_appRemote.playerAPI subscribeToPlayerState:^(id succeeded, NSError *error) {
         if (succeeded) {
             [self->_appRemote.playerAPI getPlayerState:^(id playerState, NSError *error) {
@@ -133,11 +135,10 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 }
 
 - (void)appRemote:(SPTAppRemote *)appRemote didDisconnectWithError:(NSError *)error {
-    //
+    [[MusicPlayerManager shared] didDisconnectRemote];
 }
 
 - (void)appRemote:(SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(NSError *)error {
-    //
 }
 
 # pragma mark - SPTAppRemotePlayerStateDelegate
@@ -162,7 +163,7 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 
 - (void)sceneWillResignActive {
     if (_appRemote.isConnected) {
-        [self pausePlayback];
+        [[MusicPlayerManager shared] pausePlayback];
         [_appRemote disconnect];
     }
 }
@@ -185,10 +186,11 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     
     BOOL isPlaying = !playerState.isPaused;
     BOOL isSwitchingSong = [[MusicPlayerManager shared] isSwitchingSong];
-    NSUInteger remainingSeconds = playerState.playbackPosition / 1000;
+    
+    NSInteger playbackPosition = playerState.playbackPosition / 1000; // position of the playback in ms
     
     // check if current song ended
-    if (!isPlaying && remainingSeconds == 0 && !isSwitchingSong) {
+    if (!isPlaying && playbackPosition == 0 && !isSwitchingSong) {
         [[MusicPlayerManager shared] didEndCurrentSong];
     }
     

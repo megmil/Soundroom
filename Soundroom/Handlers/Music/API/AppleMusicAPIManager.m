@@ -88,6 +88,10 @@ static NSString *const appleMusicJSONResponseURLKey = @"url";
     return tracks;
 }
 
+- (Track *)trackWithJSONResponse:(NSDictionary *)response isrc:(NSString *)isrc {
+    return [self trackWithJSONResponse:response];
+}
+
 - (Track *)trackWithJSONResponse:(NSDictionary *)response {
     
     NSDictionary *trackData = response[appleMusicJSONResponseDataKey];
