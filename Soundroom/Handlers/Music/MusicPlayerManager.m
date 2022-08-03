@@ -7,6 +7,7 @@
 
 #import "MusicPlayerManager.h"
 #import "RoomManager.h"
+#import "ParseUserManager.h"
 #import "SpotifySessionManager.h"
 #import "AppleMusicSessionManager.h"
 
@@ -15,6 +16,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 @implementation MusicPlayerManager {
     NSString *_accessToken;
+    BOOL _isSwitchingSong;
 }
 
 + (instancetype)shared {
@@ -50,11 +52,15 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 }
 
 - (void)signOut {
+    
+    [self pausePlayback];
+    
     if (_musicPlayer && _isSessionAuthorized) {
         [_musicPlayer signOut];
         _streamingService = Deezer;
         [self postDeauthorizedNotification];
     }
+    
 }
 
 - (void)setAccessToken:(NSString *)accessToken {
@@ -73,18 +79,31 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 # pragma mark - Playback
 
 - (void)playTrackWithStreamingId:(NSString *)streamingId {
-    if (_musicPlayer) {
-        [_musicPlayer playTrackWithStreamingId:streamingId];
+    
+    if (![ParseUserManager shouldPlayMusic] || _musicPlayer == nil) {
+        return;
     }
+    
+    [_musicPlayer playTrackWithStreamingId:streamingId];
+    _isSwitchingSong = NO;
+    
 }
 
 - (void)pausePlayback {
-    if (_musicPlayer && _isPlaying) {
-        [_musicPlayer pausePlayback];
+    
+    if (![ParseUserManager shouldPlayMusic] || _musicPlayer == nil || !_isPlaying) {
+        return;
     }
+    
+    [_musicPlayer pausePlayback];
+    
 }
 
 - (void)resumePlayback {
+    
+    if (![ParseUserManager shouldPlayMusic]  || _musicPlayer == NO) {
+        return;
+    }
     
     // if there is no song to resume, play the top song
     NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
@@ -94,12 +113,12 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     }
     
     // if the song is paused, resume playback
-    if ([roomTrackId isEqualToString:_playerTrackId]) {
+    if (!_isPlaying && [roomTrackId isEqualToString:_playerTrackId]) {
         [_musicPlayer resumePlayback];
         return;
     }
     
-    [_musicPlayer playTrackWithStreamingId:roomTrackId];
+    [self playTrackWithStreamingId:roomTrackId];
     
 }
 
@@ -122,8 +141,15 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 }
 
 - (void)didEndCurrentSong {
-    [self pausePlayback]; // TODO: confirm app remote is not connected for non-playing members
+    
+    if (_isSwitchingSong == YES) {
+        return;
+    }
+    
+    _isSwitchingSong = YES;
+    [self pausePlayback];
     [[RoomManager shared] playTopSong];
+    
 }
 
 - (void)setIsPlaying:(BOOL)isPlaying {
@@ -152,15 +178,23 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 }
 
 - (void)sceneWillResignActive {
-    if (_musicPlayer) {
-        [_musicPlayer sceneWillResignActive];
+    
+    if (![ParseUserManager shouldPlayMusic] || _musicPlayer == nil) {
+        return;
     }
+    
+    [_musicPlayer sceneWillResignActive];
+    
 }
 
 - (void)sceneDidBecomeActive {
-    if (_musicPlayer) {
-        [_musicPlayer sceneDidBecomeActive];
+    
+    if (![ParseUserManager shouldPlayMusic] || _musicPlayer == nil) {
+        return;
     }
+    
+    [_musicPlayer sceneDidBecomeActive];
+    
 }
 
 # pragma mark - Helpers

@@ -38,7 +38,6 @@ extern NSString *const MusicPlayerManagerDeauthorizedNotificaton;
 @property (nonatomic, strong) NSString *playerTrackId;
 @property (nonatomic, strong, nullable) NSString *accessToken;
 @property (nonatomic) BOOL isPlaying;
-@property (nonatomic) BOOL isSwitchingSong;
 @property (nonatomic) BOOL isSessionAuthorized;
 
 + (instancetype)shared;

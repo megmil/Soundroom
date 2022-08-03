@@ -185,12 +185,10 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 - (void)checkIfCurrentSongEndedWithPlayerState:(id<SPTAppRemotePlayerState>)playerState {
     
     BOOL isPlaying = !playerState.isPaused;
-    BOOL isSwitchingSong = [[MusicPlayerManager shared] isSwitchingSong];
-    
-    NSInteger playbackPosition = playerState.playbackPosition / 1000; // position of the playback in ms
+    NSInteger playbackPosition = playerState.playbackPosition / 1000; // position of playback in ms
     
     // check if current song ended
-    if (!isPlaying && playbackPosition == 0 && !isSwitchingSong) {
+    if (playbackPosition == 0 && !isPlaying) {
         [[MusicPlayerManager shared] didEndCurrentSong];
     }
     

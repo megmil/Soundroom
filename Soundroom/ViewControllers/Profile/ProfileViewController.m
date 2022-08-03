@@ -85,6 +85,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 - (void)didTapUserLogout {
     [ParseUserManager logoutWithCompletion:^(NSError *error) {
         if (!error) {
+            [[MusicPlayerManager shared] signOut];
             [self goToLogin];
         }
     }];

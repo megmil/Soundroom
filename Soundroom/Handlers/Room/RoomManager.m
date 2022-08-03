@@ -276,13 +276,14 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)playTopSong {
     
+    if (![ParseUserManager isCurrentUserHost]) {
+        return;
+    }
+    
     if (_queue.count == 0) {
         [self stopPlayback];
         return;
     }
-    
-    // tell session manager that song is changing
-    [MusicPlayerManager shared].isSwitchingSong = YES;
     
     // get and remove first song from queue
     Song *topSong = _queue.firstObject;
@@ -294,12 +295,16 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 }
 
 - (void)stopPlayback {
-    [ParseObjectManager updateCurrentRoomWithISRC:@""];
-    [_delegate setPlayState:Paused];
+    if ([ParseUserManager isCurrentUserHost]) {
+        [ParseObjectManager updateCurrentRoomWithISRC:@""];
+        [_delegate setPlayState:Paused];
+    }
 }
 
 - (void)updatePlayerWithPlayState:(PlayState)playState {
-    [_delegate setPlayState:playState];
+    if ([ParseUserManager isCurrentUserHost]) {
+        [_delegate setPlayState:playState];
+    }
 }
 
 # pragma mark - Room Helpers
@@ -524,8 +529,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId]; // TODO: fix nil
-    [MusicPlayerManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails?
+    [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId];
     
 }
 
@@ -542,6 +546,10 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (NSMutableArray<Song *> *)queue {
     return _queue;
+}
+
+- (RoomListeningMode)listeningMode {
+    return _room.listeningMode;
 }
 
 // TODO: remove?
