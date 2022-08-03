@@ -47,9 +47,9 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 }
 
 - (void)signOut {
-    if (_musicPlayer) {
+    if (_musicPlayer && _isSessionAuthorized) {
         [_musicPlayer signOut];
-        _streamingService = LoggedOut;
+        _streamingService = Deezer;
         [self postDeauthorizedNotification];
     }
 }
@@ -59,12 +59,10 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     _accessToken = accessToken;
     
     if (accessToken) {
-        _isSessionAuthorized = YES;
         [self postAuthorizedNotification];
         return;
     }
     
-    _isSessionAuthorized = NO;
     [self postDeauthorizedNotification];
     
 }
@@ -85,24 +83,24 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)resumePlayback {
     
-    if (!_musicPlayer || _isPlaying) {
-        // TODO: must connect
+    // if there is no song to resume, play the top song
+    NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
+    if (!roomTrackId) {
+        [[RoomManager shared] playTopSong];
         return;
     }
     
-    NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
-    BOOL isMatched = roomTrackId && [roomTrackId isEqualToString:_playerTrackId];
-    if (isMatched) {
+    // if the room and player songs match and the player is paused, resume
+    if ([roomTrackId isEqualToString:_playerTrackId] && !_isPlaying && _musicPlayer) {
         [_musicPlayer resumePlayback];
         return;
     }
     
-    if (roomTrackId && !_playerTrackId) {
+    // if there is a song to resume and it is not in the player, start playing it
+    if (!_playerTrackId) {
         [_musicPlayer playTrackWithStreamingId:roomTrackId];
         return;
     }
-    
-    [[RoomManager shared] playTopSong];
     
 }
 
@@ -164,10 +162,13 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 # pragma mark - Helpers
 
 - (void)postAuthorizedNotification {
+    _isSessionAuthorized = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerAuthorizedNotificaton object:nil];
 }
 
 - (void)postDeauthorizedNotification {
+    _accessToken = nil;
+    _isSessionAuthorized = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerDeauthorizedNotificaton object:nil];
 }
 

@@ -63,7 +63,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 }
 
 - (void)configureStreamingServiceAccountView {
-    _streamingServiceAccountView.accountType = [[MusicPlayerManager shared] isSessionAuthorized] ? [[MusicPlayerManager shared] streamingService] : LoggedOut;
+    _streamingServiceAccountView.accountType = [[MusicPlayerManager shared] isSessionAuthorized] ? [[MusicPlayerManager shared] streamingService] : Deezer;
     _streamingServiceAccountView.delegate = self;
 }
 
@@ -114,7 +114,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 - (void)toggleSpotifyLoginStatus {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         BOOL isSessionAuthorized = [[MusicPlayerManager shared] isSessionAuthorized];
-        self->_streamingServiceAccountView.accountType = isSessionAuthorized ? [[MusicPlayerManager shared] streamingService] : LoggedOut;
+        self->_streamingServiceAccountView.accountType = isSessionAuthorized ? [[MusicPlayerManager shared] streamingService] : Deezer;
     });
 }
 

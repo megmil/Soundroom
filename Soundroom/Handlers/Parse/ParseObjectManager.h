@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)updateCurrentRoomWithISRC:(NSString *)isrc;
 + (void)deleteCurrentRoomAndAttachedObjects;
 
-+ (void)createRequestInCurrentRoomWithISRC:(NSString *)isrc;
++ (void)createRequestInCurrentRoomWithISRC:(NSString *)isrc deezerId:(NSString *)deezerId;
 + (void)deleteRequestWithId:(NSString *)requestId;
 
 + (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;

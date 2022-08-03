@@ -9,6 +9,7 @@
 #import "ParseUserManager.h"
 #import "ParseQueryManager.h"
 #import "ParseConstants.h"
+#import "DeezerAPIManager.h"
 #import "RoomManager.h"
 #import "Room.h"
 #import "Request.h"
@@ -77,17 +78,29 @@
 
 # pragma mark - Request
 
-+ (void)createRequestInCurrentRoomWithISRC:(NSString *)isrc {
++ (void)createRequestInCurrentRoomWithISRC:(NSString *)isrc deezerId:(NSString *)deezerId {
     
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!isrc || !userId || !roomId) {
+    if (!userId || !roomId) {
         return;
     }
     
-    Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
-    [newRequest saveInBackground];
+    if (isrc) {
+        Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
+        [newRequest saveInBackground];
+        return;
+    }
+    
+    if (!deezerId) {
+        return;
+    }
+    
+    [[DeezerAPIManager shared] getISRCWithDeezerId:deezerId completion:^(NSString *isrc) {
+        Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
+        [newRequest saveInBackground];
+    }];
     
 }
 

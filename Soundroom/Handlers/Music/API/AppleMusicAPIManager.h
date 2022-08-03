@@ -6,7 +6,7 @@
 //
 
 #import <AFNetworking/AFNetworking.h>
-#import "MusicAPIManager.h"
+#import "MusicCatalogManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

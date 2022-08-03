@@ -11,7 +11,7 @@
 #import "ParseQueryManager.h"
 #import "ParseConstants.h"
 #import "ParseLiveQueryManager.h"
-#import "MusicAPIManager.h"
+#import "MusicCatalogManager.h"
 #import "MusicPlayerManager.h"
 #import "Room.h"
 #import "Request.h"
@@ -99,7 +99,12 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [_upvoteIds addObject:upvote.objectId];
+    if (_upvoteIds.count != 0) {
+        [_upvoteIds addObject:upvote.objectId];
+    } else {
+        _upvoteIds = [NSMutableSet setWithObject:upvote.objectId];
+    }
+    
     [self incrementScoreForRequestWithId:upvote.requestId amount:@(1)];
     
 }
@@ -122,7 +127,12 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [_downvoteIds addObject:downvote.objectId];
+    if (_downvoteIds.count != 0) {
+        [_downvoteIds addObject:downvote.objectId];
+    } else {
+        _downvoteIds = [NSMutableSet setWithObject:downvote.objectId];
+    }
+    
     [self incrementScoreForRequestWithId:downvote.requestId amount:@(-1)];
     
 }
@@ -164,7 +174,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
+    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
         if (track) {
             self.currentTrack = track;
         }
@@ -222,7 +232,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             continue;
         }
         
-        [[MusicAPIManager shared] getTrackWithISRC:song.isrc completion:^(Track *track, NSError *error) {
+        [[MusicCatalogManager shared] getTrackWithISRC:song.isrc completion:^(Track *track, NSError *error) {
             
             song.track = track;
             
@@ -249,7 +259,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     NSString *isrc = _room.currentISRC;
-    [[MusicAPIManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
+    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
         self.currentTrack = track;
         completion();
     }];
@@ -260,7 +270,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)playTopSong {
     
-    if (!_queue.count) {
+    if (_queue.count == 0) {
         [self stopPlayback];
         return;
     }
@@ -343,14 +353,14 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     [ParseQueryManager getRequestsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         
-        if (!objects || !objects.count) {
+        if (!objects || objects.count == 0) {
             completion();
             return;
         }
         
         [Song songsWithRequests:objects completion:^(NSArray <Song *> *songs) {
             
-            if (!songs || !songs.count) {
+            if (!songs || songs.count == 0) {
                 completion();
                 return;
             }
@@ -382,7 +392,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     _upvoteIds = [NSMutableSet <NSString *> new];
     _downvoteIds = [NSMutableSet <NSString *> new];
     
-    if (!_queue || !_queue.count) {
+    if (!_queue || _queue.count == 0) {
         completion(result);
         return;
     }
@@ -481,7 +491,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)loadCurrentTrack {
     if (_room.currentISRC) {
-        [[MusicAPIManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
+        [[MusicCatalogManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
             self.currentTrack = track;
         }];
     }
@@ -497,7 +507,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
-        [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId];
+        [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId]; // TODO: fix nil
         [MusicPlayerManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
     }
     

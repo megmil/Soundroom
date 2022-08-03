@@ -8,7 +8,7 @@
 #import "Song.h"
 #import "Track.h"
 #import "Request.h"
-#import "MusicAPIManager.h"
+#import "MusicCatalogManager.h"
 
 NSString *const songScoreKey = @"score";
 
@@ -68,7 +68,7 @@ NSString *const songScoreKey = @"score";
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithISRC:request.isrc completion:^(Track *track, NSError *error) {
+    [[MusicCatalogManager shared] getTrackWithISRC:request.isrc completion:^(Track *track, NSError *error) {
         Song *song = [[Song alloc] initWithRequestId:request.objectId
                                               userId:request.userId
                                                  isrc:request.isrc

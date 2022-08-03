@@ -106,7 +106,7 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
     [ParseObjectManager deleteInvitationWithId:invitationId];
 }
 
-# pragma mark - Table View Delegate / Data Source
+# pragma mark - Table View
 
 - (void)configureTableView {
     _tableView.dataSource = self;
@@ -118,15 +118,8 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    if (!_invitationIds.count) {
-        [_tableView showEmptyMessageWithText:emptyTableMessage];
-    } else {
-        [_tableView removeEmptyMessage];
-    }
-    
+    !_invitationIds.count ? [_tableView showEmptyMessageWithText:emptyTableMessage] : [_tableView removeEmptyMessage];
     return _invitationIds.count;
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

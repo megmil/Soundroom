@@ -5,7 +5,7 @@
 //  Created by Megan Miller on 8/1/22.
 //
 
-#import "MusicAPIManager.h"
+#import "MusicCatalogManager.h"
 #import "MusicPlayerManager.h"
 #import "DeezerAPIManager.h"
 #import "SpotifyAPIManager.h"
@@ -13,12 +13,10 @@
 #import "Track.h"
 #import "Request.h"
 
-NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManagerFailedAccessTokenNotification";
-
-@implementation MusicAPIManager
+@implementation MusicCatalogManager
 
 + (instancetype)shared {
-    static MusicAPIManager *sharedManager;
+    static MusicCatalogManager *sharedManager;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedManager = [[self alloc] init];
@@ -72,20 +70,19 @@ NSString *const MusicAPIManagerFailedAccessTokenNotification = @"MusicAPIManager
 
 - (NSString *)validateStreamingService {
     
-    if ([[MusicPlayerManager shared] streamingService] == AppleMusic) {
+    AccountType streamingService = [[MusicPlayerManager shared] streamingService];
+    NSString *accessToken = [[MusicPlayerManager shared] accessToken];
+    
+    if (streamingService == AppleMusic) {
         _musicCatalog = [AppleMusicAPIManager shared];
-    } else if ([[MusicPlayerManager shared] streamingService] == Spotify) {
+    } else if (streamingService == Spotify) {
         _musicCatalog = [SpotifyAPIManager shared];
     } else {
         _musicCatalog = [DeezerAPIManager shared];
     }
     
-    return [[MusicPlayerManager shared] accessToken];
+    return accessToken;
     
-}
-
-- (void)postFailedAuthorizationNotification {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MusicAPIManagerFailedAccessTokenNotification object:nil];
 }
 
 @end

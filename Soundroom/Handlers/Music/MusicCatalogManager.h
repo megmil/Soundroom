@@ -14,8 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @class Track;
 @class Request;
 
-extern NSString *const MusicAPIManagerFailedAccessTokenNotification;
-
 @protocol MusicCatalogManager <NSObject>
 
 - (NSString *)searchURLString;
@@ -27,7 +25,7 @@ extern NSString *const MusicAPIManagerFailedAccessTokenNotification;
 
 @end
 
-@interface MusicAPIManager : NSObject
+@interface MusicCatalogManager : NSObject
 
 @property (weak, nonatomic) AFHTTPSessionManager<MusicCatalogManager> *musicCatalog;
 

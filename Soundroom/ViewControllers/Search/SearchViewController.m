@@ -6,7 +6,7 @@
 //
 
 #import "SearchViewController.h"
-#import "MusicAPIManager.h"
+#import "MusicCatalogManager.h"
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
 #import "ParseConstants.h" // TODO: remove?
@@ -58,7 +58,7 @@ static const NSUInteger emptySearchCount = 20;
     [self.view endEditing:YES];
 }
 
-- (void)didAddObjectWithId:(NSString *)objectId {
+- (void)didAddObjectWithId:(NSString *)objectId deezerId:(NSString *)deezerId {
     
     // warning if current user is not in a room
     if (![ParseUserManager isInRoom]) {
@@ -73,7 +73,7 @@ static const NSUInteger emptySearchCount = 20;
     }
     
     // request track in queue
-    [ParseObjectManager createRequestInCurrentRoomWithISRC:objectId];
+    [ParseObjectManager createRequestInCurrentRoomWithISRC:objectId deezerId:deezerId];
     
 }
 
@@ -98,6 +98,7 @@ static const NSUInteger emptySearchCount = 20;
         cell.subtitle = track.artist;
         cell.imageURL = track.albumImageURL;
         cell.objectId = track.isrc;
+        cell.deezerId = track.deezerId;
         return cell;
     }
     
@@ -140,7 +141,7 @@ static const NSUInteger emptySearchCount = 20;
 }
 
 - (void)searchTracksWithQuery:(NSString *)query {
-    [[MusicAPIManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
+    [[MusicCatalogManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
         if (tracks) {
             if ([query isEqualToString:self->_searchBar.text]) {
                 self->_tracks = (NSArray <Track *> *)tracks;

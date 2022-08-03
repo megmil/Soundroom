@@ -105,7 +105,7 @@ static NSString *const loggedOutName = @"Music Player";
     UIColor *const spotifyColor = [UIColor colorWithRed:29.f/225.f green:185.f/225.f blue:84.f/225.f alpha:1.f];
     UIColor *const appleMusicColor = [UIColor systemPinkColor];
     
-    BOOL isLoggedIn = (accountType != LoggedOut);
+    BOOL isLoggedIn = (accountType != Deezer);
     [self setIsLoggedIn:isLoggedIn];
     
     if (accountType == Soundroom) {
@@ -144,7 +144,7 @@ static NSString *const loggedOutName = @"Music Player";
 - (void)didTapActionButton {
     
     // if the user is not already logged in, must be music player login
-    if (_accountType == LoggedOut) {
+    if (_accountType == Deezer) {
         [self.delegate didTapMusicPlayerLogin];
         return;
     }

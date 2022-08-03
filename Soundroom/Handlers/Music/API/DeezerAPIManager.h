@@ -6,13 +6,14 @@
 //
 
 #import <AFNetworking/AFNetworking.h>
-#import "MusicAPIManager.h"
+#import "MusicCatalogManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DeezerAPIManager : AFHTTPSessionManager <MusicCatalogManager>
 
 + (instancetype)shared;
+- (void)getISRCWithDeezerId:(NSString *)deezerId completion:(void (^)(NSString *))completion;
 
 @end
 

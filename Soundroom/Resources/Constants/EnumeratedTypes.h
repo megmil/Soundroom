@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, AccountType) {
-    LoggedOut = 0,
+    Deezer = 0,
     Soundroom = 1,
     Spotify = 2,
     AppleMusic = 3
