@@ -9,7 +9,7 @@
 
 @implementation Track
 
-- (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImage:(UIImage *)albumImage {
+- (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL {
     
     self = [super init];
     
@@ -18,21 +18,21 @@
         _streamingId = streamingId;
         _title = title;
         _artist = artist;
-        _albumImage = albumImage;
+        _albumImageURL = albumImageURL;
     }
     
     return self;
     
 }
 
-- (instancetype)initWithTitle:(NSString *)title artist:(NSString *)artist albumImage:(UIImage *)albumImage {
+- (instancetype)initWithTitle:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL {
     
     self = [super init];
     
     if (self) {
         _title = title;
         _artist = artist;
-        _albumImage = albumImage;
+        _albumImageURL = albumImageURL;
     }
     
     return self;

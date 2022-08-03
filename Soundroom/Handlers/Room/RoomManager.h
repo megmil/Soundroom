@@ -6,12 +6,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Request.h"
-#import "Song.h" // need for votestate
-#import "Upvote.h"
-#import "Downvote.h"
+#import "EnumeratedTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class Request;
+@class Song;
+@class Upvote;
+@class Downvote;
+@class Track;
 
 extern NSString *const RoomManagerJoinedRoomNotification;
 
@@ -39,9 +42,9 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 
 # pragma mark - Room VCs
 
-- (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
+- (void)fetchCurrentRoomWithCompletion:(void (^)(BOOL isInRoom))completion;
+- (void)reloadTrackDataWithCompletion:(void (^)(void))completion;
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
-- (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion;
 - (void)playTopSong;
 
 # pragma mark - Music Player

@@ -62,25 +62,35 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
 
 - (void)fetchPendingRoomsWithCompletion:(PFBooleanResultBlock)completion {
     
+    __block NSMutableDictionary *invitationsWithRooms = [NSMutableDictionary new];
+    
     [ParseQueryManager getInvitationsPendingForCurrentUserWithCompletion:^(NSArray *invitations, NSError *error) {
         
-        if (!invitations || !invitations.count) {
+        __block NSUInteger counter = invitations.count;
+        
+        if (!invitations || !counter) {
             completion(NO, error);
             return;
         }
         
-        [ParseQueryManager getRoomsForInvitations:invitations completion:^(NSDictionary *invitationsWithRooms) {
+        for (Invitation *invitation in invitations) {
             
-            if (!invitationsWithRooms || !invitationsWithRooms.count) {
-                completion(NO, error);
-                return;
-            }
+            [ParseQueryManager getRoomWithId:invitation.roomId completion:^(PFObject *object, NSError *error) {
+                
+                if (object) {
+                    Room *room = (Room *)object;
+                    invitationsWithRooms[invitation.objectId] = room;
+                }
+                
+                if (--counter == 0) {
+                    self->_invitationIds = [invitations valueForKey:objectIdKey];
+                    self->_invitationsWithRooms = invitationsWithRooms;
+                    completion(YES, nil);
+                }
+                
+            }];
             
-            self->_invitationIds = [invitations valueForKey:objectIdKey];
-            self->_invitationsWithRooms = invitationsWithRooms;
-            completion(YES, nil);
-            
-        }];
+        }
         
     }];
     

@@ -8,6 +8,7 @@
 #import "SongCell.h"
 #import "ImageConstants.h"
 #import "ShimmerLayer.h"
+#import "UIImageView+AFNetworking.h"
 
 static NSString *const scoreEmptyLabel = @"0";
 
@@ -214,8 +215,8 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
     
     [_shimmerLayer maskWithViews:@[_imageView, _titleLabel, _subtitleLabel] frame:frame];
     
-    BOOL didLoadMaskViews = self.title.length != 0 && self.subtitle.length != 0 && self.image;
-    _imageView.image = didLoadMaskViews ? self.image : nil;
+    BOOL didLoadMaskViews = self.title.length != 0 && self.subtitle.length != 0;
+    _imageView.image = didLoadMaskViews ? _imageView.image : nil;
     _shimmerLayer.isAnimating = !didLoadMaskViews;
     
 }
@@ -230,6 +231,10 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
     _subtitleLabel.text = subtitle;
 }
 
+- (void)setImageURL:(NSURL *)imageURL {
+    [_imageView setImageWithURL:imageURL];
+}
+
 - (void)setImage:(UIImage *)image {
     _imageView.image = image;
 }
@@ -240,10 +245,6 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
 
 - (NSString *)subtitle {
     return _subtitleLabel.text;
-}
-
-- (UIImage *)image {
-    return _imageView.image;
 }
 
 - (void)setScore:(NSNumber *)score {

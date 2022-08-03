@@ -17,10 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *streamingId;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
-@property (nonatomic, strong) UIImage *albumImage;
+@property (nonatomic, strong) NSURL *albumImageURL;
 
-- (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImage:(UIImage *)albumImage;
-- (instancetype)initWithTitle:(NSString *)title artist:(NSString *)artist albumImage:(UIImage *)albumImage;
+- (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL;
+- (instancetype)initWithTitle:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL;
 
 @end
 

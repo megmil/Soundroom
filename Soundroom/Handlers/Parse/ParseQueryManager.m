@@ -9,9 +9,6 @@
 #import "ParseUserManager.h"
 #import "ParseConstants.h"
 #import "RoomManager.h"
-#import "Room.h"
-#import "Invitation.h"
-#import "Request.h"
 
 static const NSInteger searchLimit = 20;
 
@@ -66,30 +63,6 @@ static const NSInteger searchLimit = 20;
     [query getObjectInBackgroundWithId:roomId block:completion];
 }
 
-+ (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(void (^)(NSDictionary *invitationsWithRooms))completion {
-
-    __block NSMutableDictionary *invitationsWithRooms = [NSMutableDictionary new];
-    __block NSUInteger counter = invitations.count;
-    
-    for (Invitation *invitation in invitations) {
-        
-        [self getRoomWithId:invitation.roomId completion:^(PFObject *object, NSError *error) {
-            
-            if (object) {
-                Room *room = (Room *)object;
-                invitationsWithRooms[invitation.objectId] = room;
-            }
-            
-            if (--counter == 0) {
-                completion(invitationsWithRooms);
-            }
-            
-        }];
-        
-    }
-    
-}
-
 # pragma mark - Request
 
 + (void)getRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion {
@@ -101,17 +74,6 @@ static const NSInteger searchLimit = 20;
     PFQuery *query = [self queryForRequestsInCurrentRoom];
     [query orderByAscending:createdAtKey];
     [query findObjectsInBackgroundWithBlock:completion];
-}
-
-+ (void)getISRCForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion {
-    [self getRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
-        if (object) {
-            Request *request = (Request *)object;
-            completion(request.isrc, error);
-        } else {
-            completion(nil, error);
-        }
-    }];
 }
 
 # pragma mark - Vote

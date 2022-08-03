@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *subtitle;
 @property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSURL *imageURL;
 @property (strong, nonatomic) NSString *objectId;
 
 @property (nonatomic) VoteState voteState;

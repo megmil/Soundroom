@@ -446,10 +446,9 @@
 		049304A828762ADF006AA9A3 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
+				049F6890289A2347004CAD5D /* Room */,
 				04874A3E2898DA21001B9BF5 /* Music */,
 				042299A7287E7E170086612E /* Parse */,
-				04229998287DE1270086612E /* RoomManager.h */,
-				04229999287DE1270086612E /* RoomManager.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -465,6 +464,15 @@
 				049F688E289A0FE3004CAD5D /* AppleMusicAPIManager.m */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		049F6890289A2347004CAD5D /* Room */ = {
+			isa = PBXGroup;
+			children = (
+				04229998287DE1270086612E /* RoomManager.h */,
+				04229999287DE1270086612E /* RoomManager.m */,
+			);
+			path = Room;
 			sourceTree = "<group>";
 		};
 		04CC5471288B408F00FC5707 /* Extensions */ = {

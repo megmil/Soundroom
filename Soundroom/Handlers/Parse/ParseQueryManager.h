@@ -26,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // room
 + (void)getRoomWithId:(NSString *)roomId completion:(PFObjectResultBlock)completion;
-+ (void)getRoomsForInvitations:(NSArray <Invitation *> *)invitations completion:(void (^)(NSDictionary *invitationsWithRooms))completion;
 
 // request
 + (void)getRequestWithId:(NSString *)requestId completion:(PFObjectResultBlock)completion;
@@ -47,7 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)getInvitationsPendingForCurrentUserWithCompletion:(PFArrayResultBlock)completion;
 
 // key values
-+ (void)getISRCForRequestWithId:(NSString *)requestId completion:(PFStringResultBlock)completion; // TODO: remove?
 + (void)didCurrentUserAcceptRoomInvitationWithCompletion:(PFBooleanResultBlock)completion;
 + (void)didSendCurrentRoomInvitationToUserWithId:(NSString *)userId completion:(PFBooleanResultBlock)completion;
 

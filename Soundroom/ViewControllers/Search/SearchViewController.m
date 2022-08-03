@@ -96,7 +96,7 @@ static const NSUInteger emptySearchCount = 20;
         Track *track = _tracks[indexPath.row];
         cell.title = track.title;
         cell.subtitle = track.artist;
-        cell.image = track.albumImage;
+        cell.imageURL = track.albumImageURL;
         cell.objectId = track.isrc;
         return cell;
     }

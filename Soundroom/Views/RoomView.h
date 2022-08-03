@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *roomName;
 @property (strong, nonatomic) NSString *currentSongTitle;
 @property (strong, nonatomic) NSString *currentSongArtist;
-@property (strong, nonatomic) UIImage *currentSongAlbumImage;
+@property (strong, nonatomic) NSURL *currentSongAlbumImageURL;
 @property (nonatomic) PlayState playState;
 
 @property (nonatomic, weak) id<RoomViewDelegate> delegate;

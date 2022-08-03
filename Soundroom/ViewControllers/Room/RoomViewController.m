@@ -16,6 +16,7 @@
 #import "SongCell.h"
 #import "RoomView.h"
 #import "Track.h"
+#import "Song.h"
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 #import "UITableView+EmptyMessage.h"
@@ -52,8 +53,8 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (void)fetchCurrentRoom {
     // attempt to fetch room
-    [[RoomManager shared] fetchCurrentRoomWithCompletion:^(BOOL didFindRoom, NSError *error) {
-        if (!didFindRoom) {
+    [[RoomManager shared] fetchCurrentRoomWithCompletion:^(BOOL isInRoom) {
+        if (!isInRoom) {
             // if there is no room, present lobbyVC
             [self goToLobby];
         }
@@ -102,12 +103,10 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     });
     
     // reload track data
-    [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            self->_queue = [[RoomManager shared] queue];
-            [self updateCurrentTrackViews];
-            [self->_roomView.tableView reloadData];
-        }
+    [[RoomManager shared] reloadTrackDataWithCompletion:^(void) {
+        self->_queue = [[RoomManager shared] queue];
+        [self updateCurrentTrackViews];
+        [self->_roomView.tableView reloadData];
     }];
     
 }
@@ -117,7 +116,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     Track *track = [[RoomManager shared] currentTrack];
     _roomView.currentSongTitle = track.title;
     _roomView.currentSongArtist = track.artist;
-    _roomView.currentSongAlbumImage = track.albumImage;
+    _roomView.currentSongAlbumImageURL = track.albumImageURL;
     
     if (![[RoomManager shared] isCurrentUserHost]) {
         _roomView.playState = Disabled;
@@ -239,7 +238,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     // track data
     cell.title = song.track.title;
     cell.subtitle = song.track.artist;
-    cell.image = song.track.albumImage;
+    cell.imageURL = song.track.albumImageURL;
     [cell setNeedsLayout];
     
     return cell;

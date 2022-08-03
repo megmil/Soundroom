@@ -95,19 +95,17 @@ static NSString *const appleMusicJSONResponseURLKey = @"url";
     NSString *streamingId = trackData[appleMusicJSONResponseIdKey];
     NSString *title = trackData[appleMusicJSONResponseTitleKey];
     NSString *artist = trackData[appleMusicJSONResponseArtistKey];
-    UIImage *albumImage = [self albumImageWithTrackData:trackData];
+    NSURL *albumImageURL = [self albumImageURLWithTrackData:trackData];
     
-    Track *track = [[Track alloc] initWithISRC:isrc streamingId:streamingId title:title artist:artist albumImage:albumImage];
+    Track *track = [[Track alloc] initWithISRC:isrc streamingId:streamingId title:title artist:artist albumImageURL:albumImageURL];
     return track;
     
 }
 
-- (UIImage *)albumImageWithTrackData:(NSDictionary *)trackData {
+- (NSURL *)albumImageURLWithTrackData:(NSDictionary *)trackData {
     NSString *albumImageURLString = trackData[appleMusicJSONResponseAttributesKey][appleMusicJSONResponseArtworkKey][appleMusicJSONResponseURLKey];
     NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
-    NSData *albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
-    UIImage *albumImage = [UIImage imageWithData:albumImageData];
-    return albumImage;
+    return albumImageURL;
 }
 
 @end

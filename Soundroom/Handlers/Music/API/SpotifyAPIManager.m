@@ -95,20 +95,18 @@ static const NSNumber *lookupLimit = @(1);
     NSString *streamingId = response[spotifyJSONResponseIdKey];
     NSString *title = response[spotifyJSONResponseNameKey];
     NSString *artist = [self artistNamesWithJSONResponse:response];
-    UIImage *albumImage = [self albumImageWithJSONResponse:response];
+    NSURL *albumImageURL = [self albumImageURLWithJSONResponse:response];
     
-    Track *track = [[Track alloc] initWithISRC:isrc streamingId:streamingId title:title artist:artist albumImage:albumImage];
+    Track *track = [[Track alloc] initWithISRC:isrc streamingId:streamingId title:title artist:artist albumImageURL:albumImageURL];
     
     return track;
     
 }
 
-- (UIImage *)albumImageWithJSONResponse:(NSDictionary *)response {
+- (NSURL *)albumImageURLWithJSONResponse:(NSDictionary *)response {
     NSString *albumImageURLString = [response[spotifyJSONResponseAlbumKey][spotifyJSONResponseImagesKey] firstObject][spotifyJSONResponseURLKey];
     NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
-    NSData *albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
-    UIImage *albumImage = [UIImage imageWithData:albumImageData];
-    return albumImage;
+    return albumImageURL;
 }
 
 - (NSString *)artistNamesWithJSONResponse:(NSDictionary *)response {

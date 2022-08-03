@@ -79,20 +79,12 @@ static NSString *const deezerJSONResponseAlbumImageKey = @"cover";
     
     NSString *title = response[deezerJSONResponseTitleKey];
     NSString *artist = response[deezerJSONResponseArtistKey][deezerJSONResponseArtistNameKey];
-    UIImage *albumImage = [self albumImageWithJSONResponse:response];
-    
-    Track *track = [[Track alloc] initWithTitle:title artist:artist albumImage:albumImage];
-    
-    return track;
-    
-}
-
-- (UIImage *)albumImageWithJSONResponse:(NSDictionary *)response {
     NSString *albumImageURLString = response[deezerJSONResponseAlbumKey][deezerJSONResponseAlbumImageKey];
     NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
-    NSData *albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
-    UIImage *albumImage = [UIImage imageWithData:albumImageData];
-    return albumImage;
+    
+    Track *track = [[Track alloc] initWithTitle:title artist:artist albumImageURL:albumImageURL];
+    return track;
+    
 }
 
 @end

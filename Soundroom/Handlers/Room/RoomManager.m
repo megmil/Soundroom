@@ -14,6 +14,10 @@
 #import "MusicAPIManager.h"
 #import "MusicPlayerManager.h"
 #import "Room.h"
+#import "Request.h"
+#import "Song.h"
+#import "Upvote.h"
+#import "Downvote.h"
 #import "Track.h"
 #import "Invitation.h"
 
@@ -170,27 +174,38 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 # pragma mark - Public: Room Tab
 
-- (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion {
+- (void)fetchCurrentRoomWithCompletion:(void (^)(BOOL isInRoom))completion {
     
     [ParseQueryManager getInvitationAcceptedByCurrentUserWithCompletion:^(PFObject *object, NSError *error) {
         if (object) {
             // user is already in a room
-            completion(YES, error);
+            completion(YES);
             Invitation *invitation = (Invitation *)object;
             [self joinRoomWithId:invitation.roomId];
         } else {
             // user is not in a room
-            completion(NO, error);
+            completion(NO);
             [self clearLocalRoomData];
         }
     }];
     
 }
 
-- (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion {
+- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
+    
+    // update vote state
+    NSUInteger index = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
+    Song *song = [_queue objectAtIndex:index];
+    song.voteState = voteState;
+    
+    // create/delete upvote/downvote
+    [ParseObjectManager updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
+    
+}
+
+- (void)reloadTrackDataWithCompletion:(void (^)(void))completion {
     
     if (!_room) {
-        completion(NO, nil);
         return;
     }
     
@@ -222,34 +237,22 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)reloadCurrentTrackDataWithCompletion:(PFBooleanResultBlock)completion {
+- (void)reloadCurrentTrackDataWithCompletion:(void (^)(void))completion {
     
     if (!_room) {
-        completion(NO, nil);
         return;
     }
     
     if (_currentTrack) {
-        completion(YES, nil);
+        completion();
         return;
     }
     
-    [[MusicAPIManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
+    NSString *isrc = _room.currentISRC;
+    [[MusicAPIManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
         self.currentTrack = track;
-        completion(YES, nil);
+        completion();
     }];
-    
-}
-
-- (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState {
-    
-    // update vote state
-    NSUInteger index = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
-    Song *song = [_queue objectAtIndex:index];
-    song.voteState = voteState;
-    
-    // create/delete upvote/downvote
-    [ParseObjectManager updateCurrentUserVoteForRequestWithId:requestId voteState:voteState];
     
 }
 
