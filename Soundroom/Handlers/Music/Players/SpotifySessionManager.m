@@ -175,8 +175,10 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
 }
 
 - (void)updateMusicPlayerManagerWithPlayerState:(id<SPTAppRemotePlayerState>)playerState {
-    [[MusicPlayerManager shared] setPlayerTrackId:playerState.track.URI];
-    [[MusicPlayerManager shared] setIsPlaying:!playerState.isPaused];
+    NSString *streamingId = playerState.track.URI;
+    BOOL isPlaying = !playerState.isPaused;
+    [[MusicPlayerManager shared] setPlayerTrackId:streamingId];
+    [[MusicPlayerManager shared] setIsPlaying:isPlaying];
 }
 
 - (void)checkIfCurrentSongEndedWithPlayerState:(id<SPTAppRemotePlayerState>)playerState {

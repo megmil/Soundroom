@@ -148,6 +148,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     }
 }
 
+// TODO: does not resume when u come back
 - (void)sceneWillResignActive {
     if (_musicPlayer) {
         [_musicPlayer sceneWillResignActive];
