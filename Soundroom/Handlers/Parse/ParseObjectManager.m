@@ -9,6 +9,7 @@
 #import "ParseUserManager.h"
 #import "ParseQueryManager.h"
 #import "ParseConstants.h"
+#import "DeezerAPIManager.h"
 #import "RoomManager.h"
 #import "Room.h"
 #import "Request.h"
@@ -20,7 +21,7 @@
 
 # pragma mark - Room
 
-+ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningModeType)listeningMode {
++ (void)createRoomWithTitle:(NSString *)title listeningMode:(RoomListeningMode)listeningMode {
     
     NSString *userId = [ParseUserManager currentUserId];
     
@@ -37,7 +38,7 @@
     }];
 }
 
-+ (void)updateCurrentRoomWithSongWithSpotifyId:(NSString *)spotifyId {
++ (void)updateCurrentRoomWithISRC:(NSString *)isrc {
     
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
@@ -48,7 +49,7 @@
     [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
         if (object) {
             Room *room = (Room *)object;
-            [room setValue:spotifyId forKey:currentSongSpotifyIdKey];
+            [room setValue:isrc forKey:currentISRCKey];
             [room saveInBackground];
         }
     }];
@@ -77,17 +78,29 @@
 
 # pragma mark - Request
 
-+ (void)createRequestInCurrentRoomWithSpotifyId:(NSString *)spotifyId {
++ (void)createRequestInCurrentRoomWithISRC:(NSString *)isrc deezerId:(NSString *)deezerId {
     
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!spotifyId || !userId || !roomId) {
+    if (!userId || !roomId) {
         return;
     }
     
-    Request *newRequest = [[Request alloc] initWithSpotifyId:spotifyId roomId:roomId userId:userId];
-    [newRequest saveInBackground];
+    if (isrc) {
+        Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
+        [newRequest saveInBackground];
+        return;
+    }
+    
+    if (!deezerId) {
+        return;
+    }
+    
+    [[DeezerAPIManager shared] getISRCWithDeezerId:deezerId completion:^(NSString *isrc) {
+        Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
+        [newRequest saveInBackground];
+    }];
     
 }
 

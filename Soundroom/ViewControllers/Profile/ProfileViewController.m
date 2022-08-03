@@ -7,7 +7,7 @@
 
 #import "ProfileViewController.h"
 #import "AccountView.h"
-#import "SpotifySessionManager.h"
+#import "MusicPlayerManager.h"
 #import "ParseUserManager.h"
 #import "SceneDelegate.h"
 #import "ImageConstants.h"
@@ -23,7 +23,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet AccountView *soundroomAccountView;
-@property (weak, nonatomic) IBOutlet AccountView *spotifyAccountView;
+@property (weak, nonatomic) IBOutlet AccountView *streamingServiceAccountView;
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -32,61 +32,60 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 @implementation ProfileViewController
 
 - (void)viewDidLoad {
-    
+
     [super viewDidLoad];
-    
     [self configureUserViews];
-    [self configureAccountViews];
+    [self configureTableView];
+    [self configureSoundroomAccountView];
+    [self configureStreamingServiceAccountView];
     [self configureObservers];
     
 }
 
 - (void)configureUserViews {
-    
     _usernameLabel.text = [ParseUserManager currentUsername];
-    
     _avatarImageView.image = [ParseUserManager avatarImageForCurrentUser];
     _avatarImageView.layer.cornerRadius = CGRectGetWidth(_avatarImageView.frame) * cornerRadiusRatio;
     _avatarImageView.layer.masksToBounds = YES;
-    
+}
+
+- (void)configureTableView {
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:[RoomCell reuseIdentifier]];
     _tableView.layer.borderWidth = 1.8f;
     _tableView.layer.borderColor = [UIColor tertiarySystemBackgroundColor].CGColor;
-    
 }
 
-- (void)configureAccountViews {
-    
-    _soundroomAccountView.isUserAccountView = YES;
-    _soundroomAccountView.isLoggedIn = YES;
+- (void)configureSoundroomAccountView {
+    _soundroomAccountView.accountType = Soundroom;
     _soundroomAccountView.delegate = self;
-    
-    _spotifyAccountView.isUserAccountView = NO;
-    _spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
-    _spotifyAccountView.delegate = self;
-    
+}
+
+- (void)configureStreamingServiceAccountView {
+    _streamingServiceAccountView.accountType = [[MusicPlayerManager shared] isSessionAuthorized] ? [[MusicPlayerManager shared] streamingService] : Deezer;
+    _streamingServiceAccountView.delegate = self;
 }
 
 - (void)configureObservers {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:SpotifySessionManagerDeauthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleSpotifyLoginStatus) name:MusicPlayerManagerDeauthorizedNotificaton object:nil];
 }
 
 # pragma mark - AccountView
 
-- (void)didTapSpotifyLogin {
-    [[SpotifySessionManager shared] authorizeSession];
+- (void)didTapMusicPlayerLogin {
+    [self accountTypeAlert];
 }
 
-- (void)didTapSpotifyLogout {
-    [[SpotifySessionManager shared] signOut];
+- (void)didTapMusicPlayerLogout {
+    [[MusicPlayerManager shared] signOut];
 }
 
 - (void)didTapUserLogout {
     [ParseUserManager logoutWithCompletion:^(NSError *error) {
         if (!error) {
+            [[MusicPlayerManager shared] signOut];
             [self goToLogin];
         }
     }];
@@ -115,8 +114,39 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (void)toggleSpotifyLoginStatus {
     dispatch_async(dispatch_get_main_queue(), ^(void){
-        self->_spotifyAccountView.isLoggedIn = [[SpotifySessionManager shared] isSessionAuthorized];
+        BOOL isSessionAuthorized = [[MusicPlayerManager shared] isSessionAuthorized];
+        self->_streamingServiceAccountView.accountType = isSessionAuthorized ? [[MusicPlayerManager shared] streamingService] : Deezer;
     });
+}
+
+- (void)accountTypeAlert {
+    
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:@"Choose Player"
+                                message:@"Connect with Spotify or Apple Music?"
+                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *spotifyAction = [UIAlertAction
+                                    actionWithTitle:@"Spotify"
+                                    style:UIAlertActionStyleDefault
+                                    handler:^(UIAlertAction *action) {
+                                        [[MusicPlayerManager shared] setStreamingService:Spotify];
+                                        [[MusicPlayerManager shared] authorizeSession];
+        
+                                    }];
+    
+    UIAlertAction *appleMusicAction = [UIAlertAction
+                                       actionWithTitle:@"Apple Music"
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action) {
+                                           [[MusicPlayerManager shared] setStreamingService:AppleMusic];
+                                           [[MusicPlayerManager shared] authorizeSession];
+                                       }];
+
+    [alert addAction:spotifyAction];
+    [alert addAction:appleMusicAction];
+    [self presentViewController:alert animated:YES completion:nil];
+    
 }
 
 @end

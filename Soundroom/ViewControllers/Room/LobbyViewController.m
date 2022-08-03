@@ -62,25 +62,35 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
 
 - (void)fetchPendingRoomsWithCompletion:(PFBooleanResultBlock)completion {
     
+    __block NSMutableDictionary *invitationsWithRooms = [NSMutableDictionary new];
+    
     [ParseQueryManager getInvitationsPendingForCurrentUserWithCompletion:^(NSArray *invitations, NSError *error) {
         
-        if (!invitations || !invitations.count) {
+        __block NSUInteger counter = invitations.count;
+        
+        if (!invitations || !counter) {
             completion(NO, error);
             return;
         }
         
-        [ParseQueryManager getRoomsForInvitations:invitations completion:^(NSDictionary *invitationsWithRooms) {
+        for (Invitation *invitation in invitations) {
             
-            if (!invitationsWithRooms || !invitationsWithRooms.count) {
-                completion(NO, error);
-                return;
-            }
+            [ParseQueryManager getRoomWithId:invitation.roomId completion:^(PFObject *object, NSError *error) {
+                
+                if (object) {
+                    Room *room = (Room *)object;
+                    invitationsWithRooms[invitation.objectId] = room;
+                }
+                
+                if (--counter == 0) {
+                    self->_invitationIds = [invitations valueForKey:objectIdKey];
+                    self->_invitationsWithRooms = invitationsWithRooms;
+                    completion(YES, nil);
+                }
+                
+            }];
             
-            self->_invitationIds = [invitations valueForKey:objectIdKey];
-            self->_invitationsWithRooms = invitationsWithRooms;
-            completion(YES, nil);
-            
-        }];
+        }
         
     }];
     
@@ -96,7 +106,7 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
     [ParseObjectManager deleteInvitationWithId:invitationId];
 }
 
-# pragma mark - Table View Delegate / Data Source
+# pragma mark - Table View
 
 - (void)configureTableView {
     _tableView.dataSource = self;
@@ -108,15 +118,8 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    if (!_invitationIds.count) {
-        [_tableView showEmptyMessageWithText:emptyTableMessage];
-    } else {
-        [_tableView removeEmptyMessage];
-    }
-    
+    !_invitationIds.count ? [_tableView showEmptyMessageWithText:emptyTableMessage] : [_tableView removeEmptyMessage];
     return _invitationIds.count;
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -9,6 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, AccountType) {
+    Deezer = 0,
+    Soundroom = 1,
+    Spotify = 2,
+    AppleMusic = 3
+};
+
 typedef NS_ENUM(NSUInteger, PlayState) {
     Paused = 0,
     Playing = 1,
@@ -25,7 +32,7 @@ typedef NS_ENUM(NSUInteger, RoomCellType) {
     HistoryCell
 };
 
-typedef NS_ENUM(NSUInteger, RoomListeningModeType) {
+typedef NS_ENUM(NSUInteger, RoomListeningMode) {
     PartyMode = 0,
     RemoteMode = 1
 };

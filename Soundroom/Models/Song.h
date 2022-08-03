@@ -20,7 +20,7 @@ extern NSString *const songScoreKey;
 @property (nonatomic, strong) Track *track;
 @property (nonatomic, strong) NSString *requestId;
 @property (nonatomic, strong) NSString *userId;
-@property (nonatomic, strong) NSString *spotifyId;
+@property (nonatomic, strong) NSString *isrc;
 @property (nonatomic, strong) NSNumber *score;
 @property (nonatomic) VoteState voteState;
 

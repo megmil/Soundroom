@@ -10,6 +10,8 @@
 
 static NSString *const soundroomName = @"Soundroom";
 static NSString *const spotifyName = @"Spotify";
+static NSString *const appleMusicName = @"Apple Music";
+static NSString *const loggedOutName = @"Music Player";
 
 @implementation AccountView {
     UILabel *_appLabel;
@@ -95,44 +97,66 @@ static NSString *const spotifyName = @"Spotify";
     [self addSubview:_actionButton];
 }
 
-- (void)setIsUserAccountView:(BOOL)isUserAccountView {
+- (void)setAccountType:(AccountType)accountType {
+    
+    _accountType = accountType;
     
     UIColor *const soundroomColor = [UIColor systemIndigoColor];
     UIColor *const spotifyColor = [UIColor colorWithRed:29.f/225.f green:185.f/225.f blue:84.f/225.f alpha:1.f];
+    UIColor *const appleMusicColor = [UIColor systemPinkColor];
     
-    _isUserAccountView = isUserAccountView; // TODO: remove?
+    BOOL isLoggedIn = (accountType != Deezer);
+    [self setIsLoggedIn:isLoggedIn];
     
-    _appLabel.text = isUserAccountView ? soundroomName : spotifyName;
-    _appImageView.image = isUserAccountView ? [UIImage systemImageNamed:soundroomImageName] : [UIImage imageNamed:spotifyImageName];
-    self.backgroundColor = isUserAccountView ? soundroomColor : spotifyColor;
+    if (accountType == Soundroom) {
+        _appLabel.text = soundroomName;
+        _appImageView.image = [UIImage systemImageNamed:soundroomImageName];
+        self.backgroundColor = soundroomColor;
+        return;
+    }
+    
+    if (accountType == Spotify) {
+        _appLabel.text = spotifyName;
+        _appImageView.image = [UIImage imageNamed:spotifyImageName];
+        self.backgroundColor = spotifyColor;
+        return;
+    }
+    
+    if (accountType == AppleMusic) {
+        _appLabel.text = appleMusicName;
+        _appImageView.image = [UIImage systemImageNamed:appleMusicImageName];
+        self.backgroundColor = appleMusicColor;
+        return;
+    }
+    
+    _appLabel.text = loggedOutName;
+    _appImageView.image = [UIImage systemImageNamed:loggedOutImageName];
+    self.backgroundColor = soundroomColor;
     
 }
 
 - (void)setIsLoggedIn:(BOOL)isLoggedIn {
-    
-    _isLoggedIn = isLoggedIn; // TODO: remove?
-    
     _statusImageView.image = isLoggedIn ? [UIImage systemImageNamed:verifiedImageName] : [UIImage systemImageNamed:warningImageName];
     UIImage *actionButtonImage = isLoggedIn ? [UIImage systemImageNamed:logoutImageName] : [UIImage systemImageNamed:loginImageName];
     [_actionButton setImage:actionButtonImage forState:UIControlStateNormal];
-
 }
 
 - (void)didTapActionButton {
     
-    // if the user is not already logged in, must be spotify login
-    if (!self.isLoggedIn) {
-        [self.delegate didTapSpotifyLogin];
+    // if the user is not already logged in, must be music player login
+    if (_accountType == Deezer) {
+        [self.delegate didTapMusicPlayerLogin];
         return;
     }
     
-    // if self is a Soundroom account view, only action is logout
-    if (self.isUserAccountView) {
+    // if this is a Soundroom account view, only action is logout
+    if (_accountType == Soundroom) {
         [self.delegate didTapUserLogout];
         return;
     }
     
-    [self.delegate didTapSpotifyLogout];
+    [self.delegate didTapMusicPlayerLogout];
+    
 }
 
 @end

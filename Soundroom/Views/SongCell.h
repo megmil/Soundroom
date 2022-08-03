@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @protocol AddCellDelegate
-- (void)didAddObjectWithId:(NSString *)objectId;
+- (void)didAddObjectWithId:(NSString *)objectId deezerId:(NSString *)deezerId;
 @end
 
 @interface SongCell : UITableViewCell
@@ -23,8 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) SongCellType cellType;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *subtitle;
-@property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSURL *imageURL;
 @property (strong, nonatomic) NSString *objectId;
+
+@property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSString *deezerId;
 
 @property (nonatomic) VoteState voteState;
 @property (strong, nonatomic) NSNumber *score;

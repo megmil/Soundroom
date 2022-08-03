@@ -8,6 +8,7 @@
 #import "RoomView.h"
 #import "ImageConstants.h"
 #import "ShimmerLayer.h"
+#import "UIImageView+AFNetworking.h"
 
 static const CGFloat imageSize = 70.f;
 static const CGFloat cornerRadiusRatio = 0.06f;
@@ -215,7 +216,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 }
 
 - (void)refreshAnimations {
-    BOOL didLoadMaskViews = self.currentSongTitle.length != 0 && self.currentSongArtist.length != 0 && self.currentSongAlbumImage;
+    BOOL didLoadMaskViews = self.currentSongTitle.length != 0 && self.currentSongArtist.length != 0;
     _shimmerLayer.isAnimating = !didLoadMaskViews;
 }
 
@@ -233,8 +234,8 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     _songArtistLabel.text = currentSongArtist;
 }
 
-- (void)setCurrentSongAlbumImage:(UIImage *)currentSongAlbumImage {
-    _songImageView.image = currentSongAlbumImage;
+- (void)setCurrentSongAlbumImageURL:(NSURL *)currentSongAlbumImageURL {
+    [_songImageView setImageWithURL:currentSongAlbumImageURL];
 }
 
 - (void)setPlayState:(PlayState)playState {
@@ -259,10 +260,6 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (NSString *)currentSongArtist {
     return _songArtistLabel.text;
-}
-
-- (UIImage *)currentSongAlbumImage {
-    return _songImageView.image;
 }
 
 - (UITableView *)tableView {

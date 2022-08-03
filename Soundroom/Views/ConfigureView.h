@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL enabled;
 @property (strong, nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) RoomListeningModeType listeningMode;
+@property (nonatomic, readonly) RoomListeningMode listeningMode;
 @property (nonatomic, weak) id<ConfigureViewDelegate> delegate;
 
 @end

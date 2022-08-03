@@ -8,6 +8,7 @@
 #import "SongCell.h"
 #import "ImageConstants.h"
 #import "ShimmerLayer.h"
+#import "UIImageView+AFNetworking.h"
 
 static NSString *const scoreEmptyLabel = @"0";
 
@@ -162,7 +163,7 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
 # pragma mark - Buttons
 
 - (void)didTapAdd {
-    [self.addDelegate didAddObjectWithId:_objectId];
+    [self.addDelegate didAddObjectWithId:_objectId deezerId:_deezerId];
     _addButton.transform = CGAffineTransformMakeScale(1.4f, 1.4f);
     [UIView animateWithDuration:0.6
                           delay:0.1
@@ -214,12 +215,13 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
     
     [_shimmerLayer maskWithViews:@[_imageView, _titleLabel, _subtitleLabel] frame:frame];
     
-    BOOL didLoadMaskViews = self.title.length != 0 && self.subtitle.length != 0 && self.image;
+    BOOL didLoadMaskViews = self.title.length != 0 && self.subtitle.length != 0;
+    _imageView.image = didLoadMaskViews ? _imageView.image : nil;
     _shimmerLayer.isAnimating = !didLoadMaskViews;
     
 }
 
-# pragma mark - Setters
+# pragma mark - Properties
 
 - (void)setTitle:(NSString *)title {
     _titleLabel.text = title;
@@ -227,6 +229,10 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
 
 - (void)setSubtitle:(NSString *)subtitle {
     _subtitleLabel.text = subtitle;
+}
+
+- (void)setImageURL:(NSURL *)imageURL {
+    [_imageView setImageWithURL:imageURL];
 }
 
 - (void)setImage:(UIImage *)image {
@@ -239,10 +245,6 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
 
 - (NSString *)subtitle {
     return _subtitleLabel.text;
-}
-
-- (UIImage *)image {
-    return _imageView.image;
 }
 
 - (void)setScore:(NSNumber *)score {

@@ -11,9 +11,13 @@
 #import "ParseQueryManager.h"
 #import "ParseConstants.h"
 #import "ParseLiveQueryManager.h"
-#import "SpotifyAPIManager.h"
-#import "SpotifySessionManager.h"
+#import "MusicCatalogManager.h"
+#import "MusicPlayerManager.h"
 #import "Room.h"
+#import "Request.h"
+#import "Song.h"
+#import "Upvote.h"
+#import "Downvote.h"
 #import "Track.h"
 #import "Invitation.h"
 
@@ -21,8 +25,10 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 @implementation RoomManager {
     Room *_room;
-    NSMutableArray <Song *> *_queue;
     Track *_currentTrack;
+    NSMutableArray <Song *> *_queue;
+    NSMutableSet <NSString *> *_upvoteIds;
+    NSMutableSet <NSString *> *_downvoteIds;
 }
 
 + (instancetype)shared {
@@ -55,7 +61,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    if ([self isCurrentUserHost]) {
+    if ([ParseUserManager isCurrentUserHost]) {
         [self clearAllRoomData];
         return;
     }
@@ -68,19 +74,78 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [Song songWithRequest:request completion:^(Song *song) {
         [self insertSong:song completion:^(NSUInteger index) {
             if (index != NSNotFound) {
-                [self.delegate didInsertSongAtIndex:index];
+                [self->_delegate didInsertSongAtIndex:index];
             }
         }];
     }];
 }
 
 - (void)removeRequestWithId:(NSString *)requestId {
+    
     NSUInteger index = [[_queue valueForKey:requestIdKey] indexOfObject:requestId];
     if (index == NSNotFound) {
         return;
     }
+    
     [_queue removeObjectAtIndex:index];
-    [self.delegate didDeleteSongAtIndex:index];
+    [_delegate didDeleteSongAtIndex:index];
+    
+}
+
+- (void)addUpvote:(Upvote *)upvote {
+    
+    BOOL isDuplicate = [_upvoteIds containsObject:upvote.objectId];
+    if (isDuplicate) {
+        return;
+    }
+    
+    if (_upvoteIds.count != 0) {
+        [_upvoteIds addObject:upvote.objectId];
+    } else {
+        _upvoteIds = [NSMutableSet setWithObject:upvote.objectId];
+    }
+    
+    [self incrementScoreForRequestWithId:upvote.requestId amount:@(1)];
+    
+}
+
+- (void)deleteUpvote:(Upvote *)upvote {
+    
+    if (![_upvoteIds containsObject:upvote.objectId]) {
+        return;
+    }
+    
+    [_upvoteIds removeObject:upvote.objectId];
+    [self incrementScoreForRequestWithId:upvote.requestId amount:@(-1)];
+    
+}
+
+- (void)addDownvote:(Downvote *)downvote {
+    
+    BOOL isDuplicate = [_downvoteIds containsObject:downvote.objectId];
+    if (isDuplicate) {
+        return;
+    }
+    
+    if (_downvoteIds.count != 0) {
+        [_downvoteIds addObject:downvote.objectId];
+    } else {
+        _downvoteIds = [NSMutableSet setWithObject:downvote.objectId];
+    }
+    
+    [self incrementScoreForRequestWithId:downvote.requestId amount:@(-1)];
+    
+}
+
+- (void)deleteDownvote:(Downvote *)downvote {
+    
+    if (![_downvoteIds containsObject:downvote.objectId]) {
+        return;
+    }
+    
+    [_downvoteIds removeObject:downvote.objectId];
+    [self incrementScoreForRequestWithId:downvote.requestId amount:@(1)];
+    
 }
 
 - (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount {
@@ -96,24 +161,22 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [_queue removeObjectAtIndex:oldIndex];
     [self insertSong:song completion:^(NSUInteger newIndex) {
         if (newIndex != NSNotFound) {
-            [self.delegate didMoveSongAtIndex:oldIndex toIndex:newIndex];
+            [self->_delegate didMoveSongAtIndex:oldIndex toIndex:newIndex];
         }
     }];
-
+    
 }
 
-- (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId {
+- (void)updateCurrentTrackWithISRC:(NSString *)isrc {
     
-    if ([spotifyId isEqualToString:@""]) {
+    if (!isrc || [isrc isEqualToString:@""]) {
         self.currentTrack = nil;
-        [self.delegate didUpdateCurrentTrack];
         return;
     }
     
-    [[SpotifyAPIManager shared] getTrackWithSpotifyId:spotifyId completion:^(Track *track, NSError *error) {
+    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
         if (track) {
             self.currentTrack = track;
-            [self.delegate didUpdateCurrentTrack];
         }
     }];
     
@@ -121,72 +184,19 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 # pragma mark - Public: Room Tab
 
-- (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion {
+- (void)fetchCurrentRoomWithCompletion:(void (^)(BOOL isInRoom))completion {
     
     [ParseQueryManager getInvitationAcceptedByCurrentUserWithCompletion:^(PFObject *object, NSError *error) {
         if (object) {
             // user is already in a room
-            completion(YES, error);
+            completion(YES);
             Invitation *invitation = (Invitation *)object;
             [self joinRoomWithId:invitation.roomId];
         } else {
             // user is not in a room
-            completion(NO, error);
+            completion(NO);
             [self clearLocalRoomData];
         }
-    }];
-    
-}
-
-- (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion {
-    
-    if (!_room) {
-        completion(NO, nil);
-        return;
-    }
-    
-    __block NSUInteger remainingTracks = _queue.count;
-    
-    if (remainingTracks == 0) {
-        [self reloadCurrentTrackDataWithCompletion:completion];
-        return;
-    }
-    
-    for (Song *song in _queue) {
-        
-        if (song.track) {
-            continue;
-        }
-        
-        [[SpotifyAPIManager shared] getTrackWithSpotifyId:song.spotifyId completion:^(Track *track, NSError *error) {
-            
-            song.track = track;
-            
-            if (--remainingTracks == 0) {
-                [self reloadCurrentTrackDataWithCompletion:completion];
-            }
-            
-        }];
-        
-    }
-    
-}
-
-- (void)reloadCurrentTrackDataWithCompletion:(PFBooleanResultBlock)completion {
-    
-    if (!_room) {
-        completion(NO, nil);
-        return;
-    }
-    
-    if (_currentTrack) {
-        completion(YES, nil);
-        return;
-    }
-    
-    [[SpotifyAPIManager shared] getTrackWithSpotifyId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
-        self.currentTrack = track;
-        completion(YES, nil);
     }];
     
 }
@@ -203,34 +213,98 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-# pragma mark - Spotify App Remote
-
-- (void)playTopSong {
+- (void)reloadTrackDataWithCompletion:(void (^)(void))completion {
     
-    if (!_queue.count) {
-        [self stopPlayback];
+    if (!_room) {
         return;
     }
     
-    // tell session manager that song is changing
-    [SpotifySessionManager shared].isSwitchingSong = YES;
+    __block NSUInteger remainingTracks = _queue.count;
+    
+    if (remainingTracks == 0) {
+        [self reloadCurrentTrackDataWithCompletion:completion];
+        return;
+    }
+    
+    for (Song *song in _queue) {
+        
+        if (song.track) {
+            continue;
+        }
+        
+        [[MusicCatalogManager shared] getTrackWithISRC:song.isrc completion:^(Track *track, NSError *error) {
+            
+            song.track = track;
+            
+            if (--remainingTracks == 0) {
+                [self reloadCurrentTrackDataWithCompletion:completion];
+                return;
+            }
+            
+        }];
+        
+    }
+    
+}
+
+- (void)reloadCurrentTrackDataWithCompletion:(void (^)(void))completion {
+    
+    if (!_room) {
+        return;
+    }
+    
+    if (_currentTrack) {
+        completion();
+        return;
+    }
+    
+    NSString *isrc = _room.currentISRC;
+    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
+        self.currentTrack = track;
+        completion();
+    }];
+    
+}
+
+# pragma mark - Music Player
+
+- (void)reloadCurrentTrackData {
+    [[MusicCatalogManager shared] getTrackWithISRC:_currentTrack.isrc completion:^(Track *track, NSError *error) {
+        self.currentTrack = track;
+    }];
+}
+
+- (void)playTopSong {
+    
+    if (![ParseUserManager isCurrentUserHost]) {
+        return;
+    }
+    
+    if (_queue.count == 0) {
+        [self stopPlayback];
+        return;
+    }
     
     // get and remove first song from queue
     Song *topSong = _queue.firstObject;
     [ParseObjectManager deleteRequestWithId:topSong.requestId];
     
     // save current song to room
-    [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:topSong.spotifyId];
+    [ParseObjectManager updateCurrentRoomWithISRC:topSong.isrc];
     
 }
 
 - (void)stopPlayback {
-    [ParseObjectManager updateCurrentRoomWithSongWithSpotifyId:@""];
-    [self.delegate setPlayState:Paused];
+    if ([ParseUserManager isCurrentUserHost]) {
+        [ParseObjectManager updateCurrentRoomWithISRC:@""];
+        [_delegate setPlayState:Paused];
+    }
 }
 
 - (void)updatePlayerWithPlayState:(PlayState)playState {
-    [self.delegate setPlayState:playState];
+    if ([ParseUserManager isCurrentUserHost]) {
+        [_delegate setPlayState:playState];
+    }
 }
 
 # pragma mark - Room Helpers
@@ -247,7 +321,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     [self loadCurrentTrack];
     [self loadLocalQueueDataWithCompletion:^{
-        [self.delegate didLoadQueue];
+        [self->_delegate didLoadQueue];
     }];
     
 }
@@ -271,12 +345,14 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     // clear local room data
     _room = nil;
-    _queue = [NSMutableArray <Song *> array];
+    _queue = [NSMutableArray <Song *> new];
+    _upvoteIds = [NSMutableSet <NSString *> new];
+    _downvoteIds = [NSMutableSet <NSString *> new];
     _currentTrack = nil;
     
     [[ParseLiveQueryManager shared] clearRoomLiveSubscriptions];
     
-    [self.delegate didLeaveRoom];
+    [_delegate didLeaveRoom];
     
 }
 
@@ -288,14 +364,14 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     [ParseQueryManager getRequestsInCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
         
-        if (!objects || !objects.count) {
+        if (!objects || objects.count == 0) {
             completion();
             return;
         }
         
         [Song songsWithRequests:objects completion:^(NSArray <Song *> *songs) {
             
-            if (!songs || !songs.count) {
+            if (!songs || songs.count == 0) {
                 completion();
                 return;
             }
@@ -323,9 +399,11 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)loadLocalVoteDataWithCompletion:(void (^)(NSArray <Song *> *result))completion {
     
-    __block NSMutableArray <Song *> *result = [NSMutableArray <Song *> array];
+    __block NSMutableArray <Song *> *result = [NSMutableArray <Song *> new];
+    _upvoteIds = [NSMutableSet <NSString *> new];
+    _downvoteIds = [NSMutableSet <NSString *> new];
     
-    if (!_queue || !_queue.count) {
+    if (!_queue || _queue.count == 0) {
         completion(result);
         return;
     }
@@ -346,14 +424,19 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             
             for (Upvote *upvote in upvotes) {
                 
+                BOOL isDuplicate = [self->_upvoteIds containsObject:upvote.objectId];
                 NSUInteger index = [[result valueForKey:requestIdKey] indexOfObject:upvote.requestId];
                 
-                if (index != NSNotFound) {
+                if (index != NSNotFound && !isDuplicate) {
+                    
+                    [self->_upvoteIds addObject:upvote.objectId];
+                    
                     Song *song = result[index];
                     result[index].score = @(song.score.integerValue + 1);
                     if ([upvote.userId isEqualToString:currentUserId]) {
                         song.voteState = Upvoted;
                     }
+                    
                 }
                 
                 if (--remainingVotes == 0) {
@@ -364,14 +447,19 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
             
             for (Downvote *downvote in downvotes) {
                 
+                BOOL isDuplicate = [self->_downvoteIds containsObject:downvote.objectId];
                 NSUInteger index = [[result valueForKey:requestIdKey] indexOfObject:downvote.requestId];
                 
-                if (index != NSNotFound) {
+                if (index != NSNotFound && !isDuplicate) {
+                    
+                    [self->_downvoteIds addObject:downvote.objectId];
+                    
                     Song *song = result[index];
                     result[index].score = @(song.score.integerValue - 1);
                     if ([downvote.userId isEqualToString:currentUserId]) {
                         song.voteState = Downvoted;
                     }
+                    
                 }
                 
                 if (--remainingVotes == 0) {
@@ -413,8 +501,8 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 # pragma mark - Playback Helpers
 
 - (void)loadCurrentTrack {
-    if (_room.currentSongSpotifyId) {
-        [[SpotifyAPIManager shared] getTrackWithSpotifyId:_room.currentSongSpotifyId completion:^(Track *track, NSError *error) {
+    if (![_room.currentISRC isEqualToString:@""]) {
+        [[MusicCatalogManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
             self.currentTrack = track;
         }];
     }
@@ -423,16 +511,25 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 - (void)setCurrentTrack:(Track *)currentTrack {
     
     _currentTrack = currentTrack;
+    [_delegate didUpdateCurrentTrack];
     
-    if (!currentTrack) {
-        [[SpotifySessionManager shared] pausePlayback];
+    if (![ParseUserManager shouldPlayMusic]) {
         return;
     }
     
-    if ([self isCurrentUserHost] || _room.listeningMode == RemoteMode) {
-        [[SpotifySessionManager shared] playTrackWithSpotifyURI:currentTrack.spotifyURI];
-        [SpotifySessionManager shared].isSwitchingSong = NO; // TODO: switch before here if something fails
+    if (currentTrack.title == nil) {
+        // track data was not loaded: pause playback if possible
+        _currentTrack = nil;
+        [[MusicPlayerManager shared] pausePlayback];
+        return;
     }
+    
+    if (currentTrack.streamingId == nil) {
+        [_delegate showMissingPlayerAlert];
+        return;
+    }
+    
+    [[MusicPlayerManager shared] playTrackWithStreamingId:currentTrack.streamingId];
     
 }
 
@@ -451,20 +548,21 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     return _queue;
 }
 
+- (RoomListeningMode)listeningMode {
+    return _room.listeningMode;
+}
+
+// TODO: remove?
 - (Track *)currentTrack {
     return _currentTrack;
 }
 
-- (NSString *)currentTrackSpotifyURI {
-    return _currentTrack.spotifyURI;
+- (NSString *)currentTrackStreamingId {
+    return _currentTrack.streamingId;
 }
 
-- (BOOL)isCurrentUserHost {
-    NSString *currentUserId = [ParseUserManager currentUserId];
-    if (_room.hostId && currentUserId && currentUserId.length != 0) {
-        return [_room.hostId isEqualToString:currentUserId];
-    }
-    return NO;
+- (NSString *)hostId {
+    return _room.hostId;
 }
 
 @end

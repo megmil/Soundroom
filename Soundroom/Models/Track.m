@@ -9,65 +9,51 @@
 
 @implementation Track
 
-static NSString *const tracksJSONResponsePathName = @"tracks";
-static NSString *const itemsJSONResponsePathName = @"items";
-
-static NSString *const spotifyJSONResponseItemNameKey = @"name";
-static NSString *const spotifyJSONResponseTrackIdKey = @"id";
-static NSString *const spotifyJSONResponseTrackURIKey = @"uri";
-static NSString *const spotifyJSONResponseTrackArtistKey = @"artists";
-static NSString *const spotifyJSONResponseTrackAlbumKey = @"album";
-static NSString *const spotifyJSONResponseTrackDurationKey = @"duration_ms";
-static NSString *const spotifyJSONResponseArtistSeparatorString = @", ";
-static NSString *const spotifyJSONResponseAlbumImagesKey = @"images";
-static NSString *const spotifyJSONResponseAlbumImageURLKey = @"url";
-
-+ (NSArray *)tracksWithJSONResponse:(NSDictionary *)response {
-    NSDictionary *tracksJSONResponses = response[@"tracks"][@"items"];
-    NSMutableArray *tracks = [NSMutableArray array];
-    for (NSDictionary *trackJSONResponse in tracksJSONResponses) {
-        Track *track = [[Track alloc] initWithJSONResponse:trackJSONResponse];
-        [tracks addObject:track];
-    }
-    return tracks;
-}
-
-+ (Track *)trackWithJSONResponse:(NSDictionary *)response {
-    Track *track = [[Track alloc] initWithJSONResponse:response];
-    return track;
-}
-
-- (instancetype)initWithJSONResponse:(NSDictionary *)response {
+- (instancetype)initWithISRC:(NSString *)isrc title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL {
     
     self = [super init];
     
     if (self) {
         
-        self.spotifyId = response[spotifyJSONResponseTrackIdKey];
-        self.spotifyURI = response[spotifyJSONResponseTrackURIKey];
-        self.title = response[spotifyJSONResponseItemNameKey];
+        _isrc = isrc;
+        _title = title;
+        _artist = artist;
+        _albumImageURL = albumImageURL;
         
-        // format artists into one string
-        NSMutableArray <NSString *> *artists = [NSMutableArray array];
-        for (NSDictionary *artist in response[spotifyJSONResponseTrackArtistKey]) {
-            [artists addObject:artist[spotifyJSONResponseItemNameKey]];
-        }
-        self.artist = [artists componentsJoinedByString:spotifyJSONResponseArtistSeparatorString];
+    }
+    
+    return self;
+    
+}
+
+- (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL {
+    
+    self = [super init];
+    
+    if (self) {
         
-        // get album details
-        NSDictionary *album = response[spotifyJSONResponseTrackAlbumKey];
-        self.albumTitle = album[spotifyJSONResponseItemNameKey];
-        NSString *albumImageURLString = [album[spotifyJSONResponseAlbumImagesKey] firstObject][spotifyJSONResponseAlbumImageURLKey];
-        NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
-        NSData *albumImageData = [NSData dataWithContentsOfURL:albumImageURL];
-        self.albumImage = [UIImage imageWithData:albumImageData];
+        _isrc = isrc;
+        _streamingId = streamingId;
+        _title = title;
+        _artist = artist;
+        _albumImageURL = albumImageURL;
         
-        // format duration (ms) for display (mm:ss)
-        NSNumber *millisecondsNumber = [response valueForKey:spotifyJSONResponseTrackDurationKey];
-        int milliseconds = [millisecondsNumber intValue];
-        int minutes = milliseconds / 60000;
-        int seconds = (milliseconds % 60000) / 1000;
-        self.durationString = [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
+    }
+    
+    return self;
+    
+}
+
+- (instancetype)initWithDeezerId:(NSString *)deezerId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL {
+    
+    self = [super init];
+    
+    if (self) {
+        
+        _deezerId = deezerId;
+        _title = title;
+        _artist = artist;
+        _albumImageURL = albumImageURL;
         
     }
     

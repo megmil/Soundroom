@@ -12,7 +12,7 @@
 
 @dynamic roomId;
 @dynamic hostId;
-@dynamic currentSongSpotifyId;
+@dynamic currentISRC;
 @dynamic title;
 @dynamic listeningMode;
 
@@ -20,7 +20,7 @@
     return RoomClass;
 }
 
-- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId listeningMode:(RoomListeningModeType)listeningMode {
+- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId listeningMode:(RoomListeningMode)listeningMode {
     
     self = [super init];
     

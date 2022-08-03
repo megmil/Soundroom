@@ -6,17 +6,17 @@
 //
 
 #import "SearchViewController.h"
-#import "SpotifyAPIManager.h"
+#import "MusicCatalogManager.h"
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
-#import "ParseConstants.h"
-#import "ImageConstants.h"
-#import "EnumeratedTypes.h"
-#import "Track.h"
+#import "ParseConstants.h" // TODO: remove?
 #import "ParseObjectManager.h"
+#import "EnumeratedTypes.h" // TODO: remove?
 #import "SongCell.h"
-#import "UITableView+AnimationControl.h"
+#import "Track.h"
 #import "UITableView+ReuseIdentifier.h"
+
+static const NSUInteger emptySearchCount = 20;
 
 @interface SearchViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, AddCellDelegate>
 
@@ -58,7 +58,7 @@
     [self.view endEditing:YES];
 }
 
-- (void)didAddObjectWithId:(NSString *)objectId {
+- (void)didAddObjectWithId:(NSString *)objectId deezerId:(NSString *)deezerId {
     
     // warning if current user is not in a room
     if (![ParseUserManager isInRoom]) {
@@ -66,14 +66,14 @@
         return;
     }
     
-    // request song in queue
-    if (self.searchType == SearchTypeTrack) {
-        [ParseObjectManager createRequestInCurrentRoomWithSpotifyId:objectId];
+    // invite user to room
+    if ([self searchType] == SearchTypeUser) {
+        [ParseObjectManager createInvitationToCurrentRoomForUserWithId:objectId];
         return;
     }
     
-    // invite user to room
-    [ParseObjectManager createInvitationToCurrentRoomForUserWithId:objectId];
+    // request track in queue
+    [ParseObjectManager createRequestInCurrentRoomWithISRC:objectId deezerId:deezerId];
     
 }
 
@@ -96,8 +96,9 @@
         Track *track = _tracks[indexPath.row];
         cell.title = track.title;
         cell.subtitle = track.artist;
-        cell.image = track.albumImage;
-        cell.objectId = track.spotifyId;
+        cell.imageURL = track.albumImageURL;
+        cell.objectId = track.isrc;
+        cell.deezerId = track.deezerId;
         return cell;
     }
     
@@ -119,7 +120,7 @@
 
 - (void)sendSearchRequest {
     
-    NSString *searchText = _searchBar.text;
+    NSString *searchText = [_searchBar.text copy];
     
     if (searchText.length == 0) {
         [self clearSearchData];
@@ -127,20 +128,24 @@
     }
     
     if (self.searchType == SearchTypeTrack) {
+        _tracks = [self emptyTracks];
+        [_tableView reloadData];
         [self searchTracksWithQuery:searchText];
         return;
     }
     
+    _users = [self emptyUsers];
+    [_tableView reloadData];
     [self searchUsersWithQuery:searchText];
     
 }
 
 - (void)searchTracksWithQuery:(NSString *)query {
-    [[SpotifyAPIManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
+    [[MusicCatalogManager shared] getTracksWithQuery:query completion:^(NSArray *tracks, NSError *error) {
         if (tracks) {
             if ([query isEqualToString:self->_searchBar.text]) {
                 self->_tracks = (NSArray <Track *> *)tracks;
-                [self->_tableView reloadDataWithAnimation];
+                [self->_tableView reloadData];
             }
         }
     }];
@@ -151,7 +156,7 @@
         if (users) {
             if ([query isEqualToString:self->_searchBar.text]) {
                 self->_users = (NSArray <PFUser *> *)users;
-                [self->_tableView reloadDataWithAnimation];
+                [self->_tableView reloadData];
             }
         }
     }];
@@ -164,6 +169,24 @@
 }
 
 # pragma mark - Helpers
+
+- (NSArray <Track *> *)emptyTracks {
+    NSMutableArray <Track *> *tracks = [NSMutableArray new];
+    for (NSUInteger i = 0; i < emptySearchCount; i++) {
+        Track *track = [[Track alloc] init];
+        [tracks addObject:track];
+    }
+    return tracks;
+}
+
+- (NSArray <PFUser *> *)emptyUsers {
+    NSMutableArray <PFUser *> *users = [NSMutableArray new];
+    for (NSUInteger i = 0; i < emptySearchCount; i++) {
+        PFUser *user = [[PFUser alloc] init];
+        [users addObject:user];
+    }
+    return users;
+}
 
 - (SearchType)searchType {
     return _searchTypeControl.selectedSegmentIndex + 1;
@@ -182,6 +205,46 @@
 
     [alert addAction:action];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+# pragma mark - Reload Table
+
+// TODO: test if faster than reloadData
+- (void)replaceUnloadedArray:(NSMutableArray *)unloadedArray loadedArray:(NSArray *)loadedArray {
+
+    NSMutableArray <NSIndexPath *> *indexPathsToReconfigure = [NSMutableArray new];
+    NSMutableArray <NSIndexPath *> *indexPathsToDelete = [NSMutableArray new];
+    NSMutableArray <NSIndexPath *> *indexPathsToInsert = [NSMutableArray new];
+
+    while (unloadedArray.count > loadedArray.count) {
+        [unloadedArray removeLastObject];
+        NSUInteger row = unloadedArray.count - 1;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+        [indexPathsToDelete addObject:indexPath];
+    }
+
+    for (NSUInteger index = 0; index < loadedArray.count; index++) {
+
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+
+        if (index < unloadedArray.count) {
+            [unloadedArray replaceObjectAtIndex:index withObject:loadedArray[index]];
+            [indexPathsToReconfigure addObject:indexPath];
+            continue;
+        }
+
+        [unloadedArray addObject:loadedArray[index]];
+        [indexPathsToInsert addObject:indexPath];
+
+    }
+
+    // TODO: check query against searchBar.text again
+    [_tableView beginUpdates];
+    [_tableView reconfigureRowsAtIndexPaths:indexPathsToReconfigure];
+    [_tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView endUpdates];
+
 }
 
 @end

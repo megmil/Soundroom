@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *roomId;
 @property (nonatomic, strong) NSString *hostId;
-@property (nonatomic, strong) NSString *currentSongSpotifyId;
+@property (nonatomic, strong) NSString *currentISRC;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic) NSUInteger listeningMode;
 
-- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId listeningMode:(RoomListeningModeType)listeningMode;
+- (instancetype)initWithTitle:(NSString *)title hostId:(NSString *)hostId listeningMode:(RoomListeningMode)listeningMode;
 
 @end
 

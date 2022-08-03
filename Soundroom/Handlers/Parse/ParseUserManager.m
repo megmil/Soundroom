@@ -7,10 +7,10 @@
 
 #import "ParseUserManager.h"
 #import "ParseLiveQueryManager.h"
+#import "MusicPlayerManager.h"
+#import "RoomManager.h"
 #import "ParseConstants.h"
 #import "ImageConstants.h"
-#import "SpotifySessionManager.h"
-#import "RoomManager.h" // TODO: move isInRoom?
 
 @implementation ParseUserManager
 
@@ -43,7 +43,7 @@
 + (void)logoutWithCompletion:(PFUserLogoutResultBlock)completion {
     [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
         if (!error) {
-            [[SpotifySessionManager shared] signOut];
+            [[MusicPlayerManager shared] signOut];
             [[ParseLiveQueryManager shared] clearUserLiveSubscriptions];
             completion(nil);
         } else {
@@ -97,6 +97,24 @@
 
 + (BOOL)isInRoom {
     return [[RoomManager shared] currentRoomId]; // nil (or NO) if there is no room / room id
+}
+
++ (BOOL)isCurrentUserHost {
+    
+    NSString *userId = [self currentUserId];
+    NSString *hostId = [[RoomManager shared] hostId];
+    
+    if (userId == nil || hostId == nil) {
+        return NO;
+    }
+    
+    return [hostId isEqualToString:userId];
+    
+}
+
++ (BOOL)shouldPlayMusic {
+    RoomListeningMode listeningMode = [[RoomManager shared] listeningMode];
+    return [self isCurrentUserHost] || listeningMode == RemoteMode;
 }
 
 @end

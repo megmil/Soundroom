@@ -7,8 +7,8 @@
 
 #import "RoomViewController.h"
 #import "LobbyViewController.h"
-#import "SpotifyAPIManager.h"
-#import "SpotifySessionManager.h"
+#import "MusicCatalogManager.h"
+#import "MusicPlayerManager.h"
 #import "ParseObjectManager.h"
 #import "ParseUserManager.h"
 #import "RoomManager.h"
@@ -16,6 +16,7 @@
 #import "SongCell.h"
 #import "RoomView.h"
 #import "Track.h"
+#import "Song.h"
 #import "UITableView+AnimationControl.h"
 #import "UITableView+ReuseIdentifier.h"
 #import "UITableView+EmptyMessage.h"
@@ -26,6 +27,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
 @property (strong, nonatomic) NSArray <Song *> *queue;
+@property (nonatomic) BOOL didCancelAlerts;
 
 @end
 
@@ -39,19 +41,22 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     [self configureTableView];
     [self configureObservers];
     
+    _didCancelAlerts = NO;
     _roomView.delegate = self;
     [RoomManager shared].delegate = self;
     
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [_roomView refreshAnimations];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self->_roomView refreshAnimations];
+    });
 }
 
 - (void)fetchCurrentRoom {
     // attempt to fetch room
-    [[RoomManager shared] fetchCurrentRoomWithCompletion:^(BOOL didFindRoom, NSError *error) {
-        if (!didFindRoom) {
+    [[RoomManager shared] fetchCurrentRoomWithCompletion:^(BOOL isInRoom) {
+        if (!isInRoom) {
             // if there is no room, present lobbyVC
             [self goToLobby];
         }
@@ -66,8 +71,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:SpotifySessionManagerAuthorizedNotificaton object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failedSpotifyAuthenticationAlert) name:SpotifyAPIManagerFailedAccessTokenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
 }
 
 # pragma mark - Selectors
@@ -81,7 +85,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
         
         self->_roomView.hidden = NO;
         self->_roomView.roomName = [[RoomManager shared] currentRoomName];
-        if (![[RoomManager shared] isCurrentUserHost]) {
+        if (![ParseUserManager isCurrentUserHost]) {
             self->_roomView.playState = Disabled;
         }
         
@@ -100,28 +104,34 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     });
     
     // reload track data
-    [[RoomManager shared] reloadTrackDataWithCompletion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            self->_queue = [[RoomManager shared] queue];
-            [self updateCurrentTrackViews];
+    [[RoomManager shared] reloadTrackDataWithCompletion:^(void) {
+        self->_queue = [[RoomManager shared] queue];
+        [self updateCurrentTrackViews];
+        dispatch_async(dispatch_get_main_queue(), ^(void){
             [self->_roomView.tableView reloadData];
-        }
+        });
     }];
     
 }
 
 - (void)updateCurrentTrackViews {
+    
     Track *track = [[RoomManager shared] currentTrack];
-    _roomView.currentSongTitle = track.title;
-    _roomView.currentSongArtist = track.artist;
-    _roomView.currentSongAlbumImage = track.albumImage;
     
-    if (![[RoomManager shared] isCurrentUserHost]) {
-        _roomView.playState = Disabled;
-        return;
-    }
-    
-    _roomView.playState = track ? Playing : Paused;
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        
+        self->_roomView.currentSongTitle = track.title;
+        self->_roomView.currentSongArtist = track.artist;
+        self->_roomView.currentSongAlbumImageURL = track.albumImageURL;
+        
+        if (![ParseUserManager isCurrentUserHost]) {
+            self->_roomView.playState = Disabled;
+            return;
+        }
+        
+        self->_roomView.playState = (track.streamingId != nil) ? Playing : Paused; // TODO: issue
+        
+    });
 
 }
 
@@ -137,11 +147,11 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 # pragma mark - RoomView
 
 - (void)didTapPlay {
-    [[SpotifySessionManager shared] resumePlayback];
+    [[MusicPlayerManager shared] resumePlayback];
 }
 
 - (void)didTapPause {
-    [[SpotifySessionManager shared] pausePlayback];
+    [[MusicPlayerManager shared] pausePlayback];
 }
 
 - (void)didTapSkip {
@@ -167,10 +177,12 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 }
 
 - (void)didLeaveRoom {
-    self->_roomView.hidden = YES;
     self->_queue = @[];
-    [SpotifySessionManager.shared pausePlayback];
-    [self goToLobby];
+    [[MusicPlayerManager shared] pausePlayback]; // TODO: stop playback?
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_roomView.hidden = YES;
+        [self goToLobby];
+    });
 }
 
 - (void)didLoadQueue {
@@ -236,7 +248,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     // track data
     cell.title = song.track.title;
     cell.subtitle = song.track.artist;
-    cell.image = song.track.albumImage;
+    cell.imageURL = song.track.albumImageURL;
     [cell setNeedsLayout];
     
     return cell;
@@ -246,7 +258,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // hosts can swipe to delete any cell
-    if ([[RoomManager shared] isCurrentUserHost]) {
+    if ([ParseUserManager isCurrentUserHost]) {
         return YES;
     }
     
@@ -275,24 +287,46 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 # pragma mark - Alerts
 
-- (void)failedSpotifyAuthenticationAlert {
+- (void)showMissingPlayerAlert {
     
-    NSString *title = @"Failed to authenticate";
-    NSString *message = @"Could not connect to Spotify in time to load queue data. Retry now or check status in your Profile.";
+    if (_didCancelAlerts) {
+        return;
+    }
+    
+    NSString *title = @"Music Player Not Found";
+    NSString *message = @"Could not resume playback. Please choose a streaming service or connect on the profile page.";
     
     UIAlertController *alert = [UIAlertController
                                 alertControllerWithTitle:title
                                 message:message
                                 preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *retryButton = [UIAlertAction
-                                  actionWithTitle:@"Try Again"
-                                  style:UIAlertActionStyleDefault
+    UIAlertAction *spotifyAction = [UIAlertAction
+                                    actionWithTitle:@"Spotify"
+                                    style:UIAlertActionStyleDefault
+                                    handler:^(UIAlertAction *action) {
+                                        [[MusicPlayerManager shared] setStreamingService:Spotify];
+                                        [[MusicPlayerManager shared] authorizeSession];
+                                    }];
+    
+    UIAlertAction *appleMusicAction = [UIAlertAction
+                                       actionWithTitle:@"Apple Music"
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action) {
+                                        [[MusicPlayerManager shared] setStreamingService:AppleMusic];
+                                        [[MusicPlayerManager shared] authorizeSession];
+                                    }];
+    
+    UIAlertAction *ignoreAction = [UIAlertAction
+                                  actionWithTitle:@"Don't show again"
+                                  style:UIAlertActionStyleDestructive
                                   handler:^(UIAlertAction *action) {
-                                    [[SpotifySessionManager shared] authorizeSession];
+                                    self->_didCancelAlerts = YES;
                                 }];
 
-   [alert addAction:retryButton];
+    [alert addAction:spotifyAction];
+    [alert addAction:appleMusicAction];
+    [alert addAction:ignoreAction];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         // check that self is not already presenting an alert / view controller
@@ -307,7 +341,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     NSString *title = @"Leave Room";
     NSString *message = @"Are you sure you want to leave this room?";
     NSString *buttonMessage = @"Leave";
-    if ([[RoomManager shared] isCurrentUserHost]) {
+    if ([ParseUserManager isCurrentUserHost]) {
         title = @"End Session?";
         message = @"Are you sure you want to end this session?";
         buttonMessage = @"End";

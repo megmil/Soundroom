@@ -6,22 +6,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Track : NSObject
 
-@property (nonatomic, strong) NSString *spotifyId;
-@property (nonatomic, strong) NSString *spotifyURI;
+@property (nonatomic, strong) NSString *deezerId;
+@property (nonatomic, strong) NSString *isrc;
+@property (nonatomic, strong) NSString *streamingId;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *artist;
-@property (nonatomic, strong) NSString *albumTitle;
-@property (nonatomic, strong) UIImage *albumImage;
-@property (nonatomic, strong) NSString *durationString;
+@property (nonatomic, strong) NSURL *albumImageURL;
 
-+ (NSArray *)tracksWithJSONResponse:(NSDictionary *)response;
-+ (Track *)trackWithJSONResponse:(NSDictionary *)response;
+- (instancetype)initWithISRC:(NSString *)isrc title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL;
+- (instancetype)initWithISRC:(NSString *)isrc streamingId:(NSString *)streamingId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL;
+- (instancetype)initWithDeezerId:(NSString *)deezerId title:(NSString *)title artist:(NSString *)artist albumImageURL:(NSURL *)albumImageURL;
 
 @end
 

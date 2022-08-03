@@ -6,20 +6,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EnumeratedTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol AccountViewDelegate
-- (void)didTapSpotifyLogin;
-- (void)didTapSpotifyLogout;
+
+- (void)didTapMusicPlayerLogin;
+- (void)didTapMusicPlayerLogout;
 - (void)didTapUserLogout;
+
 @end
 
 @interface AccountView : UIView
 
-@property (nonatomic) BOOL isUserAccountView;
-@property (nonatomic) BOOL isLoggedIn;
-
+@property (nonatomic) AccountType accountType;
 @property (nonatomic, weak) id<AccountViewDelegate> delegate;
 
 @end

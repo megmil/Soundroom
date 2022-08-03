@@ -6,16 +6,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Request.h"
-#import "Song.h" // need for votestate
-#import "Upvote.h"
-#import "Downvote.h"
+#import "EnumeratedTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class Request;
+@class Song;
+@class Upvote;
+@class Downvote;
+@class Track;
 
 extern NSString *const RoomManagerJoinedRoomNotification;
 
 @protocol RoomManagerDelegate
+
 - (void)didInsertSongAtIndex:(NSUInteger)index;
 - (void)didDeleteSongAtIndex:(NSUInteger)index;
 - (void)didMoveSongAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex;
@@ -23,6 +27,8 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)didLoadQueue;
 - (void)didLeaveRoom;
 - (void)setPlayState:(PlayState)playState;
+- (void)showMissingPlayerAlert;
+
 @end
 
 @interface RoomManager : NSObject
@@ -31,32 +37,37 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 @property (strong, nonatomic, readonly, getter=currentRoomName) NSString *currentRoomName;
 @property (strong, nonatomic, readonly, getter=queue) NSMutableArray <Song *> *queue;
 @property (strong, nonatomic, readonly, getter=currentTrack) Track *currentTrack;
-@property (strong, nonatomic, readonly, getter=currentTrackSpotifyURI) NSString *currentTrackSpotifyURI;
-@property (nonatomic, readonly, getter=isCurrentUserHost) BOOL isCurrentUserHost;
+@property (strong, nonatomic, readonly, getter=currentTrackStreamingId) NSString *currentTrackStreamingId;
+@property (strong, nonatomic, readonly, getter=hostId) NSString *hostId;
+@property (nonatomic, readonly, getter=listeningMode) RoomListeningMode listeningMode;
 @property (nonatomic, weak) id<RoomManagerDelegate> delegate;
 
 + (instancetype)shared;
 
-# pragma mark - Room Tab Methods
+# pragma mark - Room VCs
 
-- (void)fetchCurrentRoomWithCompletion:(PFBooleanResultBlock)completion;
+- (void)fetchCurrentRoomWithCompletion:(void (^)(BOOL isInRoom))completion;
+- (void)reloadTrackDataWithCompletion:(void (^)(void))completion;
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
-- (void)reloadTrackDataWithCompletion:(PFBooleanResultBlock)completion;
 - (void)playTopSong;
 
-# pragma mark - Spotify Session Manager Methods
+# pragma mark - Music Player
 
 - (void)updatePlayerWithPlayState:(PlayState)playState;
 - (void)stopPlayback;
+- (void)reloadCurrentTrackData;
 
 # pragma mark - Live Query Event Handlers
 
+- (void)addUpvote:(Upvote *)upvote;
+- (void)deleteUpvote:(Upvote *)upvote;
+- (void)addDownvote:(Downvote *)downvote;
+- (void)deleteDownvote:(Downvote *)downvote;
 - (void)joinRoomWithId:(NSString *)currentRoomId;
 - (void)clearRoomData;
 - (void)insertRequest:(Request *)request;
 - (void)removeRequestWithId:(NSString *)requestId;
-- (void)incrementScoreForRequestWithId:(NSString *)requestId amount:(NSNumber *)amount;
-- (void)setCurrentTrackWithSpotifyId:(NSString *)spotifyId;
+- (void)updateCurrentTrackWithISRC:(NSString *)isrc;
 
 @end
 
