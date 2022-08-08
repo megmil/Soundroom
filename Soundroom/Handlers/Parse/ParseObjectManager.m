@@ -87,13 +87,13 @@
         return;
     }
     
-    if (isrc == nil || isrc.length != 0) {
+    if (isrc != nil || isrc.length != 0) {
         Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
         [newRequest saveInBackground];
         return;
     }
     
-    if (deezerId == nil || deezerId.length == 0) {
+    if (deezerId == nil) {
         return;
     }
     
