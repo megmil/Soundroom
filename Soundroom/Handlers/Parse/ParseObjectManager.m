@@ -47,9 +47,9 @@
     }
     
     [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
-        if (object) {
+        if (object != nil) {
             Room *room = (Room *)object;
-            [room setValue:isrc forKey:currentISRCKey];
+            [room setValue:isrc forKey:currentSongISRCKey];
             [room saveInBackground];
         }
     }];

@@ -175,7 +175,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
-        if (track) {
+        if (track != nil) {
             self.currentTrack = track;
         }
     }];
@@ -280,7 +280,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    if (_queue.count == 0) {
+    if (_queue == nil || _queue.count == 0) {
         [self stopPlayback];
         return;
     }
