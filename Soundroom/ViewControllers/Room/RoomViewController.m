@@ -31,16 +31,11 @@
 @implementation RoomViewController
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
-    
     [self fetchCurrentRoom];
     [self configureTableView];
     [self configureObservers];
-    
-    _roomView.delegate = self;
-    [RoomManager shared].delegate = self;
-    
+    [self configureDelegates];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -68,6 +63,11 @@
 - (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
+}
+
+- (void)configureDelegates {
+    _roomView.delegate = self;
+    [RoomManager shared].delegate = self;
 }
 
 # pragma mark - Selectors
