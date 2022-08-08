@@ -112,7 +112,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (void)configureRoomLabel {
     _roomNameLabel = [UILabel new];
-    _roomNameLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold]; // TODO: define font sizes
+    _roomNameLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold];
     [self addSubview:_roomNameLabel];
 }
 

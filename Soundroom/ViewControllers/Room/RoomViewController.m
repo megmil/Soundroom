@@ -125,7 +125,7 @@
             return;
         }
         
-        self->_roomView.playState = (track.streamingId != nil) ? Playing : Paused; // TODO: issue
+        self->_roomView.playState = (track.streamingId != nil) ? Playing : Paused;
         
     });
 
