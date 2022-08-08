@@ -25,7 +25,6 @@
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
 @property (strong, nonatomic) NSArray <Song *> *queue;
-@property (nonatomic) BOOL didCancelAlerts;
 
 @end
 
@@ -39,7 +38,6 @@
     [self configureTableView];
     [self configureObservers];
     
-    _didCancelAlerts = NO;
     _roomView.delegate = self;
     [RoomManager shared].delegate = self;
     
@@ -280,10 +278,6 @@
 
 - (void)missingPlayerAlert {
     
-    if (_didCancelAlerts) {
-        return;
-    }
-    
     NSString *title = @"Music Player Not Found";
     NSString *message = @"Could not resume playback. Please choose a streaming service or connect on the profile page.";
     
@@ -306,16 +300,14 @@
                                         [[MusicPlayerManager shared] setAccountType:AppleMusic];
                                     }];
     
-    UIAlertAction *ignoreAction = [UIAlertAction
-                                  actionWithTitle:@"Don't show again"
-                                  style:UIAlertActionStyleDestructive
-                                  handler:^(UIAlertAction *action) {
-                                    self->_didCancelAlerts = YES;
-                                }];
+    UIAlertAction *cancelAction = [UIAlertAction
+                                   actionWithTitle:@"Cancel"
+                                   style:UIAlertActionStyleDestructive
+                                   handler:^(UIAlertAction *action) { }];
 
     [alert addAction:spotifyAction];
     [alert addAction:appleMusicAction];
-    [alert addAction:ignoreAction];
+    [alert addAction:cancelAction];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         // check that self is not already presenting an alert / view controller
