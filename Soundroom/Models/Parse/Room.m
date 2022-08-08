@@ -12,7 +12,7 @@
 
 @dynamic objectId;
 @dynamic hostId;
-@dynamic currentISRC;
+@dynamic currentSongISRC;
 @dynamic title;
 @dynamic listeningMode;
 

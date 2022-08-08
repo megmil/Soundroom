@@ -44,7 +44,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)joinRoomWithId:(NSString *)roomId {
     
-    if (self.currentRoomId == roomId) {
+    if ([_room.objectId isEqualToString:roomId]) {
         return;
     }
     
@@ -228,11 +228,11 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     for (Song *song in _queue) {
         
-        if (song.track) {
+        if (song.track == nil || song.track.title.length != 0) {
             continue;
         }
         
-        [[MusicCatalogManager shared] getTrackWithISRC:song.isrc completion:^(Track *track, NSError *error) {
+        [[MusicCatalogManager shared] getTrackWithISRC:song.track.isrc completion:^(Track *track, NSError *error) {
             
             song.track = track;
             
@@ -249,16 +249,16 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)reloadCurrentTrackDataWithCompletion:(void (^)(void))completion {
     
-    if (!_room) {
+    if (_room == nil) {
         return;
     }
     
-    if (_currentTrack) {
+    if (_currentTrack != nil) {
         completion();
         return;
     }
     
-    NSString *isrc = _room.currentISRC;
+    NSString *isrc = _room.currentSongISRC;
     [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
         self.currentTrack = track;
         completion();
@@ -290,7 +290,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [ParseObjectManager deleteRequestWithId:topSong.requestId];
     
     // save current song to room
-    [ParseObjectManager updateCurrentRoomWithISRC:topSong.isrc];
+    [ParseObjectManager updateCurrentRoomWithISRC:topSong.track.isrc];
     
 }
 
@@ -501,8 +501,8 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 # pragma mark - Playback Helpers
 
 - (void)loadCurrentTrack {
-    if (![_room.currentISRC isEqualToString:@""]) {
-        [[MusicCatalogManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
+    if (![_room.currentSongISRC isEqualToString:@""]) {
+        [[MusicCatalogManager shared] getTrackWithISRC:_room.currentSongISRC completion:^(Track *track, NSError *error) {
             self.currentTrack = track;
         }];
     }
@@ -519,7 +519,6 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
     if (currentTrack.title == nil) {
         // track data was not loaded: pause playback if possible
-        _currentTrack = nil;
         [[MusicPlayerManager shared] pausePlayback];
         return;
     }

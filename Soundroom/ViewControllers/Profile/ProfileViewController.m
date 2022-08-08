@@ -130,8 +130,6 @@ static const CGFloat cornerRadiusRatio = 0.06f;
                                     style:UIAlertActionStyleDefault
                                     handler:^(UIAlertAction *action) {
                                         [[MusicPlayerManager shared] setAccountType:Spotify];
-                                        [[MusicPlayerManager shared] authorizeSession];
-        
                                     }];
     
     UIAlertAction *appleMusicAction = [UIAlertAction
@@ -139,7 +137,6 @@ static const CGFloat cornerRadiusRatio = 0.06f;
                                        style:UIAlertActionStyleDefault
                                        handler:^(UIAlertAction *action) {
                                            [[MusicPlayerManager shared] setAccountType:AppleMusic];
-                                           [[MusicPlayerManager shared] authorizeSession];
                                        }];
 
     [alert addAction:spotifyAction];

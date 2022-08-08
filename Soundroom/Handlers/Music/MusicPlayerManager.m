@@ -48,6 +48,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     
     _accountType = accountType;
     _musicPlayer = (accountType == Spotify) ? [SpotifySessionManager shared] : [AppleMusicSessionManager shared];
+    [self authorizeSession];
 
 }
 

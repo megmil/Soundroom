@@ -29,7 +29,7 @@
 
 - (void)didTapCreate {
     
-    if (_configureView.title.length == 0) {
+    if (_configureView.title == nil || _configureView.title.length == 0) {
         [self missingFieldAlert];
         return;
     }
@@ -37,10 +37,6 @@
     _configureView.enabled = NO;
     [ParseObjectManager createRoomWithTitle:_configureView.title listeningMode:_configureView.listeningMode];
     
-}
-
-- (void)didTapInvite {
-    // TODO: show searchVC, save invited users, then invite after room is created
 }
 
 - (IBAction)didTapScreen:(id)sender {

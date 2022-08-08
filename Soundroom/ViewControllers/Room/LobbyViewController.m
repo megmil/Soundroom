@@ -82,7 +82,7 @@ NSString *const LobbyViewControllerIdentifier = @"LobbyViewController";
             
             [ParseQueryManager getRoomWithId:invitation.roomId completion:^(PFObject *object, NSError *error) {
                 
-                if (object) {
+                if (object != nil) {
                     Room *room = (Room *)object;
                     invitationsWithRooms[invitation.objectId] = room;
                 }

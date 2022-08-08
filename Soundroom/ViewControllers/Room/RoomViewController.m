@@ -21,8 +21,6 @@
 #import "UITableView+ReuseIdentifier.h"
 #import "UITableView+EmptyMessage.h"
 
-static NSString *const emptyTableMessage = @"No songs are currently in the queue.";
-
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
@@ -224,7 +222,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if (!_queue.count) {
-        [_roomView.tableView showEmptyMessageWithText:emptyTableMessage];
+        [_roomView.tableView showEmptyMessageWithText:@"No songs are currently in the queue."];
     } else {
         [_roomView.tableView removeEmptyMessage];
     }
@@ -306,7 +304,6 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
                                     style:UIAlertActionStyleDefault
                                     handler:^(UIAlertAction *action) {
                                         [[MusicPlayerManager shared] setAccountType:Spotify];
-                                        [[MusicPlayerManager shared] authorizeSession];
                                     }];
     
     UIAlertAction *appleMusicAction = [UIAlertAction
@@ -314,7 +311,6 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
                                        style:UIAlertActionStyleDefault
                                        handler:^(UIAlertAction *action) {
                                         [[MusicPlayerManager shared] setAccountType:AppleMusic];
-                                        [[MusicPlayerManager shared] authorizeSession];
                                     }];
     
     UIAlertAction *ignoreAction = [UIAlertAction

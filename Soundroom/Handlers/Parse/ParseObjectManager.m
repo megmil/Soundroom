@@ -25,7 +25,7 @@
     
     NSString *userId = [ParseUserManager currentUserId];
     
-    if (userId.length == 0) {
+    if (userId == nil || userId.length == 0) {
         return;
     }
     
@@ -42,7 +42,7 @@
     
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (roomId.length == 0) {
+    if (roomId == nil || roomId.length == 0) {
         return;
     }
     
@@ -83,17 +83,17 @@
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (userId.length == 0 || roomId.length == 0) {
+    if (userId == nil || roomId == nil || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
-    if (isrc.length != 0) {
+    if (isrc == nil || isrc.length != 0) {
         Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
         [newRequest saveInBackground];
         return;
     }
     
-    if (deezerId.length == 0) {
+    if (deezerId == nil || deezerId.length == 0) {
         return;
     }
     
@@ -157,7 +157,7 @@
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (requestId.length == 0 || userId.length == 0 || roomId.length == 0) {
+    if (requestId == nil || userId == nil || roomId == nil || requestId.length == 0 || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
@@ -176,7 +176,7 @@
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (requestId.length == 0 || userId.length == 0 || roomId.length == 0) {
+    if (requestId == nil || userId == nil || roomId == nil || requestId.length == 0 || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
@@ -214,7 +214,7 @@
     
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (userId.length == 0 || roomId.length == 0) {
+    if (userId == nil || roomId == nil || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
@@ -232,7 +232,7 @@
     
     NSString *userId = [ParseUserManager currentUserId];
     
-    if (userId.length == 0 || roomId.length == 0) {
+    if (userId == nil || roomId == nil || userId.length == 0 || roomId.length == 0) {
         return;
     }
     

@@ -79,10 +79,13 @@ static const NSUInteger emptySearchCount = 20;
 # pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
     if (self.searchType == TrackSearch) {
         return _tracks.count;
     }
+    
     return _users.count;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -102,7 +105,7 @@ static const NSUInteger emptySearchCount = 20;
     }
     
     PFUser *user = _users[indexPath.row];
-    cell.title = user.username; // TODO: add display name
+    cell.title = user.username;
     cell.subtitle = user.username;
     cell.image = [ParseUserManager avatarImageForUser:user];
     cell.objectId = user.objectId;
@@ -121,7 +124,7 @@ static const NSUInteger emptySearchCount = 20;
     
     NSString *searchText = [_searchBar.text copy];
     
-    if (searchText.length == 0) {
+    if (searchText == nil || searchText.length == 0) {
         [self clearSearchData];
         return;
     }
@@ -209,7 +212,7 @@ static const NSUInteger emptySearchCount = 20;
 # pragma mark - Reload Table
 
 // TODO: test if faster than reloadData
-- (void)replaceUnloadedArray:(NSMutableArray *)unloadedArray loadedArray:(NSArray *)loadedArray {
+- (void)replaceUnloadedArray:(NSMutableArray *)unloadedArray loadedArray:(NSArray *)loadedArray query:(NSString *)query {
 
     NSMutableArray <NSIndexPath *> *indexPathsToReconfigure = [NSMutableArray new];
     NSMutableArray <NSIndexPath *> *indexPathsToDelete = [NSMutableArray new];
@@ -237,12 +240,13 @@ static const NSUInteger emptySearchCount = 20;
 
     }
 
-    // TODO: check query against searchBar.text again
-    [_tableView beginUpdates];
-    [_tableView reconfigureRowsAtIndexPaths:indexPathsToReconfigure];
-    [_tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationNone];
-    [_tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:UITableViewRowAnimationNone];
-    [_tableView endUpdates];
+    if ([query isEqualToString:_searchBar.text]) {
+        [_tableView beginUpdates];
+        [_tableView reconfigureRowsAtIndexPaths:indexPathsToReconfigure];
+        [_tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView endUpdates];
+    }
 
 }
 

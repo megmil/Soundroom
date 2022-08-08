@@ -94,7 +94,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (roomId.length == 0) {
+    if (roomId == nil || roomId.length == 0) {
         return;
     }
     
@@ -104,7 +104,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     // room is updated: new current song
     _roomSubscription = [_roomSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Room *room = (Room *)object;
-        [[RoomManager shared] updateCurrentTrackWithISRC:room.currentISRC];
+        [[RoomManager shared] updateCurrentTrackWithISRC:room.currentSongISRC];
     }];
 
 }
@@ -169,7 +169,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (roomId.length == 0) {
+    if (roomId == nil || roomId.length == 0) {
         return;
     }
     
@@ -200,7 +200,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (roomId.length == 0) {
+    if (roomId == nil || roomId.length == 0) {
         return;
     }
     
@@ -229,7 +229,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (roomId.length == 0) {
+    if (roomId == nil || roomId.length == 0) {
         return;
     }
     

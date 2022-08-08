@@ -12,7 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ConfigureViewDelegate
 - (void)didTapCreate;
-- (void)didTapInvite;
 @end
 
 @interface ConfigureView : UIView

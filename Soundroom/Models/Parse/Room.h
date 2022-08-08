@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *objectId;
 @property (nonatomic, strong) NSString *hostId;
-@property (nonatomic, strong) NSString *currentISRC;
+@property (nonatomic, strong) NSString *currentSongISRC;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic) NSUInteger listeningMode;
 

@@ -206,8 +206,7 @@ static const CGFloat cornerRadius = 16.f;
 - (void)configureInviteButton {
     _inviteButton = [UIButton new];
     _inviteButton.enabled = NO;
-    [_inviteButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
-    [_inviteButton addTarget:self action:@selector(_inviteButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_inviteButton setImage:[UIImage systemImageNamed:plusImageName] forState:UIControlStateNormal];
     [self addSubview:_inviteButton];
 }
 
@@ -265,10 +264,6 @@ static const CGFloat cornerRadius = 16.f;
 
 - (void)_createButtonTapped {
     [self.delegate didTapCreate];
-}
-
-- (void)_inviteButtonTapped:(UIButton *)button {
-    [self.delegate didTapInvite];
 }
 
 @end
