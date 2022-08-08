@@ -108,21 +108,16 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     if (![ParseUserManager shouldCurrentUserPlayMusic]) {
         return;
     }
-    
-    // if there is no song to resume, play the top song
-    NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
-    if (roomTrackId == nil || roomTrackId.length == 0) {
-        [[RoomManager shared] playTopSong];
-        return;
-    }
+
+    NSString *streamingId = [[RoomManager shared] currentTrackStreamingId];
     
     // if the song is paused, resume playback
-    if (!_isPlaying && [roomTrackId isEqualToString:_playerTrackId]) {
+    if (!_isPlaying && [streamingId isEqualToString:_playerTrackId]) {
         [_musicPlayer resumePlayback];
         return;
     }
     
-    [self playTrackWithStreamingId:roomTrackId];
+    [self playTrackWithStreamingId:streamingId];
     
 }
 

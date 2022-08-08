@@ -447,8 +447,8 @@
 			isa = PBXGroup;
 			children = (
 				04874A3E2898DA21001B9BF5 /* Music */,
-				049F6890289A2347004CAD5D /* Room */,
 				042299A7287E7E170086612E /* Parse */,
+				049F6890289A2347004CAD5D /* Room */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";

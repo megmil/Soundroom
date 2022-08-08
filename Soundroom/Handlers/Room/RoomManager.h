@@ -27,7 +27,7 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)didLoadQueue;
 - (void)didLeaveRoom;
 - (void)setPlayState:(PlayState)playState;
-- (void)showMissingPlayerAlert;
+- (void)missingPlayerAlert;
 
 @end
 
@@ -56,6 +56,7 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 # pragma mark - Music Player
 
 - (void)updatePlayerWithPlayState:(PlayState)playState;
+- (void)resumePlayback;
 - (void)stopPlayback;
 - (void)reloadCurrentTrackData;
 

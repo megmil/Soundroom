@@ -169,7 +169,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)updateCurrentTrackWithISRC:(NSString *)isrc {
     
-    if (!isrc || [isrc isEqualToString:@""]) {
+    if (isrc == nil) {
         self.currentTrack = nil;
         return;
     }
@@ -299,6 +299,24 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         [ParseObjectManager updateCurrentRoomWithISRC:@""];
         [_delegate setPlayState:Paused];
     }
+}
+
+- (void)resumePlayback {
+    
+    // if there is no song to resume, play the top song
+    if (_currentTrack.isrc == nil || _currentTrack.isrc.length == 0) {
+        [self playTopSong];
+        return;
+    }
+    
+    // if the current song is missing its streaming ID, show alert
+    if (_currentTrack.streamingId == nil || _currentTrack.streamingId.length == 0) {
+        [_delegate missingPlayerAlert];
+        return;
+    }
+    
+    [[MusicPlayerManager shared] resumePlayback];
+    
 }
 
 - (void)updatePlayerWithPlayState:(PlayState)playState {
@@ -524,7 +542,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     if (currentTrack.streamingId == nil) {
-        [_delegate showMissingPlayerAlert];
+        [_delegate missingPlayerAlert];
         return;
     }
     

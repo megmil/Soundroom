@@ -145,7 +145,7 @@
 # pragma mark - RoomView
 
 - (void)didTapPlay {
-    [[MusicPlayerManager shared] resumePlayback];
+    [[RoomManager shared] resumePlayback];
 }
 
 - (void)didTapPause {
@@ -220,15 +220,8 @@
 # pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    if (!_queue.count) {
-        [_roomView.tableView showEmptyMessageWithText:@"No songs are currently in the queue."];
-    } else {
-        [_roomView.tableView removeEmptyMessage];
-    }
-    
+    _queue.count == 0 ? [_roomView.tableView showEmptyMessageWithText:@"No songs are currently in the queue."] : [_roomView.tableView removeEmptyMessage];
     return _queue.count;
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -285,7 +278,7 @@
 
 # pragma mark - Alerts
 
-- (void)showMissingPlayerAlert {
+- (void)missingPlayerAlert {
     
     if (_didCancelAlerts) {
         return;
