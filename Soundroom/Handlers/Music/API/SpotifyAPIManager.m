@@ -56,10 +56,20 @@ static const NSNumber *lookupLimit = @(1);
 }
 
 - (NSDictionary *)searchParametersWithToken:(NSString *)token query:(NSString *)query  {
+    
+    if (token == nil) {
+        token = @"";
+    }
+    
+    if (query == nil) {
+        query = @"";
+    }
+    
     NSDictionary *parameters = @{tokenParameterName:token,
                                  typeParameterName:trackTypeName,
                                  queryParameterName:query};
     return parameters;
+    
 }
 
 # pragma mark - Lookup
@@ -70,7 +80,7 @@ static const NSNumber *lookupLimit = @(1);
 
 - (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc {
     
-    NSString *query = [NSString stringWithFormat:isrcParameterFormat, isrc];
+    NSString *isrcQuery = [NSString stringWithFormat:isrcParameterFormat, isrc];
     
     if (token == nil) {
         token = @"";
@@ -78,7 +88,7 @@ static const NSNumber *lookupLimit = @(1);
     
     NSDictionary *parameters = @{tokenParameterName:token,
                                  limitParameterName:lookupLimit,
-                                 queryParameterName:query,
+                                 queryParameterName:isrcQuery,
                                  typeParameterName:trackTypeName};
     return parameters;
     
@@ -87,13 +97,17 @@ static const NSNumber *lookupLimit = @(1);
 # pragma mark - Decoding
 
 - (NSArray<Track *> *)tracksWithJSONResponse:(NSDictionary *)response {
+    
     NSArray *tracksJSONResponses = response[spotifyJSONResponseTracksPathName][spotifyJSONResponseItemsPathName];
-    NSMutableArray *tracks = [NSMutableArray array];
+    NSMutableArray *tracks = [NSMutableArray new];
+    
     for (NSDictionary *trackJSONResponse in tracksJSONResponses) {
         Track *track = [self trackWithJSONResponse:trackJSONResponse];
         [tracks addObject:track];
     }
+    
     return tracks;
+    
 }
 
 - (Track *)trackWithJSONResponse:(NSDictionary *)response isrc:(NSString *)isrc {

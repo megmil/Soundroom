@@ -10,7 +10,7 @@
 
 @implementation Room
 
-@dynamic roomId;
+@dynamic objectId;
 @dynamic hostId;
 @dynamic currentISRC;
 @dynamic title;

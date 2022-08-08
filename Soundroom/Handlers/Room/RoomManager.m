@@ -513,7 +513,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     _currentTrack = currentTrack;
     [_delegate didUpdateCurrentTrack];
     
-    if (![ParseUserManager shouldPlayMusic]) {
+    if (![ParseUserManager shouldCurrentUserPlayMusic]) {
         return;
     }
     
@@ -544,25 +544,26 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     return _room.title;
 }
 
-- (NSMutableArray<Song *> *)queue {
-    return _queue;
-}
-
-- (RoomListeningMode)listeningMode {
-    return _room.listeningMode;
-}
-
-// TODO: remove?
-- (Track *)currentTrack {
-    return _currentTrack;
+- (NSString *)currentHostId {
+    return _room.hostId;
 }
 
 - (NSString *)currentTrackStreamingId {
     return _currentTrack.streamingId;
 }
 
-- (NSString *)hostId {
-    return _room.hostId;
+- (RoomListeningMode)listeningMode {
+    return _room.listeningMode;
+}
+
+# pragma mark - Queue Data
+
+- (NSMutableArray<Song *> *)queue {
+    return _queue;
+}
+
+- (Track *)currentTrack {
+    return _currentTrack;
 }
 
 @end

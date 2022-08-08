@@ -305,7 +305,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
                                     actionWithTitle:@"Spotify"
                                     style:UIAlertActionStyleDefault
                                     handler:^(UIAlertAction *action) {
-                                        [[MusicPlayerManager shared] setStreamingService:Spotify];
+                                        [[MusicPlayerManager shared] setAccountType:Spotify];
                                         [[MusicPlayerManager shared] authorizeSession];
                                     }];
     
@@ -313,7 +313,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
                                        actionWithTitle:@"Apple Music"
                                        style:UIAlertActionStyleDefault
                                        handler:^(UIAlertAction *action) {
-                                        [[MusicPlayerManager shared] setStreamingService:AppleMusic];
+                                        [[MusicPlayerManager shared] setAccountType:AppleMusic];
                                         [[MusicPlayerManager shared] authorizeSession];
                                     }];
     

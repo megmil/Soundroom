@@ -56,11 +56,21 @@ static NSString *const appleMusicJSONResponseURLKey = @"url";
 }
 
 - (NSDictionary *)searchParametersWithToken:(NSString *)token query:(NSString *)query {
+    
+    if (token == nil) {
+        token = @"";
+    }
+    
+    if (query == nil) {
+        query = @"";
+    }
+    
     NSDictionary *parameters = @{tokenParameterName:token,
                                  queryParameterName:query,
                                  typeParameterName:trackTypeName,
                                  limitParameterName:searchLimit};
     return parameters;
+    
 }
 
 # pragma mark - Lookup
@@ -70,22 +80,36 @@ static NSString *const appleMusicJSONResponseURLKey = @"url";
 }
 
 - (NSDictionary *)lookupParametersWithToken:(NSString *)token isrc:(NSString *)isrc {
+    
+    if (token == nil) {
+        token = @"";
+    }
+    
+    if (isrc == nil) {
+        isrc = @"";
+    }
+    
     NSDictionary *parameters = @{tokenParameterName:token,
                                  isrcParameterName:isrc,
                                  limitParameterName:lookupLimit};
     return parameters;
+    
 }
 
 # pragma mark - Decoding
 
 - (NSArray<Track *> *)tracksWithJSONResponse:(NSDictionary *)response {
+    
     NSArray *tracksJSONResponses = response[appleMusicJSONResponseResultsKey][appleMusicJSONResponseSongsKey];
     NSMutableArray *tracks = [NSMutableArray array];
+    
     for (NSDictionary *trackJSONResponse in tracksJSONResponses) {
         Track *track = [self trackWithJSONResponse:trackJSONResponse];
         [tracks addObject:track];
     }
+    
     return tracks;
+    
 }
 
 - (Track *)trackWithJSONResponse:(NSDictionary *)response isrc:(NSString *)isrc {

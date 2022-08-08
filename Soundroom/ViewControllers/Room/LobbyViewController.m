@@ -19,7 +19,6 @@
 #import "UITableView+EmptyMessage.h"
 
 NSString *const LobbyViewControllerIdentifier = @"LobbyViewController";
-static NSString *const emptyTableMessage = @"No pending invitations.";
 
 @interface LobbyViewController () <UITableViewDelegate, UITableViewDataSource, RoomCellDelegate>
 
@@ -32,15 +31,30 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
 @implementation LobbyViewController
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
-    
     [self configureTableView];
-    [self loadRooms];
-    
+    [self configureObservers];
+    [self fetchInvitations];
+}
+
+- (void)configureTableView {
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    _tableView.rowHeight = 76.f;
+    _tableView.layer.borderWidth = 1.8f;
+    _tableView.layer.borderColor = [UIColor tertiarySystemBackgroundColor].CGColor;
+    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:[RoomCell reuseIdentifier]];
+}
+
+- (void)configureObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToRoom) name:RoomManagerJoinedRoomNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRooms) name:ParseLiveQueryManagerUpdatedPendingInvitationsNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchInvitations) name:ParseLiveQueryManagerUpdatedPendingInvitationsNotification object:nil];
+}
+
+- (void)fetchInvitations {
+    [self fetchPendingRoomsWithCompletion:^(void) {
+        [self->_tableView reloadDataWithAnimation];
+    }];
 }
 
 - (void)goToRoom {
@@ -52,15 +66,7 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
 
 # pragma mark - Invitations
 
-- (void)loadRooms {
-    [self fetchPendingRoomsWithCompletion:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            [self->_tableView reloadDataWithAnimation];
-        }
-    }];
-}
-
-- (void)fetchPendingRoomsWithCompletion:(PFBooleanResultBlock)completion {
+- (void)fetchPendingRoomsWithCompletion:(void (^)(void))completion {
     
     __block NSMutableDictionary *invitationsWithRooms = [NSMutableDictionary new];
     
@@ -68,8 +74,7 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
         
         __block NSUInteger counter = invitations.count;
         
-        if (!invitations || !counter) {
-            completion(NO, error);
+        if (invitations.count == 0) {
             return;
         }
         
@@ -85,7 +90,7 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
                 if (--counter == 0) {
                     self->_invitationIds = [invitations valueForKey:objectIdKey];
                     self->_invitationsWithRooms = invitationsWithRooms;
-                    completion(YES, nil);
+                    completion();
                 }
                 
             }];
@@ -108,17 +113,8 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
 
 # pragma mark - Table View
 
-- (void)configureTableView {
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    _tableView.rowHeight = 76.f;
-    _tableView.layer.borderWidth = 1.8f;
-    _tableView.layer.borderColor = [UIColor tertiarySystemBackgroundColor].CGColor;
-    [_tableView registerClass:[RoomCell class] forCellReuseIdentifier:[RoomCell reuseIdentifier]];
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    !_invitationIds.count ? [_tableView showEmptyMessageWithText:emptyTableMessage] : [_tableView removeEmptyMessage];
+    !_invitationIds.count ? [_tableView showEmptyMessageWithText:@"No pending invitations."] : [_tableView removeEmptyMessage];
     return _invitationIds.count;
 }
 
@@ -131,9 +127,9 @@ static NSString *const emptyTableMessage = @"No pending invitations.";
     
     cell.objectId = invitationId;
     cell.title = room.title;
-    // TODO: set image
     cell.cellType = InvitationCell;
     cell.delegate = self;
+    
     return cell;
     
 }

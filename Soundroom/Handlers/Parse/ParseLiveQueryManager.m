@@ -94,7 +94,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (!roomId) {
+    if (roomId.length == 0) {
         return;
     }
     
@@ -169,7 +169,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (!roomId) {
+    if (roomId.length == 0) {
         return;
     }
     
@@ -200,7 +200,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (!roomId) {
+    if (roomId.length == 0) {
         return;
     }
     
@@ -229,7 +229,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     
     // check for valid roomId
     NSString *roomId = [[RoomManager shared] currentRoomId];
-    if (!roomId) {
+    if (roomId.length == 0) {
         return;
     }
     

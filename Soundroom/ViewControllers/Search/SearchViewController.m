@@ -11,7 +11,6 @@
 #import "ParseUserManager.h"
 #import "ParseConstants.h" // TODO: remove?
 #import "ParseObjectManager.h"
-#import "EnumeratedTypes.h" // TODO: remove?
 #import "SongCell.h"
 #import "Track.h"
 #import "UITableView+ReuseIdentifier.h"
@@ -47,8 +46,8 @@ static const NSUInteger emptySearchCount = 20;
 
 - (void)configureSearch {
     _searchBar.delegate = self;
-    _searchTypeControl.selectedSegmentIndex = (_searchType == SearchTypeUser) ? 1 : 0;
-    _searchTypeControl.enabled = (_searchType == SearchTypeTrackAndUser);
+    _searchTypeControl.selectedSegmentIndex = (_searchType == UserSearch) ? 1 : 0;
+    _searchTypeControl.enabled = (_searchType == TrackAndUserSearch);
     [_searchTypeControl addTarget:self action:@selector(clearSearchData) forControlEvents:UIControlEventValueChanged];
 }
 
@@ -61,13 +60,13 @@ static const NSUInteger emptySearchCount = 20;
 - (void)didAddObjectWithId:(NSString *)objectId deezerId:(NSString *)deezerId {
     
     // warning if current user is not in a room
-    if (![ParseUserManager isInRoom]) {
+    if (![ParseUserManager isCurrentUserInRoom]) {
         [self missingRoomAlert];
         return;
     }
     
     // invite user to room
-    if ([self searchType] == SearchTypeUser) {
+    if ([self searchType] == UserSearch) {
         [ParseObjectManager createInvitationToCurrentRoomForUserWithId:objectId];
         return;
     }
@@ -80,7 +79,7 @@ static const NSUInteger emptySearchCount = 20;
 # pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.searchType == SearchTypeTrack) {
+    if (self.searchType == TrackSearch) {
         return _tracks.count;
     }
     return _users.count;
@@ -92,7 +91,7 @@ static const NSUInteger emptySearchCount = 20;
     cell.cellType = SearchCell;
     cell.addDelegate = self;
     
-    if (self.searchType == SearchTypeTrack) {
+    if (self.searchType == TrackSearch) {
         Track *track = _tracks[indexPath.row];
         cell.title = track.title;
         cell.subtitle = track.artist;
@@ -127,7 +126,7 @@ static const NSUInteger emptySearchCount = 20;
         return;
     }
     
-    if (self.searchType == SearchTypeTrack) {
+    if (self.searchType == TrackSearch) {
         _tracks = [self emptyTracks];
         [_tableView reloadData];
         [self searchTracksWithQuery:searchText];

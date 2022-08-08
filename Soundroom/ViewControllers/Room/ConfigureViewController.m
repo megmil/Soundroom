@@ -19,18 +19,24 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setupConfigureView];
+}
+
+- (void)setupConfigureView {
     _configureView.enabled = YES;
     _configureView.delegate = self;
 }
 
 - (void)didTapCreate {
-    if ([_configureView.title isEqualToString:@""]) {
+    
+    if (_configureView.title.length == 0) {
         [self missingFieldAlert];
         return;
     }
     
     _configureView.enabled = NO;
     [ParseObjectManager createRoomWithTitle:_configureView.title listeningMode:_configureView.listeningMode];
+    
 }
 
 - (void)didTapInvite {

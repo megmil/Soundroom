@@ -58,7 +58,7 @@ static NSString *const credentialsKeyAppleDeveloperToken = @"apple-developer-tok
 # pragma mark - Authorization
 
 - (void)authorizeSession {
-    [[MusicPlayerManager shared] setStreamingService:AppleMusic];
+    [[MusicPlayerManager shared] setAccountType:AppleMusic];
     [_cloudServiceController requestUserTokenForDeveloperToken:_developerToken completionHandler:^(NSString *userToken, NSError *error) {
         [[MusicPlayerManager shared] setAccessToken:userToken];
     }];

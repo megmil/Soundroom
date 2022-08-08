@@ -19,14 +19,12 @@ NSString *const songScoreKey = @"score";
     self = [super init];
     
     if (self) {
-        
         _requestId = requestId;
         _userId = userId;
         _isrc = isrc;
         _track = track;
         _score = @(0);
         _voteState = NotVoted;
-        
     }
     
     return self;

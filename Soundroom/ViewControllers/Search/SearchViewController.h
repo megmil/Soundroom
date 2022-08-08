@@ -6,14 +6,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EnumeratedTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSInteger, SearchType) {
-    SearchTypeTrackAndUser = 0,
-    SearchTypeTrack = 1,
-    SearchTypeUser = 2
-};
 
 @interface SearchViewController : UIViewController
 

@@ -14,12 +14,10 @@
     self = [super init];
     
     if (self) {
-        
         _isrc = isrc;
         _title = title;
         _artist = artist;
         _albumImageURL = albumImageURL;
-        
     }
     
     return self;
@@ -31,13 +29,11 @@
     self = [super init];
     
     if (self) {
-        
         _isrc = isrc;
         _streamingId = streamingId;
         _title = title;
         _artist = artist;
         _albumImageURL = albumImageURL;
-        
     }
     
     return self;
@@ -49,12 +45,10 @@
     self = [super init];
     
     if (self) {
-        
         _deezerId = deezerId;
         _title = title;
         _artist = artist;
         _albumImageURL = albumImageURL;
-        
     }
     
     return self;

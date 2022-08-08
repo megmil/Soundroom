@@ -152,7 +152,7 @@ static const NSInteger searchLimit = 20;
     [query whereKey:userIdKey equalTo:userId];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects && objects.count) {
+        if (objects && objects.count != 0) {
             // user has already been invited to room
             completion(YES, error);
         } else {

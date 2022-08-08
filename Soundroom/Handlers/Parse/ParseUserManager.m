@@ -92,19 +92,19 @@
 }
 
 + (BOOL)isLoggedIn {
-    return [PFUser currentUser];
+    return [PFUser currentUser] != nil;
 }
 
-+ (BOOL)isInRoom {
-    return [[RoomManager shared] currentRoomId]; // nil (or NO) if there is no room / room id
++ (BOOL)isCurrentUserInRoom {
+    return [[RoomManager shared] currentRoomId] != nil;
 }
 
 + (BOOL)isCurrentUserHost {
     
     NSString *userId = [self currentUserId];
-    NSString *hostId = [[RoomManager shared] hostId];
+    NSString *hostId = [[RoomManager shared] currentHostId];
     
-    if (userId == nil || hostId == nil) {
+    if (userId == nil || hostId == nil || hostId.length == 0) {
         return NO;
     }
     
@@ -112,7 +112,7 @@
     
 }
 
-+ (BOOL)shouldPlayMusic {
++ (BOOL)shouldCurrentUserPlayMusic {
     RoomListeningMode listeningMode = [[RoomManager shared] listeningMode];
     return [self isCurrentUserHost] || listeningMode == RemoteMode;
 }
