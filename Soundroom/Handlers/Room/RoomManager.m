@@ -71,6 +71,12 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 }
 
 - (void)insertRequest:(Request *)request {
+    
+    // handle double subscription error
+    if (_queue.count != 0 && [[_queue valueForKey:requestIdKey] containsString:request.objectId]) {
+        return;
+    }
+    
     [Song songWithRequest:request completion:^(Song *song) {
         [self insertSong:song completion:^(NSUInteger index) {
             if (index != NSNotFound) {
