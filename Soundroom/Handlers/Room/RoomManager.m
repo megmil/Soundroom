@@ -27,6 +27,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     Room *_room;
     Track *_currentTrack;
     NSMutableArray <Song *> *_queue;
+    NSMutableSet <NSString *> *_requestIds;
     NSMutableSet <NSString *> *_upvoteIds;
     NSMutableSet <NSString *> *_downvoteIds;
 }
@@ -73,16 +74,27 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 - (void)insertRequest:(Request *)request {
     
     // handle double subscription error
-    if (_queue.count != 0 && [[_queue valueForKey:requestIdKey] containsString:request.objectId]) {
+    if ([_requestIds containsObject:request.objectId]) {
         return;
     }
     
+    if (_requestIds.count != 0) {
+        [_requestIds addObject:request.objectId];
+    } else {
+        _requestIds = [NSMutableSet setWithObject:request.objectId];
+    }
+    
     [Song songWithRequest:request completion:^(Song *song) {
+        
+        if (song == nil) {
+            [self->_requestIds removeObject:request.objectId];
+            return;
+        }
+        
         [self insertSong:song completion:^(NSUInteger index) {
-            if (index != NSNotFound) {
-                [self->_delegate didInsertSongAtIndex:index];
-            }
+            [self->_delegate didInsertSongAtIndex:index];
         }];
+        
     }];
 }
 
@@ -94,6 +106,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     [_queue removeObjectAtIndex:index];
+    [_requestIds removeObject:requestId];
     [_delegate didDeleteSongAtIndex:index];
     
 }
@@ -175,7 +188,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)updateCurrentTrackWithISRC:(NSString *)isrc {
     
-    if (isrc == nil) {
+    if (isrc == nil || [isrc isEqualToString:@""]) {
         self.currentTrack = nil;
         return;
     }
