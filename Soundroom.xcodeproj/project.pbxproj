@@ -37,6 +37,7 @@
 		042CDA5A289899F500B5A305 /* AppleMusicSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 042CDA59289899F500B5A305 /* AppleMusicSessionManager.m */; };
 		042D626D28876A81005DE8E7 /* Upvote.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D626C28876A81005DE8E7 /* Upvote.m */; };
 		042D627328876ACC005DE8E7 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 042D627228876ACC005DE8E7 /* Invitation.m */; };
+		0444231628A463F8008B8F48 /* UIView+TapAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0444231528A463F8008B8F48 /* UIView+TapAnimation.m */; };
 		04785C8028813094001AF277 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C7F28813094001AF277 /* AccountView.m */; };
 		04785C8C2886198F001AF277 /* SpotifySessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04785C8B2886198F001AF277 /* SpotifySessionManager.m */; };
 		04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04854387288F96BE005B4AD7 /* ParseConstants.m */; };
@@ -135,6 +136,8 @@
 		042D626C28876A81005DE8E7 /* Upvote.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Upvote.m; sourceTree = "<group>"; };
 		042D627128876ACC005DE8E7 /* Invitation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
 		042D627228876ACC005DE8E7 /* Invitation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
+		0444231428A463F8008B8F48 /* UIView+TapAnimation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+TapAnimation.h"; sourceTree = "<group>"; };
+		0444231528A463F8008B8F48 /* UIView+TapAnimation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+TapAnimation.m"; sourceTree = "<group>"; };
 		04785C7E28813094001AF277 /* AccountView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
 		04785C7F28813094001AF277 /* AccountView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		04785C8A2886198F001AF277 /* SpotifySessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpotifySessionManager.h; sourceTree = "<group>"; };
@@ -484,6 +487,8 @@
 				041823E5289055BD003962B6 /* UITableView+ReuseIdentifier.m */,
 				041824142894423E003962B6 /* UITableView+EmptyMessage.h */,
 				041824152894423E003962B6 /* UITableView+EmptyMessage.m */,
+				0444231428A463F8008B8F48 /* UIView+TapAnimation.h */,
+				0444231528A463F8008B8F48 /* UIView+TapAnimation.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -784,6 +789,7 @@
 				04874A362898CEB8001B9BF5 /* MusicPlayerManager.m in Sources */,
 				04229997287DDB5C0086612E /* ParseUserManager.m in Sources */,
 				04854388288F96BE005B4AD7 /* ParseConstants.m in Sources */,
+				0444231628A463F8008B8F48 /* UIView+TapAnimation.m in Sources */,
 				041823ED2891B58E003962B6 /* ImageConstants.m in Sources */,
 				0417B5CC2874F6E6001D6B04 /* Request.m in Sources */,
 				042D626D28876A81005DE8E7 /* Upvote.m in Sources */,

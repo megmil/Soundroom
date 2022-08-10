@@ -9,6 +9,7 @@
 #import "ImageConstants.h"
 #import "ShimmerLayer.h"
 #import "UIImageView+AFNetworking.h"
+#import "UIView+TapAnimation.h"
 
 static const CGFloat imageSize = 70.f;
 static const CGFloat cornerRadiusRatio = 0.06f;
@@ -181,15 +182,21 @@ static const CGFloat standardPadding = 8.f;
 # pragma mark - RoomViewDelegate
 
 - (void)playButtonTapped {
-    _playState == Paused ? [_delegate didTapPlay] : [_delegate didTapPause];
+    [_playButton animateWithCompletion:^{
+        self->_playState == Paused ? [self->_delegate didTapPlay] : [self->_delegate didTapPause];
+    }];
 }
 
 - (void)skipButtonTapped {
-    [self.delegate didTapSkip];
+    [_skipButton animateWithCompletion:^{
+        [self->_delegate didTapSkip];
+    }];
 }
 
 - (void)leaveButtonTapped {
-    [self.delegate didTapLeave];
+    [_leaveButton animateWithCompletion:^{
+        [self->_delegate didTapLeave];
+    }];
 }
 
 # pragma mark - Shimmer

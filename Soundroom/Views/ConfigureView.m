@@ -7,6 +7,7 @@
 
 #import "ConfigureView.h"
 #import "ImageConstants.h"
+#import "UIView+TapAnimation.h"
 @import SkyFloatingLabelTextField;
 
 static NSString *const partyModeTitle = @"Party mode";
@@ -263,7 +264,9 @@ static const CGFloat cornerRadius = 16.f;
 }
 
 - (void)_createButtonTapped {
-    [self.delegate didTapCreate];
+    [_createButton animateWithCompletion:^{
+        [self->_delegate didTapCreate];
+    }];
 }
 
 @end

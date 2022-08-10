@@ -7,6 +7,7 @@
 
 #import "RoomCell.h"
 #import "ImageConstants.h"
+#import "UIView+TapAnimation.h"
 
 static const CGFloat imageSize = 60.f;
 static const CGFloat imageCornerRadius = 0.06f * imageSize;
@@ -102,11 +103,15 @@ static const CGFloat imageCornerRadius = 0.06f * imageSize;
 }
 
 - (void)didTapAcceptInvitation {
-    [self.delegate didTapAcceptInvitationWithId:_objectId];
+    [_acceptButton animateWithCompletion:^{
+        [self->_delegate didTapAcceptInvitationWithId:self->_objectId];
+    }];
 }
 
 - (void)didTapRejectInvitation {
-    [self.delegate didTapRejectInvitationWithId:_objectId];
+    [_rejectButton animateWithCompletion:^{
+        [self->_delegate didTapRejectInvitationWithId:self->_objectId];
+    }];
 }
 
 # pragma mark - Setters

@@ -7,9 +7,11 @@
 
 #import "UIView+TapAnimation.h"
 
+static const CGFloat scale = 0.95f;
+
 @implementation UIView (TapAnimation)
 
-- (void)animateButtonWithCompletion:(void (^)(void))completion {
+- (void)animateWithCompletion:(void (^)(void))completion {
     
     __weak UIView *weakSelf = self;
     
@@ -18,7 +20,7 @@
     [UIView animateWithDuration:0.1
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
-                     animations:^{ weakSelf.transform = CGAffineTransformMakeScale(0.95f, 0.95f); }
+                     animations:^{ weakSelf.transform = CGAffineTransformMakeScale(scale, scale); }
                      completion:^(BOOL finished) {
         
                         if (finished) {

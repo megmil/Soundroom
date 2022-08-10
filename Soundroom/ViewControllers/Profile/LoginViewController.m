@@ -8,6 +8,7 @@
 #import "LoginViewController.h"
 #import "ParseUserManager.h"
 #import "SceneDelegate.h"
+#import "UIView+TapAnimation.h"
 
 NSString *const LoginViewControllerIdentifier = @"LoginViewController";
 static NSString *const TabBarControllerIdentifier = @"TabBarController";
@@ -32,50 +33,55 @@ static NSString *const missingFieldsErrorMessage = @"Please fill in both usernam
 
 - (IBAction)didTapUserLogin:(id)sender {
     
-    if ([self hasEmptyField]) {
-        _errorLabel.text = missingFieldsErrorMessage;
-        return;
-    }
-    
-    NSString *username = _usernameField.text;
-    NSString *password = _passwordField.text;
-    
-    [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
+    [_loginButton animateWithCompletion:^{
         
-        if (user != nil) {
-            [self goToTabBar];
+        if ([self hasEmptyField]) {
+            self->_errorLabel.text = missingFieldsErrorMessage;
             return;
         }
         
-        if (error != nil) {
-            self->_errorLabel.text = error.localizedDescription;
-        }
+        NSString *username = self->_usernameField.text;
+        NSString *password = self->_passwordField.text;
+        
+        [ParseUserManager loginWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
+            [self handleCompletionWithUser:user error:error];
+        }];
         
     }];
+
 }
 
 - (IBAction)didTapUserRegister:(id)sender {
     
-    if ([self hasEmptyField]) {
-        _errorLabel.text = missingFieldsErrorMessage;
-        return;
-    }
-    
-    NSString *username = _usernameField.text;
-    NSString *password = _passwordField.text;
-    
-    [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
+    [_registerButton animateWithCompletion:^{
         
-        if (user != nil) {
-            [self goToTabBar];
+        if ([self hasEmptyField]) {
+            self->_errorLabel.text = missingFieldsErrorMessage;
             return;
         }
         
-        if (error != nil) {
-            self->_errorLabel.text = error.localizedDescription;
-        }
+        NSString *username = self->_usernameField.text;
+        NSString *password = self->_passwordField.text;
+        
+        [ParseUserManager registerWithUsername:username password:password completion:^(PFUser *user, NSError *error) {
+            [self handleCompletionWithUser:user error:error];
+        }];
         
     }];
+    
+}
+
+- (void)handleCompletionWithUser:(PFUser *)user error:(NSError *)error {
+    
+    if (user != nil) {
+        [self goToTabBar];
+        return;
+    }
+    
+    if (error != nil) {
+        self->_errorLabel.text = error.localizedDescription;
+    }
+    
 }
 
 - (void)goToTabBar {

@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIView (TapAnimation)
 
-- (void)animateButtonWithCompletion:(void (^)(void))completion;
+- (void)animateWithCompletion:(void (^)(void))completion;
 
 @end
 
