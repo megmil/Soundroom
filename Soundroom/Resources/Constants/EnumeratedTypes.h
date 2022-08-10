@@ -23,9 +23,9 @@ typedef NS_ENUM(NSUInteger, AccountType) {
 };
 
 typedef NS_ENUM(NSUInteger, PlayState) {
-    Disabled = 0,
+    Paused = 0,
     Playing = 1,
-    Paused = 2
+    Disabled = 2
 };
 
 typedef NS_ENUM(NSUInteger, SongCellType) {

@@ -13,7 +13,6 @@
 static const CGFloat imageSize = 70.f;
 static const CGFloat cornerRadiusRatio = 0.06f;
 static const CGFloat playbackButtonsSize = 20.f;
-static const CGFloat leftSideEdge = 20.f;
 static const CGFloat standardPadding = 8.f;
 
 @implementation RoomView {
@@ -43,6 +42,7 @@ static const CGFloat standardPadding = 8.f;
     const CGFloat viewHeight = CGRectGetHeight(self.frame) - self.layoutMargins.bottom;
     
     const CGFloat topEdge = self.safeAreaInsets.top;
+    const CGFloat leftSideEdge = 20.f;
     const CGFloat smallPadding = 2.f;
     const CGFloat rightSideEdge = viewWidth - leftSideEdge;
     
@@ -51,8 +51,7 @@ static const CGFloat standardPadding = 8.f;
     const CGFloat leaveButtonHeight = CGRectGetHeight(_leaveButton.frame);
     _leaveButton.frame = CGRectMake(rightSideEdge - leaveButtonWidth, topEdge, leaveButtonWidth, leaveButtonHeight);
     
-    [_roomNameLabel sizeToFit];
-    const CGFloat roomLabelHeight = CGRectGetHeight(_roomNameLabel.frame);
+    const CGFloat roomLabelHeight = 32.f;
     const CGFloat roomLabelWidth = CGRectGetMinX(_leaveButton.frame) - standardPadding - leftSideEdge;
     _roomNameLabel.frame = CGRectMake(leftSideEdge, topEdge, roomLabelWidth, roomLabelHeight);
     
@@ -61,7 +60,6 @@ static const CGFloat standardPadding = 8.f;
     
     const CGFloat playbackButtonsOriginY = CGRectGetMinY(_songImageView.frame) + ((imageSize - playbackButtonsSize) / 2.f);
     _skipButton.frame = CGRectMake(rightSideEdge - playbackButtonsSize, playbackButtonsOriginY, playbackButtonsSize, playbackButtonsSize);
-    _playButton.frame = _skipButton.frame;
     
     const CGFloat songTitleLabelHeight = 22.f;
     const CGFloat songArtistLabelHeight = 18.f;
@@ -69,7 +67,7 @@ static const CGFloat standardPadding = 8.f;
     const CGFloat songTitleLabelOriginY = CGRectGetMinY(_songImageView.frame) + ((imageSize - songLabelsHeight) / 2.f);
     const CGFloat songArtistLabelOriginY = songTitleLabelOriginY + songTitleLabelHeight + smallPadding;
     const CGFloat songLabelsOriginX = CGRectGetMaxX(_songImageView.frame) + standardPadding;
-    const CGFloat songLabelsWidth = CGRectGetMinX(_playButton.frame) - standardPadding - songLabelsOriginX;
+    const CGFloat songLabelsWidth = CGRectGetMinX(_skipButton.frame) - standardPadding - songLabelsOriginX;
     _songTitleLabel.frame = CGRectMake(songLabelsOriginX, songTitleLabelOriginY, songLabelsWidth, songTitleLabelHeight);
     _songArtistLabel.frame = CGRectMake(songLabelsOriginX, songArtistLabelOriginY, songLabelsWidth, songArtistLabelHeight);
     
@@ -230,33 +228,25 @@ static const CGFloat standardPadding = 8.f;
 
 - (void)setCurrentSongAlbumImageURL:(NSURL *)currentSongAlbumImageURL {
     [_songImageView setImageWithURL:currentSongAlbumImageURL];
+    [self setNeedsLayout];
 }
 
 - (void)setPlayState:(PlayState)playState {
-    
-    if (_playState == playState) {
-        return;
-    }
     
     _playState = playState;
     
     _playButton.enabled = !(playState == Disabled);
     if (playState == Disabled) {
-        self.skipButtonHidden = YES;
+        self.isSkipButtonHidden = YES;
     }
     
+    // TODO: change song labels width
     UIImage *playButtonImage = (playState == Playing) ? [UIImage systemImageNamed:pauseImageName] : [UIImage systemImageNamed:playImageName];
     [_playButton setImage:playButtonImage forState:UIControlStateNormal];
     
-    [self setNeedsLayout];
-    
 }
 
-- (void)setSkipButtonHidden:(BOOL)isSkipButtonHidden {
-    
-    if (_isSkipButtonHidden == isSkipButtonHidden) {
-        return;
-    }
+- (void)setIsSkipButtonHidden:(BOOL)isSkipButtonHidden {
     
     _isSkipButtonHidden = isSkipButtonHidden;
     _skipButton.hidden = isSkipButtonHidden;
@@ -266,13 +256,11 @@ static const CGFloat standardPadding = 8.f;
         return;
     }
     
-    const CGFloat playButtonTopEdge = CGRectGetMinY(_playButton.frame);
+    const CGFloat playButtonTopEdge = CGRectGetMinY(_skipButton.frame);
     const CGFloat leftPlayButtonLeftEdge = CGRectGetMinX(_skipButton.frame) - playbackButtonsSize - standardPadding;
     const CGRect leftButtonFrame = CGRectMake(leftPlayButtonLeftEdge, playButtonTopEdge, playbackButtonsSize, playbackButtonsSize);
     
     _playButton.frame = leftButtonFrame;
-    
-    [self setNeedsLayout];
     
 }
 

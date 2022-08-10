@@ -81,9 +81,6 @@
         
         self->_roomView.hidden = NO;
         self->_roomView.roomName = [[RoomManager shared] currentRoomName];
-        if (![ParseUserManager isCurrentUserHost]) {
-            self->_roomView.playState = Disabled;
-        }
         
         [self->_roomView.tableView reloadDataWithAnimation];
         
@@ -126,6 +123,10 @@
         }
         
         BOOL isCurrentTrackMissing = (track == nil || track.title == nil || track.title.length == 0);
+        if (isCurrentTrackMissing) {
+            self->_roomView.playState = Paused;
+        }
+        
         self->_roomView.isSkipButtonHidden = isCurrentTrackMissing || ![ParseUserManager isCurrentUserHost];
         
     });
