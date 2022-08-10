@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)isLoggedIn;
 + (BOOL)isCurrentUserInRoom;
 + (BOOL)isCurrentUserHost;
-+ (BOOL)shouldCurrentUserPlayMusic;
++ (BOOL)isCurrentUserPlayingMusic;
 
 + (UIImage *)avatarImageForCurrentUser;
 + (UIImage *)avatarImageForUser:(PFUser *)user;

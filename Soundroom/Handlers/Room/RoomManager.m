@@ -339,7 +339,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 }
 
 - (void)updatePlayerWithPlayState:(PlayState)playState {
-    if ([ParseUserManager isCurrentUserHost]) {
+    if ([ParseUserManager isCurrentUserPlayingMusic]) {
         [_delegate setPlayState:playState];
     }
 }
@@ -383,6 +383,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     // clear local room data
     _room = nil;
     _queue = [NSMutableArray <Song *> new];
+    _requestIds = [NSMutableSet <NSString *> new];
     _upvoteIds = [NSMutableSet <NSString *> new];
     _downvoteIds = [NSMutableSet <NSString *> new];
     _currentTrack = nil;
@@ -550,7 +551,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     _currentTrack = currentTrack;
     [_delegate didUpdateCurrentTrack];
     
-    if (![ParseUserManager shouldCurrentUserPlayMusic]) {
+    if (![ParseUserManager isCurrentUserPlayingMusic]) {
         return;
     }
     

@@ -112,7 +112,7 @@
     
 }
 
-+ (BOOL)shouldCurrentUserPlayMusic {
++ (BOOL)isCurrentUserPlayingMusic {
     RoomListeningMode listeningMode = [[RoomManager shared] listeningMode];
     return [self isCurrentUserHost] || listeningMode == RemoteMode;
 }

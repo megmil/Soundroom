@@ -84,7 +84,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)playTrackWithStreamingId:(NSString *)streamingId {
     
-    if (![ParseUserManager shouldCurrentUserPlayMusic] || _musicPlayer == nil) {
+    if (![ParseUserManager isCurrentUserPlayingMusic] || _musicPlayer == nil) {
         return;
     }
     
@@ -95,7 +95,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)pausePlayback {
     
-    if (![ParseUserManager shouldCurrentUserPlayMusic] || _musicPlayer == nil || !_isPlaying) {
+    if (![ParseUserManager isCurrentUserPlayingMusic] || _musicPlayer == nil || !_isPlaying) {
         return;
     }
     
@@ -105,7 +105,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)resumePlayback {
     
-    if (![ParseUserManager shouldCurrentUserPlayMusic]) {
+    if (![ParseUserManager isCurrentUserPlayingMusic]) {
         return;
     }
 
@@ -149,7 +149,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)sceneWillResignActive {
     
-    if (![ParseUserManager shouldCurrentUserPlayMusic] || _musicPlayer == nil) {
+    if (![ParseUserManager isCurrentUserPlayingMusic] || _musicPlayer == nil) {
         return;
     }
     
@@ -159,7 +159,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)sceneDidBecomeActive {
     
-    if (![ParseUserManager shouldCurrentUserPlayMusic] || _musicPlayer == nil) {
+    if (![ParseUserManager isCurrentUserPlayingMusic] || _musicPlayer == nil) {
         return;
     }
     

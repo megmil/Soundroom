@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *currentSongTitle;
 @property (strong, nonatomic) NSString *currentSongArtist;
 @property (strong, nonatomic) NSURL *currentSongAlbumImageURL;
+@property (nonatomic) BOOL isSkipButtonHidden;
 @property (nonatomic) PlayState playState;
 
 @property (nonatomic, weak) id<RoomViewDelegate> delegate;

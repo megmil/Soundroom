@@ -120,12 +120,13 @@
         self->_roomView.currentSongArtist = track.artist;
         self->_roomView.currentSongAlbumImageURL = track.albumImageURL;
         
-        if (![ParseUserManager isCurrentUserHost]) {
+        if (![ParseUserManager isCurrentUserPlayingMusic]) {
             self->_roomView.playState = Disabled;
             return;
         }
         
-        self->_roomView.playState = (track.streamingId != nil) ? Playing : Paused;
+        BOOL isCurrentTrackMissing = (track == nil || track.title == nil || track.title.length == 0);
+        self->_roomView.isSkipButtonHidden = isCurrentTrackMissing || ![ParseUserManager isCurrentUserHost];
         
     });
 
