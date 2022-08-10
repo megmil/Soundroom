@@ -247,8 +247,8 @@
 }
 
 + (void)deleteInvitationsAcceptedByCurrentUser {
-    [ParseQueryManager getInvitationsAcceptedForCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
-        [self deleteObjects:objects];
+    [ParseQueryManager getInvitationAcceptedByCurrentUserWithCompletion:^(PFObject *object, NSError *error) {
+        [object deleteInBackground];
     }];
 }
 

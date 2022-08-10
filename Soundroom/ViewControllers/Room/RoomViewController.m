@@ -123,11 +123,13 @@
         }
         
         BOOL isCurrentTrackMissing = (track == nil || track.title == nil || track.title.length == 0);
-        if (isCurrentTrackMissing) {
-            self->_roomView.playState = Paused;
+        self->_roomView.isSkipButtonHidden = isCurrentTrackMissing || ![ParseUserManager isCurrentUserHost];
+        
+        if (!isCurrentTrackMissing) {
+            return;
         }
         
-        self->_roomView.isSkipButtonHidden = isCurrentTrackMissing || ![ParseUserManager isCurrentUserHost];
+        self->_roomView.playState = ![ParseUserManager isCurrentUserHost] ? Disabled : Paused;
         
     });
 
@@ -213,7 +215,20 @@
 
 - (void)setPlayState:(PlayState)playState {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_roomView.playState = playState;
+        
+        if ([ParseUserManager isCurrentUserHost]) {
+            self->_roomView.playState = playState;
+            return;
+        }
+        
+        BOOL isCurrentTrackMissing = [[RoomManager shared] currentTrack].title != nil && [[RoomManager shared] currentTrack].title.length != 0;
+        if ([[RoomManager shared] listeningMode] == RemoteMode && !isCurrentTrackMissing) {
+            self->_roomView.playState = playState;
+            return;
+        }
+        
+        self->_roomView.playState = Disabled;
+        
     });
 }
 
