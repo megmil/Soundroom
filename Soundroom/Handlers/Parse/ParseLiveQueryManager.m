@@ -104,7 +104,7 @@ NSString *const ParseLiveQueryManagerUpdatedPendingInvitationsNotification = @"P
     // room is updated: new current song
     _roomSubscription = [_roomSubscription addUpdateHandler:^(PFQuery<PFObject *> *query, PFObject *object) {
         Room *room = (Room *)object;
-        [[RoomManager shared] updateCurrentTrackWithISRC:room.currentSongISRC];
+        [[RoomManager shared] setCurrentTrackISRC:room.currentSongISRC];
     }];
 
 }

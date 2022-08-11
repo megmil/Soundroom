@@ -186,21 +186,6 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)updateCurrentTrackWithISRC:(NSString *)isrc {
-    
-    if (isrc == nil || [isrc isEqualToString:@""]) {
-        self.currentTrack = nil;
-        return;
-    }
-    
-    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
-        if (track != nil) {
-            self.currentTrack = track;
-        }
-    }];
-    
-}
-
 # pragma mark - Public: Room Tab
 
 - (void)fetchCurrentRoomWithCompletion:(void (^)(BOOL isInRoom))completion {
@@ -232,31 +217,31 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)reloadTrackDataWithCompletion:(void (^)(void))completion {
+- (void)reloadTrackData {
+    [self reloadQueueTrackData];
+    [self loadCurrentTrackData];
+}
+
+- (void)reloadQueueTrackData {
     
-    if (!_room) {
+    if (_room == nil) {
         return;
     }
     
     __block NSUInteger remainingTracks = _queue.count;
     
     if (remainingTracks == 0) {
-        [self reloadCurrentTrackDataWithCompletion:completion];
         return;
     }
     
     for (Song *song in _queue) {
-        
-        if (song.track == nil || song.track.title.length != 0) {
-            continue;
-        }
         
         [[MusicCatalogManager shared] getTrackWithISRC:song.track.isrc completion:^(Track *track, NSError *error) {
             
             song.track = track;
             
             if (--remainingTracks == 0) {
-                [self reloadCurrentTrackDataWithCompletion:completion];
+                [self->_delegate didReloadQueue];
                 return;
             }
             
@@ -266,32 +251,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)reloadCurrentTrackDataWithCompletion:(void (^)(void))completion {
-    
-    if (_room == nil) {
-        return;
-    }
-    
-    if (_currentTrack != nil) {
-        completion();
-        return;
-    }
-    
-    NSString *isrc = _room.currentSongISRC;
-    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
-        self.currentTrack = track;
-        completion();
-    }];
-    
-}
-
 # pragma mark - Music Player
-
-- (void)reloadCurrentTrackData {
-    [[MusicCatalogManager shared] getTrackWithISRC:_currentTrack.isrc completion:^(Track *track, NSError *error) {
-        self.currentTrack = track;
-    }];
-}
 
 - (void)playTopSong {
     
@@ -353,10 +313,11 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     _room = room;
+    [_delegate didLoadRoom];
     [[ParseLiveQueryManager shared] configureRoomLiveSubscriptions];
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
     
-    [self loadCurrentTrack];
+    [self loadCurrentTrackData];
     [self loadLocalQueueDataWithCompletion:^{
         [self->_delegate didLoadQueue];
     }];
@@ -536,12 +497,24 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [_queue sortUsingDescriptors:@[sortDescriptor]];
 }
 
-# pragma mark - Playback Helpers
+# pragma mark - Current Track Helpers
 
-- (void)loadCurrentTrack {
-    [[MusicCatalogManager shared] getTrackWithISRC:_room.currentSongISRC completion:^(Track *track, NSError *error) {
+- (void)loadCurrentTrackData {
+    
+    if (_room == nil) {
+        return;
+    }
+    
+    NSString *isrc = _room.currentSongISRC;
+    if (isrc == nil || isrc.length == 0) {
+        self.currentTrack = nil;
+        return;
+    }
+    
+    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
         self.currentTrack = track;
     }];
+    
 }
 
 - (void)setCurrentTrack:(Track *)currentTrack {
@@ -583,12 +556,13 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     return _room.hostId;
 }
 
-- (NSString *)currentTrackStreamingId {
-    return _currentTrack.streamingId;
-}
-
 - (RoomListeningMode)listeningMode {
     return _room.listeningMode;
+}
+
+- (void)setCurrentTrackISRC:(NSString *)isrc {
+    _room.currentSongISRC = isrc;
+    [self loadCurrentTrackData];
 }
 
 # pragma mark - Queue Data
@@ -599,6 +573,10 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (Track *)currentTrack {
     return _currentTrack;
+}
+
+- (NSString *)currentTrackStreamingId {
+    return _currentTrack.streamingId;
 }
 
 @end

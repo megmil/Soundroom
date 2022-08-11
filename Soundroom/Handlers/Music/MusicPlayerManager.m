@@ -200,7 +200,6 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 # pragma mark - Helpers
 
 - (void)postAuthorizedNotification {
-    [[RoomManager shared] reloadCurrentTrackData];
     [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerAuthorizedNotificaton object:nil];
 }
 

@@ -32,10 +32,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self fetchCurrentRoom];
+    [self configureDelegates];
     [self configureTableView];
     [self configureObservers];
-    [self configureDelegates];
+    [self fetchCurrentRoom];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -61,7 +61,6 @@
 }
 
 - (void)configureObservers {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
 }
 
@@ -72,21 +71,6 @@
 
 # pragma mark - Selectors
 
-- (void)loadRoomViews {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        
-        self->_queue = [[RoomManager shared] queue];
-
-        [self updateCurrentTrackViews];
-        
-        self->_roomView.hidden = NO;
-        self->_roomView.roomName = [[RoomManager shared] currentRoomName];
-        
-        [self->_roomView.tableView reloadDataWithAnimation];
-        
-    });
-}
-
 - (void)reloadTrackViews {
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -96,47 +80,13 @@
         }
     });
     
-    // reload track data
-    [[RoomManager shared] reloadTrackDataWithCompletion:^(void) {
-        self->_queue = [[RoomManager shared] queue];
-        [self updateCurrentTrackViews];
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [self->_roomView.tableView reloadData];
-        });
-    }];
+    [[RoomManager shared] reloadTrackData];
     
-}
-
-- (void)updateCurrentTrackViews {
-    
-    Track *track = [[RoomManager shared] currentTrack];
-    
-    dispatch_async(dispatch_get_main_queue(), ^(void){
-        
-        self->_roomView.currentSongTitle = track.title;
-        self->_roomView.currentSongArtist = track.artist;
-        self->_roomView.currentSongAlbumImageURL = track.albumImageURL;
-        
-        if (![ParseUserManager isCurrentUserPlayingMusic]) {
-            self->_roomView.playState = Disabled;
-            return;
-        }
-        
-        BOOL isCurrentTrackMissing = (track == nil || track.title == nil || track.title.length == 0);
-        self->_roomView.isSkipButtonHidden = isCurrentTrackMissing || ![ParseUserManager isCurrentUserHost];
-        
-        if (!isCurrentTrackMissing) {
-            return;
-        }
-        
-        self->_roomView.playState = ![ParseUserManager isCurrentUserHost] ? Disabled : Paused;
-        
-    });
-
 }
 
 - (void)goToLobby {
     dispatch_async(dispatch_get_main_queue(), ^(void){
+        self->_roomView.hidden = YES;
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LobbyViewController *lobbyViewController = [storyboard instantiateViewControllerWithIdentifier:LobbyViewControllerIdentifier];
         [lobbyViewController setModalPresentationStyle:UIModalPresentationCurrentContext];
@@ -170,6 +120,14 @@
 
 # pragma mark - RoomManager
 
+- (void)didLoadRoom {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_roomView.playState = ![ParseUserManager isCurrentUserPlayingMusic] ? Disabled : Paused;
+        self->_roomView.roomName = [[RoomManager shared] currentRoomName];
+        self->_roomView.hidden = NO;
+    });
+}
+
 - (void)didUpdateCurrentTrack {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         [self updateCurrentTrackViews];
@@ -180,7 +138,6 @@
     self->_queue = @[];
     [[MusicPlayerManager shared] pausePlayback]; // TODO: stop playback?
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_roomView.hidden = YES;
         [self goToLobby];
     });
 }
@@ -189,6 +146,13 @@
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         self->_queue = [[RoomManager shared] queue];
         [self->_roomView.tableView reloadDataWithAnimation];
+    });
+}
+
+- (void)didReloadQueue {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
+        [self->_roomView.tableView reloadData];
     });
 }
 
@@ -216,20 +180,31 @@
 - (void)setPlayState:(PlayState)playState {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         
-        if ([ParseUserManager isCurrentUserHost]) {
+        // update playback controls if current user is host or (remote mode) there is a current track
+        BOOL isCurrentTrackMissing = [[RoomManager shared] currentTrack].title == nil || [[RoomManager shared] currentTrack].title.length == 0;
+        BOOL isRemoteMode = [[RoomManager shared] listeningMode] == RemoteMode;
+        if ([ParseUserManager isCurrentUserHost] || (!isCurrentTrackMissing && isRemoteMode)) {
             self->_roomView.playState = playState;
             return;
         }
         
-        BOOL isCurrentTrackMissing = [[RoomManager shared] currentTrack].title != nil && [[RoomManager shared] currentTrack].title.length != 0;
-        if ([[RoomManager shared] listeningMode] == RemoteMode && !isCurrentTrackMissing) {
-            self->_roomView.playState = playState;
-            return;
-        }
-        
+        // else, show disabled state
         self->_roomView.playState = Disabled;
         
     });
+}
+
+- (void)updateCurrentTrackViews {
+    
+    Track *track = [[RoomManager shared] currentTrack];
+    _roomView.currentSongTitle = track.title;
+    _roomView.currentSongArtist = track.artist;
+    _roomView.currentSongAlbumImageURL = track.albumImageURL;
+    
+    // hide skip button for non-host members and rooms missing a current track
+    BOOL isCurrentTrackMissing = (track == nil || track.title == nil || track.title.length == 0);
+    _roomView.isSkipButtonHidden = ![ParseUserManager isCurrentUserHost] || isCurrentTrackMissing;
+
 }
 
 # pragma mark - TableView
