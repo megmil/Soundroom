@@ -7,13 +7,15 @@
 
 #import "UIView+TapAnimation.h"
 
-static const CGFloat scale = 0.95f;
+static const CGFloat smallScaleSize = 0.95f;
+static const CGFloat largeScaleSize = 0.85f;
 
 @implementation UIView (TapAnimation)
 
-- (void)animateWithCompletion:(void (^)(void))completion {
+- (void)animateWithScaleSize:(ScaleSize)scaleSize completion:(void (^)(void))completion {
     
     __weak UIView *weakSelf = self;
+    CGFloat scale = (scaleSize == Large) ? largeScaleSize : smallScaleSize;
     
     self.userInteractionEnabled = NO;
     

@@ -144,7 +144,7 @@ static NSString *const loggedOutName = @"Music Player";
 
 - (void)didTapActionButton {
     
-    [_actionButton animateWithCompletion:^{
+    [_actionButton animateWithScaleSize:Large completion:^{
         
         // if the user is not already logged in, must be music player login
         if (self->_accountType == Deezer) {

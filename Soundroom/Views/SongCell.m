@@ -164,7 +164,7 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
 # pragma mark - Buttons
 
 - (void)didTapAdd {
-    [_addButton animateWithCompletion:^{
+    [_addButton animateWithScaleSize:Large completion:^{
         [self->_addDelegate didAddObjectWithId:self->_objectId deezerId:self->_deezerId];
     }];
 }

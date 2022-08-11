@@ -33,7 +33,7 @@ static NSString *const missingFieldsErrorMessage = @"Please fill in both usernam
 
 - (IBAction)didTapUserLogin:(id)sender {
     
-    [_loginButton animateWithCompletion:^{
+    [_loginButton animateWithScaleSize:Small completion:^{
         
         if ([self hasEmptyField]) {
             self->_errorLabel.text = missingFieldsErrorMessage;
@@ -53,7 +53,7 @@ static NSString *const missingFieldsErrorMessage = @"Please fill in both usernam
 
 - (IBAction)didTapUserRegister:(id)sender {
     
-    [_registerButton animateWithCompletion:^{
+    [_registerButton animateWithScaleSize:Small completion:^{
         
         if ([self hasEmptyField]) {
             self->_errorLabel.text = missingFieldsErrorMessage;

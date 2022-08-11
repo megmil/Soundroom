@@ -103,13 +103,13 @@ static const CGFloat imageCornerRadius = 0.06f * imageSize;
 }
 
 - (void)didTapAcceptInvitation {
-    [_acceptButton animateWithCompletion:^{
+    [_acceptButton animateWithScaleSize:Large completion:^{
         [self->_delegate didTapAcceptInvitationWithId:self->_objectId];
     }];
 }
 
 - (void)didTapRejectInvitation {
-    [_rejectButton animateWithCompletion:^{
+    [_rejectButton animateWithScaleSize:Large completion:^{
         [self->_delegate didTapRejectInvitationWithId:self->_objectId];
     }];
 }

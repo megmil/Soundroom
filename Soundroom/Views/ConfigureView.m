@@ -264,7 +264,7 @@ static const CGFloat cornerRadius = 16.f;
 }
 
 - (void)_createButtonTapped {
-    [_createButton animateWithCompletion:^{
+    [_createButton animateWithScaleSize:Small completion:^{
         [self->_delegate didTapCreate];
     }];
 }

@@ -182,19 +182,19 @@ static const CGFloat standardPadding = 8.f;
 # pragma mark - RoomViewDelegate
 
 - (void)playButtonTapped {
-    [_playButton animateWithCompletion:^{
+    [_playButton animateWithScaleSize:Large completion:^{
         self->_playState == Paused ? [self->_delegate didTapPlay] : [self->_delegate didTapPause];
     }];
 }
 
 - (void)skipButtonTapped {
-    [_skipButton animateWithCompletion:^{
+    [_skipButton animateWithScaleSize:Large completion:^{
         [self->_delegate didTapSkip];
     }];
 }
 
 - (void)leaveButtonTapped {
-    [_leaveButton animateWithCompletion:^{
+    [_leaveButton animateWithScaleSize:Small completion:^{
         [self->_delegate didTapLeave];
     }];
 }

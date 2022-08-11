@@ -9,9 +9,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, ScaleSize) {
+    Small = 0,
+    Large = 1
+};
+
 @interface UIView (TapAnimation)
 
-- (void)animateWithCompletion:(void (^)(void))completion;
+- (void)animateWithScaleSize:(ScaleSize)scaleSize completion:(void (^)(void))completion;
 
 @end
 
