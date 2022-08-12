@@ -18,7 +18,7 @@ extern NSString *const InvitationClass;
 extern NSString *const objectIdKey;
 extern NSString *const userIdKey;
 extern NSString *const roomIdKey;
-extern NSString *const currentISRCKey;
+extern NSString *const currentSongISRCKey;
 extern NSString *const requestIdKey;
 extern NSString *const isPendingKey;
 extern NSString *const createdAtKey;

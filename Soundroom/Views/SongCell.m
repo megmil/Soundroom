@@ -9,6 +9,7 @@
 #import "ImageConstants.h"
 #import "ShimmerLayer.h"
 #import "UIImageView+AFNetworking.h"
+#import "UIView+TapAnimation.h"
 
 static NSString *const scoreEmptyLabel = @"0";
 
@@ -163,15 +164,9 @@ static const CGFloat cellHeight = largeViewSize + (2 * standardPadding);
 # pragma mark - Buttons
 
 - (void)didTapAdd {
-    [self.addDelegate didAddObjectWithId:_objectId deezerId:_deezerId];
-    _addButton.transform = CGAffineTransformMakeScale(1.4f, 1.4f);
-    [UIView animateWithDuration:0.6
-                          delay:0.1
-         usingSpringWithDamping:0.8f
-          initialSpringVelocity:0.5f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{ self->_addButton.transform = CGAffineTransformIdentity; }
-                     completion:nil];
+    [_addButton animateWithScaleSize:Large completion:^{
+        [self->_addDelegate didAddObjectWithId:self->_objectId deezerId:self->_deezerId];
+    }];
 }
 
 - (void)didTapVote:(UIButton *)sender {

@@ -16,7 +16,6 @@
 #import "UITableView+ReuseIdentifier.h"
 #import "UITableView+EmptyMessage.h"
 
-static NSString *const emptyTableMessage = @"No recent sessions to show.";
 static const CGFloat cornerRadiusRatio = 0.06f;
 
 @interface ProfileViewController () <AccountViewDelegate, UITableViewDelegate, UITableViewDataSource>
@@ -63,7 +62,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 }
 
 - (void)configureStreamingServiceAccountView {
-    _streamingServiceAccountView.accountType = [[MusicPlayerManager shared] isSessionAuthorized] ? [[MusicPlayerManager shared] streamingService] : Deezer;
+    _streamingServiceAccountView.accountType = [[MusicPlayerManager shared] isSessionAuthorized] ? [[MusicPlayerManager shared] accountType] : Deezer;
     _streamingServiceAccountView.delegate = self;
 }
 
@@ -94,7 +93,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 # pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    [_tableView showEmptyMessageWithText:emptyTableMessage];
+    [_tableView showEmptyMessageWithText:@"No recent sessions to show."];
     return 0;
 }
 
@@ -115,7 +114,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 - (void)toggleSpotifyLoginStatus {
     dispatch_async(dispatch_get_main_queue(), ^(void){
         BOOL isSessionAuthorized = [[MusicPlayerManager shared] isSessionAuthorized];
-        self->_streamingServiceAccountView.accountType = isSessionAuthorized ? [[MusicPlayerManager shared] streamingService] : Deezer;
+        self->_streamingServiceAccountView.accountType = isSessionAuthorized ? [[MusicPlayerManager shared] accountType] : Deezer;
     });
 }
 
@@ -130,17 +129,14 @@ static const CGFloat cornerRadiusRatio = 0.06f;
                                     actionWithTitle:@"Spotify"
                                     style:UIAlertActionStyleDefault
                                     handler:^(UIAlertAction *action) {
-                                        [[MusicPlayerManager shared] setStreamingService:Spotify];
-                                        [[MusicPlayerManager shared] authorizeSession];
-        
+                                        [[MusicPlayerManager shared] setAccountType:Spotify];
                                     }];
     
     UIAlertAction *appleMusicAction = [UIAlertAction
                                        actionWithTitle:@"Apple Music"
                                        style:UIAlertActionStyleDefault
                                        handler:^(UIAlertAction *action) {
-                                           [[MusicPlayerManager shared] setStreamingService:AppleMusic];
-                                           [[MusicPlayerManager shared] authorizeSession];
+                                           [[MusicPlayerManager shared] setAccountType:AppleMusic];
                                        }];
 
     [alert addAction:spotifyAction];

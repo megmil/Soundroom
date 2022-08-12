@@ -128,13 +128,6 @@ static const NSInteger searchLimit = 20;
     [query getFirstObjectInBackgroundWithBlock:completion]; // should only be one accepted invitation per user
 }
 
-+ (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
-    PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
-    [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
-    [query whereKey:isPendingKey equalTo:@(NO)];
-    [query findObjectsInBackgroundWithBlock:completion];
-}
-
 + (void)getInvitationsForCurrentRoomWithCompletion:(PFArrayResultBlock)completion {
     PFQuery *query = [PFQuery queryWithClassName:InvitationClass];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
@@ -152,7 +145,7 @@ static const NSInteger searchLimit = 20;
     [query whereKey:userIdKey equalTo:userId];
     [query whereKey:roomIdKey equalTo:[[RoomManager shared] currentRoomId]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects && objects.count) {
+        if (objects && objects.count != 0) {
             // user has already been invited to room
             completion(YES, error);
         } else {

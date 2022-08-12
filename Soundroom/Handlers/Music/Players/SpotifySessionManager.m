@@ -66,14 +66,13 @@ static NSString *const credentialsKeySpotifyTokenRefreshURL = @"spotify-token-re
     _configuration = [[SPTConfiguration alloc] initWithClientID:clientId redirectURL:redirectURL];
     _configuration.tokenSwapURL = tokenSwapURL;
     _configuration.tokenRefreshURL = tokenRefreshURL;
-    _configuration.playURI = silentTrackURI; // must be playing a track to connect
+    _configuration.playURI = silentTrackURI; // cannot connect to app remote without playing a track
     
 }
 
 # pragma mark - Authorization
 
 - (void)authorizeSession {
-    [[MusicPlayerManager shared] setStreamingService:Spotify];
     SPTScope requestedScope = SPTAppRemoteControlScope;
     [_sessionManager initiateSessionWithScope:requestedScope options:SPTDefaultAuthorizationOption];
 }

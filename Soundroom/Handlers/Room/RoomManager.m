@@ -27,6 +27,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     Room *_room;
     Track *_currentTrack;
     NSMutableArray <Song *> *_queue;
+    NSMutableSet <NSString *> *_requestIds;
     NSMutableSet <NSString *> *_upvoteIds;
     NSMutableSet <NSString *> *_downvoteIds;
 }
@@ -44,7 +45,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 
 - (void)joinRoomWithId:(NSString *)roomId {
     
-    if (self.currentRoomId == roomId) {
+    if ([_room.objectId isEqualToString:roomId]) {
         return;
     }
     
@@ -71,12 +72,29 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
 }
 
 - (void)insertRequest:(Request *)request {
+    
+    // handle double subscription error
+    if ([_requestIds containsObject:request.objectId]) {
+        return;
+    }
+    
+    if (_requestIds.count != 0) {
+        [_requestIds addObject:request.objectId];
+    } else {
+        _requestIds = [NSMutableSet setWithObject:request.objectId];
+    }
+    
     [Song songWithRequest:request completion:^(Song *song) {
+        
+        if (song == nil) {
+            [self->_requestIds removeObject:request.objectId];
+            return;
+        }
+        
         [self insertSong:song completion:^(NSUInteger index) {
-            if (index != NSNotFound) {
-                [self->_delegate didInsertSongAtIndex:index];
-            }
+            [self->_delegate didInsertSongAtIndex:index];
         }];
+        
     }];
 }
 
@@ -88,6 +106,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     [_queue removeObjectAtIndex:index];
+    [_requestIds removeObject:requestId];
     [_delegate didDeleteSongAtIndex:index];
     
 }
@@ -167,21 +186,6 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)updateCurrentTrackWithISRC:(NSString *)isrc {
-    
-    if (!isrc || [isrc isEqualToString:@""]) {
-        self.currentTrack = nil;
-        return;
-    }
-    
-    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
-        if (track) {
-            self.currentTrack = track;
-        }
-    }];
-    
-}
-
 # pragma mark - Public: Room Tab
 
 - (void)fetchCurrentRoomWithCompletion:(void (^)(BOOL isInRoom))completion {
@@ -213,31 +217,31 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)reloadTrackDataWithCompletion:(void (^)(void))completion {
+- (void)reloadTrackData {
+    [self reloadQueueTrackData];
+    [self loadCurrentTrackData];
+}
+
+- (void)reloadQueueTrackData {
     
-    if (!_room) {
+    if (_room == nil) {
         return;
     }
     
     __block NSUInteger remainingTracks = _queue.count;
     
     if (remainingTracks == 0) {
-        [self reloadCurrentTrackDataWithCompletion:completion];
         return;
     }
     
     for (Song *song in _queue) {
         
-        if (song.track) {
-            continue;
-        }
-        
-        [[MusicCatalogManager shared] getTrackWithISRC:song.isrc completion:^(Track *track, NSError *error) {
+        [[MusicCatalogManager shared] getTrackWithISRC:song.track.isrc completion:^(Track *track, NSError *error) {
             
             song.track = track;
             
             if (--remainingTracks == 0) {
-                [self reloadCurrentTrackDataWithCompletion:completion];
+                [self->_delegate didReloadQueue];
                 return;
             }
             
@@ -247,32 +251,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     
 }
 
-- (void)reloadCurrentTrackDataWithCompletion:(void (^)(void))completion {
-    
-    if (!_room) {
-        return;
-    }
-    
-    if (_currentTrack) {
-        completion();
-        return;
-    }
-    
-    NSString *isrc = _room.currentISRC;
-    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
-        self.currentTrack = track;
-        completion();
-    }];
-    
-}
-
 # pragma mark - Music Player
-
-- (void)reloadCurrentTrackData {
-    [[MusicCatalogManager shared] getTrackWithISRC:_currentTrack.isrc completion:^(Track *track, NSError *error) {
-        self.currentTrack = track;
-    }];
-}
 
 - (void)playTopSong {
     
@@ -280,7 +259,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
         return;
     }
     
-    if (_queue.count == 0) {
+    if (_queue == nil || _queue.count == 0) {
         [self stopPlayback];
         return;
     }
@@ -290,7 +269,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [ParseObjectManager deleteRequestWithId:topSong.requestId];
     
     // save current song to room
-    [ParseObjectManager updateCurrentRoomWithISRC:topSong.isrc];
+    [ParseObjectManager updateCurrentRoomWithISRC:topSong.track.isrc];
     
 }
 
@@ -301,8 +280,26 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
 }
 
+- (void)resumePlayback {
+    
+    // if there is no song to resume, play the top song
+    if (_currentTrack.isrc == nil || _currentTrack.isrc.length == 0) {
+        [self playTopSong];
+        return;
+    }
+    
+    // if the current song is missing its streaming ID, show alert
+    if (_currentTrack.streamingId == nil || _currentTrack.streamingId.length == 0) {
+        [_delegate missingPlayerAlert];
+        return;
+    }
+    
+    [[MusicPlayerManager shared] resumePlayback];
+    
+}
+
 - (void)updatePlayerWithPlayState:(PlayState)playState {
-    if ([ParseUserManager isCurrentUserHost]) {
+    if ([ParseUserManager isCurrentUserPlayingMusic]) {
         [_delegate setPlayState:playState];
     }
 }
@@ -316,10 +313,11 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     }
     
     _room = room;
+    [_delegate didLoadRoom];
     [[ParseLiveQueryManager shared] configureRoomLiveSubscriptions];
     [[NSNotificationCenter defaultCenter] postNotificationName:RoomManagerJoinedRoomNotification object:self];
     
-    [self loadCurrentTrack];
+    [self loadCurrentTrackData];
     [self loadLocalQueueDataWithCompletion:^{
         [self->_delegate didLoadQueue];
     }];
@@ -346,6 +344,7 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     // clear local room data
     _room = nil;
     _queue = [NSMutableArray <Song *> new];
+    _requestIds = [NSMutableSet <NSString *> new];
     _upvoteIds = [NSMutableSet <NSString *> new];
     _downvoteIds = [NSMutableSet <NSString *> new];
     _currentTrack = nil;
@@ -498,14 +497,24 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     [_queue sortUsingDescriptors:@[sortDescriptor]];
 }
 
-# pragma mark - Playback Helpers
+# pragma mark - Current Track Helpers
 
-- (void)loadCurrentTrack {
-    if (![_room.currentISRC isEqualToString:@""]) {
-        [[MusicCatalogManager shared] getTrackWithISRC:_room.currentISRC completion:^(Track *track, NSError *error) {
-            self.currentTrack = track;
-        }];
+- (void)loadCurrentTrackData {
+    
+    if (_room == nil) {
+        return;
     }
+    
+    NSString *isrc = _room.currentSongISRC;
+    if (isrc == nil || isrc.length == 0) {
+        self.currentTrack = nil;
+        return;
+    }
+    
+    [[MusicCatalogManager shared] getTrackWithISRC:isrc completion:^(Track *track, NSError *error) {
+        self.currentTrack = track;
+    }];
+    
 }
 
 - (void)setCurrentTrack:(Track *)currentTrack {
@@ -513,19 +522,18 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     _currentTrack = currentTrack;
     [_delegate didUpdateCurrentTrack];
     
-    if (![ParseUserManager shouldPlayMusic]) {
+    if (![ParseUserManager isCurrentUserPlayingMusic]) {
         return;
     }
     
     if (currentTrack.title == nil) {
         // track data was not loaded: pause playback if possible
-        _currentTrack = nil;
         [[MusicPlayerManager shared] pausePlayback];
         return;
     }
     
     if (currentTrack.streamingId == nil) {
-        [_delegate showMissingPlayerAlert];
+        [_delegate missingPlayerAlert];
         return;
     }
     
@@ -544,25 +552,31 @@ NSString *const RoomManagerJoinedRoomNotification = @"RoomManagerJoinedRoomNotif
     return _room.title;
 }
 
-- (NSMutableArray<Song *> *)queue {
-    return _queue;
+- (NSString *)currentHostId {
+    return _room.hostId;
 }
 
 - (RoomListeningMode)listeningMode {
     return _room.listeningMode;
 }
 
-// TODO: remove?
+- (void)setCurrentTrackISRC:(NSString *)isrc {
+    _room.currentSongISRC = isrc;
+    [self loadCurrentTrackData];
+}
+
+# pragma mark - Queue Data
+
+- (NSMutableArray<Song *> *)queue {
+    return _queue;
+}
+
 - (Track *)currentTrack {
     return _currentTrack;
 }
 
 - (NSString *)currentTrackStreamingId {
     return _currentTrack.streamingId;
-}
-
-- (NSString *)hostId {
-    return _room.hostId;
 }
 
 @end

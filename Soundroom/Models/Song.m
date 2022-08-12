@@ -14,19 +14,16 @@ NSString *const songScoreKey = @"score";
 
 @implementation Song
 
-- (instancetype)initWithRequestId:(NSString *)requestId userId:(NSString *)userId isrc:(NSString *)isrc track:(Track *)track  {
+- (instancetype)initWithRequestId:(NSString *)requestId userId:(NSString *)userId track:(Track *)track  {
     
     self = [super init];
     
     if (self) {
-        
         _requestId = requestId;
         _userId = userId;
-        _isrc = isrc;
         _track = track;
         _score = @(0);
         _voteState = NotVoted;
-        
     }
     
     return self;
@@ -71,7 +68,6 @@ NSString *const songScoreKey = @"score";
     [[MusicCatalogManager shared] getTrackWithISRC:request.isrc completion:^(Track *track, NSError *error) {
         Song *song = [[Song alloc] initWithRequestId:request.objectId
                                               userId:request.userId
-                                                 isrc:request.isrc
                                                track:track];
         completion(song);
     }];

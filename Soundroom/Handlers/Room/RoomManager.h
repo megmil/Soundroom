@@ -23,11 +23,13 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)didInsertSongAtIndex:(NSUInteger)index;
 - (void)didDeleteSongAtIndex:(NSUInteger)index;
 - (void)didMoveSongAtIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex;
+- (void)didLoadRoom;
 - (void)didUpdateCurrentTrack;
 - (void)didLoadQueue;
+- (void)didReloadQueue;
 - (void)didLeaveRoom;
 - (void)setPlayState:(PlayState)playState;
-- (void)showMissingPlayerAlert;
+- (void)missingPlayerAlert;
 
 @end
 
@@ -35,11 +37,12 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 
 @property (strong, nonatomic, readonly, getter=currentRoomId) NSString *currentRoomId;
 @property (strong, nonatomic, readonly, getter=currentRoomName) NSString *currentRoomName;
+@property (strong, nonatomic, readonly, getter=currentHostId) NSString *currentHostId;
+@property (strong, nonatomic, readonly, getter=currentTrackStreamingId) NSString *currentTrackStreamingId;
+@property (nonatomic, readonly, getter=listeningMode) RoomListeningMode listeningMode;
 @property (strong, nonatomic, readonly, getter=queue) NSMutableArray <Song *> *queue;
 @property (strong, nonatomic, readonly, getter=currentTrack) Track *currentTrack;
-@property (strong, nonatomic, readonly, getter=currentTrackStreamingId) NSString *currentTrackStreamingId;
-@property (strong, nonatomic, readonly, getter=hostId) NSString *hostId;
-@property (nonatomic, readonly, getter=listeningMode) RoomListeningMode listeningMode;
+
 @property (nonatomic, weak) id<RoomManagerDelegate> delegate;
 
 + (instancetype)shared;
@@ -47,15 +50,15 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 # pragma mark - Room VCs
 
 - (void)fetchCurrentRoomWithCompletion:(void (^)(BOOL isInRoom))completion;
-- (void)reloadTrackDataWithCompletion:(void (^)(void))completion;
+- (void)reloadTrackData;
 - (void)updateCurrentUserVoteForRequestWithId:(NSString *)requestId voteState:(VoteState)voteState;
 - (void)playTopSong;
 
 # pragma mark - Music Player
 
 - (void)updatePlayerWithPlayState:(PlayState)playState;
+- (void)resumePlayback;
 - (void)stopPlayback;
-- (void)reloadCurrentTrackData;
 
 # pragma mark - Live Query Event Handlers
 
@@ -67,7 +70,7 @@ extern NSString *const RoomManagerJoinedRoomNotification;
 - (void)clearRoomData;
 - (void)insertRequest:(Request *)request;
 - (void)removeRequestWithId:(NSString *)requestId;
-- (void)updateCurrentTrackWithISRC:(NSString *)isrc;
+- (void)setCurrentTrackISRC:(NSString *)isrc;
 
 @end
 

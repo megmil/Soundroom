@@ -9,9 +9,12 @@
 #import "ImageConstants.h"
 #import "ShimmerLayer.h"
 #import "UIImageView+AFNetworking.h"
+#import "UIView+TapAnimation.h"
 
 static const CGFloat imageSize = 70.f;
 static const CGFloat cornerRadiusRatio = 0.06f;
+static const CGFloat playbackButtonsSize = 20.f;
+static const CGFloat standardPadding = 8.f;
 
 @implementation RoomView {
     
@@ -24,7 +27,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     ShimmerLayer *_shimmerLayer;
     
     UIButton *_playButton;
-    UIButton *_pauseButton;
+    UIButton *_skipButton;
     
     UILabel *_nextUpLabel;
     
@@ -41,7 +44,6 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     
     const CGFloat topEdge = self.safeAreaInsets.top;
     const CGFloat leftSideEdge = 20.f;
-    const CGFloat standardPadding = 8.f;
     const CGFloat smallPadding = 2.f;
     const CGFloat rightSideEdge = viewWidth - leftSideEdge;
     
@@ -50,20 +52,15 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     const CGFloat leaveButtonHeight = CGRectGetHeight(_leaveButton.frame);
     _leaveButton.frame = CGRectMake(rightSideEdge - leaveButtonWidth, topEdge, leaveButtonWidth, leaveButtonHeight);
     
-    [_roomNameLabel sizeToFit];
-    const CGFloat roomLabelHeight = CGRectGetHeight(_roomNameLabel.frame);
+    const CGFloat roomLabelHeight = 32.f;
     const CGFloat roomLabelWidth = CGRectGetMinX(_leaveButton.frame) - standardPadding - leftSideEdge;
     _roomNameLabel.frame = CGRectMake(leftSideEdge, topEdge, roomLabelWidth, roomLabelHeight);
     
     const CGFloat songImageViewOriginY = CGRectGetMaxY(_roomNameLabel.frame) + leftSideEdge;
     _songImageView.frame = CGRectMake(leftSideEdge, songImageViewOriginY, imageSize, imageSize);
     
-    const CGFloat playbackButtonsSize = 20.f;
     const CGFloat playbackButtonsOriginY = CGRectGetMinY(_songImageView.frame) + ((imageSize - playbackButtonsSize) / 2.f);
-    _playButton.frame = CGRectMake(rightSideEdge - playbackButtonsSize, playbackButtonsOriginY, playbackButtonsSize, playbackButtonsSize);
-    
-    const CGFloat pauseButtonOriginX = CGRectGetMinX(_playButton.frame) - playbackButtonsSize - standardPadding;
-    _pauseButton.frame = CGRectMake(pauseButtonOriginX, playbackButtonsOriginY, playbackButtonsSize, playbackButtonsSize);
+    _skipButton.frame = CGRectMake(rightSideEdge - playbackButtonsSize, playbackButtonsOriginY, playbackButtonsSize, playbackButtonsSize);
     
     const CGFloat songTitleLabelHeight = 22.f;
     const CGFloat songArtistLabelHeight = 18.f;
@@ -71,7 +68,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     const CGFloat songTitleLabelOriginY = CGRectGetMinY(_songImageView.frame) + ((imageSize - songLabelsHeight) / 2.f);
     const CGFloat songArtistLabelOriginY = songTitleLabelOriginY + songTitleLabelHeight + smallPadding;
     const CGFloat songLabelsOriginX = CGRectGetMaxX(_songImageView.frame) + standardPadding;
-    const CGFloat songLabelsWidth = CGRectGetMinX(_playButton.frame) - standardPadding - songLabelsOriginX;
+    const CGFloat songLabelsWidth = CGRectGetMinX(_skipButton.frame) - standardPadding - songLabelsOriginX;
     _songTitleLabel.frame = CGRectMake(songLabelsOriginX, songTitleLabelOriginY, songLabelsWidth, songTitleLabelHeight);
     _songArtistLabel.frame = CGRectMake(songLabelsOriginX, songArtistLabelOriginY, songLabelsWidth, songArtistLabelHeight);
     
@@ -99,7 +96,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
         [self configureSongArtistLabel];
         [self configureSongImageView];
         [self configurePlayButton];
-        [self configurePauseButton];
+        [self configureSkipButton];
         [self configureNextUpLabel];
         [self configureTableView];
         [self configureShimmerLayer];
@@ -112,7 +109,7 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (void)configureRoomLabel {
     _roomNameLabel = [UILabel new];
-    _roomNameLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold]; // TODO: define font sizes
+    _roomNameLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightSemibold];
     [self addSubview:_roomNameLabel];
 }
 
@@ -155,14 +152,14 @@ static const CGFloat cornerRadiusRatio = 0.06f;
     [self addSubview:_playButton];
 }
 
-- (void)configurePauseButton {
-    _pauseButton = [UIButton new];
-    _pauseButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-    _pauseButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-    _pauseButton.hidden = YES;
-    [_pauseButton setImage:[UIImage systemImageNamed:pauseImageName] forState:UIControlStateNormal];
-    [_pauseButton addTarget:self action:@selector(pauseButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_pauseButton];
+- (void)configureSkipButton {
+    _skipButton = [UIButton new];
+    _skipButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+    _skipButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+    self.isSkipButtonHidden = YES;
+    [_skipButton setImage:[UIImage systemImageNamed:skipImageName] forState:UIControlStateNormal];
+    [_skipButton addTarget:self action:@selector(skipButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_skipButton];
 }
 
 - (void)configureNextUpLabel {
@@ -185,19 +182,21 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 # pragma mark - RoomViewDelegate
 
 - (void)playButtonTapped {
-    if (_playState == Paused) {
-        [self.delegate didTapPlay];
-        return;
-    }
-    [self.delegate didTapSkip];
+    [_playButton animateWithScaleSize:Large completion:^{
+        self->_playState == Paused ? [self->_delegate didTapPlay] : [self->_delegate didTapPause];
+    }];
 }
 
-- (void)pauseButtonTapped {
-    [self.delegate didTapPause];
+- (void)skipButtonTapped {
+    [_skipButton animateWithScaleSize:Large completion:^{
+        [self->_delegate didTapSkip];
+    }];
 }
 
 - (void)leaveButtonTapped {
-    [self.delegate didTapLeave];
+    [_leaveButton animateWithScaleSize:Small completion:^{
+        [self->_delegate didTapLeave];
+    }];
 }
 
 # pragma mark - Shimmer
@@ -236,19 +235,39 @@ static const CGFloat cornerRadiusRatio = 0.06f;
 
 - (void)setCurrentSongAlbumImageURL:(NSURL *)currentSongAlbumImageURL {
     [_songImageView setImageWithURL:currentSongAlbumImageURL];
+    [self setNeedsLayout];
 }
 
 - (void)setPlayState:(PlayState)playState {
     
     _playState = playState;
     
-    _pauseButton.hidden = !(playState == Playing);
     _playButton.enabled = !(playState == Disabled);
+    if (playState == Disabled) {
+        self.isSkipButtonHidden = YES;
+    }
     
-    UIImage *playButtonImage = (playState == Playing) ? [UIImage systemImageNamed:skipImageName] : [UIImage systemImageNamed:playImageName];
+    // TODO: change song labels width
+    UIImage *playButtonImage = (playState == Playing) ? [UIImage systemImageNamed:pauseImageName] : [UIImage systemImageNamed:playImageName];
     [_playButton setImage:playButtonImage forState:UIControlStateNormal];
     
-    [self setNeedsLayout];
+}
+
+- (void)setIsSkipButtonHidden:(BOOL)isSkipButtonHidden {
+    
+    _isSkipButtonHidden = isSkipButtonHidden;
+    _skipButton.hidden = isSkipButtonHidden;
+    
+    if (isSkipButtonHidden) {
+        _playButton.frame = _skipButton.frame;
+        return;
+    }
+    
+    const CGFloat playButtonTopEdge = CGRectGetMinY(_skipButton.frame);
+    const CGFloat leftPlayButtonLeftEdge = CGRectGetMinX(_skipButton.frame) - playbackButtonsSize - standardPadding;
+    const CGRect leftButtonFrame = CGRectMake(leftPlayButtonLeftEdge, playButtonTopEdge, playbackButtonsSize, playbackButtonsSize);
+    
+    _playButton.frame = leftButtonFrame;
     
 }
 

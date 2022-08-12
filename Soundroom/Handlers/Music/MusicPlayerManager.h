@@ -34,24 +34,24 @@ extern NSString *const MusicPlayerManagerDeauthorizedNotificaton;
 @interface MusicPlayerManager : NSObject
 
 @property (nonatomic, weak) id<MusicPlayer> musicPlayer;
-@property (nonatomic) AccountType streamingService;
+@property (nonatomic) AccountType accountType;
 @property (nonatomic, strong) NSString *playerTrackId;
 @property (nonatomic, strong, nullable) NSString *accessToken;
 @property (nonatomic) BOOL isPlaying;
-@property (nonatomic) BOOL isSessionAuthorized;
+@property (nonatomic, readonly, getter=isSessionAuthorized) BOOL isSessionAuthorized;
 
 + (instancetype)shared;
 
 - (void)authorizeSession;
 - (void)signOut;
-- (void)setStreamingService:(AccountType)streamingService;
+- (void)setAccountType:(AccountType)accountType;
 
 - (void)playTrackWithStreamingId:(NSString *)streamingId;
 - (void)resumePlayback;
 - (void)pausePlayback;
 - (void)didEndCurrentSong;
-
 - (void)didDisconnectRemote;
+
 - (void)openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
 - (void)sceneWillResignActive;
 - (void)sceneDidBecomeActive;

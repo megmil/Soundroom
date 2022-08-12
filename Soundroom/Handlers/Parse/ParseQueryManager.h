@@ -42,7 +42,6 @@ NS_ASSUME_NONNULL_BEGIN
 // invitation
 + (void)getInvitationWithId:(NSString *)invitationId completion:(PFObjectResultBlock)completion;
 + (void)getInvitationAcceptedByCurrentUserWithCompletion:(PFObjectResultBlock)completion;
-+ (void)getInvitationsAcceptedForCurrentRoomWithCompletion:(PFArrayResultBlock)completion;
 + (void)getInvitationsPendingForCurrentUserWithCompletion:(PFArrayResultBlock)completion;
 
 // key values

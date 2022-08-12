@@ -9,9 +9,7 @@
 #import "MusicCatalogManager.h"
 #import "ParseQueryManager.h"
 #import "ParseUserManager.h"
-#import "ParseConstants.h" // TODO: remove?
 #import "ParseObjectManager.h"
-#import "EnumeratedTypes.h" // TODO: remove?
 #import "SongCell.h"
 #import "Track.h"
 #import "UITableView+ReuseIdentifier.h"
@@ -47,8 +45,8 @@ static const NSUInteger emptySearchCount = 20;
 
 - (void)configureSearch {
     _searchBar.delegate = self;
-    _searchTypeControl.selectedSegmentIndex = (_searchType == SearchTypeUser) ? 1 : 0;
-    _searchTypeControl.enabled = (_searchType == SearchTypeTrackAndUser);
+    _searchTypeControl.selectedSegmentIndex = (_searchType == UserSearch) ? 1 : 0;
+    _searchTypeControl.enabled = (_searchType == TrackAndUserSearch);
     [_searchTypeControl addTarget:self action:@selector(clearSearchData) forControlEvents:UIControlEventValueChanged];
 }
 
@@ -61,13 +59,13 @@ static const NSUInteger emptySearchCount = 20;
 - (void)didAddObjectWithId:(NSString *)objectId deezerId:(NSString *)deezerId {
     
     // warning if current user is not in a room
-    if (![ParseUserManager isInRoom]) {
+    if (![ParseUserManager isCurrentUserInRoom]) {
         [self missingRoomAlert];
         return;
     }
     
     // invite user to room
-    if ([self searchType] == SearchTypeUser) {
+    if ([self searchType] == UserSearch) {
         [ParseObjectManager createInvitationToCurrentRoomForUserWithId:objectId];
         return;
     }
@@ -80,10 +78,13 @@ static const NSUInteger emptySearchCount = 20;
 # pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.searchType == SearchTypeTrack) {
+    
+    if (self.searchType == TrackSearch) {
         return _tracks.count;
     }
+    
     return _users.count;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -92,7 +93,7 @@ static const NSUInteger emptySearchCount = 20;
     cell.cellType = SearchCell;
     cell.addDelegate = self;
     
-    if (self.searchType == SearchTypeTrack) {
+    if (self.searchType == TrackSearch) {
         Track *track = _tracks[indexPath.row];
         cell.title = track.title;
         cell.subtitle = track.artist;
@@ -103,7 +104,7 @@ static const NSUInteger emptySearchCount = 20;
     }
     
     PFUser *user = _users[indexPath.row];
-    cell.title = user.username; // TODO: add display name
+    cell.title = user.username;
     cell.subtitle = user.username;
     cell.image = [ParseUserManager avatarImageForUser:user];
     cell.objectId = user.objectId;
@@ -122,12 +123,12 @@ static const NSUInteger emptySearchCount = 20;
     
     NSString *searchText = [_searchBar.text copy];
     
-    if (searchText.length == 0) {
+    if (searchText == nil || searchText.length == 0) {
         [self clearSearchData];
         return;
     }
     
-    if (self.searchType == SearchTypeTrack) {
+    if (self.searchType == TrackSearch) {
         _tracks = [self emptyTracks];
         [_tableView reloadData];
         [self searchTracksWithQuery:searchText];
@@ -210,7 +211,7 @@ static const NSUInteger emptySearchCount = 20;
 # pragma mark - Reload Table
 
 // TODO: test if faster than reloadData
-- (void)replaceUnloadedArray:(NSMutableArray *)unloadedArray loadedArray:(NSArray *)loadedArray {
+- (void)replaceUnloadedArray:(NSMutableArray *)unloadedArray loadedArray:(NSArray *)loadedArray query:(NSString *)query {
 
     NSMutableArray <NSIndexPath *> *indexPathsToReconfigure = [NSMutableArray new];
     NSMutableArray <NSIndexPath *> *indexPathsToDelete = [NSMutableArray new];
@@ -238,12 +239,13 @@ static const NSUInteger emptySearchCount = 20;
 
     }
 
-    // TODO: check query against searchBar.text again
-    [_tableView beginUpdates];
-    [_tableView reconfigureRowsAtIndexPaths:indexPathsToReconfigure];
-    [_tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationNone];
-    [_tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:UITableViewRowAnimationNone];
-    [_tableView endUpdates];
+    if ([query isEqualToString:_searchBar.text]) {
+        [_tableView beginUpdates];
+        [_tableView reconfigureRowsAtIndexPaths:indexPathsToReconfigure];
+        [_tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView endUpdates];
+    }
 
 }
 

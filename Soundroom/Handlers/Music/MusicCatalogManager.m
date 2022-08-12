@@ -70,7 +70,7 @@
 
 - (NSString *)validateStreamingService {
     
-    AccountType streamingService = [[MusicPlayerManager shared] streamingService];
+    AccountType streamingService = [[MusicPlayerManager shared] accountType];
     NSString *accessToken = [[MusicPlayerManager shared] accessToken];
     
     if (streamingService == AppleMusic) {

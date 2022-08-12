@@ -9,6 +9,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, SearchType) {
+    TrackAndUserSearch = 0,
+    TrackSearch = 1,
+    UserSearch = 2
+};
+
 typedef NS_ENUM(NSUInteger, AccountType) {
     Deezer = 0,
     Soundroom = 1,

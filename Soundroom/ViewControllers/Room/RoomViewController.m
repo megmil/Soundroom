@@ -21,30 +21,21 @@
 #import "UITableView+ReuseIdentifier.h"
 #import "UITableView+EmptyMessage.h"
 
-static NSString *const emptyTableMessage = @"No songs are currently in the queue.";
-
 @interface RoomViewController () <UITableViewDelegate, UITableViewDataSource, RoomManagerDelegate, QueueCellDelegate, RoomViewDelegate>
 
 @property (strong, nonatomic) IBOutlet RoomView *roomView;
 @property (strong, nonatomic) NSArray <Song *> *queue;
-@property (nonatomic) BOOL didCancelAlerts;
 
 @end
 
 @implementation RoomViewController
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
-    
-    [self fetchCurrentRoom];
+    [self configureDelegates];
     [self configureTableView];
     [self configureObservers];
-    
-    _didCancelAlerts = NO;
-    _roomView.delegate = self;
-    [RoomManager shared].delegate = self;
-    
+    [self fetchCurrentRoom];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -70,29 +61,15 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 }
 
 - (void)configureObservers {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRoomViews) name:RoomManagerJoinedRoomNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTrackViews) name:MusicPlayerManagerAuthorizedNotificaton object:nil];
 }
 
-# pragma mark - Selectors
-
-- (void)loadRoomViews {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        
-        self->_queue = [[RoomManager shared] queue];
-
-        [self updateCurrentTrackViews];
-        
-        self->_roomView.hidden = NO;
-        self->_roomView.roomName = [[RoomManager shared] currentRoomName];
-        if (![ParseUserManager isCurrentUserHost]) {
-            self->_roomView.playState = Disabled;
-        }
-        
-        [self->_roomView.tableView reloadDataWithAnimation];
-        
-    });
+- (void)configureDelegates {
+    _roomView.delegate = self;
+    [RoomManager shared].delegate = self;
 }
+
+# pragma mark - Selectors
 
 - (void)reloadTrackViews {
     
@@ -103,40 +80,13 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
         }
     });
     
-    // reload track data
-    [[RoomManager shared] reloadTrackDataWithCompletion:^(void) {
-        self->_queue = [[RoomManager shared] queue];
-        [self updateCurrentTrackViews];
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [self->_roomView.tableView reloadData];
-        });
-    }];
+    [[RoomManager shared] reloadTrackData];
     
-}
-
-- (void)updateCurrentTrackViews {
-    
-    Track *track = [[RoomManager shared] currentTrack];
-    
-    dispatch_async(dispatch_get_main_queue(), ^(void){
-        
-        self->_roomView.currentSongTitle = track.title;
-        self->_roomView.currentSongArtist = track.artist;
-        self->_roomView.currentSongAlbumImageURL = track.albumImageURL;
-        
-        if (![ParseUserManager isCurrentUserHost]) {
-            self->_roomView.playState = Disabled;
-            return;
-        }
-        
-        self->_roomView.playState = (track.streamingId != nil) ? Playing : Paused; // TODO: issue
-        
-    });
-
 }
 
 - (void)goToLobby {
     dispatch_async(dispatch_get_main_queue(), ^(void){
+        self->_roomView.hidden = YES;
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LobbyViewController *lobbyViewController = [storyboard instantiateViewControllerWithIdentifier:LobbyViewControllerIdentifier];
         [lobbyViewController setModalPresentationStyle:UIModalPresentationCurrentContext];
@@ -147,7 +97,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 # pragma mark - RoomView
 
 - (void)didTapPlay {
-    [[MusicPlayerManager shared] resumePlayback];
+    [[RoomManager shared] resumePlayback];
 }
 
 - (void)didTapPause {
@@ -170,6 +120,14 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 # pragma mark - RoomManager
 
+- (void)didLoadRoom {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_roomView.playState = ![ParseUserManager isCurrentUserPlayingMusic] ? Disabled : Paused;
+        self->_roomView.roomName = [[RoomManager shared] currentRoomName];
+        self->_roomView.hidden = NO;
+    });
+}
+
 - (void)didUpdateCurrentTrack {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         [self updateCurrentTrackViews];
@@ -180,7 +138,6 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     self->_queue = @[];
     [[MusicPlayerManager shared] pausePlayback]; // TODO: stop playback?
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_roomView.hidden = YES;
         [self goToLobby];
     });
 }
@@ -189,6 +146,13 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         self->_queue = [[RoomManager shared] queue];
         [self->_roomView.tableView reloadDataWithAnimation];
+    });
+}
+
+- (void)didReloadQueue {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self->_queue = [[RoomManager shared] queue];
+        [self->_roomView.tableView reloadData];
     });
 }
 
@@ -215,22 +179,39 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 - (void)setPlayState:(PlayState)playState {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self->_roomView.playState = playState;
+        
+        // update playback controls if current user is host or (remote mode) there is a current track
+        BOOL isCurrentTrackMissing = [[RoomManager shared] currentTrack].title == nil || [[RoomManager shared] currentTrack].title.length == 0;
+        BOOL isRemoteMode = [[RoomManager shared] listeningMode] == RemoteMode;
+        if ([ParseUserManager isCurrentUserHost] || (!isCurrentTrackMissing && isRemoteMode)) {
+            self->_roomView.playState = playState;
+            return;
+        }
+        
+        // else, show disabled state
+        self->_roomView.playState = Disabled;
+        
     });
+}
+
+- (void)updateCurrentTrackViews {
+    
+    Track *track = [[RoomManager shared] currentTrack];
+    _roomView.currentSongTitle = track.title;
+    _roomView.currentSongArtist = track.artist;
+    _roomView.currentSongAlbumImageURL = track.albumImageURL;
+    
+    // hide skip button for non-host members and rooms missing a current track
+    BOOL isCurrentTrackMissing = (track == nil || track.title == nil || track.title.length == 0);
+    _roomView.isSkipButtonHidden = ![ParseUserManager isCurrentUserHost] || isCurrentTrackMissing;
+
 }
 
 # pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    if (!_queue.count) {
-        [_roomView.tableView showEmptyMessageWithText:emptyTableMessage];
-    } else {
-        [_roomView.tableView removeEmptyMessage];
-    }
-    
+    _queue.count == 0 ? [_roomView.tableView showEmptyMessageWithText:@"No songs are currently in the queue."] : [_roomView.tableView removeEmptyMessage];
     return _queue.count;
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -287,11 +268,7 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
 
 # pragma mark - Alerts
 
-- (void)showMissingPlayerAlert {
-    
-    if (_didCancelAlerts) {
-        return;
-    }
+- (void)missingPlayerAlert {
     
     NSString *title = @"Music Player Not Found";
     NSString *message = @"Could not resume playback. Please choose a streaming service or connect on the profile page.";
@@ -305,28 +282,24 @@ static NSString *const emptyTableMessage = @"No songs are currently in the queue
                                     actionWithTitle:@"Spotify"
                                     style:UIAlertActionStyleDefault
                                     handler:^(UIAlertAction *action) {
-                                        [[MusicPlayerManager shared] setStreamingService:Spotify];
-                                        [[MusicPlayerManager shared] authorizeSession];
+                                        [[MusicPlayerManager shared] setAccountType:Spotify];
                                     }];
     
     UIAlertAction *appleMusicAction = [UIAlertAction
                                        actionWithTitle:@"Apple Music"
                                        style:UIAlertActionStyleDefault
                                        handler:^(UIAlertAction *action) {
-                                        [[MusicPlayerManager shared] setStreamingService:AppleMusic];
-                                        [[MusicPlayerManager shared] authorizeSession];
+                                        [[MusicPlayerManager shared] setAccountType:AppleMusic];
                                     }];
     
-    UIAlertAction *ignoreAction = [UIAlertAction
-                                  actionWithTitle:@"Don't show again"
-                                  style:UIAlertActionStyleDestructive
-                                  handler:^(UIAlertAction *action) {
-                                    self->_didCancelAlerts = YES;
-                                }];
+    UIAlertAction *cancelAction = [UIAlertAction
+                                   actionWithTitle:@"Cancel"
+                                   style:UIAlertActionStyleDestructive
+                                   handler:^(UIAlertAction *action) { }];
 
     [alert addAction:spotifyAction];
     [alert addAction:appleMusicAction];
-    [alert addAction:ignoreAction];
+    [alert addAction:cancelAction];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         // check that self is not already presenting an alert / view controller

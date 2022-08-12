@@ -24,7 +24,7 @@ static NSString *const deezerJSONResponseArtistKey = @"artist";
 static NSString *const deezerJSONResponseArtistNameKey = @"name";
 static NSString *const deezerJSONResponseAlbumKey = @"album";
 static NSString *const deezerJSONResponseAlbumImageKey = @"cover";
-static NSString *const deezerJSOnResponseISRCKey = @"isrc";
+static NSString *const deezerJSONResponseISRCKey = @"isrc";
 
 @implementation DeezerAPIManager
 
@@ -50,12 +50,18 @@ static NSString *const deezerJSOnResponseISRCKey = @"isrc";
 }
 
 - (NSDictionary *)searchParametersWithToken:(NSString *)token query:(NSString *)query {
+    
+    if (query == nil) {
+        query = @"";
+    }
+    
     NSDictionary *parameters = @{queryParameterName:query,
                                  limitParameterName:searchLimit};
     return parameters;
+    
 }
 
-# pragma mark - Lookup
+# pragma mark - ISRC Lookup
 
 - (NSString *)lookupURLStringWithISRC:(NSString *)isrc {
     return [NSString stringWithFormat:lookupURLString, isrc];
@@ -65,14 +71,14 @@ static NSString *const deezerJSOnResponseISRCKey = @"isrc";
     return nil;
 }
 
-# pragma mark - ISRC
+# pragma mark - Deezer ID Lookup
 
 - (void)getISRCWithDeezerId:(NSString *)deezerId completion:(void (^)(NSString *))completion {
     
     NSString *urlString = [NSString stringWithFormat:getTrackURLString, deezerId];
     
     [self GET:urlString parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask *task, id response) {
-        NSString *isrc = response[deezerJSOnResponseISRCKey];
+        NSString *isrc = response[deezerJSONResponseISRCKey];
         completion(isrc);
     } failure:nil];
     
@@ -83,7 +89,7 @@ static NSString *const deezerJSOnResponseISRCKey = @"isrc";
 - (NSArray<Track *> *)tracksWithJSONResponse:(NSDictionary *)response {
     
     NSArray *tracksJSONResponses = response[deezerJSONResponseTracksPathName];
-    NSMutableArray *tracks = [NSMutableArray array];
+    NSMutableArray *tracks = [NSMutableArray new];
     
     for (NSDictionary *trackJSONResponse in tracksJSONResponses) {
         Track *track = [self trackWithJSONResponse:trackJSONResponse];
@@ -98,8 +104,7 @@ static NSString *const deezerJSOnResponseISRCKey = @"isrc";
     
     NSString *title = response[deezerJSONResponseTitleKey];
     NSString *artist = response[deezerJSONResponseArtistKey][deezerJSONResponseArtistNameKey];
-    NSString *albumImageURLString = response[deezerJSONResponseAlbumKey][deezerJSONResponseAlbumImageKey];
-    NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
+    NSURL *albumImageURL = [self albumImageURLWithJSONResponse:response];
     
     Track *track = [[Track alloc] initWithISRC:isrc title:title artist:artist albumImageURL:albumImageURL];
     return track;
@@ -111,12 +116,17 @@ static NSString *const deezerJSOnResponseISRCKey = @"isrc";
     NSString *deezerId = response[deezerJSONResponseIdKey];
     NSString *title = response[deezerJSONResponseTitleKey];
     NSString *artist = response[deezerJSONResponseArtistKey][deezerJSONResponseArtistNameKey];
-    NSString *albumImageURLString = response[deezerJSONResponseAlbumKey][deezerJSONResponseAlbumImageKey];
-    NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
+    NSURL *albumImageURL = [self albumImageURLWithJSONResponse:response];
     
     Track *track = [[Track alloc] initWithDeezerId:deezerId title:title artist:artist albumImageURL:albumImageURL];
     return track;
     
+}
+
+- (NSURL *)albumImageURLWithJSONResponse:(NSDictionary *)response {
+    NSString *albumImageURLString = response[deezerJSONResponseAlbumKey][deezerJSONResponseAlbumImageKey];
+    NSURL *albumImageURL = [NSURL URLWithString:albumImageURLString];
+    return albumImageURL;
 }
 
 @end

@@ -25,7 +25,7 @@
     
     NSString *userId = [ParseUserManager currentUserId];
     
-    if (!userId) {
+    if (userId == nil || userId.length == 0) {
         return;
     }
     
@@ -42,14 +42,14 @@
     
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!roomId) {
+    if (roomId == nil || roomId.length == 0) {
         return;
     }
     
     [ParseQueryManager getRoomWithId:roomId completion:^(PFObject *object, NSError *error) {
-        if (object) {
+        if (object != nil) {
             Room *room = (Room *)object;
-            [room setValue:isrc forKey:currentISRCKey];
+            [room setValue:isrc forKey:currentSongISRCKey];
             [room saveInBackground];
         }
     }];
@@ -83,17 +83,17 @@
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!userId || !roomId) {
+    if (userId == nil || roomId == nil || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
-    if (isrc) {
+    if (isrc != nil || isrc.length != 0) {
         Request *newRequest = [[Request alloc] initWithISRC:isrc roomId:roomId userId:userId];
         [newRequest saveInBackground];
         return;
     }
     
-    if (!deezerId) {
+    if (deezerId == nil) {
         return;
     }
     
@@ -157,13 +157,13 @@
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!requestId || !userId || !roomId) {
+    if (requestId == nil || userId == nil || roomId == nil || requestId.length == 0 || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
     // check for duplicate
     [ParseQueryManager getUpvoteByCurrentUserForRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
-        if (!object && error.code == 101) {
+        if (object == nil && error.code == 101) {
             // no results matched the query
             Upvote *upvote = [[Upvote alloc] initWithRequestId:requestId userId:userId roomId:roomId];
             [upvote saveInBackground];
@@ -176,13 +176,13 @@
     NSString *userId = [ParseUserManager currentUserId];
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!requestId || !userId || !roomId) {
+    if (requestId == nil || userId == nil || roomId == nil || requestId.length == 0 || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
     // check for duplicate
     [ParseQueryManager getDownvoteByCurrentUserForRequestWithId:requestId completion:^(PFObject *object, NSError *error) {
-        if (!object && error.code == 101) {
+        if (object == nil && error.code == 101) {
             // no results matched the query
             Downvote *downvote = [[Downvote alloc] initWithRequestId:requestId userId:userId roomId:roomId];
             [downvote saveInBackground];
@@ -214,7 +214,7 @@
     
     NSString *roomId = [[RoomManager shared] currentRoomId];
     
-    if (!userId || !roomId) {
+    if (userId == nil || roomId == nil || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
@@ -232,7 +232,7 @@
     
     NSString *userId = [ParseUserManager currentUserId];
     
-    if (!userId || !roomId) {
+    if (userId == nil || roomId == nil || userId.length == 0 || roomId.length == 0) {
         return;
     }
     
@@ -247,14 +247,14 @@
 }
 
 + (void)deleteInvitationsAcceptedByCurrentUser {
-    [ParseQueryManager getInvitationsAcceptedForCurrentRoomWithCompletion:^(NSArray *objects, NSError *error) {
-        [self deleteObjects:objects];
+    [ParseQueryManager getInvitationAcceptedByCurrentUserWithCompletion:^(PFObject *object, NSError *error) {
+        [object deleteInBackground];
     }];
 }
 
 + (void)acceptInvitationWithId:(NSString *)invitationId {
     [ParseQueryManager getInvitationWithId:invitationId completion:^(PFObject *object, NSError *error) {
-        if (object) {
+        if (object != nil) {
             Invitation *invitation = (Invitation *)object;
             [invitation setValue:@(NO) forKey:isPendingKey];
             [invitation saveInBackground];
@@ -264,7 +264,7 @@
 
 + (void)deleteInvitationWithId:(NSString *)invitationId {
     [ParseQueryManager getInvitationWithId:invitationId completion:^(PFObject *object, NSError *error) {
-        if (object) {
+        if (object != nil) {
             [object deleteInBackground];
         }
     }];

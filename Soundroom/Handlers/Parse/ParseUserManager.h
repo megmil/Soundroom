@@ -19,9 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)currentUserId;
 + (NSString *)currentUsername;
 + (BOOL)isLoggedIn;
-+ (BOOL)isInRoom;
++ (BOOL)isCurrentUserInRoom;
 + (BOOL)isCurrentUserHost;
-+ (BOOL)shouldPlayMusic; // TODO: rename
++ (BOOL)isCurrentUserPlayingMusic;
 
 + (UIImage *)avatarImageForCurrentUser;
 + (UIImage *)avatarImageForUser:(PFUser *)user;

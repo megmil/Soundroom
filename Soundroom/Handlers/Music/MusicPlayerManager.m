@@ -28,14 +28,27 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     return sharedManager;
 }
 
-- (void)setStreamingService:(AccountType)streamingService {
+- (instancetype)init {
     
-    if (streamingService != Spotify && streamingService != AppleMusic) {
+    self = [super init];
+    
+    if (self) {
+        _accountType = Deezer;
+    }
+    
+    return self;
+    
+}
+
+- (void)setAccountType:(AccountType)accountType {
+    
+    if (accountType != Spotify && accountType != AppleMusic) {
         return;
     }
     
-    _streamingService = streamingService;
-    _musicPlayer = (streamingService == Spotify) ? [SpotifySessionManager shared] : [AppleMusicSessionManager shared];
+    _accountType = accountType;
+    _musicPlayer = (accountType == Spotify) ? [SpotifySessionManager shared] : [AppleMusicSessionManager shared];
+    [self authorizeSession];
 
 }
 
@@ -43,36 +56,27 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)authorizeSession {
     
-    if (!_musicPlayer || _accessToken) {
+    if (_musicPlayer == nil) {
+        return;
+    }
+    
+    if (_accessToken != nil) {
         [self postAuthorizedNotification];
         return;
     }
     
     [_musicPlayer authorizeSession];
+    
 }
 
 - (void)signOut {
     
     [self pausePlayback];
     
-    if (_musicPlayer && _isSessionAuthorized) {
+    if (_musicPlayer != nil && [self isSessionAuthorized]) {
         [_musicPlayer signOut];
-        _streamingService = Deezer;
         [self postDeauthorizedNotification];
     }
-    
-}
-
-- (void)setAccessToken:(NSString *)accessToken {
-    
-    _accessToken = accessToken;
-    
-    if (accessToken) {
-        [self postAuthorizedNotification];
-        return;
-    }
-    
-    [self postDeauthorizedNotification];
     
 }
 
@@ -80,7 +84,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)playTrackWithStreamingId:(NSString *)streamingId {
     
-    if (![ParseUserManager shouldPlayMusic] || _musicPlayer == nil) {
+    if (![ParseUserManager isCurrentUserPlayingMusic] || _musicPlayer == nil) {
         return;
     }
     
@@ -91,7 +95,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)pausePlayback {
     
-    if (![ParseUserManager shouldPlayMusic] || _musicPlayer == nil || !_isPlaying) {
+    if (![ParseUserManager isCurrentUserPlayingMusic] || _musicPlayer == nil || !_isPlaying) {
         return;
     }
     
@@ -101,47 +105,31 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)resumePlayback {
     
-    if (![ParseUserManager shouldPlayMusic]) {
+    if (![ParseUserManager isCurrentUserPlayingMusic]) {
         return;
     }
-    
-    // if there is no song to resume, play the top song
-    NSString *roomTrackId = [[RoomManager shared] currentTrackStreamingId];
-    if (roomTrackId == nil) {
-        [[RoomManager shared] playTopSong];
-        return;
-    }
+
+    NSString *streamingId = [[RoomManager shared] currentTrackStreamingId];
     
     // if the song is paused, resume playback
-    if (!_isPlaying && [roomTrackId isEqualToString:_playerTrackId]) {
+    if (!_isPlaying && [streamingId isEqualToString:_playerTrackId]) {
         [_musicPlayer resumePlayback];
         return;
     }
     
-    [self playTrackWithStreamingId:roomTrackId];
+    [self playTrackWithStreamingId:streamingId];
     
 }
 
 - (void)didEndCurrentSong {
     
-    if (_isSwitchingSong == YES) {
+    if (_isSwitchingSong) {
         return;
     }
     
     _isSwitchingSong = YES;
     [self pausePlayback];
     [[RoomManager shared] playTopSong];
-    
-}
-
-- (void)setIsPlaying:(BOOL)isPlaying {
-    
-    if (_isPlaying == isPlaying) {
-        return;
-    }
-    
-    _isPlaying = isPlaying;
-    [[RoomManager shared] updatePlayerWithPlayState:_isPlaying];
     
 }
 
@@ -161,7 +149,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)sceneWillResignActive {
     
-    if (![ParseUserManager shouldPlayMusic] || _musicPlayer == nil) {
+    if (![ParseUserManager isCurrentUserPlayingMusic] || _musicPlayer == nil) {
         return;
     }
     
@@ -171,7 +159,7 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
 
 - (void)sceneDidBecomeActive {
     
-    if (![ParseUserManager shouldPlayMusic] || _musicPlayer == nil) {
+    if (![ParseUserManager isCurrentUserPlayingMusic] || _musicPlayer == nil) {
         return;
     }
     
@@ -179,17 +167,45 @@ NSString *const MusicPlayerManagerDeauthorizedNotificaton = @"MusicPlayerManager
     
 }
 
+# pragma mark - Properties
+
+- (void)setAccessToken:(NSString *)accessToken {
+    
+    _accessToken = accessToken;
+    
+    if ([self isSessionAuthorized]) {
+        [self postAuthorizedNotification];
+        return;
+    }
+    
+    [self postDeauthorizedNotification];
+    
+}
+
+- (void)setIsPlaying:(BOOL)isPlaying {
+    
+    if (_isPlaying == isPlaying) {
+        return;
+    }
+    
+    _isPlaying = isPlaying;
+    [[RoomManager shared] updatePlayerWithPlayState:_isPlaying];
+    
+}
+
+- (BOOL)isSessionAuthorized {
+    return _accessToken != nil && _accessToken.length != 0;
+}
+
 # pragma mark - Helpers
 
 - (void)postAuthorizedNotification {
-    _isSessionAuthorized = YES;
-    [[RoomManager shared] reloadCurrentTrackData];
     [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerAuthorizedNotificaton object:nil];
 }
 
 - (void)postDeauthorizedNotification {
+    _accountType = Deezer;
     _accessToken = nil;
-    _isSessionAuthorized = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:MusicPlayerManagerDeauthorizedNotificaton object:nil];
 }
 

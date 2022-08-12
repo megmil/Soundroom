@@ -7,6 +7,7 @@
 
 #import "AccountView.h"
 #import "ImageConstants.h"
+#import "UIView+TapAnimation.h"
 
 static NSString *const soundroomName = @"Soundroom";
 static NSString *const spotifyName = @"Spotify";
@@ -143,19 +144,23 @@ static NSString *const loggedOutName = @"Music Player";
 
 - (void)didTapActionButton {
     
-    // if the user is not already logged in, must be music player login
-    if (_accountType == Deezer) {
-        [self.delegate didTapMusicPlayerLogin];
-        return;
-    }
-    
-    // if this is a Soundroom account view, only action is logout
-    if (_accountType == Soundroom) {
-        [self.delegate didTapUserLogout];
-        return;
-    }
-    
-    [self.delegate didTapMusicPlayerLogout];
+    [_actionButton animateWithScaleSize:Large completion:^{
+        
+        // if the user is not already logged in, must be music player login
+        if (self->_accountType == Deezer) {
+            [self->_delegate didTapMusicPlayerLogin];
+            return;
+        }
+        
+        // if this is a Soundroom account view, only action is logout
+        if (self->_accountType == Soundroom) {
+            [self->_delegate didTapUserLogout];
+            return;
+        }
+        
+        [self->_delegate didTapMusicPlayerLogout];
+        
+    }];
     
 }
 
