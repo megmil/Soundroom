@@ -101,10 +101,10 @@ A collaborative music queue where users can create and join virtual music rooms 
 ## Project Plan
 
 ### Wireframes
-<img width="650" alt="wireframe" src="https://user-images.githubusercontent.com/101139170/177431593-f5094072-df7e-4d8d-904b-70a5da8a0066.png">
+<img alt="wireframe" src="https://user-images.githubusercontent.com/101139170/177431593-f5094072-df7e-4d8d-904b-70a5da8a0066.png" width=40% height=40%>
 
 ### Gantt Chart
-<img width="760" alt="gantt" src="https://user-images.githubusercontent.com/101139170/177448765-d558fb32-1be6-43d9-a352-cfb01e51b752.png">
+<img alt="gantt" src="https://user-images.githubusercontent.com/101139170/177448765-d558fb32-1be6-43d9-a352-cfb01e51b752.png" width=60% height=60%>
 
 
 ## Schema
