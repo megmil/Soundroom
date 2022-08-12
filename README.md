@@ -6,53 +6,71 @@
 3. [Project Plan](#project-plan)
 4. [Schema](#schema)
 
-## 1. Overview
+## Overview
 
 ### Description
-A collaborative music queue where users can create/join virtual music rooms to request and vote on songs.
+A collaborative music queue where users can create and join virtual music rooms to request and vote on songs. Users can participate in a room without connecting to a music streaming account, or they can optionally link their Spotify account to control playback through the Soundroom app. Allows two room listening modes: Party Mode, where only the host's device plays the queue; and Remote Mode, where all devices play the queue.
 
-### Requirements
-From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tRvQZDizWwBSQVCfRiS4sqMZY6Y/edit#heading=h.8l153mzbgh5r).
-- Interacts with a database
-  - Parse/Back4App
-- Integrates at least one SDK or API
-  - Spotify iOS SDK
-  - Spotify Web API
-  - Deezer API
-  - MusicKit
-- Ability to log in / logout as a user
-- Ability to sign up with a new user profile
-- Uses at least one gesture
-  - Tap to dismiss keyboards
-  - Swipe to remove song from queue
-- Incorporates at least one external library to add visual polish
-  - SkyFloatingLabelTextField
-- Uses at least one animation
-  - Vote button animations
-  - Loading cell shimmer
-  - Add button animation
-  - Reload table with animation
-  - Insert/delete/move cell with animation
-- Technical challenges
-  - Live implementation: Parse LiveQuery subscribes to 5 queries (invitations for current user, current room, song requests in current room, upvotes in current room, downvotes in current room) to respond to real-time updates from multiple users
-  - Search bar: throttle search requests to reduce the number of API calls and allow typeahead
-  - Allow multiple music players / catalogs: swap out Spotify for Apple Music (for search/get API calls and playback) or use Deezer to search/get tracks without connecting to a music streaming service
+### Technical Challenges
+- Live implementation: Parse LiveQuery subscribes to 5 queries (invitations for current user, current room, song requests in current room, upvotes in current room, downvotes in current room) to respond to real-time updates from multiple users
+- Search bar: throttle search requests to reduce the number of API calls and allow typeahead
+- Allow multiple music players / catalogs: swap out Spotify for Apple Music (for search/get API calls and playback) or use Deezer to search/get tracks without connecting to a music streaming service
+- Custom animations: tap resize animation, vote button bounce, loading cell shimmer layer, queue insert/delete/move row animations
+
+### Databases, SDKs, APIs, and libraries incorporated
+- Parse and Parse Live Query + Back4App
+- Spotify iOS SDK
+- MusicKit
+- Spotify Web API
+- Deezer API
+- Apple Music API
+- SkyFloatingLabelTextField
 
 
-## 2. Product Spec
+## Product Spec
 
 ### User Stories
 
 #### Required Stories
+- Users can register / login / logout as a user
 - Users can create rooms
+
+<img src="https://user-images.githubusercontent.com/101139170/184420868-bc6e1163-925e-4fb8-981e-5821ff053371.gif" width=20% height=20%>
+
 - Users can join private rooms
-- Users can play the room queue through the Spotify app
+
+<img src="https://user-images.githubusercontent.com/101139170/184419037-b8bada2f-09d3-4fe4-b6d0-5e4246856f5b.gif" width=20% height=20%> <img src="https://user-images.githubusercontent.com/101139170/184418889-3e872a38-e8af-429d-9ca9-5ab7604e4826.gif" width=20% height=20%>
+
+- Users can control playback through the Spotify app
+
+<img src="https://user-images.githubusercontent.com/101139170/184420012-48c0c5ef-2837-4dea-9515-53ad349608cb.gif" width=30% height=30%> <img src="https://user-images.githubusercontent.com/101139170/184420036-5dc1c5ca-af2e-4675-8ece-b5dd710e003a.gif" width=30% height=30%>
+
+<img src="https://user-images.githubusercontent.com/101139170/184420425-ff6e9172-619a-45f0-b402-dd9a1a313767.gif" width=30% height=30%> <img src="https://user-images.githubusercontent.com/101139170/184420433-32efb213-aad2-4c00-b0bf-4ab5fd397bc6.gif" width=30% height=30%>
+
 - Users can vote on songs
+
+<img src="https://user-images.githubusercontent.com/101139170/184419681-251c6f4a-fcf6-4779-a11f-cfa3db263b18.gif" width=30% height=30%> <img src="https://user-images.githubusercontent.com/101139170/184419699-ca324faf-fbf7-4f5a-87bd-623edc97d487.gif" width=30% height=30%> <img src="https://user-images.githubusercontent.com/101139170/184419690-8c49bcd6-f47c-45c1-b5b4-92f30dc16aeb.gif" width=30% height=30%>
+
 - Songs change position in the queue based on their "score"
+
+<img src="https://user-images.githubusercontent.com/101139170/184419951-2cd9ee36-c492-4ae0-b901-ca11d488dd16.gif" width=30% height=30%>
+
 - Users can search songs
+
+<img src="https://user-images.githubusercontent.com/101139170/184417817-050f4c55-aed1-4686-8f3c-2c462158e317.gif" width=20% height=20%> <img src="https://user-images.githubusercontent.com/101139170/184418309-bc541ab1-f473-4db1-91d3-2cc2b56263b4.gif" width=20% height=20%>
+
 - Users can add songs to the queue
+
+<img src="https://user-images.githubusercontent.com/101139170/184419244-b19546e9-7833-4579-981f-ad6431c84180.gif" width=20% height=20%> <img src="https://user-images.githubusercontent.com/101139170/184419190-eb4e6f00-6ca5-4a70-a133-7deff8839b1d.gif" width=20% height=20%>
+
 - Users can leave a room
+
+<img src="https://user-images.githubusercontent.com/101139170/184421036-e0db9ec6-0af2-4d31-a3e4-5cd1b144f9e7.gif" width=20% height=20%>
+
 - Hosts can swipe to remove a song from the queue
+
+<img src="https://user-images.githubusercontent.com/101139170/184419901-86b465bb-a4e7-49e5-9cc2-d0ce0044de74.gif" width=30% height=30%>
+
 
 #### Stretch goals
 - Search bar throttles search requests to reduce the number of API calls
@@ -61,7 +79,9 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 - Users can swap out Spotify and Apple Music to play the queue
 - Hosts can create rooms in party mode (i.e. only the host plays music) or remote mode (i.e. all members play music)
 - Animate queue for individual changes (e.g. song moves up/down, song is deleted, song is inserted)
-- Used Core Animation to create a shimmer layer that masks over empty track/user views while data is loading
+- Animate button taps
+- Shimmer animation covers empty track/user views while data is loading
+
 
 ### Screen Archetypes
 * Login
@@ -78,7 +98,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
   * Add songs to the queue
 
 
-## 3. Project Plan
+## Project Plan
 
 ### Wireframes
 <img width="650" alt="wireframe" src="https://user-images.githubusercontent.com/101139170/177431593-f5094072-df7e-4d8d-904b-70a5da8a0066.png">
@@ -87,7 +107,7 @@ From [Project Expections](https://docs.google.com/document/d/1TvGTVGsH0b3HSVh_tR
 <img width="760" alt="gantt" src="https://user-images.githubusercontent.com/101139170/177448765-d558fb32-1be6-43d9-a352-cfb01e51b752.png">
 
 
-## 4. Schema
+## Schema
 
 ### Models
 Made with [Table Generator](https://www.tablesgenerator.com/markdown_tables).
